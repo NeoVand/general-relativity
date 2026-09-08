@@ -23,6 +23,11 @@
  const active=$derived(playback!=='idle');
  const calling=$derived(callState!=='idle');
  const busy=$derived(playback==='preparing');
+ function sizeComposer(node){
+  question;
+  node.style.height='auto';
+  node.style.height=`${Math.min(node.scrollHeight,160)}px`;
+ }
  function fail(e){if(e?.name!=='AbortError')error=e?.message||'Something went wrong. Please retry.'}
  function reveal(nextTab){open=true;tab=nextTab;error='';notice='';tick().then(()=>document.querySelector('#study-panel')?.focus());}
  function persist(){notice=saveSettings($state.snapshot(settings))?'Connections saved.':'This browser cannot save connections; they remain available until you leave.';error='';}
@@ -222,18 +227,26 @@
    </div>
   {:else}
    <div class="study-content study-chat" id="ask-content" role="tabpanel" aria-labelledby="ask-tab">
-    <div class="voice-session" class:connected={calling}>
-     {#if calling}<div><span class="live-dot"></span><strong>{callState==='connecting'?'Connecting…':muted?'Microphone muted':callState==='speaking'?'Speaking':'Listening'}</strong></div><div class="study-actions">{#if callState!=='connecting'}<button onclick={mute}>{muted?'Unmute':'Mute'}</button><button onclick={()=>callAudio?.play().catch(fail)}>Hear assistant</button>{/if}<button onclick={endCall}>End call</button></div>
-     {:else}<button class="study-primary" onclick={startCall}><Icon name="mic"/>Talk about this page</button><p class="field-note">Ask naturally. Interrupt anytime. The tutor can show you the passage it is explaining.</p>{/if}
-    </div>
+    {#if calling}<div class="voice-session connected"><div><span class="live-dot"></span><strong>{callState==='connecting'?'Connecting…':muted?'Microphone muted':callState==='speaking'?'Speaking':'Listening'}</strong></div><div class="study-actions">{#if callState!=='connecting'}<button onclick={mute}>{muted?'Unmute':'Mute'}</button><button onclick={()=>callAudio?.play().catch(fail)}>Hear assistant</button>{/if}<button onclick={endCall}>End call</button></div>
+    </div>{/if}
     <div class="chat-transcript" aria-label="Conversation" aria-live="polite" aria-relevant="additions">
      {#if !messages.length}<div class="chat-empty"><span class="study-eyebrow">A GOOD PLACE TO START</span><button onclick={()=>ask('Explain the passage I am looking at, starting with the physical idea.')}>What is this really saying?<Icon name="send" size={16}/></button><button onclick={()=>ask('What earlier idea do I need to understand this passage? Show me where it is introduced.')}>Help me connect the dots.<Icon name="send" size={16}/></button></div>{/if}
      {#each messages as message (message.id)}<div class={`chat-message ${message.role}`}><span>{message.role==='user'?'You':'Tutor'}</span><div><SafeHTML html={answerHTML(message.text,page.id.replace('chapter-',''))}/></div></div>{/each}
      {#if thinking}<p class="thinking" role="status">Following the idea… <button onclick={cancelAnswer}>Stop</button></p>{/if}
     </div>
-    {#if selection}<div class="question-context">Using selected passage<button aria-label="Clear question context" onclick={()=>selected=null}><Icon name="close" size={15}/></button></div>{/if}
-    <form class="question-form" onsubmit={e=>{e.preventDefault();ask()}}><label class="sr-only" for="tutor-question">Ask a question</label><textarea id="tutor-question" bind:value={question} placeholder="Ask about what you’re reading…" rows="2" onkeydown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ask()}}}></textarea><button type="submit" aria-label="Send question" disabled={thinking||!question.trim()}><Icon name="send"/></button></form>
-    {#if messages.length}<button class="clear-chat" onclick={()=>{cancelAnswer();endCall();messages=[]}}>Clear conversation</button>{/if}
+    <form class="question-form" onsubmit={e=>{e.preventDefault();ask()}}>
+     {#if selection}<div class="composer-selection"><Icon name="book" size={15}/><span>Selected passage</span><button type="button" aria-label="Clear question context" title="Clear selected passage" onclick={()=>selected=null}><Icon name="close" size={14}/></button></div>{/if}
+     <label class="sr-only" for="tutor-question">Ask a question</label>
+     <textarea id="tutor-question" {@attach sizeComposer} bind:value={question} placeholder="Ask anything about this chapter" rows="1" onkeydown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask()}}}></textarea>
+     <div class="composer-toolbar">
+      <span class="composer-context" title={page.title}><Icon name="book" size={16}/>{page.id.startsWith('chapter-')?page.id.replace('chapter-','Chapter '):'This page'}</span>
+      <div class="composer-actions">
+       {#if messages.length}<button type="button" class="composer-utility" aria-label="Clear conversation" title="New conversation" onclick={()=>{cancelAnswer();endCall();messages=[]}}><Icon name="newChat" size={19}/></button>{/if}
+       <button type="button" class="composer-utility" class:voice-active={calling} aria-label={calling?'End voice conversation':'Talk about this page'} title={calling?'End voice conversation':'Start voice conversation'} onclick={()=>calling?endCall():startCall()}><Icon name="mic" size={20}/></button>
+       {#if thinking}<button type="button" class="composer-send" aria-label="Stop answer" title="Stop answer" onclick={cancelAnswer}><Icon name="stop" size={18}/></button>{:else}<button type="submit" class="composer-send" aria-label="Send question" title="Send question" disabled={!question.trim()}><Icon name="up" size={20}/></button>{/if}
+      </div>
+     </div>
+    </form>
    </div>
   {/if}
  </section>

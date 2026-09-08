@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {parseHTML} from 'linkedom';
-import {scenes} from './scenes.mjs';
+import {scenes,icon} from './scenes.mjs';
 fs.mkdirSync('site/assets/licenses',{recursive:true});
 fs.copyFileSync('vendor/voicebook/LICENSE','site/assets/licenses/voicebook.txt');
 const catalog=[];
@@ -50,7 +50,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   el.append(script);
   if(['equation','figure','visualization'].includes(kind)&&!el.matches('a')&&!el.closest('.hero-scene')){
    const tools=document.createElement('div');tools.className='passage-tools';
-   for(const [action,label] of [['listen','Listen'],['explain','Explain']]){const button=document.createElement('button');button.type='button';button.dataset.studyAction=action;button.dataset.readTarget=anchor;button.textContent=label;button.setAttribute('aria-label',`${label} this ${kind}`);tools.append(button);}
+   for(const [action,label] of [['listen','Listen'],['explain','Explain']]){const button=document.createElement('button');button.type='button';button.dataset.studyAction=action;button.dataset.readTarget=anchor;button.innerHTML=icon(action==='listen'?'HeadphonesIcon':'Chat01Icon');const description=`${label}${action==='listen'?' to':''} this ${kind}`;button.setAttribute('aria-label',description);button.title=description;tools.append(button);}
    el.append(tools);
   }
  }
