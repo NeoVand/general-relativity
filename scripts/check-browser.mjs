@@ -29,6 +29,32 @@ try{
    if(['index.html','chapter-0.html','chapter-8.html','chapter-11.html','chapter-14.html','chapter-16.html','chapter-22.html'].includes(file))await page.screenshot({path:`qa/${file.replace('.html','')}-${width}.png`});
   }
  }
+ // The opening goes straight from the equation to the contents, and reading
+ // chrome can be put away without losing navigation or the saved preference.
+ await page.setViewportSize({width:1440,height:1000});
+ await page.goto(new URL('index.html',base).href);
+ assert.equal(await page.locator('.welcome,.book-facts,main>.color-key,.site-footer').count(),0);
+ assert.equal(await page.locator('.cover + #contents').count(),1);
+ assert.equal(await page.locator('.equation-piece').count(),6);
+ assert.equal(await page.locator('.chapter-card .chapter-visual svg').count(),25);
+ for(const label of ['Ricci scalar','Ricci tensor','Metric tensor','Cosmological constant','Einstein constant','Stress–energy tensor'])assert.ok((await page.locator('.equation-pieces').innerText()).includes(label));
+ await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-desktop.png'});
+ await page.locator('#menu-button').click();
+ assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
+ assert.ok(await page.locator('#book-navigation').evaluate(e=>e.inert));
+ await page.goto(new URL('chapter-6.html',base).href);
+ assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
+ assert.equal(await page.locator('main .color-key').count(),0);
+ assert.equal(await page.locator('.chapter-preparation').getAttribute('open'),null);
+ const boxed=page.locator('.equation:has(.fbox)').first();
+ assert.equal(await boxed.locator('.fbox').first().evaluate(e=>getComputedStyle(e).borderTopWidth),'0px');
+ assert.equal(await boxed.evaluate(e=>getComputedStyle(e).borderTopWidth),'1px');
+ await boxed.screenshot({path:'qa/equation-container-border.png'});
+ await page.locator('#menu-button').click();
+ assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
+ await page.setViewportSize({width:390,height:844});
+ await page.goto(new URL('index.html',base).href);
+ await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-mobile.png'});
  await page.goto(new URL('chapter-16.html#16-7-gps-calculate-the-competing-clock-effects',base).href);
  await page.waitForFunction(()=>Math.abs(document.getElementById('16-7-gps-calculate-the-competing-clock-effects').getBoundingClientRect().top-90)<15);
  await page.screenshot({path:'qa/section-link-mobile.png'});
@@ -69,6 +95,11 @@ try{
  await page.waitForURL('**/chapter-16.html');
  await page.evaluate(()=>document.documentElement.dataset.theme='light');
  await page.locator('#theme-button').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+ assert.ok(await page.locator('#theme-button .theme-sun').isVisible());
+ assert.ok(!await page.locator('#theme-button .theme-moon').isVisible());
+ await page.locator('#theme-button').click();
+ assert.ok(await page.locator('#theme-button .theme-moon').isVisible());
+ await page.locator('#theme-button').click();
  await page.locator('#type-button').click();assert.match(await page.locator('html').getAttribute('class'),/large-type/);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  await page.screenshot({path:'qa/dark-large-mobile.png'});

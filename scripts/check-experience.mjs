@@ -74,7 +74,7 @@ try{
  await page.waitForTimeout(150);
  assert.equal(await earth.getAttribute('data-frames'),stopped,'Paused scene must stop updating');
  await earth.locator('.scene-stage').press('Space');
- await page.locator('.site-footer').scrollIntoViewIfNeeded();
+ await page.locator('.appendix-links').scrollIntoViewIfNeeded();
  await page.waitForTimeout(200);
  const hiddenFrames=await earth.getAttribute('data-frames');
  await page.waitForTimeout(200);

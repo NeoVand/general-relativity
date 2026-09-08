@@ -71,3 +71,55 @@ html[data-theme=dark]{--paper:#111722;--wash:#18212f;--figure-bg:#192331;--figur
 @media(max-width:1100px){.topbar.search-open .top-title{display:none}.topbar.search-open .reading-tools{margin-left:auto}}
 @media(max-width:600px){.book-search{width:42px}.search-field{border-color:transparent}.book-search.open{position:absolute;left:15px;right:15px;top:10px;width:auto}.topbar.search-open #menu-button,.topbar.search-open #type-button,.topbar.search-open #theme-button{visibility:hidden}.book-search.open .search-field{background:var(--paper)}#search-input{font-size:16px}#search-popover{width:100%;top:calc(100% + 9px)}#search-results strong{font-size:20px}.search-hint{font-size:8px}}
 @media(max-width:600px){#search-results{max-height:min(260px,calc(55dvh - 125px))}}
+
+/* A quieter reading surface: spacing carries structure, borders mark results. */
+:root{--sidebar-space:var(--sidebar-width)}
+html[data-sidebar=collapsed]{--sidebar-space:0px}
+.page{margin-left:var(--sidebar-space)}
+.reading-progress{left:var(--sidebar-space);width:calc((100% - var(--sidebar-space))*var(--progress,0))}
+.sidebar{border-right:0}
+.topbar{background:color-mix(in srgb,var(--paper) 64%,transparent);backdrop-filter:blur(22px) saturate(145%);-webkit-backdrop-filter:blur(22px) saturate(145%)}
+.top-title{margin-right:auto}
+#menu-button{display:inline-flex;flex-shrink:0;color:var(--muted)}
+#menu-button span{display:none}
+.theme-sun{display:none}
+html[data-theme=dark] .theme-sun{display:block}
+html[data-theme=dark] .theme-moon{display:none}
+.chapter-preparation{font-size:12px;color:var(--muted);margin:0 0 32px}
+.chapter-preparation>summary{width:fit-content;cursor:pointer;padding:5px 0}
+.chapter-preparation[open]>summary{color:var(--geometry)}
+.chapter-guide{border:0;padding:20px 0;margin:0;gap:20px 32px;color:var(--ink)}
+.chapter-payoff{border:0;padding-top:0;margin:0}
+.prose hr{display:none}
+.section-rail nav{border:0}
+.section-rail nav a{border:0;border-radius:7px;padding-left:12px}
+.section-rail nav a:hover,.section-rail nav a.current{border:0;margin-left:0;background:color-mix(in srgb,var(--geometry) 7%,transparent)}
+.equation{border:1px solid transparent;box-shadow:none;background:color-mix(in srgb,var(--wash) 75%,var(--paper))}
+.equation:has(.fbox){border-color:color-mix(in srgb,var(--geometry) 38%,var(--line));background:color-mix(in srgb,var(--geometry) 4%,var(--paper))}
+.equation .katex .fbox{border:0!important}
+.figure-surface,.spacetime-lab,.lab,.takeaway,.checkpoint,.color-key{border:0;box-shadow:none}
+.checkpoint[open] summary,.page-turn,.scene-toolbar,.flow-explanation,.color-roles,.scene-equation.equation{border:0}
+.checkpoint{background:color-mix(in srgb,var(--paper) 70%,transparent)}
+.page-turn{padding-top:24px}
+.cover-equation{border:0;overflow:visible;padding:32px 0 0;font-size:1.8rem}
+.cover-equation>.eyebrow{margin-bottom:24px}
+.cover-equation .katex-display{width:auto;min-width:0;margin:0}
+.equation-pieces{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:32px auto 10px;max-width:1000px}
+.equation-piece{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:12px;text-decoration:none;border-radius:12px;padding:14px 5px;color:var(--ink);transition:background .15s}
+.equation-piece:hover{background:var(--wash)}
+.piece-symbol{display:flex;align-items:center;justify-content:center;min-height:58px;font-size:1.3rem}
+.piece-label{font-size:10px;line-height:1.5;text-align:center;color:var(--muted)}
+.book-contents{padding-top:35px}
+.contents-group{margin:36px 0 48px}
+.chapter-card,.chapter-card:last-child{border:0;border-radius:13px;padding:18px 16px;gap:23px;margin:4px -16px}
+.chapter-card:hover{padding-left:16px;background:var(--wash);color:var(--ink)}
+.chapter-visual{width:58px;min-width:58px;height:65px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;border-radius:13px;background:color-mix(in srgb,currentColor 7%,transparent)}
+.chapter-visual .hugeicon{width:25px;height:25px}
+.chapter-visual .card-number{min-width:0;font:650 9px Manrope,Arial,sans-serif;letter-spacing:1.4px;color:currentColor;opacity:.8}
+.chapter-card h3{margin-bottom:6px}
+.appendix-links a{display:flex;align-items:center;gap:13px;padding:7px 0;text-decoration:none}
+.appendix-links .hugeicon{width:19px;height:19px;color:var(--muted)}
+@media(min-width:801px){html[data-sidebar=collapsed] .sidebar{visibility:hidden;transform:translateX(-100%)}html[data-sidebar=collapsed] .section-rail{display:none}html[data-sidebar=collapsed] .reading-layout{display:block;max-width:1100px}html[data-sidebar=collapsed] .reading-layout:not(:has(>.section-rail)){max-width:1320px}}
+@media(max-width:1000px){.equation-pieces{grid-template-columns:repeat(3,minmax(0,1fr));max-width:650px}.cover-equation{font-size:1.55rem}}
+@media(max-width:800px){:root{--sidebar-space:0px}#menu-button span{display:inline}.top-title{display:none}.reading-tools{margin-left:auto}}
+@media(max-width:600px){.cover-equation{padding:24px 0 0}.cover-equation .cover-math-compact{font-size:1.43rem}.equation-pieces{gap:10px 3px;margin:25px 0 0}.piece-symbol{font-size:1.16rem;min-height:52px}.piece-label{font-size:9px}.equation-piece{padding:9px 3px;gap:8px}.book-contents{padding-top:24px}.chapter-card,.chapter-card:last-child{gap:16px;padding:16px 8px;margin:3px -8px}.chapter-card:hover{padding-left:8px}.chapter-visual{width:44px;min-width:44px;height:56px;border-radius:10px}.chapter-visual .hugeicon{width:22px;height:22px}.chapter-card .card-arrow{display:none}.chapter-guide{padding:16px 0}.takeaway{margin:40px 0}.page-turn{padding-bottom:35px}}
