@@ -56,6 +56,8 @@ try{
  assert.ok(!semanticTex(String.raw`\eta^\rho`,5).includes('math-geometry'));
  assert.ok(!semanticTex(String.raw`\Gamma^\rho_{\mu\nu}`,7).includes('math-matter'));
  assert.ok(!semanticTex(String.raw`\mathcal T^a`,21).includes('math-matter'));
+ assert.ok(!semanticTex(String.raw`C^\mu{}_\nu v^\nu`,2).includes('math-curvature'));
+ assert.ok(semanticTex(String.raw`C^\rho{}_{\sigma\mu\nu}`,9).includes('math-curvature'));
  for(const tex of [String.raw`\boldsymbol\nabla\Phi`,String.raw`\dot g`,String.raw`\mathbb R^n`])assert.ok(math(tex,true,12).includes('katex'));
  console.log(`Checked ${checks.length} 3D scene/theme/viewport combinations, model endpoints, keyboard controls, semantic math, and atlas inspection.`);
 }finally{await browser.close()}

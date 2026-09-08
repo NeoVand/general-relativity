@@ -20,11 +20,13 @@ export function semanticTex(tex, context='') {
   const tensorIndex=/^\s*[_^]\s*(?:\{(?:\\(?:mu|nu|rho|sigma|alpha|beta|gamma|lambda)|[a-dijk]|[0-3]{2})|\\(?:mu|nu|rho|sigma|alpha|beta|gamma|lambda))/.test(tex.slice(end));
   const metricScalar=/^(4|6|7|8|9|10|12|13|14|15|17|18|19|20|21|22|23|24)$/.test(String(context));
   const metricEta=/^\s*[_^]\s*\{\\[a-z]+\s*\\[a-z]+\}/.test(tex.slice(end));
+  const scripts=tex.slice(end).match(/^(?:\s*(?:[_^]\s*(?:\{[^}]*\}|\\[a-z]+)|\{\}))+/)?.[0]||'';
+  const weylIndices=(scripts.match(/\\(?:mu|nu|rho|sigma|alpha|beta|gamma|lambda)/g)||[]).length>=4;
   let role=null;
   if(token==='g'&&(indexed||metricScalar)||token==='\\eta'&&metricEta)role='geometry';
   if(token==='h'&&indexed&&String(context)==='18'||token==='a'&&String(context)==='19'||token==='\\gamma'&&tensorIndex&&String(context)==='20')role='geometry';
   if(token==='\\Gamma'&&indexed||token==='\\nabla'||token==='\\omega'&&indexed&&String(context)==='21')role='transport';
-  if(token==='R'&&(tensorIndex||scalarCurvature)||token==='C'&&tensorIndex||token==='G'&&tensorIndex&&!/^\s*_\s*(?:N|\{N\})/.test(tex.slice(end))||token==='\\Omega'&&indexed)role='curvature';
+  if(token==='R'&&(tensorIndex||scalarCurvature)||token==='C'&&weylIndices||token==='G'&&tensorIndex&&!/^\s*_\s*(?:N|\{N\})/.test(tex.slice(end))||token==='\\Omega'&&indexed)role='curvature';
   if(token==='T'&&tensorIndex||token==='\\rho'&&/^(0|11|12|15|16|18|19|22|23)$/.test(String(context)))role='matter';
   if(token==='\\tau'||token==='u'&&indexed)role='observer';
   result+=role?`{\\htmlClass{math-${role}}{${token}}}`:token;i=end;
