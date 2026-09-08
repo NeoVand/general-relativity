@@ -1,89 +1,78 @@
 # General Relativity, From the Inside Out
 
-A complete guided expedition from clocks and vectors to curvature, the
-Einstein–Hilbert action, and the modern theory of spacetime.
+**[Read the HTML book](https://neovand.github.io/general-relativity/)** ·
+[Visual atlas](https://neovand.github.io/general-relativity/figure-atlas.html) ·
+[Editorial comparison](docs/reference-comparison.md)
 
-For readers with college-level mathematics and physics. The book contains
-24 chapters, 30 solved exercises, a formula reference, a glossary, and linked
-sources. It combines explicit derivations with intuitive analogies and the
-conceptual traps worth understanding.
+A complete illustrated book that starts with basic calculus and linear algebra.
+Chapter 0 supplies the mechanics and multivariable-calculus bridge. The main
+sequence develops special relativity, tensors, geometry, Einstein's equation,
+the action, and observable predictions. Four optional deeper trails cover
+initial data, tetrads, focusing and thermodynamics, and effective field theory.
 
-[Read the PDF](dist/General_Relativity_From_the_Inside_Out.pdf) ·
-[Read the Markdown](book.md) · [LaTeX source](book.tex)
+The HTML edition contains 25 chapters (0–24), five appendices, 40 original SVG
+figures, 30 original solved exercises plus three new calculations, chapter
+checkpoints, three interactive experiments, and four documented public-domain
+historical images. Equations are rendered at build time as HTML and MathML;
+math fonts and all required assets are hosted with the book.
 
-## Files
+## Edit and build
 
-| Path | Purpose |
+Requirements: Node.js 24 and Python 3.12 or later. No TeX installation is needed.
+
+```sh
+npm ci
+npm run build
+npm test
+npm run serve
+```
+
+Open [the local reading edition](http://localhost:4173/). The output is `site/`,
+which is ignored by Git. All URL paths are relative so the site works under
+the repository's GitHub Pages subpath.
+
+| File | Purpose |
 | --- | --- |
-| `book.tex` | Complete, standalone LaTeX source used for the finished PDF; cover and styling are embedded. |
-| `book.md` | Original, editable Markdown manuscript with TeX equations. |
-| `dist/General_Relativity_From_the_Inside_Out.pdf` | Compiled reading edition. |
-| `scripts/build.py` | Portable build script; defaults to compiling the checked-in LaTeX. |
-| `scripts/prepare.py` | Adapts Markdown headings and navigation for print. |
-| `typesetting/header.tex` | Fonts, headings, margins, callouts, and PDF metadata. |
-| `typesetting/cover.tex` | Title page and clickable table of contents. |
-| `typesetting/print.lua` | Pandoc filter for equations, tables, and main-matter numbering. |
-| `build/` | Ignored intermediate files and compiler logs, created when building. |
+| `book.md` | Canonical complete manuscript, including all new sections. |
+| `content/guides.json` | Chapter questions, prerequisite guidance, takeaways, and checkpoints. |
+| `content/credits.md` | Published edition notes and image credits. |
+| `scripts/build-site.mjs` | Static HTML generation, equation rendering, navigation, and search index. |
+| `scripts/figures.py` | Reproducible SVG diagrams and placement manifest. |
+| `web/styles.css`, `web/app.js` | Reading layout, accessibility, and experiments. |
+| `assets/history/manifest.json` | Historical-image provenance, rights rationale, and hashes. |
+| `docs/reference-comparison.md` | Coverage comparison and editorial decisions. |
+| `docs/visual-review.md` | Diagram inventory, inspection process, and corrections. |
+| `.github/workflows/pages.yml` | Build, checks, and GitHub Pages deployment. |
 
-## Build from LaTeX
+## Browser and figure checks
 
-Requirements: Python 3 and a TeX distribution with XeLaTeX. A full TeX Live or
-MacTeX installation includes the required packages and Latin Modern fonts.
-The source uses KOMA-Script (`scrbook`), `fontspec`, `unicode-math`, `microtype`,
-`fancyhdr`, `tcolorbox`, and Pandoc's standard LaTeX support packages.
+Keep the local server running, then run:
 
-From the repository root:
-
-```bash
-python3 scripts/build.py
+```sh
+npx playwright install chromium
+npm run test:browser
+npm run test:figures
 ```
 
-This runs XeLaTeX three times to resolve the contents, bookmarks, and references,
-checks the compiler log for typesetting problems, and writes the PDF into `dist/`.
-No Pandoc installation is required for this route. Paths are resolved relative
-to the script, so the command also works when invoked from another directory.
+On macOS the checks use installed Google Chrome when available; elsewhere they
+use Playwright's Chromium. Reports and screenshots are written to ignored `qa/`.
+Checks cover every HTML page at desktop and mobile widths, equation errors,
+local links, image loading, search, chapter anchors, reading controls,
+interactive numerical examples, and all SVG label bounds and intersections.
+They support—but do not replace—human visual and mathematical review.
 
-For a LaTeX editor or Overleaf, open `book.tex` and select **XeLaTeX** as the
-compiler. The file contains the entire book and has no external image or
-bibliography-file dependencies. Let the editor repeat compilation until the
-contents and page references stabilize.
+## Publishing
 
-## Edit the Markdown and regenerate LaTeX
+The repository uses **GitHub Actions** as its Pages source. A push to `main`
+builds the HTML, runs the checks, uploads the static artifact, and deploys it
+with the official GitHub Pages actions. Pull requests run the same build and
+checks without publishing. Visual inspection evidence is retained as a workflow
+artifact. The publish job has only Pages and OIDC permissions; build jobs have
+read-only repository access.
 
-This route also requires Pandoc. The original edition used **Pandoc 3.1.3** and
-**XeTeX from TeX Live 2023**. Different versions may alter layout or generated
-LaTeX; these versions are the reference build environment.
+## Earlier print edition
 
-Edit `book.md` for content, or files in `typesetting/` for the print design, then:
-
-```bash
-python3 scripts/build.py --from-markdown
-```
-
-**This replaces `book.tex`.** Choose your editing workflow deliberately:
-
-- For direct LaTeX editing, edit `book.tex` and use the default build command.
-- For Markdown editing, edit `book.md`, regenerate, and commit both the Markdown
-  and generated LaTeX so readers can compile without Pandoc.
-
-The preparation step replaces the Markdown's manual contents and title with
-print-native versions, promotes heading levels, preserves chapter anchors, and
-normalizes dash typography. The Lua filter uses native math fonts, measures
-displayed equations, and scales an equation only if it exceeds the text width.
-None of the original edition's equations needed scaling.
-
-## Equation and layout checks
-
-The original PDF has **164 pages**, **669 displayed equations**, and **244
-chapter/section bookmarks**. Its fonts are embedded, the text is selectable,
-and the contents are clickable. The build had no missing-character warnings,
-undefined commands, font-substitution warnings, or overfull boxes.
-
-Visual review included contact sheets for every page and 14 detailed page
-samples covering tensor notation, the geodesic derivation, covariant
-derivatives, the Einstein–Hilbert variation and boundary terms, cosmology,
-ADM equations, tetrads, exercises, and the reference sheet.
-
-After substantive edits, inspect the rendered PDF as well as the compiler log.
-A successful build checks typesetting; it does not establish the mathematical
-correctness of new content.
+`book.tex`, `typesetting/`, `scripts/build.py`, `scripts/prepare.py`, and the
+PDF under `dist/` are retained as historical files. **They are not the current
+edition and have not been regenerated with these revisions.** The requested
+publication format and canonical reading experience are HTML.

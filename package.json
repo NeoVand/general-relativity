@@ -1,0 +1,21 @@
+{
+  "name": "general-relativity-from-the-inside-out",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "figures": "python3 scripts/figures.py",
+    "build": "npm run figures && node scripts/build-site.mjs",
+    "serve": "python3 -m http.server 4173 --directory site",
+    "test": "node scripts/check-site.mjs",
+    "test:browser": "node scripts/check-browser.mjs",
+    "test:figures": "node scripts/check-figures.mjs"
+  },
+  "dependencies": {
+    "katex": "0.16.22",
+    "markdown-it": "14.3.1"
+  },
+  "devDependencies": {
+    "playwright": "1.55.1"
+  }
+}

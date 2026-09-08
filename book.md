@@ -2,7 +2,7 @@
 
 ### A guided expedition from clocks and vectors to the Einstein–Hilbert action, black holes, and the modern theory of spacetime
 
-**For a reader with college-level mathematics and physics.** You should be comfortable with derivatives, integrals, elementary vectors and matrices, Newton's laws, and basic energy conservation. Everything specifically geometric—manifolds, covectors, connections, covariant derivatives, curvature, and metric variations—is developed here. Some later sections introduce graduate-level ideas, but the conceptual staircase remains visible.
+**For a reader with basic calculus and linear algebra.** Chapter 0 builds the needed mechanics, partial derivatives, differential equations, and flux accounting. You do not need a prior course in physics or relativity. Everything specifically geometric—manifolds, covectors, connections, covariant derivatives, curvature, and metric variations—is developed here. Some later sections introduce graduate-level ideas, but the conceptual staircase remains visible.
 
 The destination is this equation:
 
@@ -19,11 +19,11 @@ You should also be able to recognize several seductive mistakes before they reco
 
 Read with a pencil and occasionally stop before the next displayed equation. Predict its indices, its dimensions, or its sign. Understanding is much easier to counterfeit while reading than while predicting.
 
-There are three routes:
+Begin with Chapter 0 if mechanics or multivariable calculus is unfamiliar. Chapters 20–23 are optional deeper trails; their extra concepts are introduced in place. There are three routes:
 
 | Route | Read | What it builds |
 |---|---|---|
-| The full expedition | Chapters 1–24, then the exercises | A continuous foundation from special relativity to modern GR |
+| The full expedition | Chapters 0–24, then the exercises | A continuous foundation from special relativity to modern GR |
 | The equation expedition | Chapters 2–15, then 24 | The mathematical and physical meaning of every term and the full action derivation |
 | The physical expedition | Chapters 1, 3–5, 8–12, 16–19 | Clocks, tides, matter, black holes, waves, and cosmology; return for the intermediate machinery |
 
@@ -96,6 +96,7 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 
 ## Contents
 
+- [0. Before spacetime: the tools you already almost know](#chapter-0)
 - [1. The scandal: gravity changes the measuring equipment](#chapter-1)
 - [2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe](#chapter-2)
 - [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
@@ -124,8 +125,171 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 - [Appendix B. A working reference sheet](#appendix-b)
 - [Appendix C. A plain-language glossary](#appendix-c)
 - [Appendix D. Where to go next](#appendix-d)
+- [Appendix E. Index practice and three extra calculations](#appendix-e)
 
 ---
+
+<a id="chapter-0"></a>
+
+## 0. Before spacetime: the tools you already almost know
+
+You need basic calculus and linear algebra to begin this book. You do not need a prior course in mechanics, special relativity, differential geometry, or variational calculus. We will build the missing bridges. Later chapters reach research-level questions; understanding their physical point comes before mastering their machinery.
+
+Here is the central question. **If a falling astronaut feels no gravity, what can a second falling astronaut measure that the first one cannot?** Their changing separation. Gravity has a locally removable part and a tidal part that survives. The book turns that observation into a theory of clocks, trajectories, and spacetime.
+
+### 0.1 A derivative is a local prediction
+
+Suppose a position is $x(t)=3t^2$, with $x$ in metres and $t$ in seconds. Its velocity is $v(t)=dx/dt=6t$, and its acceleration is $a(t)=d^2x/dt^2=6$. At $t=2$, the velocity is $12\,\mathrm{m/s}$. That means a small extra time $\Delta t$ changes the position by approximately $12\Delta t$ metres. A derivative predicts a small change, not a whole future.
+
+Taylor's formula makes that prediction systematic:
+
+$$
+x(t+\Delta t)=x(t)+v(t)\Delta t+\frac12 a(t)(\Delta t)^2+\cdots.
+$$
+
+The dots stand for terms of higher order in the small increment. For this quadratic example the displayed expression is exact. For a general smooth function it is an approximation whose omitted terms shrink as the increment shrinks.
+
+The same idea will explain local flatness. Near an event, we can simplify a metric's value and first derivatives by changing coordinates. Terms quadratic in distance still carry curvature. “Locally flat” is a statement about the order of the approximation.
+
+### 0.2 Partial derivatives: change one input at a time
+
+A temperature $f(x,y)=x^2+3y$ has two inputs. Its partial derivative $\partial_x f=2x$ asks how it changes if you move in $x$ while holding $y$ fixed. Its other partial derivative is $\partial_y f=3$. The symbol $\partial$ is the familiar derivative with an instruction about what to hold fixed.
+
+If a path supplies $x=x(s)$ and $y=y(s)$, both inputs can change. The chain rule says
+
+$$
+\frac{df}{ds}=\frac{\partial f}{\partial x}\frac{dx}{ds}
++\frac{\partial f}{\partial y}\frac{dy}{ds}.
+$$
+
+Try $x=s$, $y=s^2$. Direct substitution gives $f=4s^2$, so $df/ds=8s$. The chain rule gives $(2s)(1)+(3)(2s)=8s$ too. Nothing new was hiding in the notation.
+
+In four coordinates we abbreviate this as $df/ds=(\partial_\mu f)(dx^\mu/ds)$, summing over $\mu=0,1,2,3$. An index here is a label, not an exponent. Chapter 2 develops why this notation is more than shorthand.
+
+### 0.3 An integral adds local measurements
+
+Distance along a path is built by adding tiny distances. A clock does something analogous: it adds tiny amounts of its own elapsed time. In flat spacetime the result will be
+
+$$
+\tau=\int_{t_1}^{t_2}\sqrt{1-\frac{v(t)^2}{c^2}}\,dt.
+$$
+
+For now, read this as a recipe. At each time, calculate a clock-rate factor, multiply by the tiny time step, and add. The constant $c$ is the speed of light. If $v=0$ throughout, the square root is one and $\tau=t_2-t_1$. Chapter 3 derives the recipe and explains why it changes when the path changes.
+
+An integral over a region works the same way. To add mass, sum density times a tiny physical volume: $M=\int\rho\,dV$. Coordinate rectangles do not always have equal physical size. In polar coordinates a cell has area approximately $(dr)(r\,d\theta)$, so $dA=r\,dr\,d\theta$. The extra $r$ is measuring geometry, not adding matter.
+
+### 0.4 A differential equation needs a starting story
+
+The equation $d^2x/dt^2=-g$ tells you the acceleration of a falling object in a uniform Newtonian field. Integrate once and then again:
+
+$$
+v(t)=v_0-gt,\qquad x(t)=x_0+v_0t-\frac12gt^2.
+$$
+
+The two constants have physical meanings: starting position $x_0$ and starting velocity $v_0$. The equation alone does not tell you whether the object was dropped, thrown up, or thrown down. A second-order equation normally needs two initial data per unknown function.
+
+Einstein's equation is also a differential equation, now for the metric throughout spacetime. Not every proposed set of initial data is allowed: some equations are constraints. Chapter 20 explains this carefully. Keep the simpler lesson now: **a law plus starting data produces a prediction.**
+
+### 0.5 The mechanics we will use
+
+Momentum in slow-motion mechanics is $\mathbf p=m\mathbf v$. Force changes momentum: $\mathbf F=d\mathbf p/dt$. For constant mass this is $\mathbf F=m\mathbf a$. A force is an interaction such as a floor pushing on your shoes. Coordinate acceleration is a change in position labels; later we will distinguish it from acceleration measured by an instrument.
+
+For a slow particle, kinetic energy is $K=mv^2/2$. Near Earth, gravitational potential energy can be written $U=mgh$, choosing zero at $h=0$. Throw a ball upward: kinetic energy decreases while potential energy increases. Ignoring air resistance, their sum remains constant.
+
+More generally write $U=m\Phi$, where $\Phi$ is potential energy per unit mass. Outside a spherical mass $M$,
+
+$$
+\Phi(r)=-\frac{G_NM}{r},\qquad
+\mathbf a=-\boldsymbol\nabla\Phi.
+$$
+
+The gradient $\boldsymbol\nabla\Phi$ is the vector of partial derivatives in Cartesian coordinates. It points toward fastest increase of $\Phi$; the minus sign makes falling objects accelerate toward decreasing potential. Differentiating gives inward acceleration of magnitude $G_NM/r^2$. Here $G_N$ is Newton's gravitational constant. This is a low-speed, weak-field description; we use it as a calibration for the relativistic theory.
+
+Pressure is force per area. Imagine a gas repeatedly hitting a wall: each collision transfers momentum. More collisions or harder collisions mean more pressure. This makes pressure a **flow of momentum**, which explains why it belongs in the same tensor as energy. Chapter 11 supplies the precise units and entries.
+
+### 0.6 Matrices measure pairs of arrows
+
+You already know a dot product. For $v=(2,1)$ and $w=(1,3)$, the Euclidean result is $v\cdot w=5$. Insert a symmetric matrix between the row and column:
+
+$$
+g(v,w)=v^{\mathsf T}
+\begin{pmatrix}1&0\\0&4\end{pmatrix}w
+=(2)(1)+4(1)(3)=14.
+$$
+
+The matrix specifies a new measuring rule. In particular $g(v,v)=8$ is the squared length of $v$ under that rule. A metric is this kind of pair-measuring operation, supplied at every point. In spacetime the matrix has one negative direction. We will learn why that minus sign distinguishes clocks from rulers.
+
+The inverse matrix undoes the original linear map. It is not obtained by taking the reciprocal of every entry. For example,
+
+$$
+\begin{pmatrix}2&1\\1&2\end{pmatrix}^{-1}
+=\frac13\begin{pmatrix}2&-1\\-1&2\end{pmatrix}.
+$$
+
+Multiply them to check that the diagonal entries become one and the off-diagonal entries zero. This is precisely the operation denoted by $g^{\mu\nu}$ later.
+
+### 0.7 Flux and divergence, with a box before a theorem
+
+A field $\mathbf J$ can describe how much stuff crosses unit area per unit time. Its flux through a small surface is the normal component of $\mathbf J$ times that area. To find net outflow from a box, subtract inflow through one face from outflow through the opposite face, then add the three directions.
+
+In a box of width $\Delta x$, the $x$ contribution is approximately $(\partial_x J^x)\Delta x\Delta y\Delta z$. Dividing total outflow by the box volume gives
+
+$$
+\boldsymbol\nabla\cdot\mathbf J
+=\partial_xJ^x+\partial_yJ^y+\partial_zJ^z.
+$$
+
+This is **divergence**. Positive divergence means net outflow per volume. Conservation then reads $\partial_t\rho+\boldsymbol\nabla\cdot\mathbf J=0$: if more leaves than arrives, the amount inside falls. The divergence theorem adds this accounting over many little boxes; flows across shared internal faces cancel, leaving only the outer boundary. Curved geometry changes the volume factors, not this accounting idea.
+
+### 0.8 Approximation is a skill, not an apology
+
+For a small dimensionless $q$,
+
+$$
+\sqrt{1+q}\simeq1+\frac q2,\qquad
+\frac{1}{1-q}\simeq1+q,\qquad e^q\simeq1+q.
+$$
+
+Each discards terms beginning at order $q^2$. For $q=0.01$, those terms are on the scale of $10^{-4}$, though the coefficient depends on the function. We will always identify what is small: $v/c$, $G_NM/(rc^2)$, a wave amplitude, or a short distance compared with a curvature scale. “Small” without a ratio is not a usable approximation.
+
+Check dimensions before arithmetic. An equation for acceleration must have units of length/time squared on both sides. You can add energy density to pressure, because both have units $\mathrm{J/m^3}$. You cannot add mass density to pressure without the appropriate $c^2$. A dimension check often catches a mistake before a page of algebra does.
+
+### 0.9 Your first five-minute check
+
+Try these before revealing the answers. They test the actual prerequisites, not whether you remember physics vocabulary.
+
+<details class="checkpoint"><summary>1. If x(t) = 2t³, what are its velocity and acceleration?</summary>
+
+$v=6t^2$ and $a=12t$. If $t$ is in seconds and $x$ in metres, the coefficient 2 carries units $\mathrm{m/s^3}$.
+
+</details>
+
+<details class="checkpoint"><summary>2. For f(x,y) = xy², what is df/ds along x=s, y=2s?</summary>
+
+Substitution gives $f=4s^3$, so $df/ds=12s^2$. The chain rule gives $y^2(1)+2xy(2)=4s^2+8s^2$, the same result.
+
+</details>
+
+<details class="checkpoint"><summary>3. Why is a polar cell wider when it is farther from the origin?</summary>
+
+The same angle $d\theta$ subtends arc length $r\,d\theta$. A cell's area is therefore $r\,dr\,d\theta$. Changing labels has not curved the plane.
+
+</details>
+
+<details class="checkpoint"><summary>4. Does specifying acceleration specify a unique trajectory?</summary>
+
+No. You also need initial position and velocity. Dropping and throwing can obey the same acceleration law.
+
+</details>
+
+<details class="checkpoint"><summary>5. What is the first-order approximation to √(1−v²/c²)?</summary>
+
+$1-v^2/(2c^2)$, when $v^2/c^2\ll1$. The expansion parameter is $v^2/c^2$, not a speed with units.
+
+</details>
+
+If a check was unfamiliar, revisit that one section. You do not need perfect fluency to start. Chapter 1 introduces the physical puzzle; Chapter 2 teaches the index language with explicit examples; Chapter 3 builds special relativity. The rest grows from those three foundations.
+
 
 <a id="chapter-1"></a>
 
@@ -265,6 +429,34 @@ We will repeatedly ask four questions:
 **Under which assumptions is the statement true?** Vacuum or matter? Local or global? Weak field or exact? Classical or semiclassical? A point particle or an extended spinning body?
 
 Those questions are the real prerequisites. The calculus will follow them.
+
+### 1.9 The historical route was not a straight line
+
+The order in this book is designed for learning. Discovery followed a much less direct route. Keep these two stories separate: a clean derivation tells us how ideas fit together now; a historical account asks what the people involved actually knew then.
+
+<div class="history-grid">
+<figure><a href="assets/history/newton-1689.jpg"><img src="assets/history/newton-1689.jpg" width="1162" height="1400" alt="Godfrey Kneller’s painted portrait of Isaac Newton, 1689." loading="lazy"></a><figcaption>Isaac Newton, painted by Godfrey Kneller in 1689. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Portrait_of_Sir_Isaac_Newton,_1689.jpg">Source and provenance</a>.</figcaption></figure>
+<figure><a href="assets/history/einstein-1921.jpg"><img src="assets/history/einstein-1921.jpg" width="1066" height="1400" alt="Albert Einstein beside a chalkboard in Vienna, photographed by Ferdinand Schmutzer in 1921." loading="lazy"></a><figcaption>Albert Einstein in 1921, photographed by Ferdinand Schmutzer. Public domain. <a href="https://commons.wikimedia.org/wiki/File:Einstein_1921_by_F_Schmutzer.jpg">Source and provenance</a>.</figcaption></figure>
+</div>
+
+**1687: one law for terrestrial and celestial motion.** Newton's *Principia* brought the motion of falling bodies and planets into the same mathematical account. His gravity was enormously successful. Its instantaneous interaction and the unexplained proportionality of inertial and gravitational mass later became productive questions, not reasons to dismiss its achievements.
+
+**1905–1908: clocks and geometry become inseparable.** Einstein's special relativity replaced universal simultaneity with a consistent account of measurements by moving observers. Minkowski organized the theory geometrically in four-dimensional spacetime. That did not yet make the geometry dynamical.
+
+**1907: free fall becomes the clue.** Einstein recognized the special status of a freely falling observer. The equivalence principle suggested a link between acceleration, gravitational clock shifts, and gravity. It did not by itself supply the final field equation.
+
+**1912–1913: mathematical collaboration and a wrong turn.** Marcel Grossmann helped Einstein bring differential geometry into the problem. Their *Entwurf* theory had a metric description but restricted field equations. Recovering Newtonian gravity, interpreting coordinate conditions, and deciding what general covariance meant were entangled difficulties. The route was not “notice curvature, write the answer.”
+
+**November 1915: revision in public.** Einstein presented successive communications on November 4, 11, 18, and 25. The November 18 calculation explained Mercury's anomalous perihelion advance. The November 25 paper gave the final field equations. Hilbert was developing an action-based approach in the same period. The surviving documents matter more than a simple race narrative; a paper's submission date and the content of its later printed version are different evidence. [Einstein's November 25 paper](https://de.wikisource.org/wiki/Die_Feldgleichungen_der_Gravitation), [Norton's historical analysis](https://sites.pitt.edu/~jdnorton/papers/Einstein_field_eqn_1-4.pdf).
+
+<div class="history-grid">
+<figure><a href="assets/history/principia-1687.jpg"><img src="assets/history/principia-1687.jpg" width="1188" height="1400" alt="The printed title page of Newton’s first-edition Principia, 1687." loading="lazy"></a><figcaption>The 1687 <em>Principia</em> title page. This is an original historical publication, not a modern typeset facsimile. <a href="https://commons.wikimedia.org/wiki/File:Newton_-_Principia_(1687),_title,_p._5,_color.jpg">Public-domain source</a>.</figcaption></figure>
+<figure><a href="assets/history/einstein-gr-1916.jpg"><img src="assets/history/einstein-gr-1916.jpg" width="924" height="1400" alt="Printed title page of Einstein’s 1916 separate edition of The Foundation of the General Theory of Relativity." loading="lazy"></a><figcaption>Einstein's 1916 exposition, separate-edition title page. This is not the November 1915 paper or a handwritten manuscript. <a href="https://commons.wikimedia.org/wiki/File:Einstein_Die_Grundlage_der_allgemeinen_Relativit%C3%A4tstheorie_Sonderdruck_1916_Titel.jpg">Public-domain source</a>.</figcaption></figure>
+</div>
+
+**After the field equation: interpretation remained hard.** Schwarzschild's spherical solution, expanding cosmological models, rotating black holes, gravitational radiation, and singularity theorems exposed consequences that were not obvious from the equation. Observations eventually made these subjects experimentally accessible. Chapter 18 follows one concrete landmark: the first direct gravitational-wave detection in 2015, reported in 2016. Chapter 19 explains what an expanding solution means before asking what data favor it.
+
+The historical lesson is useful while studying. Getting stuck on coordinate meaning or a missing factor is part of the subject. The right response is a controlled example and a consistency check—not the assumption that the whole theory should have been obvious.
 
 <a id="chapter-2"></a>
 
@@ -2630,6 +2822,37 @@ You can now move through the geometric core without treating any symbol as a cer
 
 The next step is physical rather than merely geometrical: identify the tensor that describes matter's energy, momentum, and stresses, then find the dynamical equation and action that relate it to the geometry you have just learned to measure.
 
+### 10.9 How much curvature is outside your window?
+
+An enormous-looking number of indices can hide a very small measurable effect. Outside a spherical Earth, the radial relative acceleration of two nearby freely falling particles separated by $\ell$ is approximately
+
+$$
+\Delta a_r\simeq \frac{2G_NM_\oplus}{R_\oplus^3}\ell.
+$$
+
+Use $G_NM_\oplus=3.9860\times10^{14}\,\mathrm{m^3/s^2}$ and $R_\oplus=6.371\times10^6\,\mathrm m$. For $\ell=1\,\mathrm m$, this gives $\Delta a_r\simeq3.08\times10^{-6}\,\mathrm{m/s^2}$. It is a few millionths of a metre per second squared, not the approximately $9.8\,\mathrm{m/s^2}$ of a supported laboratory's accelerometer.
+
+In an orthonormal frame, the magnitude of the corresponding radial curvature component is
+
+$$
+\mathcal K=\frac{2G_NM_\oplus}{c^2R_\oplus^3}
+\simeq3.43\times10^{-23}\,\mathrm{m^{-2}}.
+$$
+
+The associated scale $\mathcal K^{-1/2}\simeq1.71\times10^{11}\,\mathrm m$ is about 1.14 astronomical units. This is a scale constructed from one component, not a literal circle into which four-dimensional spacetime bends. Notice the units: restoring $c^2$ gives a relative acceleration **per unit separation**, and multiplying by $\ell$ gives the acceleration difference. Curvature by itself does not determine the weight of one supported object.
+
+Here is a second useful conversion. Earth's geometrized mass is $G_NM_\oplus/c^2\simeq4.44\,\mathrm{mm}$, and its Schwarzschild radius is twice that, about $8.87\,\mathrm{mm}$. These are compactness scales. Earth is not a black hole: its actual radius is hundreds of millions of times larger.
+
+### 10.10 Why twenty curvature numbers survive local flattening
+
+Chapter 8 counted curvature components using tensor symmetries. There is a second useful perspective: compare the metric's Taylor coefficients with the coordinate freedom that can change them. This is a count that supports the normal-coordinate construction, not a substitute for its existence proof.
+
+At an event, a symmetric four-by-four metric has ten independent entries. A linear coordinate transformation has sixteen coefficients. Once it puts the metric into Minkowski form, six continuous freedoms remain: three spatial rotations and three boosts. The first derivatives of the metric then have $4\times10=40$ entries. The quadratic part of a coordinate transformation also has $4\times10=40$ coefficients, symmetric in its two lower coordinate labels; normal coordinates use this freedom to eliminate those first derivatives.
+
+At the next order, the second derivatives have $10\times10=100$ entries. The cubic coordinate change has four choices of output component and twenty symmetric triples of input labels, giving $4\times20=80$ coefficients. The twenty triples are counted by combinations with repetition: $\binom{4+3-1}{3}=20$. The remaining $100-80=20$ independent combinations are precisely the curvature information that cannot be eliminated at the event.
+
+This count explains the hierarchy: the metric's values supply local measuring units, its first derivatives can be simplified away at one event, and curvature survives in the quadratic spatial variation. It does not say that there are twenty propagating gravitational polarizations. Chapter 20 counts dynamical initial data and reaches a different answer to a different question.
+
 <a id="chapter-11"></a>
 
 ## 11. Energy, momentum, and stress: what gravity listens to
@@ -3244,6 +3467,20 @@ A symmetric four-by-four tensor has ten independent components. Einstein's equat
 This is why “solve ten independent wave equations for ten metric components” is the wrong computational picture. It is also why inserting an arbitrary, nonconserved $T_{\mu\nu}$ generally fails: geometry's identities require the matter equations and sources to fit together.
 
 Finally, $T_{\mu\nu}$ here does not contain a universal local gravitational stress tensor added by hand. Gravitational self-interaction is already present in the nonlinear left-hand side. We will return to the important distinction between that fact and the existence of physically meaningful gravitational-wave energy or total mass.
+
+### 12.7 Why the coupling has units of inverse force
+
+Curvature in an orthonormal frame has units $\mathrm{m^{-2}}$. Energy density has units $\mathrm{J/m^3}=\mathrm{N/m^2}$. To turn the latter into the former, the coupling must have units $\mathrm{N^{-1}}$:
+
+$$
+\left[\frac{G_N}{c^4}\right]
+=\frac{\mathrm{m^3\,kg^{-1}\,s^{-2}}}{\mathrm{m^4\,s^{-4}}}
+=\mathrm{N^{-1}}.
+$$
+
+Using $G_N\simeq6.67430\times10^{-11}\,\mathrm{m^3\,kg^{-1}\,s^{-2}}$ gives $c^4/(8\pi G_N)\simeq4.82\times10^{42}\,\mathrm N$. Multiplying curvature by this factor produces the energy-density scale on the other side of Einstein's equation.
+
+This enormous conversion factor motivates the analogy that spacetime is “stiff.” It is not an elastic material modulus, and the inverse coupling is not itself a curvature or an energy density. Nor does this dimensional argument establish a universal maximum-force theorem. Its job is to check the equation's units and make the smallness of the coupling tangible.
 
 <a id="chapter-13"></a>
 
@@ -4192,6 +4429,27 @@ The equation's assumptions should now be visible: a Lorentzian metric, a specifi
 
 That coherence is the achievement. The theory becomes more impressive when its assumptions are stated than when they are hidden inside a slogan.
 
+### 15.9 Mach's question: what fixes an inertial frame?
+
+Imagine a rotating bucket of water. The surface becomes concave. Rotating relative to what? Relative to the bucket cannot be the whole answer: once the water co-rotates with the bucket, the concavity remains. Mach's critique of absolute space encouraged the idea that inertia might ultimately be tied to the matter elsewhere in the universe. Einstein found this line of thought influential.
+
+General relativity does not reduce to the claim that distant stars uniquely determine every local inertial frame. A simple counterexample is empty Minkowski spacetime: it contains no matter but has a well-defined family of inertial worldlines. A metric and suitable initial or boundary data remain part of the theory. Frame dragging shows that rotating matter does influence local inertial directions; it does not establish every stronger formulation of “Mach's principle.” The name covers several related proposals, not one universally accepted theorem. [Einstein's own 1918 discussion of the principles of GR](https://onlinelibrary.wiley.com/doi/10.1002/andp.19183600402).
+
+This distinction is another application of the book's discipline. An idea can motivate a theory without becoming a theorem of the final theory. We test what the actual field equation predicts.
+
+### 15.10 A tiny density that does not dilute
+
+Use $\Lambda=1.1\times10^{-52}\,\mathrm{m^{-2}}$ as an illustrative cosmological scale, not a newly measured parameter estimate. The effective vacuum mass-equivalent density is
+
+$$
+\rho_\Lambda=\frac{\Lambda c^2}{8\pi G_N}
+\simeq5.9\times10^{-27}\,\mathrm{kg/m^3}.
+$$
+
+Dividing by the mass of a hydrogen atom, about $1.67\times10^{-27}\,\mathrm{kg}$, gives the mass equivalent of roughly 3.5 hydrogen atoms per cubic metre. The vacuum component is not literally a gas of hydrogen. The comparison translates an unfamiliar density into a familiar mass scale.
+
+For a cosmological constant, the energy density $\epsilon_\Lambda=\rho_\Lambda c^2$ remains constant while a comoving region expands, and its pressure is $p_\Lambda=-\epsilon_\Lambda$. Ordinary dust dilutes as $a^{-3}$ and radiation as $a^{-4}$. Thus a constant component can eventually dominate even if it starts small. That conclusion assumes the component really is constant and the cosmological solution evolves into that regime; it is not a general forecast for every possible dark-energy model.
+
 <a id="chapter-16"></a>
 
 ## 16. Turning geometry into experiments: clocks, light, and Mercury
@@ -4442,6 +4700,87 @@ per orbit, where $p_{\rm orb}=a_{\rm orb}(1-e^2)$ at the needed Newtonian order.
 This is the relativistic contribution under the approximation of an isolated spherical Sun. Planetary perturbations, solar structure, and reference-frame modeling also affect the observed perihelion. The success lies in calculating the appropriate additional contribution, not declaring that every observed orbital change is relativistic.
 
 **The lesson of these experiments:** Newtonian motion, clock comparison, light bending, and radar delay interrogate related but different pieces of the geometry. Agreement across them is more informative than agreement with one attractive number.
+
+### 16.7 GPS: calculate the competing clock effects
+
+Start with the clock formula already derived here:
+
+$$
+\frac{d\tau}{dt}\simeq1+\frac{\Phi}{c^2}-\frac{v^2}{2c^2}.
+$$
+
+Use a nonrotating, spherical Earth model. Compare a clock in a circular orbit of radius $r$ with a stationary surface clock at radius $R$. The potential is $\Phi=-G_NM/r$. Circular motion requires $v^2/r=G_NM/r^2$, so $v^2=G_NM/r$. Subtract the surface rate from the orbital rate:
+
+$$
+\Delta\!\left(\frac{d\tau}{dt}\right)
+\simeq\underbrace{\frac{G_NM}{c^2}\left(\frac1R-\frac1r\right)}_{\text{altitude gain}}
+-\underbrace{\frac{G_NM}{2rc^2}}_{\text{motion loss}}.
+$$
+
+Take $R=6371\,\mathrm{km}$ and $r=26{,}571\,\mathrm{km}$, corresponding to an approximate GPS altitude of $20{,}200\,\mathrm{km}$. With $c=299{,}792{,}458\,\mathrm{m/s}$ and the Earth parameter from Section 10.9, multiply each dimensionless rate by $86{,}400$ seconds per day:
+
+| Contribution | Approximate clock change per day | Physical reason |
+|---|---|---|
+| Altitude | $+45.7\,\mu\mathrm s$ | The orbital clock is at a less negative potential. |
+| Motion | $-7.2\,\mu\mathrm s$ | The orbital clock moves relative to the chosen stationary coordinates. |
+| Sum | $+38.5\,\mu\mathrm s$ | At this altitude, the potential contribution wins. |
+
+A light signal travels about $11.5\,\mathrm{km}$ in $38.5\,\mu\mathrm s$. This converts a timing offset to a ranging scale; it is not a full prediction of an uncorrected receiver's position error, which depends on how it estimates its own clock bias and uses satellite data.
+
+Set the net rate to zero. The result is $1/R=3/(2r)$, or $r=3R/2$. In this model, a circular-orbit clock matches the surface rate at altitude $R/2\simeq3186\,\mathrm{km}$. Below that, it loses time; above that, it gains time. This crossover is not exact for the rotating, nonspherical real Earth. Operational GPS also includes eccentricity, Earth rotation, a chosen reference time and geoid, and propagation corrections. [Ashby's account of relativity in GPS](https://pmc.ncbi.nlm.nih.gov/articles/PMC5253894/).
+
+### 16.8 A tossed clock can age more than the clock on the shelf
+
+Compare two ideal clocks that start together at height zero and reunite after coordinate time $T$. One remains supported at that height. The other is tossed vertically and falls freely between launch and catch. Ignore drag, recoil, and the brief launch and catch intervals; use a uniform $g$ and weak-field, slow-motion accuracy.
+
+The free-fall path that returns after $T$ is
+
+$$
+h(t)=\frac g2t(T-t),\qquad
+v(t)=g\left(\frac T2-t\right).
+$$
+
+Choose $\Phi=gh$, so the shelf's potential is zero. The tossed clock gains from height and loses from motion. Its net proper-time excess is
+
+$$
+\Delta\tau\simeq\frac1{c^2}\int_0^T
+\left(gh(t)-\frac{v(t)^2}{2}\right)dt.
+$$
+
+Do the two elementary integrals separately:
+
+$$
+\int_0^Tgh(t)dt=\frac{g^2T^3}{12},\qquad
+\int_0^T\frac{v(t)^2}{2}dt=\frac{g^2T^3}{24}.
+$$
+
+Thus $\Delta\tau=g^2T^3/(24c^2)>0$. With $g=9.81\,\mathrm{m/s^2}$ and $T=1\,\mathrm s$, the gain is approximately $4.46\times10^{-17}\,\mathrm s$, or 44.6 attoseconds. The height gain is twice the speed loss. In this short-path regime, the timelike free-fall path locally maximizes proper time between the endpoints. This does not make every geodesic a global maximum over arbitrary long journeys.
+
+### 16.9 Gyroscopes and a compact experimental map
+
+A gyroscope supplies a direction that can be transported. Around a gravitating body, its orientation need not stay fixed relative to distant reference directions. Even a nonrotating source produces geodetic precession. A rotating source adds frame dragging. These are different contributions, not two names for the same effect.
+
+For a weak, slowly rotating source with angular momentum $\mathbf J$, the leading frame-dragging precession is
+
+$$
+\boldsymbol\Omega_{\rm LT}=\frac{G_N}{c^2r^3}
+\left[3(\mathbf J\cdot\hat{\mathbf r})\hat{\mathbf r}-\mathbf J\right].
+$$
+
+Here $\hat{\mathbf r}$ is the radial unit vector. The expression is a vector: an orbital average must average its direction as well as its magnitude. For a circular polar orbit, its averaged vector is $G_N\mathbf J/(2c^2r^3)$. The measured projection also depends on the reference direction used by the experiment.
+
+Gravity Probe B reported drift magnitudes of $6601.8\pm18.3$ milliarcseconds per year for the geodetic effect and $37.2\pm7.2$ for frame dragging, compared with predictions of $6606.1$ and $39.2$. The experiment's signed drift convention is defined by its sky axes; magnitudes are quoted here to focus on scale. [The collaboration's 2011 final results](https://arxiv.org/abs/1105.3456).
+
+| Experiment | What is measured | The theoretical relationship tested |
+|---|---|---|
+| Freely falling bodies of different composition | Differential acceleration | Universality of free fall; MICROSCOPE's 2022 results probed parts in $10^{15}$. |
+| Clock comparisons and GPS | Frequency or accumulated time differences | Proper time along specified worldlines. |
+| Light deflection and Shapiro delay | Angles and travel times | Null propagation through both temporal and spatial metric terms. |
+| Mercury's orbit | Perihelion advance | Relativistic corrections to orbital geometry. |
+| Gyroscope precession | Orientation drift | Parallel transport and rotation-induced frame dragging. |
+| Binary pulsars and gravitational-wave detectors | Orbital decay and strain | Radiative dynamics and the energy lost through waves. |
+
+This is a map of physical questions, not a ranking by a single “precision of GR.” Each measurement has its own model, observable, nuisance parameters, and uncertainty. MICROSCOPE does not establish exact equality or directly measure a metric coefficient. [MICROSCOPE's final analysis](https://arxiv.org/abs/2209.15487).
 
 <a id="chapter-17"></a>
 
@@ -5997,6 +6336,41 @@ Here $\varepsilon_{0123}=+1$ is the internal alternating symbol and $\mathcal R^
 
 The payoff is larger than elegant notation. We now understand a metric formulation, a moving-laboratory formulation, and a gauge-connection formulation as different ways of asking the same questions about comparison, motion, and curvature.
 
+### 21.8 Cartan on a sphere: every wedge product earns its sign
+
+Use the round two-sphere metric $ds^2=a^2(d\theta^2+\sin^2\theta\,d\phi^2)$. Its orthonormal coframe is
+
+$$
+e^1=a\,d\theta,\qquad e^2=a\sin\theta\,d\phi.
+$$
+
+First differentiate. Because $d(d\theta)=d(d\phi)=0$,
+
+$$
+de^1=0,\qquad de^2=a\cos\theta\,d\theta\wedge d\phi.
+$$
+
+Metric compatibility in this Euclidean two-dimensional frame gives $\omega^1{}_2=-\omega^2{}_1$. The torsion-free equation for $e^2$ is $de^2+\omega^2{}_1\wedge e^1=0$. Choose $\omega^2{}_1=\cos\theta\,d\phi$. Then its contribution is
+
+$$
+\omega^2{}_1\wedge e^1
+=a\cos\theta\,d\phi\wedge d\theta
+=-a\cos\theta\,d\theta\wedge d\phi,
+$$
+
+which cancels $de^2$. The other structure equation also holds: $\omega^1{}_2\wedge e^2$ vanishes because it contains $d\phi\wedge d\phi$.
+
+Now compute curvature. In this two-dimensional orthonormal frame the matrix-product contribution to $\Omega^1{}_2$ vanishes because the diagonal connection entries vanish. Therefore
+
+$$
+\Omega^1{}_2=d\omega^1{}_2
+=d(-\cos\theta\,d\phi)
+=\sin\theta\,d\theta\wedge d\phi
+=\frac1{a^2}e^1\wedge e^2.
+$$
+
+The Gaussian curvature is $K=1/a^2$, so the scalar curvature is $R=2/a^2$, agreeing with Chapter 8's coordinate calculation. The sphere's curvature is positive even though this coframe fails at the poles. That failure belongs to the angular chart and frame, not to the smooth sphere. This worked calculation applies the structure equations developed above; it is not a new assumption about gravity.
+
 <a id="chapter-22"></a>
 
 ## 22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics
@@ -6287,6 +6661,46 @@ $$
 with the quantum-field entropy and gravitational parameters treated consistently under renormalization. The generalized second law has substantial support and proofs in specified settings; it should not be promoted without qualifications to a theorem covering every unknown quantum-gravitational process.
 
 Curvature, causality, quantum theory, and entropy now meet in one calculation. That intersection is a clue about the depth of gravity, even though it is not yet a finished microscopic explanation.
+
+### 22.9 Classical area increase, with the assumptions visible
+
+For horizon-generating null geodesics, the vorticity vanishes and the screen has two dimensions. In an affine parameter $\lambda$, Raychaudhuri becomes
+
+$$
+\frac{d\theta}{d\lambda}
+=-\frac12\theta^2-\sigma_{ab}\sigma^{ab}
+-R_{\mu\nu}k^\mu k^\nu.
+$$
+
+The null energy condition, together with Einstein's equation, makes the last contraction nonnegative; the cosmological term drops out because $g_{\mu\nu}k^\mu k^\nu=0$. If the horizon expansion were negative, the inequality would force a future caustic. Under the global regularity and predictability assumptions of the classical area theorem, horizon generators cannot end in that way on the future horizon. This yields nonnegative expansion and nondecreasing horizon area. The global step is essential; a local differential equation alone does not prove the theorem.
+
+For a simple numerical illustration, imagine two initially well-separated, nonspinning holes of equal mass $M$, ending in a nonspinning hole of mass $M_f$. Since a Schwarzschild area is $16\pi G_N^2M^2/c^4$, area increase requires
+
+$$
+M_f^2\ge2M^2,\qquad M_f\ge\sqrt2\,M.
+$$
+
+With initial total energy approximately $2Mc^2$, the radiated fraction is consequently at most $1-1/\sqrt2\simeq29.3\%$ under these idealizations. This is an upper bound, not the predicted emission efficiency. A spinning remnant requires the Kerr area formula, so applying $A\propto M^2$ blindly to a measured merger would be wrong.
+
+For an uncharged stationary rotating black hole, the first law can be written in SI units as
+
+$$
+d(Mc^2)=\frac{\kappa_{\rm sg}c^2}{8\pi G_N}\,dA+\Omega_H\,dJ.
+$$
+
+Here $\kappa_{\rm sg}$ is surface gravity with acceleration units, $\Omega_H$ is horizon angular velocity, and $J$ is angular momentum. With $T_H=\hbar\kappa_{\rm sg}/(2\pi c k_B)$ and $S_{\rm BH}=k_BAc^3/(4\hbar G_N)$, the area term equals $T_HdS_{\rm BH}$. Surface gravity is constant on an equilibrium horizon under the zeroth law's assumptions. The classical second law is area increase; quantum evaporation calls for generalized entropy instead. The various third-law formulations need additional qualifications and are not needed for this derivation. [Wald's account of the laws and their assumptions](https://arxiv.org/abs/gr-qc/9912119).
+
+### 22.10 The information question, without assuming quantum mechanics
+
+Classical uncertainty means we do not know which state a system has. Quantum theory also has **entanglement**: two subsystems can have a definite joint state even when neither has a definite pure state on its own. A **pure state** describes the complete quantum state; a **mixed state** describes uncertainty or the reduced description of a subsystem. **Unitary evolution** is the reversible state evolution of an isolated quantum system in ordinary quantum mechanics. These definitions are enough to state the puzzle, though not to reproduce a quantum-field calculation.
+
+In the leading semiclassical account of a collapsing black hole, outgoing radiation is entangled with degrees of freedom behind the horizon. An observer with access only to the exterior describes approximately thermal radiation, modified by propagation through the surrounding geometry. A thermal-looking spectrum alone does not prove that all correlations are absent.
+
+The tension appears when we combine several claims: a pure initial state, complete evaporation with no remaining hidden system, a final radiation state with irretrievably lost correlations, and unitary evolution of the entire isolated process. Those claims cannot all hold. The classical no-hair description of a stationary exterior is not, by itself, a proof that a quantum state has no microscopic information.
+
+The entropy of radiation expected in a unitary evaporation rises while the radiation is entangled with the remaining hole, then eventually falls to zero if all that remains is the final pure radiation state. This qualitative rise-and-fall behavior is called the **Page curve**. Modern gravitational entropy calculations reproduce such curves in specified models using additional saddle points and so-called islands. They are significant theoretical results, not direct observations of astrophysical evaporation or a fully settled microscopic description of every black hole. [Almheiri and collaborators' review](https://arxiv.org/abs/2006.06872).
+
+The boundary of the book is visible here. The classical Einstein equation alone cannot decide how quantum information is recovered. It supplies the geometry in which the question becomes sharp.
 
 <a id="chapter-23"></a>
 
@@ -7452,3 +7866,64 @@ This list gathers the sources linked at the point of use. A link to a paper does
 ---
 
 **One final challenge:** explain the Einstein equation to a friend without saying “mass bends a rubber sheet.” Use a clock, two neighboring freely falling laboratories, a rule for comparing their directions, and an action whose stationary points determine the geometry. If you can do that—and explain why empty spacetime can still carry waves—you have moved well beyond recognizing the symbols.
+
+
+<a id="appendix-e"></a>
+
+## Appendix E. Index practice and three extra calculations
+
+### E.1 An index-reading checklist
+
+Before calculating, read the expression aloud. In $A^\mu B_\mu$, one index appears upstairs and downstairs, so sum over it and obtain a scalar. In $C^\mu{}_\nu v^\nu$, the $\nu$ is summed and the $\mu$ remains free: the result is a vector with one upper index.
+
+| Check | A valid example | The mistake it prevents |
+|---|---|---|
+| Free indices match on both sides | $a^\mu=b^\mu$ | Equating objects of different tensor type. |
+| A dummy appears twice in a term | $A^\mu B_\mu$ | An ambiguous threefold repetition. |
+| Rename an entire dummy pair | $A^\mu B_\mu=A^\alpha B_\alpha$ | Changing only half a contraction. |
+| An inverse is a matrix inverse | $g^{\mu\alpha}g_{\alpha\nu}=\delta^\mu{}_\nu$ | Taking elementwise reciprocals. |
+| Raising uses the metric | $v^\mu=g^{\mu\nu}v_\nu$ | Treating height as decoration. |
+| A trace knows the dimension | $\delta^\mu{}_\mu=4$ | Forgetting that the repeated pair is summed. |
+
+For an antisymmetric $A^{\mu\nu}$ and symmetric $S_{\mu\nu}$, the contraction vanishes. Rename $\mu\leftrightarrow\nu$ throughout: $S_{\mu\nu}A^{\mu\nu}=S_{\nu\mu}A^{\nu\mu}=-S_{\mu\nu}A^{\mu\nu}$. A number equal to its own negative is zero. This small argument removes many apparently complicated terms.
+
+### E.2 A scalar field: when is it dust, and when is it not?
+
+**Problem.** In natural units, a homogeneous canonical scalar field has $\epsilon=\dot\phi^2/2+V(\phi)$ and $p=\dot\phi^2/2-V(\phi)$. Find its equation of state when $V=0$. Then explain how an oscillating massive scalar can instead act like dust.
+
+<details class="checkpoint"><summary>Work it out, then reveal the solution</summary>
+
+If $V=0$ and the field has nonzero kinetic energy, $p=\epsilon$, so $w=p/\epsilon=1$. This is called stiff matter, not dust. The continuity equation then gives $\epsilon\propto a^{-6}$.
+
+For a quadratic potential $V=m^2\phi^2/2$, and oscillations much faster than cosmic expansion, a cycle average has $\langle\dot\phi^2/2\rangle=\langle V\rangle$. One way to see it is to approximate $\phi=A\cos(mt)$ over a cycle: sine squared and cosine squared have equal averages. Thus $\langle p\rangle\simeq0$ while $\langle\epsilon\rangle>0$, the dust-like result. It requires the massive potential and the separation of timescales. A field dominated by a slowly varying potential instead has $p\simeq-\epsilon$.
+
+</details>
+
+### E.3 Trace reversal in any dimension
+
+**Problem.** Let spacetime have dimension $n$. Take the trace of $R_{\mu\nu}-Rg_{\mu\nu}/2+\Lambda g_{\mu\nu}=\kappa T_{\mu\nu}$, then solve for $R_{\mu\nu}$ when $n\ne2$.
+
+<details class="checkpoint"><summary>Reveal the contraction, one step at a time</summary>
+
+Contract with $g^{\mu\nu}$. Since $g^{\mu\nu}g_{\mu\nu}=n$, we get $(1-n/2)R+n\Lambda=\kappa T$. Therefore $R=2(n\Lambda-\kappa T)/(n-2)$. Substitute it back:
+
+$$
+R_{\mu\nu}=\kappa\left(T_{\mu\nu}-\frac{T}{n-2}g_{\mu\nu}\right)
++\frac{2\Lambda}{n-2}g_{\mu\nu}.
+$$
+
+In four dimensions this recovers the familiar half-trace term. In two dimensions division by $n-2$ is forbidden. Instead the trace equation gives $2\Lambda=\kappa T$, and the Einstein tensor vanishes identically. Other two-dimensional gravity theories can still have dynamics; this result concerns the Einstein–Hilbert metric theory.
+
+</details>
+
+### E.4 Pressure and light bending are different questions
+
+**Problem.** In an isotropic rest frame with $\Lambda=0$, compare the initial small-ball focusing source for dust with that for radiation at the same energy density $\epsilon$. Does this derive the factor of two in deflection of a ray by the Sun?
+
+<details class="checkpoint"><summary>Reveal the answer and the important distinction</summary>
+
+For an initially comoving infinitesimal ball, the rest-frame focusing source is proportional to $\epsilon+3p$. Dust has $p=0$ and isotropic radiation has $p=\epsilon/3$, so their sources are $\epsilon$ and $2\epsilon$ respectively. This is a statement about different matter stress tensors sourcing Ricci curvature.
+
+Deflection of a ray around the Sun is a different problem: the exterior is approximately vacuum and its metric has both temporal and spatial weak-field contributions. Their combined effect gives twice the deflection obtained from keeping the temporal contribution alone. The two factors of two should not be identified as the same derivation. Nor does the pressure of radiation double the total mass of a sealed photon box; the container's stresses must be included.
+
+</details>

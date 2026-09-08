@@ -1,0 +1,71 @@
+name: Build and publish the HTML book
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - name: Install browser for the reading checks
+        run: npx playwright install --with-deps chromium
+      - name: Check desktop, mobile, and interactive examples
+        run: |
+          npm run serve > /tmp/book-server.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            curl --fail --silent http://localhost:4173/ > /dev/null && break
+            sleep 1
+          done
+          npm run test:browser
+          npm run test:figures
+      - name: Preserve inspection evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-inspection
+          path: qa/
+      - uses: actions/configure-pages@v5
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: site
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the checked book
+        id: deployment
+        uses: actions/deploy-pages@v4
