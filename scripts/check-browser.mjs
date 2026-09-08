@@ -44,10 +44,30 @@ try{
  await page.goto(new URL('chapter-18.html',base).href);
  await page.locator('#wave-phase').fill('50');await page.locator('#wave-phase').dispatchEvent('input');
  assert.ok(Number(await page.locator('.wave-dot').first().getAttribute('cx'))>330);
+ for(const width of [1440,390])for(const theme of ['light','dark']){
+  await page.setViewportSize({width,height:844});
+  await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
+  await page.locator('#search-button').click();await page.locator('#search-input').fill('GPS');
+  await page.waitForFunction(()=>document.querySelectorAll('#search-results a').length>0);
+  assert.ok((await page.locator('#search-results').innerText()).includes('Clocks, light, and Mercury'));
+  assert.equal(await page.locator('dialog[open]').count(),0,'Search must not open a modal');
+  const box=await page.locator('#search-popover').boundingBox();
+  assert.ok(box.x>=0&&box.x+box.width<=width+1&&box.height<600,'Suggestions stay compact and inside the viewport');
+  await page.keyboard.press('ArrowDown');
+  assert.equal(await page.locator('#search-input').getAttribute('aria-activedescendant'),'search-result-0');
+  await page.screenshot({path:`qa/search-${width}-${theme}.png`});
+  await page.keyboard.press('Escape');await page.locator('#search-popover').waitFor({state:'hidden'});
+  assert.equal(await page.locator('#search-button').getAttribute('aria-expanded'),'false');
+  await page.locator('#search-button').click();await page.locator('#search-input').fill('zzzz-no-such-idea');
+  assert.equal(await page.locator('#search-results a').count(),0);
+  await page.locator('#search-input').fill('');await page.locator('[data-search-query="Proper time"]').click();
+  assert.ok(await page.locator('#search-results a').count()>0);
+  await page.mouse.click(width-5,700);await page.locator('#search-popover').waitFor({state:'hidden'});
+ }
  await page.locator('#search-button').click();await page.locator('#search-input').fill('GPS');
- await page.waitForFunction(()=>document.querySelectorAll('#search-results a').length>0);
- assert.ok((await page.locator('#search-results').innerText()).includes('Clocks, light, and Mercury'));
- await page.keyboard.press('Escape');await page.locator('#search-dialog').waitFor({state:'hidden'});
+ await page.keyboard.press('ArrowDown');await page.keyboard.press('Enter');
+ await page.waitForURL('**/chapter-16.html');
+ await page.evaluate(()=>document.documentElement.dataset.theme='light');
  await page.locator('#theme-button').click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
  await page.locator('#type-button').click();assert.match(await page.locator('html').getAttribute('class'),/large-type/);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));

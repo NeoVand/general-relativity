@@ -26,7 +26,7 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
   controls.target.set(0, 0, 0);
   controls.minDistance = 4.8;
   controls.maxDistance = 15;
-  controls.autoRotateSpeed = .25; // One gentle camera orbit every four minutes.
+  controls.autoRotateSpeed = .6; // A perceptible, unhurried camera orbit every 100 seconds.
   const uniforms = {
     phase: {value: INITIAL_PHASE}, ink: {value: new THREE.Color()},
   };
