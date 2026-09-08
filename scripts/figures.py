@@ -41,7 +41,8 @@ def save(id,ch,title,alt,caption,body,height=480,after=None):
 b=axes(85,375,420,255,'time t','position x')
 b+=plot(lambda t:t*t,0,3,85,375,390,240,0,9)
 b+=plot(lambda t:4*t-4,1,3,215,375,260,240,0,9,color=ORANGE,dash='7 5')
-b+=circle(345,375-240*4/9,6,TEAL)+text(355,250,'t = 2',17)
+b+=circle(345,375-240*4/9,6,TEAL)+text(326,243,'t = 2',17,anchor='end')
+b+=line(331,248,340,261,MUTED,1.5)
 b+=label(565,130,'Derivative → local slope','At t = 2, the slope of x = t² is 4.')
 b+=line(570,191,920,191)+text(565,234,'x(2 + Δt) ≈ 4 + 4Δt',28,ORANGE)
 b+=text(565,283,'The line matches value and slope.',19)+text(565,316,'The curve reveals the next-order change.',19)
@@ -72,12 +73,12 @@ b+=line(590,360,800,220,TEAL,4,arrow=True)+text(625,435,'Three level intervals c
 save('vector-covector',2,'Arrows and the questions they answer','A diagonal vector crosses three evenly spaced level intervals of the function x.','The covector dx returns the change in x, not the Euclidean length of the arrow. Changing the coordinate scale changes both components so their pairing stays the same.',b)
 
 # 3: light cones and twins.
-b=axes(460,390,430,290,'space x','time ct')
-b+=poly([(180,110),(460,390),(740,110)],TEAL,2,fill='#dff0f0')
+b=poly([(180,110),(460,390),(740,110)],TEAL,2,fill='#dff0f0')
+b+=axes(460,390,430,290,'space x','time ct')
 b+=line(180,110,460,390,TEAL,3)+line(460,390,740,110,TEAL,3)
 b+=line(460,390,535,155,ORANGE,4,arrow=True)+text(570,180,'timelike',21,ORANGE)
 b+=line(460,390,830,300,BLUE,3,arrow=True)+text(720,280,'spacelike',21,BLUE)
-b+=text(460,92,'FUTURE LIGHT CONE',16,TEAL,'middle',650)+text(194,250,'light: |Δx| = cΔt',18,TEAL)
+b+=text(460,92,'FUTURE LIGHT CONE',16,TEAL,'middle',650)+text(240,255,'light: |Δx| = cΔt',18,TEAL,'end')
 b+=text(52,443,'Signals from the starting event remain on or inside this cone. One space dimension is shown.',18,MUTED)
 save('light-cone',3,'The minus sign creates a light cone','Two light rays bound the possible future of an event. A slower-than-light path lies inside, and a spacelike displacement lies outside.','The graph uses the same scale for x and ct. A massive observer follows a timelike worldline; no rest frame exists for a light ray.',b)
 b=axes(100,380,470,260,'distance (light-years)','time (years)')
@@ -95,7 +96,7 @@ for r in [65,125,185]:b+=poly([(ox+r*cos(t*pi/100),oy-r*sin(t*pi/100)) for t in 
 for t in [0,pi/6,pi/3,pi/2,2*pi/3,5*pi/6,pi]:b+=line(ox,oy,ox+185*cos(t),oy-185*sin(t))
 r1,r2,t1,t2=125,185,.5,.9
 cell=[(ox+r1*cos(t1+i*(t2-t1)/30),oy-r1*sin(t1+i*(t2-t1)/30)) for i in range(31)]+[(ox+r2*cos(t2-i*(t2-t1)/30),oy-r2*sin(t2-i*(t2-t1)/30)) for i in range(31)]
-b+=poly(cell+[cell[0]],TEAL,3,'#d9eeee')+line(ox,oy,ox+125*cos(.5),oy-125*sin(.5),ORANGE,2)+text(330,323,'r',22,ORANGE)
+b+=poly(cell+[cell[0]],TEAL,3,'#d9eeee')+line(ox,oy,ox+125*cos(.5),oy-125*sin(.5),ORANGE,2)+text(345,312,'r',22,ORANGE)
 b+=text(428,205,'dr',20,TEAL)+text(380,151,'r dθ',20,TEAL)
 b+=label(565,150,'Two physical edge lengths')+text(565,205,'Radial: dr',26,TEAL)+text(565,252,'Angular: r dθ',26,ORANGE)+text(565,320,'ds² = dr² + r²dθ²',29)+text(565,365,'Cell area ≈ r dr dθ',21,MUTED)
 save('polar-metric',4,'Coordinates are not rulers','A polar grid has an annular sector highlighted; its radial and angular edges have different measuring factors.','For an infinitesimal cell, the angular edge is r dθ and the radial edge is dr. The finite cell is enlarged for visibility; the plane is intrinsically flat.',b)
@@ -143,7 +144,7 @@ for z in [-.5,0,.5]:
 paths=[[(sin(t*pi/200),0,cos(t*pi/200)) for t in range(101)],[(cos(t*pi/200),sin(t*pi/200),0) for t in range(101)],[(0,cos(t*pi/200),sin(t*pi/200)) for t in range(101)]]
 for pts in paths:b+=poly([project(p) for p in pts],TEAL,4)
 P,A,B=project((0,0,1)),project((1,0,0)),project((0,1,0))
-for name,p,dx,dy in [('P',P,-20,-14),('A',A,14,5),('B',B,-32,5)]:b+=circle(*p,5,INK)+text(p[0]+dx,p[1]+dy,name,22)
+for name,p,dx,dy in [('P',P,-7,48),('A',A,-28,-8),('B',B,14,-8)]:b+=circle(*p,5,INK)+text(p[0]+dx,p[1]+dy,name,22)
 b+=line(*P,P[0]+65*.707,P[1]+65*.408,ORANGE,3,arrow=True)
 b+=line(*P,P[0]-65*.707,P[1]+65*.408,BLUE,3,arrow=True)
 b+=text(585,195,'Start: toward A',22,ORANGE)+text(585,239,'Return: perpendicular to start',22,BLUE)
@@ -237,7 +238,7 @@ b+=line(65,185,930,185,MUTED,2,'6 5')
 pts=[]
 for i in range(251):
  x=-5+10*i/250;y=.045*(x+sqrt(x*x+1));pts.append((70+85*i/25,190+130*y))
-b+=poly(pts,TEAL,4)+line(490,305,490,190,BLUE,2)+text(506,258,'b',24,BLUE)
+b+=poly(pts,TEAL,4)+line(545,305,572,305,BLUE,1.5)+line(565,305,565,185,BLUE,2)+text(580,251,'b',24,BLUE)
 b+=text(85,165,'incoming direction',18,MUTED)+text(685,342,'α ≈ 4GM / (c²b)',30,TEAL)
 b+=text(55,440,'b is the impact parameter in the weak-field, asymptotically flat description.',19,MUTED)
 save('light-bending',16,'A ray samples more than the clock rate','A light ray bends toward a mass relative to its straight incoming reference line; the impact parameter is marked.','This is the shape from a first-order weak-field deflection profile, with its amplitude enlarged. The book derives why keeping only the clock term misses half the leading GR deflection.',b,after='16.4')
@@ -255,8 +256,8 @@ for r in [.5,1,1.6,2.7]:
 b+=text(70,462,'Inside: every future light direction goes to smaller r.',19,ORANGE)+text(580,462,'Outside: an outward ray can escape.',19,TEAL)
 save('horizon-cones',17,'A horizon changes which way the future goes','At four radii, future radial light cones tilt inward. The outward generator is vertical at the horizon and points toward smaller radius inside.','The diagram uses regular ingoing coordinates, not singular Schwarzschild time. Cone slopes follow dr/dT = −1 and (r − rₛ)/(r + rₛ). T is a drawing coordinate, not a freely falling clock reading.',b,height=505,after='17.3')
 b=label(45,90,'Three radii, three questions','For a nonrotating, uncharged black hole.')
-cx,cy=320,290
-for radius,col in [(170,BLUE),(85,GOLD),(56.6667,TEAL)]:b+=circle(cx,cy,radius,col,'none')
+cx,cy=320,300
+for radius,col in [(160,BLUE),(80,GOLD),(53.3333,TEAL)]:b+=circle(cx,cy,radius,col,'none')
 b+=circle(cx,cy,4,INK)
 for yy,title,sub,col in [(170,'Horizon · 2GM/c²','Boundary of causal escape',TEAL),(265,'Photon sphere · 3GM/c²','Unstable circular light orbits',GOLD),(360,'ISCO · 6GM/c²','Innermost stable circular timelike orbit',BLUE)]:
  b+=label(565,yy,title,sub,col)
@@ -288,7 +289,7 @@ for y,name in [(200,'next slice'),(370,'initial slice')]:
  b+=poly([(100,y),(730,y),(865,y-65),(235,y-65),(100,y)],MUTED,2,fill='#e9f0f3')+text(785,y+5,name,18,MUTED)
 p=(325,335);q=(465,165);n=(325,165)
 b+=line(*p,*n,TEAL,4,arrow=True)+line(*n,*q,ORANGE,4,arrow=True)+line(*p,*q,BLUE,3,arrow=True)
-b+=circle(*p,5,INK)+text(220,270,'lapse × normal',19,TEAL)+text(390,145,'shift',20,ORANGE,'middle')+text(480,270,'coordinate-time step',20,BLUE)
+b+=circle(*p,5,INK)+text(303,270,'lapse × normal',19,TEAL,'end')+text(390,189,'shift',18,ORANGE,'middle')+text(480,270,'coordinate-time step',20,BLUE)
 b+=text(70,445,'Spatial metric γ: measurements within a slice. Extrinsic curvature K: how that slice sits in spacetime.',17,MUTED)
 save('adm-slicing',20,'Lapse and shift separate two choices','A diagonal coordinate-time step is decomposed into a normal step between slices and a tangential shift.','Lapse controls normal proper-time separation; shift controls the tangential relabeling. Arrow lengths are schematic and do not represent an ordinary Euclidean decomposition of a Lorentzian norm.',b)
 
@@ -404,7 +405,7 @@ b=label(45,95,'Three quantities that should not share one name','Here χ is como
 b+=axes(90,385,440,235,'comoving distance χ','conformal time η')
 p=(285,205);b+=circle(*p,6,TEAL)+poly([(105,385),p,(465,385)],TEAL,3)
 b+=line(100,165,500,165,ORANGE,2,'6 5')+line(285,205,245,165,ORANGE,3)+line(285,205,325,165,ORANGE,3)
-b+=text(290,234,'now',17,TEAL)+text(105,445,'initial conformal boundary',16,MUTED)+text(108,153,'finite future conformal boundary',16,ORANGE)
+b+=text(285,252,'now',17,TEAL,'middle')+text(105,445,'initial conformal boundary',16,MUTED)+text(108,153,'finite future conformal boundary',16,ORANGE)
 b+=label(585,155,'Particle horizon','How far light has reached us since the start.',TEAL)+label(585,255,'Event horizon','How far a signal sent now can ever reach.',ORANGE)+label(585,355,'Hubble radius: c/H','An expansion scale; not generally a causal horizon.',BLUE)
 save('cosmic-horizons',19,'A causal horizon is not just a distance scale','Past and future light rays in conformal coordinates meet initial and finite future boundaries.','The diagram depicts a model with finite past and future conformal intervals. Their lengths determine particle and event horizons. Other expansion histories can lack one or both boundaries; c/H is a different construction.',b,after='19.8')
 
