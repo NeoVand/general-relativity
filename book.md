@@ -480,7 +480,7 @@ Now compare two observers. If they lie along the same outward radial line, the n
 
 There are two safeguards for the picture. First, the connecting lines at a given instant are not themselves geodesics: the laboratories' **worldlines through spacetime** are geodesics. Second, bending the lines of a coordinate drawing is easy even in flat space. The physical evidence for curvature is the relative acceleration of nearby freely falling laboratories, not the appearance of a mesh.
 
-The [ScienceClic visualization by Alessandro Roussel](https://www.youtube.com/watch?v=wrwgIjBUYVc) motivates this moving-grid intuition. Our implementation uses the precise [river model developed by Hamilton and Lisle](https://arxiv.org/abs/gr-qc/0411060). Its displayed time runs faster than real time, and it stops following observers at Earth's surface. A replay starts a new showing of the same initial grid; it is not a physical expansion followed by another collapse.
+The [ScienceClic visualization by Alessandro Roussel](https://www.youtube.com/watch?v=wrwgIjBUYVc) motivates this moving-grid intuition. Our implementation uses the precise [river model developed by Hamilton and Lisle](https://arxiv.org/abs/gr-qc/0411060). Its motion runs faster than real time, and it stops following observers at Earth's surface. The animation shows an established, continuous flow: older, already-deformed reference grids fill the view from the first frame, while new ones enter from a boundary beyond its edges. There is no flat starting state or global replay. New lines mark additional falling observers entering the scene; they do not mean new space is being created.
 
 ---
 

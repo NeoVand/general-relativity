@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {scenes} from './scenes.mjs';
-import {rainRadius, FALL_TIME, DURATION, EARTH_GM, EARTH_RADIUS} from '../web/earth-flow.js';
+import {rainRadius, FALL_TIME, ENTRY_HALF_SIZE, VIEW_RADIUS, INJECTION_INTERVAL, COHORTS, INITIAL_PHASE, cohortRadius, EARTH_GM, EARTH_RADIUS} from '../web/earth-flow.js';
 import {math,semanticTex} from './math-system.mjs';
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader'],...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
@@ -16,10 +16,13 @@ try{
    await page.goto(new URL(`chapter-${s.chapter}.html#scene-${s.id}`,base).href);
    const el=page.locator(`#scene-${s.id}`);await el.scrollIntoViewIfNeeded();await page.waitForFunction(id=>document.getElementById(id).dataset.ready==='true',`scene-${s.id}`);
    await page.evaluate(()=>document.fonts.ready);
-   const range=el.locator('input');await range.fill(String(s.max));await range.dispatchEvent('input');
+   const range=el.locator('input');
+   if(s.id==='earth')await el.getByRole('button',{name:'Pause free fall',exact:true}).click();
+   else {await range.fill(String(s.max));await range.dispatchEvent('input');}
    const data=await el.evaluate(e=>({...e.dataset}));
    if(s.id==='earth'){
-    assert.ok(Math.abs(+data.measurement-rainRadius(3,DURATION))<1e-12);
+    assert.equal(await range.count(),0,'The continuous Earth scene must not have a slider');
+    assert.ok(+data.phase>=0 && +data.phase<INJECTION_INTERVAL);
     assert.equal(data.playing,'false');
     await page.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.texture==='ready');
    }else if(s.id==='sphere'){
@@ -32,7 +35,7 @@ try{
    else if(s.id==='wave')assert.ok(Math.abs(+data.phase-2*Math.PI)<1e-12);
    else if(s.id==='slices')assert.equal(+data.measurement,1.2);
    // Inspect a representative intermediate state as well as the endpoint.
-   await range.fill(String(s.id==='sphere'?180:s.value));await range.dispatchEvent('input');
+   if(s.id!=='earth'){await range.fill(String(s.id==='sphere'?180:s.value));await range.dispatchEvent('input');}
    await el.locator('[data-view=left]').click();await el.locator('[data-view=reset]').click();
    const result=await el.evaluate(e=>{
     const stage=e.querySelector('.scene-stage'),rect=stage.getBoundingClientRect();
@@ -54,12 +57,15 @@ try{
  const earth=page.locator('[data-scene=earth]');
  await page.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='true');
  await earth.getByRole('button',{name:'Pause free fall',exact:true}).click();
- const paused=await earth.getAttribute('data-time');
- await earth.locator('input').press('ArrowRight');
- assert.notEqual(await earth.getAttribute('data-time'),paused,'Keyboard scrubbing should advance the model');
+ assert.equal(await earth.locator('input').count(),0);
+ const paused=+(await earth.getAttribute('data-time'));
+ assert.ok(paused>=0);
  await earth.getByRole('button',{name:'Play free fall',exact:true}).click();
  const before=+(await earth.getAttribute('data-frames'));
  await page.waitForFunction(n=>+document.querySelector('[data-scene=earth]').dataset.frames>n+2,before);
+ // Follow more than two injections: time must keep increasing across recycling.
+ await page.waitForFunction(t=>+document.querySelector('[data-scene=earth]').dataset.time>t+1.5,paused,{timeout:20000});
+ assert.equal(await earth.locator('[data-flow-status]').innerText(),'Continuous free fall');
  await earth.getByRole('button',{name:'Pause free fall',exact:true}).click();
  const stopped=await earth.getAttribute('data-frames');
  await page.waitForTimeout(150);
@@ -88,6 +94,19 @@ try{
  await fallbackPage.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='fallback');
  assert.ok(await fallbackPage.locator('[data-scene=earth] .scene-fallback svg').isVisible());
  await fallbackContext.close();
+ // Recycling continuity: every retained surface at the phase boundary has an
+ // identical successor. Only a hidden outer surface and an absorbed inner one change.
+ const eps=1e-7,wrap=INJECTION_INTERVAL-INITIAL_PHASE;
+ for(const r0 of [ENTRY_HALF_SIZE,ENTRY_HALF_SIZE*Math.sqrt(1.25),ENTRY_HALF_SIZE*Math.sqrt(3)]){
+  assert.ok(cohortRadius(r0,0,wrap+eps)>VIEW_RADIUS,'New reference lines enter outside the view');
+  assert.ok(cohortRadius(r0,COHORTS-1,wrap-eps)<1,'Recycled surfaces have completely crossed Earth');
+  for(let j=0;j<COHORTS-1;j++)assert.ok(Math.abs(cohortRadius(r0,j,wrap-eps)-cohortRadius(r0,j+1,wrap+eps))<1e-4,'Injection must preserve the visible grid');
+  for(const t of [0,.2,2.4,10,1000])assert.ok(Array.from({length:COHORTS},(_,j)=>cohortRadius(r0,j,t)).filter(r=>r>1.01&&r<VIEW_RADIUS).length>=4,'The grid must stay populated at all times');
+ }
+ // A visible reference line is already bowed toward Earth at startup.
+ const age=8*INJECTION_INTERVAL+INITIAL_PHASE,center=rainRadius(ENTRY_HALF_SIZE,age);
+ const sideR0=ENTRY_HALF_SIZE*Math.sqrt(1.25),sideX=rainRadius(sideR0,age)/Math.sqrt(1.25);
+ assert.ok(center>1 && sideX<VIEW_RADIUS && sideX-center>.1,'Initial visible lines must already be deformed');
  // Independent physical identities, not just a duplicate endpoint calculation.
  for(const r0 of [2,3,5])for(const t of [0,.3,.7]){
   const h=1e-4,r=rainRadius(r0,t),dr=(rainRadius(r0,t+h)-rainRadius(r0,t-h))/(2*h);

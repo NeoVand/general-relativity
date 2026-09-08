@@ -29,7 +29,7 @@ function createLab(el){
  function sphereGrid(r=1.65,parent=root){for(let j=1;j<12;j++){const phi=Math.PI*j/12;line(Array.from({length:101},(_,i)=>V(r*Math.sin(phi)*Math.cos(i*Math.PI/50),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(i*Math.PI/50))),'geometry',.38,parent);}for(let j=0;j<12;j++){const phi=Math.PI*j/6;line(Array.from({length:101},(_,i)=>V(r*Math.sin(i*Math.PI/50)*Math.cos(phi),r*Math.cos(i*Math.PI/50),r*Math.sin(i*Math.PI/50)*Math.sin(phi))),'geometry',.38,parent);}}
  let update=()=>{};
  if(kind==='earth'){
-  update=earthFlow({el,stage,root,camera,controls,renderer,render,input,output});
+  update=earthFlow({el,stage,root,camera,controls,renderer,render});
  }else if(kind==='cone'){
   camera.position.set(6,4.2,7);controls.target.set(0,.3,0);
   for(const sign of [-1,1]){const g=new THREE.ConeGeometry(2.2,2.2,80,1,true);g.translate(0,-1.1,0);if(sign===1)g.rotateZ(Math.PI);const mesh=new THREE.Mesh(g,material('geometry',{transparent:true,opacity:.14,depthWrite:false}));root.add(mesh);
@@ -88,7 +88,7 @@ function createLab(el){
  function render(){renderer.render(scene,camera);labelRenderer.render(scene,camera);}
  function theme(){const styles=getComputedStyle(el);for(const name of ['geometry','curvature','transport','matter','observer','line','ink','figure-tint'])palette[name]=styles.getPropertyValue('--'+name).trim();for(const m of mats)m.color.set(palette[m.userData.role]||palette.ink);render();}
  function resize(){const {width,height}=stage.getBoundingClientRect();camera.aspect=width/height;camera.zoom=Math.min(1,camera.aspect/(kind==='embedding'?1.55:1.2));camera.updateProjectionMatrix();renderer.setSize(width,height);labelRenderer.setSize(width,height);render();}
- input.addEventListener('input',()=>{update();render()});controls.addEventListener('change',render);
+ input?.addEventListener('input',()=>{update();render()});controls.addEventListener('change',render);
  el.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.view==='reset'){camera.position.copy(initial.position);controls.target.copy(initial.target);}else{const delta=camera.position.clone().sub(controls.target);delta.applyAxisAngle(V(0,1,0),b.dataset.view==='left'?.25:-.25);camera.position.copy(controls.target).add(delta);}controls.update();render();}));
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();el.dataset.ready='fallback';stage.querySelector('.scene-fallback span').textContent='3D rendering paused. Reload to restore it, or use the vector explanation.';});
  new ResizeObserver(resize).observe(stage);update();theme();resize();el.dataset.ready='true';instances.push({el,render,theme});
