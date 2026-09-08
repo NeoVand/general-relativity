@@ -31,6 +31,7 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm test
+      - run: npm run check
       - name: Install browser for the reading checks
         run: npx playwright install --with-deps chromium
       - name: Check desktop, mobile, and interactive examples
@@ -43,6 +44,7 @@ jobs:
           npm run test:browser
           npm run test:figures
           npm run test:experience
+          npm run test:study
       - name: Preserve inspection evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -91,8 +91,11 @@ function createLab(el){
  input?.addEventListener('input',()=>{update();render()});controls.addEventListener('change',render);
  el.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.view==='reset'){camera.position.copy(initial.position);controls.target.copy(initial.target);}else{const delta=camera.position.clone().sub(controls.target);delta.applyAxisAngle(V(0,1,0),b.dataset.view==='left'?.25:-.25);camera.position.copy(controls.target).add(delta);}controls.update();render();}));
  renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();el.dataset.ready='fallback';stage.querySelector('.scene-fallback span').textContent='3D rendering paused. Reload to restore it, or use the vector explanation.';});
- new ResizeObserver(resize).observe(stage);update();theme();resize();el.dataset.ready='true';instances.push({el,render,theme});
+ const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);update();theme();resize();el.dataset.ready='true';instances.push({el,render,theme,dispose(){update.dispose?.();resizeObserver.disconnect();controls.dispose();scene.traverse(o=>{o.geometry?.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];materials.filter(Boolean).forEach(m=>{Object.values(m).forEach(v=>{if(v?.isTexture)v.dispose()});m.dispose()})});renderer.dispose();renderer.forceContextLoss();}});
 }
+export function initScenes(){
 const lazy=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){lazy.unobserve(e.target);try{createLab(e.target)}catch(error){e.target.dataset.ready='fallback';e.target.querySelector('.scene-fallback span').textContent='The interactive view could not initialize. The vector explanation remains available.';console.error(error);}}},{rootMargin:'200px'});
 document.querySelectorAll('[data-scene]').forEach(el=>lazy.observe(el));
-new MutationObserver(()=>instances.forEach(i=>i.theme())).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+const themeObserver=new MutationObserver(()=>instances.forEach(i=>i.theme()));themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+return ()=>{lazy.disconnect();themeObserver.disconnect();instances.splice(0).forEach(i=>i.dispose())};
+}

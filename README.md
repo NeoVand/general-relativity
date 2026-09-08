@@ -76,3 +76,7 @@ read-only repository access.
 PDF under `dist/` are retained as historical files. **They are not the current
 edition and have not been regenerated with these revisions.** The requested
 publication format and canonical reading experience are HTML.
+
+## Listen and study with a tutor
+
+The Svelte reader supports ElevenLabs chapter narration, GPT Realtime 2.1 voice conversations, and a GPT-5.6 Terra/Sol text tutor using your own API keys. Equations and figures receive separate spoken explanations, and the tutor can navigate to and highlight passages across chapters. Open Listen or Ask, then Connections. See [the companion guide](docs/study-companion.md) for setup, storage behavior, architecture, and verification.

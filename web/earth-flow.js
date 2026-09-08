@@ -22,6 +22,7 @@ export function rainRadius(r0, time) {
 }
 
 export function earthFlow({el, stage, root, camera, controls, renderer, render}) {
+  let disposed=false;
   camera.position.set(5.6, 3.2, 7.8);
   controls.target.set(0, 0, 0);
   controls.minDistance = 4.8;
@@ -120,6 +121,7 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
   earth.rotation.y = -1.6;
   root.add(earth);
   new THREE.TextureLoader().load('./assets/earth/blue-marble-december.webp', texture => {
+    if(disposed){texture.dispose();return;}
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
     earthMaterial.map = texture;
@@ -192,16 +194,17 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     frame = requestAnimationFrame(tick);
   }
   function resume() {if (playing && visible && !document.hidden && !frame) frame=requestAnimationFrame(tick);}
+  const lifecycle=new AbortController(),signal=lifecycle.signal;
   stage.addEventListener('keydown', event => {
     if(event.code!=='Space')return;
     event.preventDefault(); playing=!playing; describe();
     if(playing)resume();else stopFrame();
-  });
-  new IntersectionObserver(entries => {visible=entries[0].isIntersecting; if(visible)resume();else stopFrame();},{threshold:.05}).observe(stage);
-  document.addEventListener('visibilitychange', () => {if(document.hidden)stopFrame();else resume();});
-  reduced.addEventListener('change', () => {if(reduced.matches){playing=false;stopFrame();describe();}});
-  renderer.domElement.addEventListener('webglcontextlost', stopFrame);
-  new MutationObserver(theme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  },{signal});
+  const visibilityObserver=new IntersectionObserver(entries => {visible=entries[0].isIntersecting; if(visible)resume();else stopFrame();},{threshold:.05});visibilityObserver.observe(stage);
+  document.addEventListener('visibilitychange', () => {if(document.hidden)stopFrame();else resume();},{signal});
+  reduced.addEventListener('change', () => {if(reduced.matches){playing=false;stopFrame();describe();}},{signal});
+  renderer.domElement.addEventListener('webglcontextlost', stopFrame,{signal});
+  const themeObserver=new MutationObserver(theme);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   function theme() {
     const styles = getComputedStyle(el);
     uniforms.ink.value.set(styles.getPropertyValue('--geometry').trim());
@@ -209,5 +212,7 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     render();
   }
   describe(); theme();
-  return () => draw(time);
+  const update=()=>draw(time);
+  update.dispose=()=>{disposed=true;playing=false;stopFrame();lifecycle.abort();visibilityObserver.disconnect();themeObserver.disconnect()};
+  return update;
 }
