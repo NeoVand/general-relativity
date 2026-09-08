@@ -34,9 +34,11 @@ try{
     const labels=[...e.querySelectorAll('.scene-label')].map(n=>{const r=n.getBoundingClientRect();return {text:n.textContent,x:r.left-rect.left,y:r.top-rect.top,w:r.width,h:r.height}});
     const clipped=labels.filter(r=>r.x<0||r.y<0||r.x+r.w>rect.width||r.y+r.h>rect.height);
     const overlaps=[];for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){const a=labels[i],b=labels[j];if(Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>3&&Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>3)overlaps.push([a.text,b.text]);}
-    return {clipped,overlaps,width:rect.width,height:rect.height,theme:document.documentElement.dataset.theme,canvas:!!e.querySelector('canvas'),scroll:document.documentElement.scrollWidth};
+    const eq=e.querySelector('.scene-equation');
+    return {clipped,overlaps,width:rect.width,height:rect.height,theme:document.documentElement.dataset.theme,canvas:!!e.querySelector('canvas'),scroll:document.documentElement.scrollWidth,equationOverflow:eq.scrollWidth-eq.clientWidth};
    });
    assert.equal(result.theme,theme);assert.ok(result.canvas);assert.ok(result.scroll<=width+1);
+   assert.ok(result.equationOverflow<=1,`${s.id}: lab equation must fit the reading width`);
    if(result.clipped.length||result.overlaps.length)labelIssues.push({scene:s.id,width,theme,...result});
    checks.push({scene:s.id,width,theme});
    await el.screenshot({path:`qa/lab-${s.id}-${width}-${theme}.png`});

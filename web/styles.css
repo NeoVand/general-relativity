@@ -21,3 +21,5 @@ html[data-theme=dark]{--paper:#111722;--wash:#18212f;--figure-bg:#192331;--figur
 
 .scene-heading>p{font-size:13px}.scene-note{font-size:11px}.scene-controls label{font-size:12px}.scene-controls output{font-size:12px}.scene-toolbar{font-size:11px}.range-limits{font-size:10px}.scene-label{font-size:17px}.cover-intro{font-size:14px}.cover-prereq,.cover-model>p{font-size:11px}.diagram figcaption{font-size:12px}.atlas-item .diagram figcaption{font-size:11px}@media(max-width:600px){.scene-heading>p{font-size:12px}.scene-note{font-size:11px}.scene-controls label,.scene-controls output{font-size:10px}.scene-toolbar{font-size:10px}.range-limits{font-size:9px}.scene-label{font-size:13px}.diagram figcaption{font-size:11px}}
 .scene-fallback>.gr-figure{max-height:85%;width:100%;height:auto}
+
+.cover-math-compact{display:none}@media(max-width:600px){.cover-math-wide{display:none}.cover-math-compact{display:block;font-size:1.3rem}.cover-equation .cover-math-compact .katex-display>.katex{display:block;text-align:center}}
