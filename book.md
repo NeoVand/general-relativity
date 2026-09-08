@@ -258,13 +258,13 @@ Check dimensions before arithmetic. An equation for acceleration must have units
 
 Try these before revealing the answers. They test the actual prerequisites, not whether you remember physics vocabulary.
 
-<details class="checkpoint"><summary>1. If x(t) = 2t³, what are its velocity and acceleration?</summary>
+<details class="checkpoint"><summary>1. If $x(t)=2t^3$, what are its velocity and acceleration?</summary>
 
 $v=6t^2$ and $a=12t$. If $t$ is in seconds and $x$ in metres, the coefficient 2 carries units $\mathrm{m/s^3}$.
 
 </details>
 
-<details class="checkpoint"><summary>2. For f(x,y) = xy², what is df/ds along x=s, y=2s?</summary>
+<details class="checkpoint"><summary>2. For $f(x,y)=xy^2$, what is $df/ds$ along $x=s$, $y=2s$?</summary>
 
 Substitution gives $f=4s^3$, so $df/ds=12s^2$. The chain rule gives $y^2(1)+2xy(2)=4s^2+8s^2$, the same result.
 
@@ -282,7 +282,7 @@ No. You also need initial position and velocity. Dropping and throwing can obey 
 
 </details>
 
-<details class="checkpoint"><summary>5. What is the first-order approximation to √(1−v²/c²)?</summary>
+<details class="checkpoint"><summary>5. What is the first-order approximation to $\sqrt{1-v^2/c^2}$?</summary>
 
 $1-v^2/(2c^2)$, when $v^2/c^2\ll1$. The expansion parameter is $v^2/c^2$, not a speed with units.
 

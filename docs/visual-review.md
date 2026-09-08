@@ -104,3 +104,13 @@ as its `visual-inspection` artifact. Local evidence is written to ignored `qa/`.
 | 38 | 22 | [The information question has a shape](../assets/figures/page-curve.svg) | Axes are qualitative and the curves are not a quantitative evaporation solution. A final pure radiation state has zero fine-grained entropy for the whole radiation system; individual portions can remain mixed. |
 | 39 | 23 | [A theory has a resolution scale](../assets/figures/effective-theory.svg) | This is a hierarchy diagram, not a measured error curve. The cutoff depends on the theory and physical setting; the text distinguishes gravitational scales from other possible new-physics scales. |
 | 40 | 24 | [From a metric to a measurement](../assets/figures/calculation-map.svg) | The observer can often be chosen earlier. This map is a practical organizing sequence; it is not a claim that every problem needs every tensor computed explicitly. |
+
+## Explorable visual overhaul — September 8, 2026
+
+Replaced the reading interface and cover, introduced Newsreader and Manrope, added Hugeicons, and built a five-role semantic math palette with separate light/dark values. Converted 231 mathematical figure labels to explicit LaTeX and vector glyphs. Captions and checkpoints now use the same typesetting pipeline as the manuscript. Preserved the mathematical token sequence of all 2,474 manuscript expressions.
+
+Eight new Three.js labs were inspected at 1440px and 390px in both themes (32 combinations). Endpoint checks cover octant transport, tidal scale factors, the embedding profile, displacement pairing, cone speed, expansion scale, wave phase, and ADM shift. Inspection caught and corrected overlapping covector labels, clipped tidal/expansion labels, excessive mobile embedding cropping, and distracting sphere back-grid lines. A blocked-WebGL check verified the dark-theme inline vector fallback.
+
+All 35 pages passed desktop/mobile checks (70 combinations). All 40 SVGs were inspected in both themes with the deployed description font and bounding boxes for both ordinary text and LaTeX glyphs; no label overlap or clipping remained. Reviewed five contact sheets spanning all figures, plus the cover, atlas directory, full-size viewer, mobile embedding, and individual 3D labs. The primary semantic text colors have contrast ratios of at least 4.54:1 on the light reading/equation surfaces; dark equivalents exceed 7:1 on the scene backgrounds.
+
+The GitHub Actions workflow now also runs the 3D experience checks before publication and preserves the screenshot/report artifact. Scientific illustrations retain their stated approximation limits; visual QA is not a claim of independent peer review of the entire manuscript.

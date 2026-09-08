@@ -28,3 +28,11 @@ The final image is a printed 1916 title page. It is not Einstein's November 1915
 Research and historical references appear at the point of use and in [Appendix D](appendix-d.html). A successful render is a typesetting check, not an independent peer review of an entire general-relativity textbook. The edition's numerical checks cover the new clock and curvature examples and selected geometric models, and the visual review checks the exported diagrams and desktop and mobile layouts.
 
 The current publication target is this HTML book. The older PDF and LaTeX files in the repository are archival material from the previous edition; they do not contain these revisions. The HTML is built and deployed through the repository's GitHub Actions workflow.
+
+## The explorable edition
+
+The visual overhaul adds eight original [Three.js](https://threejs.org/) labs: covector level planes, light cones, spherical parallel transport, tidal deformation, Flamm’s paraboloid, gravitational-wave detector rings, FLRW expansion, and ADM slicing. Each states its dimensional reductions and approximation limits. Models render on interaction rather than running an animation loop while you read.
+
+The interface uses [Hugeicons](https://hugeicons.com/) Stroke Rounded icons from its free core package. Reading typography pairs [Newsreader](https://github.com/productiontype/Newsreader) with [Manrope](https://github.com/sharanda/manrope); the fonts are locally hosted under the SIL Open Font License. Equations and interactive labels use [KaTeX](https://katex.org/). Mathematical labels in the static figures are compiled from explicit LaTeX using [MathJax](https://www.mathjax.org/) and stored as vector glyphs. No third-party font or script request is needed to read the deployed book.
+
+The [language of color](visual-language.html) documents the five semantic roles and the limits of automatic classification. Color identifies recognized mathematical objects; indices, constants, and ambiguous notation stay neutral. Where a comparative plot distinguishes several models, its own labels identify the series. The two reading themes each supply their own colors, including inside inline vector figures and WebGL scenes. [Bundled software notices](assets/vendor-notices.md) and [font license files](assets/fonts/manrope-LICENSE) are included with the site.

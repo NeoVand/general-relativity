@@ -8,7 +8,7 @@ from math import sin, cos, pi, sqrt, exp
 import json, html
 
 OUT=Path('assets/figures'); OUT.mkdir(parents=True,exist_ok=True)
-INK='#183746'; MUTED='#526e7b'; TEAL='#087f8c'; ORANGE='#b95730'; BLUE='#4267a1'; GOLD='#b18225'; LINE='#d5e2e7'
+INK='#183746'; MUTED='#526e7b'; TEAL='#087f8c'; ORANGE='#b95730'; BLUE='#4267a1'; GOLD='#b18225'; CURV='#7951bb'; MATTER='#a25e00'; LINE='#d5e2e7'
 manifest=[]
 def text(x,y,s,size=20,color=INK,anchor='start',weight=400):
  return f'<text x="{x:.2f}" y="{y:.2f}" font-size="{size}" fill="{color}" text-anchor="{anchor}" font-weight="{weight}">{html.escape(str(s))}</text>'
@@ -143,7 +143,7 @@ for z in [-.5,0,.5]:
 paths=[[(sin(t*pi/200),0,cos(t*pi/200)) for t in range(101)],[(cos(t*pi/200),sin(t*pi/200),0) for t in range(101)],[(0,cos(t*pi/200),sin(t*pi/200)) for t in range(101)]]
 for pts in paths:b+=poly([project(p) for p in pts],TEAL,4)
 P,A,B=project((0,0,1)),project((1,0,0)),project((0,1,0))
-for name,p,dx,dy in [('P',P,-20,-14),('A',A,14,5),('B',B,-23,5)]:b+=circle(*p,5,INK)+text(p[0]+dx,p[1]+dy,name,22)
+for name,p,dx,dy in [('P',P,-20,-14),('A',A,14,5),('B',B,-32,5)]:b+=circle(*p,5,INK)+text(p[0]+dx,p[1]+dy,name,22)
 b+=line(*P,P[0]+65*.707,P[1]+65*.408,ORANGE,3,arrow=True)
 b+=line(*P,P[0]-65*.707,P[1]+65*.408,BLUE,3,arrow=True)
 b+=text(585,195,'Start: toward A',22,ORANGE)+text(585,239,'Return: perpendicular to start',22,BLUE)
@@ -175,18 +175,17 @@ labels=[['ε','Sₓ/c','Sᵧ/c','S𝓏/c'],['cπₓ','σₓₓ','σₓᵧ','σ�
 for i in range(4):
  for j in range(4):
   color='#d9eeee' if i==j==0 else '#f6e8de' if i==0 or j==0 else '#e3eaf5'
-  b+=rect(75+j*90,155+i*60,85,55,color,LINE,4)+text(117+j*90,191+i*60,labels[i][j],24,INK,'middle')
-b+=label(535,177,'Energy density','ε: what the observer finds locally.',TEAL)+label(535,261,'Energy flow ↔ momentum density','For symmetric T: S/c = cπ.',ORANGE)+label(535,345,'Stress','Diagonal pressure; off-diagonal shear.',BLUE)
+  b+=rect(75+j*90,155+i*60,85,55,color,LINE,4)+text(117+j*90,191+i*60,labels[i][j],24,MATTER,'middle')
+b+=label(535,177,'Energy density','ε: what the observer finds locally.',MATTER)+label(535,261,'Energy flow ↔ momentum density','For symmetric T: S/c = cπ.',MATTER)+label(535,345,'Stress','Diagonal pressure; off-diagonal shear.',MATTER)
 save('stress-energy',11,'The source has more than one kind of entry','A four-by-four stress-energy matrix colors energy density, mixed energy-momentum entries, and spatial stresses differently.','S is energy flux, π is momentum density, and σ denotes the spatial stress entries using the momentum-flux convention. The tensor is symmetric in ordinary metric GR.',b)
 
-# 12: geometry-to-matter equation anatomy.
-b=label(50,100,'A local equation at every event','Ten symmetric component equations, tied together by identities and constraints.')
-for x,w,title,sub,color in [(50,280,'Einstein tensor','Ricci − ½ trace × metric',TEAL),(360,230,'Vacuum term','Λ × metric',GOLD),(640,310,'Matter & energy','(8πG/c⁴) × stress-energy',ORANGE)]:
- b+=rect(x,155,w,155,'#fff',color)+text(x+w/2,213,title,25,color,'middle',650)+text(x+w/2,260,sub,17,MUTED,'middle')
-b+=text(345,243,'+',30,INK,'middle')+text(615,243,'=',30,INK,'middle')
-b+=text(195,377,'Geometric response',20,TEAL,'middle')+text(795,377,'Physical source',20,ORANGE,'middle')
-b+=line(320,366,630,366,MUTED,2,arrow=True)+text(500,442,'Each term is a tensor. A single component depends on the chosen frame.',19,MUTED,'middle')
-save('einstein-anatomy',12,'Read the equation as a relationship','The Einstein tensor and vacuum term stand opposite the coupled stress-energy tensor.','The equation constrains spacetime geometry and matter together. It is not a recipe that chooses arbitrary matter independently of its own dynamics and conservation.',b)
+# 12: typeset equation with aligned conceptual annotations.
+b=label(50,100,'One relationship. Every event.','Curvature, measurement geometry, and the local energy content.')
+b+=text(500,245,'Einstein equation display',49,INK,'middle')
+for x,title,sub,col in [(180,'Curvature','How nearby directions fail to agree.',CURV),(500,'Metric','How coordinate steps become intervals.',TEAL),(820,'Matter & energy','Energy, momentum, and stress.',MATTER)]:
+ b+=line(x,305,x,330,col,2)+circle(x,305,3,col)
+ b+=text(x,374,title,23,col,'middle',650)+text(x,410,sub,15,MUTED,'middle')
+save('einstein-anatomy',12,'Read the equation as a relationship','The colored Einstein equation connects violet curvature and a teal metric to amber stress–energy. The constants and index letters remain neutral.','The equation constrains spacetime geometry and matter together. It is not a recipe that chooses arbitrary matter independently of its own dynamics and conservation.',b)
 
 # 13: variations with endpoints fixed.
 b=axes(85,375,450,255,'time','position')

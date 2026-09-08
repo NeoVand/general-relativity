@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import katex from 'katex';
+import {math} from './math-system.mjs';
 const root=path.resolve('site');
 const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));
 const report=JSON.parse(fs.readFileSync('site/build-report.json'));
@@ -40,4 +42,9 @@ assert.equal(10*Math.sqrt(1-.6**2),8);
 assert.ok(Math.abs((1-1/Math.sqrt(2))*100-29.289)<.001);
 // The explicit spherical connection gives curvature +sin(theta), and scalar 2/a².
 for(const theta of [.3,.8,1.5,2.6]){const h=1e-5;const curvature=(-Math.cos(theta+h)+Math.cos(theta-h))/(2*h);assert.ok(Math.abs(curvature-Math.sin(theta))<1e-9)}
+// Styling must preserve the mathematical token stream, including unbraced
+// accents/font commands. TeX annotations differ, presentation MathML must not.
+const expressions=[...fs.readFileSync('book.md','utf8').matchAll(/\$\$([\s\S]*?)\$\$|(?<!\\)\$([^$\n]+)\$/g)].map(m=>m[1]||m[2]);
+const tokens=html=>html.match(/<math[\s\S]*?<\/math>/)?.[0].replace(/<annotation[\s\S]*?<\/annotation>/g,'').replace(/<[^>]*>/g,'');
+for(const tex of expressions)assert.equal(tokens(math(tex,false,12)),tokens(katex.renderToString(tex,{strict:'ignore',throwOnError:true})),`Color changed math: ${tex}`);
 console.log(`Verified ${files.length} HTML pages, ${links} local links/assets, ${figs.length} figure placements, and numerical calibrations.`);
