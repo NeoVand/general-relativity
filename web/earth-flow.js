@@ -26,6 +26,7 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
   controls.target.set(0, 0, 0);
   controls.minDistance = 4.8;
   controls.maxDistance = 15;
+  controls.autoRotateSpeed = .25; // One gentle camera orbit every four minutes.
   const uniforms = {
     phase: {value: INITIAL_PHASE}, ink: {value: new THREE.Color()},
   };
@@ -182,7 +183,12 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     last = now;
     // Accelerated PG time. No global reset or fade.
     time += dt * FLOW_SPEED / FALL_TIME;
-    draw(time); render();
+    draw(time);
+    // Advance the viewpoint only with the animation; dragging keeps full control.
+    controls.autoRotate = true;
+    controls.update(dt);
+    controls.autoRotate = false;
+    render();
     frame = requestAnimationFrame(tick);
   }
   function resume() {if (playing && visible && !document.hidden && !frame) frame=requestAnimationFrame(tick);}
