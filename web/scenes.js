@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {earthFlow} from './earth-flow.js';
 import {OrbitControls} from './assets/three/OrbitControls.js';
 import {CSS2DRenderer,CSS2DObject} from './assets/three/CSS2DRenderer.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
@@ -27,7 +28,9 @@ function createLab(el){
  function grid(size=5,steps=10,y=0,role='line',parent=root){for(let i=0;i<=steps;i++){const v=-size/2+size*i/steps;line([V(-size/2,y,v),V(size/2,y,v)],role,.55,parent);line([V(v,y,-size/2),V(v,y,size/2)],role,.55,parent);}}
  function sphereGrid(r=1.65,parent=root){for(let j=1;j<12;j++){const phi=Math.PI*j/12;line(Array.from({length:101},(_,i)=>V(r*Math.sin(phi)*Math.cos(i*Math.PI/50),r*Math.cos(phi),r*Math.sin(phi)*Math.sin(i*Math.PI/50))),'geometry',.38,parent);}for(let j=0;j<12;j++){const phi=Math.PI*j/6;line(Array.from({length:101},(_,i)=>V(r*Math.sin(i*Math.PI/50)*Math.cos(phi),r*Math.cos(i*Math.PI/50),r*Math.sin(i*Math.PI/50)*Math.sin(phi))),'geometry',.38,parent);}}
  let update=()=>{};
- if(kind==='cone'){
+ if(kind==='earth'){
+  update=earthFlow({el,stage,root,camera,controls,renderer,render,input,output});
+ }else if(kind==='cone'){
   camera.position.set(6,4.2,7);controls.target.set(0,.3,0);
   for(const sign of [-1,1]){const g=new THREE.ConeGeometry(2.2,2.2,80,1,true);g.translate(0,-1.1,0);if(sign===1)g.rotateZ(Math.PI);const mesh=new THREE.Mesh(g,material('geometry',{transparent:true,opacity:.14,depthWrite:false}));root.add(mesh);
    for(let j=0;j<16;j++){const a=j*Math.PI/8;line([V(),V(2.2*Math.cos(a),sign*2.2,2.2*Math.sin(a))],'geometry',.35);}line(Array.from({length:101},(_,i)=>V(2.2*Math.cos(i*Math.PI/50),sign*2.2,2.2*Math.sin(i*Math.PI/50))),'geometry',.8);}

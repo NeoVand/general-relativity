@@ -460,6 +460,30 @@ The historical lesson is useful while studying. Getting stuck on coordinate mean
 
 <a id="chapter-2"></a>
 
+### 1.10 A falling grid: give the picture its time dimension
+
+Imagine a fleet of tiny laboratories falling toward Earth from every direction. Draw a line between each laboratory and its neighbors. Advance time. The lines bend, the grid moves inward, and the shape of each cell changes. You have made time visible by allowing the picture to move.
+
+What is falling? The laboratories. The grid is a way to keep track of them. Earth does not consume space, and the geometry need not change with time. A stationary spacetime can contain a moving family of freely falling observers, just as a fixed globe can contain ants walking toward the north pole.
+
+In the opening interactive picture we choose a particularly simple family, called **rain observers**. Each one has fallen radially from rest infinitely far away. By the time it reaches the displayed region it is already moving. This is different from an apple held above the ground and then released: that apple has a different initial velocity and follows a different member of the full family of possible free-fall trajectories.
+
+In the coordinates used for the animation, the radial speed of a rain observer is
+
+$$
+\frac{dr}{dt}=-\sqrt{\frac{2GM}{r}}.
+$$
+
+Here $r$ is distance from Earth's center, $M$ is Earth's mass, and $G$ is Newton's gravitational constant. The minus sign says that distance is decreasing. The denominator inside the square root says that the inward speed grows as the observer approaches Earth. This familiar-looking escape-speed formula is also exact for these particular observers in the exterior Schwarzschild rain coordinates; it is not a formula for every possible velocity or every coordinate system.
+
+Now compare two observers. If they lie along the same outward radial line, the nearer one falls faster, increasing their radial separation. If they lie side by side at the same radius, their inward paths converge, decreasing their sideways separation. A tiny cell stretches one way and squeezes in the other two directions. Chapter 10 will turn this observation into a measurement of curvature.
+
+There are two safeguards for the picture. First, the connecting lines at a given instant are not themselves geodesics: the laboratories' **worldlines through spacetime** are geodesics. Second, bending the lines of a coordinate drawing is easy even in flat space. The physical evidence for curvature is the relative acceleration of nearby freely falling laboratories, not the appearance of a mesh.
+
+The [ScienceClic visualization by Alessandro Roussel](https://www.youtube.com/watch?v=wrwgIjBUYVc) motivates this moving-grid intuition. Our implementation uses the precise [river model developed by Hamilton and Lisle](https://arxiv.org/abs/gr-qc/0411060). Its displayed time runs faster than real time, and it stops following observers at Earth's surface. A replay starts a new showing of the same initial grid; it is not a physical expansion followed by another collapse.
+
+---
+
 ## 2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe
 
 ### 2.1 A vector is not its spreadsheet

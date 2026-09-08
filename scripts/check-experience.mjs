@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {scenes} from './scenes.mjs';
+import {rainRadius, FALL_TIME, DURATION, EARTH_GM, EARTH_RADIUS} from '../web/earth-flow.js';
 import {math,semanticTex} from './math-system.mjs';
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader'],...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
@@ -17,7 +18,11 @@ try{
    await page.evaluate(()=>document.fonts.ready);
    const range=el.locator('input');await range.fill(String(s.max));await range.dispatchEvent('input');
    const data=await el.evaluate(e=>({...e.dataset}));
-   if(s.id==='sphere'){
+   if(s.id==='earth'){
+    assert.ok(Math.abs(+data.measurement-rainRadius(3,DURATION))<1e-12);
+    assert.equal(data.playing,'false');
+    await page.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.texture==='ready');
+   }else if(s.id==='sphere'){
     const v=JSON.parse(data.vector),p=JSON.parse(data.position);assert.ok(Math.abs(v[2]-1)<1e-12);assert.ok(Math.abs(p[1]-1)<1e-12);assert.ok(Math.abs(v.reduce((sum,x,i)=>sum+x*p[i],0))<1e-12);
    }else if(s.id==='tides')assert.deepEqual(JSON.parse(data.scales),[1.3,.85,.85]);
    else if(s.id==='embedding')assert.equal(+data.measurement,4);
@@ -44,6 +49,58 @@ try{
    await el.screenshot({path:`qa/lab-${s.id}-${width}-${theme}.png`});
   }
  }
+ // Check the actual falling-grid controls, reduced motion, and invisible-scene suspension.
+ await page.goto(new URL('index.html',base).href);
+ const earth=page.locator('[data-scene=earth]');
+ await page.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='true');
+ await earth.getByRole('button',{name:'Pause free fall',exact:true}).click();
+ const paused=await earth.getAttribute('data-time');
+ await earth.locator('input').press('ArrowRight');
+ assert.notEqual(await earth.getAttribute('data-time'),paused,'Keyboard scrubbing should advance the model');
+ await earth.getByRole('button',{name:'Play free fall',exact:true}).click();
+ const before=+(await earth.getAttribute('data-frames'));
+ await page.waitForFunction(n=>+document.querySelector('[data-scene=earth]').dataset.frames>n+2,before);
+ await earth.getByRole('button',{name:'Pause free fall',exact:true}).click();
+ const stopped=await earth.getAttribute('data-frames');
+ await page.waitForTimeout(150);
+ assert.equal(await earth.getAttribute('data-frames'),stopped,'Paused scene must stop updating');
+ await earth.getByRole('button',{name:'Play free fall',exact:true}).click();
+ await page.locator('.site-footer').scrollIntoViewIfNeeded();
+ await page.waitForTimeout(200);
+ const hiddenFrames=await earth.getAttribute('data-frames');
+ await page.waitForTimeout(200);
+ assert.equal(await earth.getAttribute('data-frames'),hiddenFrames,'Offscreen scene must stop updating');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await page.goto(new URL('figure-atlas.html',base).href);
+ await page.locator('[data-scene=earth]').scrollIntoViewIfNeeded();
+ await page.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='true');
+ assert.equal(await page.locator('[data-scene=earth]').getAttribute('data-playing'),'false');
+ await page.locator('.flow-explanation summary').click();
+ assert.equal(await page.locator('.flow-explanation .katex-error').count(),0);
+ const explanationOverflow=await page.locator('.flow-explanation .equation').evaluateAll(ns=>ns.map(n=>n.scrollWidth-n.clientWidth));
+ assert.ok(explanationOverflow.every(x=>x<=1),`Earth explanation equations overflow: ${explanationOverflow}`);
+ await page.screenshot({path:'qa/earth-explanation-mobile.png',fullPage:false});
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ const fallbackContext=await browser.newContext();
+ await fallbackContext.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:get.call(this,type,...args)};});
+ const fallbackPage=await fallbackContext.newPage();
+ await fallbackPage.goto(new URL('index.html',base).href);
+ await fallbackPage.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='fallback');
+ assert.ok(await fallbackPage.locator('[data-scene=earth] .scene-fallback svg').isVisible());
+ await fallbackContext.close();
+ // Independent physical identities, not just a duplicate endpoint calculation.
+ for(const r0 of [2,3,5])for(const t of [0,.3,.7]){
+  const h=1e-4,r=rainRadius(r0,t),dr=(rainRadius(r0,t+h)-rainRadius(r0,t-h))/(2*h);
+  const ddr=(rainRadius(r0,t+h)-2*r+rainRadius(r0,t-h))/(h*h);
+  assert.ok(Math.abs(dr+1/Math.sqrt(r))<1e-7,'Rain velocity must solve the first-order ODE');
+  assert.ok(Math.abs(ddr+.5/(r*r))<1e-6,'Geodesic coordinate acceleration must give -GM/r²');
+  const radialStretch=(rainRadius(r0+h,t)-rainRadius(r0-h,t))/(2*h);
+  if(t>0){assert.ok(radialStretch>1);assert.ok(r/r0<1);}
+  const physicalV=dr*EARTH_RADIUS/FALL_TIME;
+  const shift=Math.sqrt(2*EARTH_GM/(r*EARTH_RADIUS));
+  assert.ok(Math.abs(physicalV+shift)<.001,'PG shift cancels rain velocity, giving ds²=-c²dt²');
+ }
+ assert.ok(Math.abs(Math.sqrt(2*EARTH_GM/EARTH_RADIUS)-11186)<2);
  // Atlas filters, theme-aware SVG, and figure dialog ID isolation.
  await page.goto(new URL('figure-atlas.html',base).href);await page.locator('[data-filter=foundations]').click();assert.equal(await page.locator('.atlas-item:visible').count(),10);
  const figure=page.locator('.atlas-item:visible').first();await figure.locator('[data-figure]').click();await page.locator('#figure-dialog').waitFor({state:'visible'});
@@ -53,6 +110,8 @@ try{
  assert.deepEqual(errors,[]);
  fs.writeFileSync('qa/experience-report.json',JSON.stringify({checks,errors,labelIssues},null,2));
  assert.deepEqual(labelIssues,[],'Default 3D labels overlap or clip; inspect experience-report.json.');
+ for(const [tex,context] of [[String.raw`d\Omega^2`,1],[String.raw`\Omega^2g_{\mu\nu}`,9],[String.raw`\Omega_H`,22]])assert.ok(!semanticTex(tex,context).includes('math-curvature'));
+ assert.ok(semanticTex(String.raw`\Omega^1{}_2`,21).includes('math-curvature'));
  // Conservative semantic classification must not confuse coordinates and indices.
  assert.ok(!semanticTex(String.raw`R^2`,16).includes('math-curvature'));
  assert.ok(!semanticTex(String.raw`\eta^\rho`,5).includes('math-geometry'));
