@@ -31,7 +31,7 @@ The current publication target is this HTML book. The older PDF and LaTeX files 
 
 ## The explorable edition
 
-The visual overhaul includes nine original [Three.js](https://threejs.org/) labs: an Earth-centered free-fall grid, covector level planes, light cones, spherical parallel transport, tidal deformation, Flamm’s paraboloid, gravitational-wave detector rings, FLRW expansion, and ADM slicing. Each states its dimensional reductions and approximation limits. The Earth grid animates only while visible, can be paused, and starts paused when reduced motion is requested. The other models render on interaction.
+The visual overhaul includes nine original [Three.js](https://threejs.org/) labs: an Earth-centered free-fall grid, covector level planes, light cones, spherical parallel transport, tidal deformation, Flamm’s paraboloid, gravitational-wave detector rings, FLRW expansion, and ADM slicing. Each states its dimensional reductions and approximation limits. The Earth grid animates only while visible, can be paused with Space when focused, and starts paused when reduced motion is requested. The other models render on interaction.
 
 The interface uses [Hugeicons](https://hugeicons.com/) Stroke Rounded icons from its free core package. Reading typography pairs [Newsreader](https://github.com/productiontype/Newsreader) with [Manrope](https://github.com/sharanda/manrope); the fonts are locally hosted under the SIL Open Font License. Equations and interactive labels use [KaTeX](https://katex.org/). Mathematical labels in the static figures are compiled from explicit LaTeX using [MathJax](https://www.mathjax.org/) and stored as vector glyphs. No third-party font or script request is needed to read the deployed book.
 

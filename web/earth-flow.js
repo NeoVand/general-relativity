@@ -4,6 +4,7 @@ import * as THREE from 'three';
 // Length unit: Earth's mean radius. Time unit: R / sqrt(2GM/R).
 export const EARTH_RADIUS = 6.371e6;
 export const EARTH_GM = 3.986004418e14;
+export const FLOW_SPEED = 110;
 export const FALL_TIME = Math.sqrt(EARTH_RADIUS ** 3 / (2 * EARTH_GM));
 // Successive reference surfaces enter through a cube outside the viewing window.
 // Older surfaces are already deformed when the scene first becomes visible.
@@ -149,14 +150,11 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     return {age: ((i*73)%160)/160*particleLifetime, direction: new THREE.Vector3(Math.sqrt(1-y*y)*Math.cos(theta), y, Math.sqrt(1-y*y)*Math.sin(theta))};
   });
   const dummy = new THREE.Object3D();
-  const button = el.querySelector('[data-flow-play]');
-  const status = el.querySelector('[data-flow-status]');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let playing = !reduced.matches, visible = false, frame = 0, last = 0, time = 0;
-  const setButton = () => {
-    button.setAttribute('aria-label', playing ? 'Pause free fall' : 'Play free fall');
-    button.setAttribute('aria-pressed', String(playing));
-    button.querySelector('span').textContent = playing ? 'Pause' : 'Play';
+  stage.tabIndex = 0;
+  const describe = () => {
+    stage.setAttribute('aria-label', `Earth in a continuously falling reference grid. Drag to rotate. Press Space to ${playing?'pause':'resume'} motion.`);
     el.dataset.playing = String(playing);
   };
   function draw(timeValue) {
@@ -182,16 +180,20 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     if (!playing || !visible || document.hidden || el.dataset.ready === 'fallback') {last=0; return;}
     const dt = last ? Math.min((now-last)/1000, .1) : 0;
     last = now;
-    // Ninety seconds of PG time per playback second. No global reset or fade.
-    time += dt * 90 / FALL_TIME;
+    // Accelerated PG time. No global reset or fade.
+    time += dt * FLOW_SPEED / FALL_TIME;
     draw(time); render();
     frame = requestAnimationFrame(tick);
   }
   function resume() {if (playing && visible && !document.hidden && !frame) frame=requestAnimationFrame(tick);}
-  button.addEventListener('click', () => {playing = !playing; setButton(); if(playing) {status.textContent='Continuous free fall';resume();} else {stopFrame(); status.textContent='Paused';}});
+  stage.addEventListener('keydown', event => {
+    if(event.code!=='Space')return;
+    event.preventDefault(); playing=!playing; describe();
+    if(playing)resume();else stopFrame();
+  });
   new IntersectionObserver(entries => {visible=entries[0].isIntersecting; if(visible)resume();else stopFrame();},{threshold:.05}).observe(stage);
   document.addEventListener('visibilitychange', () => {if(document.hidden)stopFrame();else resume();});
-  reduced.addEventListener('change', () => {if(reduced.matches){playing=false;stopFrame();setButton();status.textContent='Paused · reduced motion';}});
+  reduced.addEventListener('change', () => {if(reduced.matches){playing=false;stopFrame();describe();}});
   renderer.domElement.addEventListener('webglcontextlost', stopFrame);
   new MutationObserver(theme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
   function theme() {
@@ -200,7 +202,6 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     particleMaterial.color.set(styles.getPropertyValue('--observer').trim());
     render();
   }
-  setButton(); theme();
-  status.textContent = playing ? 'Continuous free fall' : 'Paused · reduced motion';
+  describe(); theme();
   return () => draw(time);
 }

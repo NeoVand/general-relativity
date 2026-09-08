@@ -25,15 +25,13 @@ html[data-theme=dark]{--paper:#111722;--wash:#18212f;--figure-bg:#192331;--figur
 .cover-math-compact{display:none}@media(max-width:600px){.cover-math-wide{display:none}.cover-math-compact{display:block;font-size:1.3rem}.cover-equation .cover-math-compact .katex-display>.katex{display:block;text-align:center}}
 /* Earth: a moving reference frame, with an explicit playback boundary. */
 [data-scene=earth] .scene-stage{background:radial-gradient(ellipse at 48% 48%,color-mix(in srgb,var(--geometry) 8%,var(--figure-bg)),var(--figure-bg) 66%)}
-.flow-playback{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 30px 17px;font-size:10px;color:var(--muted)}
-.flow-playback button{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:100px;background:var(--paper);color:var(--ink);font:600 11px Manrope,sans-serif;padding:9px 15px;cursor:pointer}
-.flow-playback button:hover{border-color:var(--geometry);color:var(--geometry)}
-.flow-playback .hugeicon{width:15px;height:15px}
-.flow-playback button[aria-pressed=true] .hugeicon{display:none}
-.flow-playback button[aria-pressed=true]::before{content:'';width:9px;height:11px;border-left:3px solid currentColor;border-right:3px solid currentColor}
-.flow-key{display:flex;justify-content:center;flex-wrap:wrap;gap:18px;margin:0;padding:0 20px 20px;color:var(--muted);font:10px Manrope,sans-serif}
-.flow-key span{display:flex;align-items:center;gap:6px}.flow-key i{width:15px;height:2px;background:var(--geometry)}.flow-key span+span i{width:5px;height:5px;border-radius:50%;background:var(--observer)}
 .flow-explanation{margin:0 30px 28px;border-top:1px solid var(--line)}.flow-explanation summary{padding:20px 0 0;cursor:pointer;color:var(--geometry);font-size:12px;font-weight:600}.flow-explanation>div{padding-top:4px}.flow-explanation h3{font:450 1.65rem Newsreader,Georgia,serif;margin:26px 0 10px}.flow-explanation p{font:400 1.14rem/1.75 Newsreader,Georgia,serif;color:var(--ink)}.flow-explanation .equation{font-size:1.2rem;padding:22px 10px}.flow-explanation .flow-credit{font:10px/1.9 Manrope,sans-serif;color:var(--muted)}
-.cover-model>p a{display:inline-block;margin-top:9px;text-decoration-color:var(--geometry);text-underline-offset:4px}
-@media(max-width:600px){.flow-playback{padding:8px 20px 14px;font-size:9px}.flow-key{gap:12px;font-size:9px}.flow-explanation{margin:0 20px 24px}.flow-explanation summary{font-size:11px}.flow-explanation .equation{font-size:1rem}}
+@media(max-width:600px){.flow-explanation{margin:0 20px 24px}.flow-explanation summary{font-size:11px}.flow-explanation .equation{font-size:1rem}}
 .cover-model [data-scene=earth] .scene-stage{border-radius:18px;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--geometry) 8%,transparent),transparent 72%)}
+
+/* The Earth opening is a centered illustration, with no playback furniture. */
+.cover-model{align-self:center;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--curvature) 8%,transparent),transparent 70%)}
+.cover-model>.hero-scene{width:100%}
+[data-scene=earth] .scene-stage,.cover-model [data-scene=earth] .scene-stage,.atlas>[data-scene=earth] .scene-stage{width:100%;max-width:680px;aspect-ratio:1;height:auto;margin-inline:auto;background:transparent;border-radius:0}
+[data-scene=earth] .scene-stage>canvas{-webkit-mask-image:radial-gradient(ellipse closest-side at center,#000 44%,transparent 100%);mask-image:radial-gradient(ellipse closest-side at center,#000 44%,transparent 100%)}
+[data-scene=earth] .scene-stage:focus-visible{outline:2px solid var(--geometry);outline-offset:-5px;border-radius:50%}

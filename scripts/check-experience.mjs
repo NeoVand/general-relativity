@@ -17,7 +17,7 @@ try{
    const el=page.locator(`#scene-${s.id}`);await el.scrollIntoViewIfNeeded();await page.waitForFunction(id=>document.getElementById(id).dataset.ready==='true',`scene-${s.id}`);
    await page.evaluate(()=>document.fonts.ready);
    const range=el.locator('input');
-   if(s.id==='earth')await el.getByRole('button',{name:'Pause free fall',exact:true}).click();
+   if(s.id==='earth')await el.locator('.scene-stage').press('Space');
    else {await range.fill(String(s.max));await range.dispatchEvent('input');}
    const data=await el.evaluate(e=>({...e.dataset}));
    if(s.id==='earth'){
@@ -36,7 +36,7 @@ try{
    else if(s.id==='slices')assert.equal(+data.measurement,1.2);
    // Inspect a representative intermediate state as well as the endpoint.
    if(s.id!=='earth'){await range.fill(String(s.id==='sphere'?180:s.value));await range.dispatchEvent('input');}
-   await el.locator('[data-view=left]').click();await el.locator('[data-view=reset]').click();
+   if(s.id!=='earth'){await el.locator('[data-view=left]').click();await el.locator('[data-view=reset]').click();}
    const result=await el.evaluate(e=>{
     const stage=e.querySelector('.scene-stage'),rect=stage.getBoundingClientRect();
     const labels=[...e.querySelectorAll('.scene-label')].map(n=>{const r=n.getBoundingClientRect();return {text:n.textContent,x:r.left-rect.left,y:r.top-rect.top,w:r.width,h:r.height}});
@@ -56,21 +56,24 @@ try{
  await page.goto(new URL('index.html',base).href);
  const earth=page.locator('[data-scene=earth]');
  await page.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='true');
- await earth.getByRole('button',{name:'Pause free fall',exact:true}).click();
+ await earth.locator('.scene-stage').press('Space');
  assert.equal(await earth.locator('input').count(),0);
  const paused=+(await earth.getAttribute('data-time'));
  assert.ok(paused>=0);
- await earth.getByRole('button',{name:'Play free fall',exact:true}).click();
+ await earth.locator('.scene-stage').press('Space');
  const before=+(await earth.getAttribute('data-frames'));
  await page.waitForFunction(n=>+document.querySelector('[data-scene=earth]').dataset.frames>n+2,before);
  // Follow more than two injections: time must keep increasing across recycling.
  await page.waitForFunction(t=>+document.querySelector('[data-scene=earth]').dataset.time>t+1.5,paused,{timeout:20000});
- assert.equal(await earth.locator('[data-flow-status]').innerText(),'Continuous free fall');
- await earth.getByRole('button',{name:'Pause free fall',exact:true}).click();
+ assert.equal(await earth.locator('button,input,.flow-playback,.scene-toolbar,.scene-heading,.flow-key').count(),0,'The cover must contain only the animation');
+ const framing=await earth.locator('.scene-stage').evaluate(e=>{const r=e.getBoundingClientRect();return {width:r.width,height:r.height,mask:getComputedStyle(e.querySelector('canvas')).maskImage};});
+ assert.ok(Math.abs(framing.width-framing.height)<1,'Earth needs a square frame with equal clearance');
+ assert.ok(framing.mask.includes('radial-gradient')&&framing.mask.includes('100%'),'The canvas must fade fully at every boundary');
+ await earth.locator('.scene-stage').press('Space');
  const stopped=await earth.getAttribute('data-frames');
  await page.waitForTimeout(150);
  assert.equal(await earth.getAttribute('data-frames'),stopped,'Paused scene must stop updating');
- await earth.getByRole('button',{name:'Play free fall',exact:true}).click();
+ await earth.locator('.scene-stage').press('Space');
  await page.locator('.site-footer').scrollIntoViewIfNeeded();
  await page.waitForTimeout(200);
  const hiddenFrames=await earth.getAttribute('data-frames');
