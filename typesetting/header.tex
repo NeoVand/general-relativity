@@ -1,0 +1,39 @@
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{needspace}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\definecolor{ink}{HTML}{152D38}
+\definecolor{accent}{HTML}{126B7A}
+\definecolor{muted}{HTML}{52636A}
+\definecolor{pale}{HTML}{EFF5F6}
+\newsavebox{\grmathbox}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt minus 1pt}
+\setlength{\emergencystretch}{2em}
+\setlength{\LTpre}{7pt}
+\setlength{\LTpost}{7pt}
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{24pt}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\fontsize{8}{10}\selectfont\color{muted}GENERAL RELATIVITY}
+\fancyhead[R]{\sffamily\fontsize{8}{10}\selectfont\color{muted}FROM THE INSIDE OUT}
+\fancyfoot[R]{\sffamily\small\color{accent}\thepage}
+\renewcommand{\headrulewidth}{0.25pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[R]{\sffamily\small\color{accent}\thepage}\renewcommand{\headrulewidth}{0pt}}
+\setkomafont{disposition}{\normalfont\sffamily\bfseries\color{ink}}
+\setkomafont{chapter}{\fontsize{23}{28}\selectfont}
+\setkomafont{section}{\fontsize{15}{19}\selectfont}
+\setkomafont{subsection}{\fontsize{12}{15}\selectfont}
+\RedeclareSectionCommand[beforeskip=0pt,afterskip=16pt]{chapter}
+\RedeclareSectionCommand[beforeskip=18pt,afterskip=8pt]{section}
+\RedeclareSectionCommand[beforeskip=12pt,afterskip=6pt]{subsection}
+\renewenvironment{quote}{\begin{tcolorbox}[enhanced,breakable,sharp corners,colback=pale,colframe=accent,boxrule=0pt,borderline west={2pt}{0pt}{accent},left=10pt,right=10pt,top=7pt,bottom=7pt]}{\end{tcolorbox}}
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\raggedbottom
+\AtBeginDocument{\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,pdftitle={General Relativity, From the Inside Out},pdfsubject={An educational guide to spacetime geometry and the Einstein-Hilbert action},pdfauthor={},bookmarksopen=false,bookmarksdepth=2}}
