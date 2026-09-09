@@ -166,6 +166,7 @@ for(let i=0;i<pages.length;i++){
  html=html.replace('<div data-foundation-insert="polar"></div>',()=>polarExperienceHTML());
  html=html.replace('<div data-foundation-insert="vector-field"></div>',()=>vectorFieldExperienceHTML());
  html=html.replace('<div data-foundation-insert="transport"></div>',()=>parallelTransportHTML());
+ html=html.replace('<div data-foundation-insert="transport-routes"></div>',()=>parallelTransportHTML(true));
  html=html.replace('<div data-foundation-insert="flow-order"></div>',()=>flowOrderHTML());
  if(p.chapter==='8')html=html.replace('<section class="guided-lesson" id="carry-a-direction-without-turning-it"','<span id="scene-sphere"></span><section class="guided-lesson" id="carry-a-direction-without-turning-it"');
  if(p.chapter==='4')html=html.replace('<section class="guided-lesson" id="two-maps-one-sphere"',geometryExperienceHTML('manifold')+'<section class="guided-lesson" id="two-maps-one-sphere"');

@@ -2587,6 +2587,14 @@ In the [transport experiment](chapter-7.html#parallel-transport-lab), the plane 
 
 Shrink the sphere’s triangle. The return angle becomes smaller, approaching zero with the enclosed area. What remains after dividing by that small area is a local measure of curvature. On a sphere of radius $R$, its magnitude is $1/R^2$. Increasing $R$ while keeping the same angular triangle does not change the rotation: the physical area grows as $R^2$ while the curvature falls as $1/R^2$.
 
+There is another way to make the comparison: start with two identical arrows at A, carry them along different routes, and let them meet at C. Now both arrows live in C’s tangent plane. Their angle can be measured there with no further transport.
+
+<div data-foundation-insert="transport-routes"></div>
+
+The arrows meet at the same point in every version of this experiment. On the plane and rolled sheet, their directions agree. On the sphere, they generally disagree. This differs from the [two-flow experiment](chapter-6.html#flow-order): there, changing instructions carried the points to different destinations even on a flat plane. Here, the destinations are fixed; it is the transported direction that remembers the route.
+
+Following the route via B from A to C and the direct route backward from C to A makes a closed loop. Transport along that last leg preserves the angle between the arrows, so the mismatch at C is exactly the return rotation at A. The open-route comparison and the closed-loop experiment measure the same effect.
+
 To calculate this effect for a small loop, we need to compare derivatives taken in two different orders.
 
 ### 8.1 Comparing two orders of differentiation

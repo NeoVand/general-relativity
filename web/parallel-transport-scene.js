@@ -1,6 +1,7 @@
-import {surfaceFrame,transportAt,transportLoop} from './parallel-transport-model.js';
+import {surfaceFrame,transportAt,transportLoop,transportRoutesAt,transportRoutesResult} from './parallel-transport-model.js';
 
-export async function createTransportScene(root,getState){
+export async function createTransportScene(root,getState,routes=false){
+ const frame=state=>routes?transportRoutesAt(state):transportAt(state);
  const [THREE,{OrbitControls}]=await Promise.all([import('three'),import('./assets/three/OrbitControls.js')]);
  const stage=root.querySelector('.tp-spatial');if(!stage.isConnected)return null;
  let renderer;try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'low-power'})}catch{return null}
@@ -12,15 +13,17 @@ export async function createTransportScene(root,getState){
  let controls=new OrbitControls(camera,canvas);controls.target.copy(target);controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=false;controls.minPolarAngle=.08;controls.maxPolarAngle=Math.PI-.08;controls.update();
  canvas.style.touchAction='pan-y';
  scene.add(new THREE.HemisphereLight(0xffffff,0x748392,2));const light=new THREE.DirectionalLight(0xffffff,2.4);light.position.set(-3,-5,7);scene.add(light);const rim=new THREE.DirectionalLight(0xb4d4f0,1);rim.position.set(4,3,1);scene.add(rim);
- const terrain=new THREE.Group(),pathGroup=new THREE.Group();scene.add(terrain,pathGroup);
+ const terrain=new THREE.Group(),pathGroup=new THREE.Group(),angleGroup=new THREE.Group();scene.add(terrain,pathGroup,angleGroup);let angleKey='';
  const materials=new Set(),V=p=>new THREE.Vector3(...p);let surface,key='',lastSurface='',disposed=false,available=true;
  function material(role,opacity=1,standard=false){const m=new (standard?THREE.MeshStandardMaterial:THREE.MeshBasicMaterial)({side:THREE.DoubleSide,transparent:opacity<1,opacity,...(standard?{roughness:.85,metalness:0}:{})});m.userData.role=role;materials.add(m);return m}
  function disposeGroup(g){g.traverse(o=>{o.geometry?.dispose();for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean)){materials.delete(m);m.dispose()}});g.clear()}
  function arrow(role){const g=new THREE.Group(),m=material(role),shaft=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.4,12),m),head=new THREE.Mesh(new THREE.ConeGeometry(.055,.14,20),m);shaft.position.y=.2;head.position.y=.47;g.add(shaft,head);scene.add(g);return g}
  const initialArrow=arrow('transport'),movingArrow=arrow('observer');
+ const directMarker=new THREE.Mesh(new THREE.SphereGeometry(.028,20,16),material('transport'));directMarker.visible=routes;scene.add(directMarker);
+ const directTangent=new THREE.Mesh(new THREE.PlaneGeometry(.72,.72),material('matter',.12));directTangent.material.depthWrite=false;directTangent.visible=routes;scene.add(directTangent);
  const tangent=new THREE.Mesh(new THREE.PlaneGeometry(.72,.72),material('matter',.17));tangent.material.depthWrite=false;scene.add(tangent);
  const marker=new THREE.Mesh(new THREE.SphereGeometry(.032,20,16),material('observer',1,true));scene.add(marker);
- const labels=['A','B','C','P'].map(name=>{const el=document.createElement('span');el.className='tp-label';el.textContent=name;stage.append(el);return {name,el,point:new THREE.Vector3()}});
+ const labels=[...['A','B','C','P'],...(routes?['angle']:[])].map(name=>{const el=document.createElement('span');el.className='tp-label';el.textContent=name;stage.append(el);return {name,el,point:new THREE.Vector3()}});
  const raycaster=new THREE.Raycaster();
  function placeLabels(){
   const rect=stage.getBoundingClientRect(),cameraPoint=new THREE.Vector3();camera.getWorldPosition(cameraPoint);
@@ -29,11 +32,11 @@ export async function createTransportScene(root,getState){
    raycaster.setFromCamera(new THREE.Vector2(p.x,p.y),camera);const hits=surface?raycaster.intersectObject(surface,false):[];
    const blocked=hits.length>0&&hits[0].point.distanceTo(label.point)>.12&&hits[0].distance<raycaster.ray.origin.distanceTo(label.point);
    const nearVertex=label.name==='P'&&labels.slice(0,3).some(l=>l.point.distanceTo(label.point)<.18);
-   label.el.hidden=blocked||nearVertex||px<16||px>rect.width-16||py<16||py>rect.height-16;
-   label.el.style.left=`${px}px`;label.el.style.top=`${py-13}px`;
+   label.el.hidden=label.enabled===false||blocked||nearVertex||px<16||px>rect.width-16||py<16||py>rect.height-16;
+   label.el.style.left=`${px+(routes&&label.name==='C'?-11:0)}px`;label.el.style.top=`${py+(routes&&label.name==='C'?13:label.name==='angle'?0:-13)}px`;
   }
  }
- function render(){if(disposed||!available)return;renderer.render(scene,camera);placeLabels();const f=transportAt(getState()),project=p=>V(p).project(camera).toArray();stage.dataset.projection=JSON.stringify({frustum:[camera.left,camera.right,camera.top,camera.bottom],start:project(f.startPoint),initialTip:project(f.startPoint.map((x,i)=>x+.52*f.startVector[i])),point:project(f.point),tip:project(f.point.map((x,i)=>x+.52*f.vector[i]))})}
+ function render(){if(disposed||!available)return;renderer.render(scene,camera);placeLabels();const f=frame(getState()),reference=routes?f.direct:{point:f.startPoint,vector:f.startVector},project=p=>V(p).project(camera).toArray();stage.dataset.projection=JSON.stringify({frustum:[camera.left,camera.right,camera.top,camera.bottom],start:project(reference.point),initialTip:project(reference.point.map((x,i)=>x+.52*reference.vector[i])),point:project(f.point),tip:project(f.point.map((x,i)=>x+.52*f.vector[i]))})}
  function theme(){const css=getComputedStyle(root);for(const m of materials){m.color.set(css.getPropertyValue(`--${m.userData.role}`).trim()||'#3f8f92');if(m.userData.surface&&document.documentElement.dataset.theme!=='dark')m.color.lerp(new THREE.Color('#6fd4c2'),.45)}render()}
  function makeSurface(s){
   disposeGroup(terrain);const positions=[],normals=[],uv=[],indices=[],rows=60,cols=96;
@@ -66,22 +69,41 @@ export async function createTransportScene(root,getState){
   const loop=transportLoop(s);
   for(let i=0;i<3;i++){
    const curve=new THREE.Curve();curve.getPoint=t=>{const f=transportAt({...s,progress:loop.corners[i]+t*(loop.corners[i+1]-loop.corners[i])});return V(f.point).addScaledVector(V(f.normal),.018)};
-   pathGroup.add(new THREE.Mesh(new THREE.TubeGeometry(curve,96,.014,6,false),material('transport')));
+   pathGroup.add(new THREE.Mesh(new THREE.TubeGeometry(curve,96,.014,6,false),material(routes&&i<2?'observer':'transport')));
   }
   for(let i=0;i<3;i++){const f=transportAt({...s,progress:loop.corners[i]}),p=V(f.point).addScaledVector(V(f.normal),.03),ball=new THREE.Mesh(new THREE.SphereGeometry(.025,16,12),material('transport'));ball.position.copy(p);pathGroup.add(ball);labels[i].point.copy(p).addScaledVector(V(f.normal),.065);labels[i].el.textContent=(s.reverse?'ACB':'ABC')[i]}
  }
  function update(){
-  if(disposed||!available)return;const s=getState(),f=transportAt(s),newKey=JSON.stringify([s.surface,s.radius,s.size,s.reverse]);
+  if(disposed||!available)return;const s=getState(),f=frame(s),newKey=JSON.stringify([s.surface,s.radius,s.size,s.reverse]);
   if(newKey!==key){makeSurface(s);makePath(s);key=newKey;theme()}
   if(lastSurface!==s.surface){lastSurface=s.surface;reset();resize()}
   const n=V(f.normal),v=V(f.vector),p=V(f.point);
   movingArrow.position.copy(p).addScaledVector(n,.025);movingArrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v);
-  initialArrow.position.copy(V(f.startPoint)).addScaledVector(V(f.startNormal),.022);initialArrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),V(f.startVector));
+  const reference=routes?f.direct:{point:f.startPoint,normal:f.startNormal,vector:f.startVector};
+  initialArrow.position.copy(V(reference.point)).addScaledVector(V(reference.normal),.022);initialArrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),V(reference.vector));
+  if(routes){
+   directMarker.position.copy(V(reference.point)).addScaledVector(V(reference.normal),.028);
+   directTangent.visible=V(reference.point).distanceTo(p)>.12;
+   directTangent.position.copy(V(reference.point)).addScaledVector(V(reference.normal),.022);
+   directTangent.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(V(reference.vector),new THREE.Vector3().crossVectors(V(reference.normal),V(reference.vector)),V(reference.normal)));
+  }
   // Keep the reference unobtrusive while the carried arrow leaves the start.
   initialArrow.scale.set(.65,1,.65);
   marker.position.copy(p).addScaledVector(n,.032);tangent.position.copy(p).addScaledVector(n,.022);
   tangent.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(v,new THREE.Vector3().crossVectors(n,v),n));
   labels[3].point.copy(p).addScaledVector(n,.09);
+  if(routes){
+   const angle=transportRoutesResult(s).angle,show=s.progress===1&&Math.abs(angle)>.02,newAngleKey=JSON.stringify([show,s.surface,s.radius,s.size]);labels[4].enabled=show;
+   if(newAngleKey!==angleKey){
+    disposeGroup(angleGroup);angleKey=newAngleKey;
+    if(show){
+     const blue=V(f.direct.vector),across=new THREE.Vector3().crossVectors(n,blue),origin=p.clone().addScaledVector(n,.035),curve=new THREE.Curve();
+     curve.getPoint=t=>origin.clone().addScaledVector(blue,.25*Math.cos(t*angle)).addScaledVector(across,.25*Math.sin(t*angle));
+     angleGroup.add(new THREE.Mesh(new THREE.TubeGeometry(curve,40,.004,6,false),material('matter')));
+     labels[4].point.copy(origin).addScaledVector(blue,.49*Math.cos(angle/2)).addScaledVector(across,.49*Math.sin(angle/2));labels[4].el.textContent=`${(Math.abs(angle)*180/Math.PI).toFixed(1)}°`;
+    }
+   }
+  }
   render();
  }
  function resize(){const {width,height}=stage.getBoundingClientRect();if(!width||!height)return;const half=(getState().surface==='sphere'?1.98:2.55)/Math.min(1,width/height);camera.left=-half*width/height;camera.right=half*width/height;camera.top=half;camera.bottom=-half;camera.updateProjectionMatrix();renderer.setSize(width,height,false);render()}
@@ -89,7 +111,7 @@ export async function createTransportScene(root,getState){
  // it when changing that direction, so orbiting after a face-on view is smooth.
  function renewControls(){controls.removeEventListener('change',render);controls.dispose();controls=new OrbitControls(camera,canvas);controls.target.copy(target);controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=false;controls.minPolarAngle=.08;controls.maxPolarAngle=Math.PI-.08;controls.update();controls.addEventListener('change',render);canvas.style.touchAction='pan-y'}
  function reset(){camera.up.set(0,0,1);camera.position.set(...pose(getState().surface));renewControls();render()}
- function faceStart(){const f=transportAt({...getState(),progress:0});camera.up.copy(V(f.startVector));camera.position.copy(target).addScaledVector(V(f.startNormal),9);renewControls();render()}
+ function faceStart(){const f=frame({...getState(),progress:routes?1:0}),normal=routes?f.normal:f.startNormal,vector=routes?f.direct.vector:f.startVector;camera.up.copy(V(vector));camera.position.copy(target).addScaledVector(V(normal),9);renewControls();render()}
  function keyboard(event){
   if(event.key==='Home'){reset();event.preventDefault();return}
   if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;event.preventDefault();
@@ -102,5 +124,5 @@ export async function createTransportScene(root,getState){
  const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);
  const themeObserver=new MutationObserver(theme);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']});
  stage.hidden=false;root.querySelector('[data-tp-fallback]').hidden=true;root.dataset.transportSpatial='ready';resize();update();
- return {update,reset,faceStart,dispose(){disposed=true;controls.dispose();resizeObserver.disconnect();themeObserver.disconnect();stage.removeEventListener('keydown',keyboard);canvas.removeEventListener('webglcontextlost',lost);disposeGroup(terrain);disposeGroup(pathGroup);for(const o of [initialArrow,movingArrow])disposeGroup(o);tangent.geometry.dispose();marker.geometry.dispose();for(const m of materials)m.dispose();renderer.dispose();canvas.remove();labels.forEach(l=>l.el.remove())}};
+ return {update,reset,faceStart,dispose(){disposed=true;controls.dispose();resizeObserver.disconnect();themeObserver.disconnect();stage.removeEventListener('keydown',keyboard);canvas.removeEventListener('webglcontextlost',lost);disposeGroup(terrain);disposeGroup(pathGroup);disposeGroup(angleGroup);for(const o of [initialArrow,movingArrow])disposeGroup(o);tangent.geometry.dispose();marker.geometry.dispose();directMarker.geometry.dispose();directTangent.geometry.dispose();for(const m of materials)m.dispose();renderer.dispose();canvas.remove();labels.forEach(l=>l.el.remove())}};
 }

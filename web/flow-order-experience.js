@@ -52,7 +52,7 @@ export function initFlowOrder(){
   on(root.querySelector('[data-fo-reset]'),'click',()=>{state={...flowOrderDefaults};playing=false;draw(true);schedule()});
   for(const input of root.querySelectorAll('[data-fo-parameter]'))on(input,'input',()=>{state=flowOrderState({...state,[input.dataset.foParameter]:+input.value});playing=false;draw(true);schedule()});
   on(document,'visibilitychange',schedule);const reduced=matchMedia('(prefers-reduced-motion: reduce)');on(reduced,'change',()=>{if(reduced.matches){playing=false;draw();schedule()}});
-  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;schedule()});observer.observe(root);
+  const observer=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;schedule()});observer.observe(root);
   for(const el of root.querySelectorAll('[data-fo-controls]'))el.hidden=false;draw();root.dataset.flowOrderReady='true';
   cleanup.push(()=>{stop();abort.abort();observer.disconnect()});
  }

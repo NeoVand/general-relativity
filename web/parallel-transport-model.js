@@ -57,3 +57,23 @@ export function transportResult(value=transportDefaults){
  const angle=Math.atan2(dot(end.startNormal,cross(end.startVector,end.vector)),dot(end.startVector,end.vector));
  return {angle,area:Math.abs(end.signedArea),signedArea:end.signedArea,curvature:s.surface==='sphere'?1/s.radius**2:0,endVector:end.vector,perimeter:end.totalLength};
 }
+
+export const routeComparisonDefaults=Object.freeze({...transportDefaults,surface:'sphere',progress:1});
+export function routeComparisonState(value={}){return {...transportState({...routeComparisonDefaults,...value}),reverse:false};}
+export function transportRoutesAt(value=routeComparisonDefaults){
+ const s=routeComparisonState(value),loop=transportLoop(s),viaLength=loop.lengths[0]+loop.lengths[1];
+ const via=transportAt({...s,progress:s.progress*viaLength/loop.totalLength});
+ let direct;
+ if(s.surface==='sphere'){
+  const axis=unit(cross(loop.vertices[0],loop.vertices[2])),angle=s.progress*loop.lengths[2]/s.radius,normal=rotate(loop.vertices[0],axis,angle);
+  direct={point:scale(normal,s.radius),normal,vector:rotate([0,0,1],axis,angle)};
+ }else{
+  const A=loop.vertices[0],C=loop.vertices[2],uv=A.map((x,i)=>x+s.progress*(C[i]-x)),f=surfaceFrame(s.surface,...uv,s.radius);
+  direct={point:f.point,normal:f.normal,vector:f.e1};
+ }
+ return {...via,direct,viaLength,directLength:loop.lengths[2],journeyProgress:s.progress};
+}
+export function transportRoutesResult(value=routeComparisonDefaults){
+ const s=routeComparisonState(value),end=transportRoutesAt({...s,progress:1});
+ return {angle:Math.atan2(dot(end.normal,cross(end.direct.vector,end.vector)),dot(end.direct.vector,end.vector)),area:Math.abs(end.signedArea),signedArea:end.signedArea,curvature:s.surface==='sphere'?1/s.radius**2:0,endVector:end.vector,directEndVector:end.direct.vector,endpoint:end.point,viaLength:end.viaLength,directLength:end.directLength};
+}
