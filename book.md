@@ -6741,17 +6741,17 @@ At $z=1$, the same source has $D_L=4D_A$. The definitions differ because the bri
 
 <a id="chapter-20"></a>
 
-## 20. Making spacetime run: initial data, constraints, and numerical relativity
+## 20. Initial data, constraints, and numerical relativity
 
 ### 20.1 An equation is not yet a prediction
 
-An equation can be magnificent and still fail to tell you what happens next. Newton's $m\ddot x=F$ needs an initial position and velocity. Maxwell's equations need an electromagnetic field whose initial divergence satisfies the charge constraints. Einstein's equation also needs initial data—but now the object being initialized includes the geometry used to define “initial.”
+Chapter 19 found both an expanding and a contracting branch of a cosmological solution. The field equation alone did not choose one: we also needed an initial scale and rate of change. The same need appears without cosmological symmetry. To evolve a general gravitational field, specify its spatial geometry and how that geometry is changing, together with the matter data.
 
-Imagine a video editor handed a single frame of a film and asked to generate the next frame. A photograph alone cannot determine motion. In GR the spatial geometry is the photograph; a second geometric object, **extrinsic curvature**, supplies the relevant velocity information. Matter fields bring their own initial data. The catch is that these ingredients cannot be chosen independently: they must already satisfy four Einstein equations.
+The rate-of-change information is carried by **extrinsic curvature**, which Chapter 14 introduced as the change of a boundary’s normal direction. We will relate that definition to the evolving spatial metric. Four projections of Einstein’s equation constrain the allowed initial geometry, extrinsic curvature, and matter; they cannot all be chosen independently.
 
 For this chapter set $c=1$, so time and length have the same units. Keep $G_N$ explicit.
 
-### 20.2 Slicing spacetime without claiming that nature has a preferred slicer
+### 20.2 Spatial slices, lapse, and shift
 
 Choose spacelike hypersurfaces $\Sigma_t$ labeled by a coordinate $t$. Locally, wherever this foliation is valid, write the metric in **3+1 form**:
 
@@ -6777,11 +6777,17 @@ $$
 
 The sign of the shift has operational meaning: someone following a normal worldline has $dx^i/dt=-\beta^i$. The coordinates drift relative to that person.
 
-A useful analogy is slicing a loaf while moving the cutting board sideways. Slice thickness corresponds to lapse; sideways movement corresponds to shift. Its limitation is decisive: spacetime is Lorentzian, and these slices are conventions for organizing causal evolution, not pieces cut from an object sitting in a larger room.
+For a flat-spacetime example, start with $ds^2=-dT^2+dX^2+dY^2+dZ^2$ and set $T=2t$, $X=x+vt$, $Y=y$, $Z=z$, with constant dimensionless $v$. The metric becomes
+
+$$
+ds^2=-4dt^2+(dx+vdt)^2+dy^2+dz^2.
+$$
+
+Here $N=2$, $\beta^x=v$, and $\gamma_{ij}=\delta_{ij}$. A normal observer stays at fixed $X$, so $dx/dt=-v$ and $d\tau=2dt$. Lapse changes the clock labeling; shift changes the spatial labeling between slices. This example has no spacetime curvature.
 
 There need not be a convenient global slicing of an arbitrary spacetime. We will meet the additional causal conditions that support one in Chapter 22.
 
-### 20.3 The “velocity of space” is extrinsic curvature
+### 20.3 Extrinsic curvature and the change of spatial geometry
 
 Extend the spatial projector to spacetime:
 
@@ -6816,11 +6822,11 @@ $$
 
 This is a precise version of “extrinsic curvature contains the velocity of the spatial metric.” The qualification matters: it is velocity relative to the chosen slicing, after correcting for coordinate drift.
 
-**Sign trap:** Chapter 14 used the boundary convention $K_{\mathrm{boundary}}=h^{\mu\nu}\nabla_\mu n_\nu$. For the same spacelike hypersurface and the same normal, the present ADM convention gives $K=-K_{\mathrm{boundary}}$. Other textbooks also differ in this choice. Every equation containing an odd number of $K$ factors must be translated consistently. A sign difference here is not a disagreement about expanding universes.
+**Extrinsic-curvature convention.** Chapter 14 used the boundary convention $K_{\mathrm{boundary}}=h^{\mu\nu}\nabla_\mu n_\nu$. For the same spacelike hypersurface and the same normal, the present ADM convention gives $K=-K_{\mathrm{boundary}}$. Other textbooks also differ in this choice. Every equation containing an odd number of $K$ factors must be translated consistently. A sign difference here is not a disagreement about expanding universes.
 
-**Geometry trap:** extrinsic curvature need not indicate spacetime curvature. Curved slices can be drawn inside flat Minkowski spacetime. Intrinsic spatial curvature, extrinsic curvature, and four-dimensional spacetime curvature are related objects, not synonyms.
+**Intrinsic and extrinsic curvature.** extrinsic curvature need not indicate spacetime curvature. Curved slices can be drawn inside flat Minkowski spacetime. Intrinsic spatial curvature, extrinsic curvature, and four-dimensional spacetime curvature are related objects, not synonyms.
 
-### 20.4 Four equations your initial photograph must already obey
+### 20.4 Four constraints on the initial data
 
 Define the matter energy and momentum seen by the normal observers:
 
@@ -6844,18 +6850,41 @@ $$
 \boxed{D_j\left(K^{ij}-\gamma^{ij}K\right)=8\pi G_Nj^i.}
 $$
 
-Why these combinations? The Gauss relation connects curvature measured entirely within a slice to spacetime curvature plus products of $K_{ij}$. After contraction it gives
+These combinations follow by comparing spacetime transport with transport restricted to the slice. To calculate that comparison at a chosen slice, use Gaussian normal coordinates locally: $N=1$, $\beta^i=0$, and $ds^2=-dt^2+\gamma_{ij}(t,x)dx^idx^j$. The normal geodesics construct this chart until they cross. Its connection contains
+
+$$
+\begin{aligned}
+\Gamma^0{}_{ij}&=-K_{ij},\\
+\Gamma^i{}_{0j}&=-K^i{}_j,\\
+\Gamma^i{}_{jk}&={}^{(3)}\Gamma^i{}_{jk}.
+\end{aligned}
+$$
+
+In the purely spatial Riemann components, the derivative terms and spatial connection products form ${}^{(3)}R_{ijkl}$. The two products with intermediate index 0 remain:
+
+$$
+{}^{(4)}R_{ijkl}={}^{(3)}R_{ijkl}
++K_{ik}K_{jl}-K_{il}K_{jk}.
+$$
+
+This is the **Gauss relation**. Contracting with $\gamma^{ik}\gamma^{jl}$ gives ${}^{(3)}R+K^2-K_{ij}K^{ij}$. The same contraction of spacetime curvature equals $2G_{\mu\nu}n^\mu n^\nu$: the normal contributions in $R+2R_{\mu\nu}n^\mu n^\nu$ cancel, leaving just the spatial contraction. Thus
 
 $$
 2G_{\mu\nu}n^\mu n^\nu
 ={}^{(3)}R+K^2-K_{ij}K^{ij}.
 $$
 
-Projecting $G_{\mu\nu}+\Lambda g_{\mu\nu}=8\pi G_NT_{\mu\nu}$ twice along $n$ contributes $-\Lambda$, because $g(n,n)=-1$. Move it across and multiply by two: the $+2\Lambda$ in the constraint follows. The Codazzi relation similarly turns the mixed projection into a spatial divergence of $K$; our definition of $j_i$ fixes the momentum equation's sign.
+Projecting $G_{\mu\nu}+\Lambda g_{\mu\nu}=8\pi G_NT_{\mu\nu}$ twice along $n$ contributes $-\Lambda$, because $g(n,n)=-1$. Move it across and multiply by two: the $+2\Lambda$ in the constraint follows. The mixed curvature components in this chart give the **Codazzi relation**,
+
+$$
+{}^{(4)}R_{0ijk}=D_jK_{ik}-D_kK_{ij}.
+$$
+
+The ordinary derivatives come from differentiating $\Gamma^0{}_{ij}=-K_{ij}$; the remaining products supply the spatial covariant-derivative corrections. Contracting yields $G_{0i}=R_{0i}=D_iK-D_jK^j{}_i$. Since $T_{0i}=-j_i$ in this normal chart, the mixed field equation gives exactly the momentum constraint above. These projected identities are tensorial, so the result does not depend on having used the convenient chart to derive them.
 
 These equations contain no second time derivative of the geometry. They constrain what can consistently exist on one slice. The 3+1 projection and this extrinsic-curvature convention are developed systematically in [Éric Gourgoulhon's author-written notes on the 3+1 formalism](https://arxiv.org/abs/gr-qc/0703035).
 
-Suppose you invent a lumpy matter distribution, decree that space is perfectly Euclidean, and also decree that it is instantaneously unchanging, $K_{ij}=0$. With $\Lambda=0$, the Hamiltonian constraint says $E=0$. Your proposed universe has failed its entrance exam.
+Suppose we try to prescribe positive matter density together with an exactly Euclidean spatial metric and $K_{ij}=0$. With $\Lambda=0$, the left side of the Hamiltonian constraint is zero, so it requires $E=0$. To describe that matter, we must change the spatial geometry, its extrinsic curvature, or both.
 
 This is analogous to specifying an electric field with zero divergence everywhere while also inserting a charge. Evolution cannot repair an inconsistent starting point without changing the data.
 
@@ -6892,9 +6921,16 @@ $$
 
 The familiar cosmological equation is the statement that the initial geometry, expansion rate, and matter density fit together. Homogeneity made the constraint algebraic. In a binary-black-hole calculation, solving its spatially varying version is substantial work.
 
-### 20.6 Evolution, gauge, and why ten metric components do not mean ten gravitons
+### 20.6 Evolution and the two physical degrees of freedom
 
-The spatial projections provide evolution equations. In vacuum with $\Lambda=0$, one useful form is
+The spatial Ricci projection contains the time derivative absent from the constraints. In the Gaussian normal chart used above, direct substitution of the same connection gives
+
+$$
+{}^{(4)}R_{ij}={}^{(3)}R_{ij}-\partial_tK_{ij}
++KK_{ij}-2K_{ik}K^k{}_j.
+$$
+
+For general lapse and shift, the time derivative becomes $N^{-1}(\partial_t-\mathcal L_\beta)K_{ij}$ and the projection has an additional term $-N^{-1}D_iD_jN$. Setting the vacuum Ricci tensor to zero, with $\Lambda=0$, gives
 
 $$
 (\partial_t-\mathcal L_\beta)K_{ij}
@@ -6910,6 +6946,15 @@ $$
 S_{\mathrm{bulk}}=\frac1{16\pi G_N}\int dt\,d^3x\,
 N\sqrt\gamma\left({}^{(3)}R+K_{ij}K^{ij}-K^2-2\Lambda\right).
 $$
+
+Here $\gamma=\det(\gamma_{ij})$. One way to track the boundary contribution is the scalar identity
+
+$$
+{}^{(4)}R={}^{(3)}R+K_{ij}K^{ij}-K^2
+-2\nabla_\mu(Kn^\mu+a^\mu),
+$$
+
+where $a^\mu=n^\nu\nabla_\nu n^\mu$ is the normal observers’ acceleration. Multiplying the last term by $\sqrt{-g}=N\sqrt\gamma$ turns it into an ordinary divergence, as in Chapter 14. Its boundary integral must be treated with the prescribed boundary data. The remaining interior terms give the bulk action displayed above.
 
 There are no independent time derivatives of lapse and shift. In the Hamiltonian formulation they act as multipliers enforcing the constraints, rather than adding propagating gravitational polarizations.
 
@@ -6953,17 +6998,17 @@ g^{\alpha\beta}\partial_\alpha\partial_\beta g_{\mu\nu}
 =\text{lower-derivative geometric terms and matter sources}.
 $$
 
-The metric itself supplies the coefficients that determine wave propagation: the stage also controls its own signal speed. Such a system is called **quasilinear**.
+The metric itself supplies the coefficients that determine wave propagation: the unknown metric appears in the coefficients of its own highest derivatives. Those highest derivatives enter linearly, which is the meaning of **quasilinear**.
 
-A well-posed formulation needs existence, uniqueness in the appropriate sense, and continuous dependence on initial data. Tiny numerical errors must not instantly become arbitrary disasters. A formulation can be mathematically equivalent on exact constraint-satisfying solutions yet behave very differently when roundoff and discretization introduce small constraint violations. Generalized harmonic, BSSN, and related formulations make different choices for variables, gauge evolution, and controlling those violations.
+A **well-posed** formulation has a solution, has the appropriate uniqueness, and makes that solution depend continuously on the initial data. The last requirement bounds how errors in the starting data affect the solution over a specified time interval. A formulation can be mathematically equivalent on exact constraint-satisfying solutions yet behave very differently when roundoff and discretization introduce small constraint violations. Generalized harmonic formulations prescribe the contracted connection through coordinate equations. The BSSN formulation, named for Baumgarte, Shapiro, Shibata, and Nakamura, instead separates the spatial volume factor from a unit-determinant spatial metric and separates the trace of extrinsic curvature from its trace-free part. It also evolves auxiliary connection variables. These are distinct organizations of the same physical solution, with different responses to numerical errors; deriving a full implementation goes beyond the homogeneous benchmark below.
 
-The contracted Bianchi identity supplies constraint-propagation relations. With consistent matter evolution, exact constraints that hold initially continue to hold in a suitable exact evolution. A computer approximates that theorem; it does not receive a magical exemption from error analysis.
+The contracted Bianchi identity supplies constraint-propagation relations. With consistent matter evolution, exact constraints that hold initially continue to hold in a suitable exact evolution. A discretized evolution introduces errors, so constraint residuals must still be monitored and checked for convergence.
 
-Initial conditions and boundary conditions play different roles. Initial data describe a spatial slice. Boundaries of a finite simulation also require treatment of incoming characteristic fields, gravitational radiation, and gauge or constraint modes. For an isolated system one often approximates an asymptotically flat exterior; arbitrary reflective boundary conditions would instead build a gravitational echo chamber.
+Initial conditions and boundary conditions play different roles. Initial data describe a spatial slice. At a finite simulation boundary, combinations of field disturbances propagate inward or outward at speeds set by the chosen equations; these combinations are called **characteristic fields**. Boundary data must handle the incoming combinations consistently, including physical radiation and changes in coordinates or constraint errors. For an isolated system one often approximates an asymptotically flat exterior; a reflecting boundary can send outgoing radiation back into the modeled region.
 
-Solving an elliptic constraint across a slice does not transmit a physical signal instantly. It constructs a mutually compatible initial state. Subsequent physical disturbances propagate according to the causal equations.
+Some constraint formulations give spatial boundary-value equations of the same general type as Poisson’s equation, called **elliptic equations**. Solving them across a slice does not transmit a physical signal instantly. It constructs a mutually compatible initial state. Subsequent physical disturbances propagate according to the causal equations.
 
-### 20.8 The hole argument: predicting geometry without predicting coordinate labels
+### 20.8 What uniqueness means when coordinates are free
 
 Imagine a smooth relabeling of spacetime that is exactly the identity near the initial slice but changes labels inside a later empty region—the “hole.” Apply it to the metric and all physical fields. General covariance produces a new coordinate description satisfying the same initial data. Does that destroy determinism?
 
@@ -6973,17 +7018,21 @@ A prediction should concern “the curvature measured when this clock reads this
 
 For suitable constraint-satisfying vacuum data, and for appropriate well-posed matter systems, the relevant uniqueness statement is uniqueness of the maximal globally hyperbolic development **up to diffeomorphism**. “Maximal” does not promise geodesic completeness or a nonsingular future. This is the landmark result of [Choquet-Bruhat and Geroch's original Cauchy-problem paper](https://projecteuclid.org/journals/communications-in-mathematical-physics/volume-14/issue-4/Global-aspects-of-the-Cauchy-problem-in-general-relativity/cmp/1103841822.pdf).
 
-GR does predict a spacetime. It declines to endow your spreadsheet's row labels with additional physical reality.
-
 <a id="chapter-21"></a>
 
-## 21. A local laboratory at every point: tetrads, forms, and the gauge viewpoint
+## 21. Local laboratory frames and differential forms
 
-### 21.1 Taking a square root of the metric
+### 21.1 Converting coordinates to laboratory components
 
 Coordinate bases are versatile, but they need not look like a laboratory's orthogonal ruler-and-clock axes. In spherical coordinates, a change of one radian is not a change of one meter. For a local experiment we often want an orthonormal basis instead.
 
-Introduce four one-forms
+For example, in flat cylindrical coordinates,
+
+$$
+ds^2=-c^2dt^2+dr^2+r^2d\phi^2+dz^2,
+$$
+
+the one-forms $c\,dt$, $dr$, $r\,d\phi$, and $dz$ directly measure components along orthonormal clock-and-ruler directions. The factor $r$ converts an angular coordinate increment into a local length. Generalize this construction by introducing four one-forms
 
 $$
 e^a=e^a{}_\mu dx^\mu,
@@ -7014,9 +7063,9 @@ $$
 
 produces the same metric. Sixteen tetrad components minus six local Lorentz freedoms leave the metric's ten components. Coordinate freedom remains as well; this count describes the additional frame representation, not the physical degrees of freedom counted in Chapter 20.
 
-**Deep gotcha:** writing the metric as $\eta_{ab}$ in an orthonormal frame does not flatten spacetime. The frame changes from point to point, and its comparison law contains the geometry. Writing every bank balance in dollars does not make all accounts contain the same amount of money.
+An orthonormal frame makes the metric’s frame components equal to $\eta_{ab}$ at every point where that frame is defined. Curvature can still be nonzero: the frame’s comparison law changes across the region. The polar-frame calculation below will distinguish this comparison law from curvature itself.
 
-### 21.2 Differential forms: antisymmetry earns its keep
+### 21.2 Oriented measurements and differential forms
 
 A one-form takes one vector and returns a number. A two-form takes two vectors and returns an antisymmetric number, naturally measuring oriented area. A $p$-form generalizes this to $p$ directions.
 
@@ -7044,7 +7093,21 @@ $$
 
 Thus two two-forms commute under the wedge product, while two one-forms anticommute. The sign follows from moving $p$ directions past $q$ directions: $pq$ exchanges.
 
-The **exterior derivative** raises the form degree by one. For a scalar,
+The **exterior derivative** differentiates the coefficient functions and adds the derivative’s coordinate one-form on the left. For
+
+$$
+\alpha=\frac1{p!}\alpha_{\mu_1\ldots\mu_p}
+dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p},
+$$
+
+its rule is
+
+$$
+d\alpha=\frac1{p!}\partial_\nu\alpha_{\mu_1\ldots\mu_p}
+dx^\nu\wedge dx^{\mu_1}\wedge\cdots\wedge dx^{\mu_p}.
+$$
+
+The coefficient array is antisymmetric; $1/p!$ compensates for summing its $p!$ signed permutations. The derivative raises the form degree by one. For a scalar,
 
 $$
 df=\partial_\mu f\,dx^\mu.
@@ -7102,7 +7165,7 @@ $$
 \qquad \omega_{ab}=\eta_{ac}\omega^c{}_b.
 $$
 
-Antisymmetry applies after lowering the first frame index. A boost component can therefore satisfy $\omega^0{}_1=\omega^1{}_0$ with both indices in the displayed mixed positions. The minus sign hiding in $\eta_{00}$ is doing real work.
+Antisymmetry applies after lowering the first frame index. A boost component can therefore satisfy $\omega^0{}_1=\omega^1{}_0$ with both indices in the displayed mixed positions. Lowering the first index of the time component multiplies it by $\eta_{00}=-1$, which accounts for the apparent difference between these two statements.
 
 The relationship to Christoffel symbols follows by demanding that conversion between coordinate and frame components commute with differentiation:
 
@@ -7122,9 +7185,9 @@ $$
 \boxed{\omega'=L\omega L^{-1}-(dL)L^{-1}.}
 $$
 
-This is why a connection transforms inhomogeneously. The extra term is the bookkeeping fee for changing frames differently at different places.
+This is why a connection transforms inhomogeneously. The derivative of the position-dependent frame change produces the extra term.
 
-### 21.4 Cartan's equations package geometry into two lines
+### 21.4 Torsion and curvature in a moving frame
 
 The torsion two-form is
 
@@ -7138,7 +7201,14 @@ $$
 \boxed{de^a+\omega^a{}_b\wedge e^b=0.}
 $$
 
-This is the torsion-free first Cartan structure equation. Together with metric compatibility it determines $\omega$ from the tetrad. It is often a much quicker calculation than a page of Christoffel symbols.
+This is the torsion-free first Cartan structure equation. To connect it to Chapter 7, antisymmetrize the tetrad postulate in $\mu,\nu$. The derivative and spin-connection terms give
+
+$$
+\mathcal T^a{}_{\mu\nu}
+=e^a{}_\rho(\Gamma^\rho{}_{\mu\nu}-\Gamma^\rho{}_{\nu\mu}).
+$$
+
+Thus the two-form expresses the same torsion tensor in frame components. Zero torsion together with metric compatibility determines $\omega$ from the tetrad.
 
 The curvature two-form is
 
@@ -7154,7 +7224,18 @@ $$
 \,dx^\mu\wedge dx^\nu.
 $$
 
-With our Riemann convention these agree with the curvature defined by $[\nabla_\mu,\nabla_\nu]$. Applying $D=d+\omega$ twice to a vector-valued zero-form gives $D^2V=\mathcal R V$: the leftover is exactly the failure of parallel transport around an infinitesimal loop to return a vector unchanged.
+With our Riemann convention these agree with the curvature defined by $[\nabla_\mu,\nabla_\nu]$. For a vector-valued form, $D=d+\omega\wedge$ combines exterior differentiation with the frame correction. Apply it twice to the component functions $V$:
+
+$$
+\begin{aligned}
+D^2V&=d(\omega V)+\omega\wedge dV+\omega\wedge\omega V\\
+&=(d\omega)V-\omega\wedge dV+\omega\wedge dV
++\omega\wedge\omega V\\
+&=\mathcal R V.
+\end{aligned}
+$$
+
+The derivatives of $V$ cancel. The remaining matrix is the same curvature that controls infinitesimal loop transport.
 
 The connection's inhomogeneous transformation disappears from curvature:
 
@@ -7229,17 +7310,18 @@ $$
 
 Its Gaussian curvature is $1/a^2$, and its scalar curvature is $2/a^2$. The same two-line machinery has distinguished a rotating choice of axes from actual curved geometry.
 
-That distinction is one of the central survival skills of GR: a connection can look busy while spacetime is doing nothing gravitationally interesting.
+### 21.6 Frame symmetry and other gauge theories
 
-### 21.6 What gravity shares with gauge theory—and what it adds
-
-Electromagnetism uses a potential one-form $A$ and field strength $F=dA$. A non-Abelian gauge theory uses a matrix-valued connection with schematic curvature $F=dA+A\wedge A$. The spin connection obeys the same geometric pattern.
+Electromagnetism uses a potential one-form $A$ and field strength $F=dA$. In a **non-Abelian** gauge theory the internal transformations need not commute. Its connection is matrix-valued, so products of different connection matrices need not cancel. The curvature has the form $F=dA+A\wedge A$. The spin connection obeys the same geometric pattern.
 
 The shared idea is a freedom to choose a local reference convention, accompanied by a connection that compares neighboring conventions. It is not an assertion that gravity is ordinary electromagnetism with a larger alphabet.
 
-In GR, the tetrad ties the internal Lorentz frame to actual tangent directions: it connects the gauge description to rods, clocks, causal cones, and volume. The Einstein-Hilbert action is linear in curvature, while the usual Yang-Mills action is quadratic in its field strength. Their symmetry, variables, and dynamics therefore differ in crucial ways.
+In GR, the tetrad ties the internal Lorentz frame to actual tangent directions: it connects the gauge description to rods, clocks, causal cones, and volume. The Einstein-Hilbert action is linear in curvature, while the usual Yang-Mills action is quadratic in its field strength. The choice of action gives these theories different equations of motion even though their connection and curvature formulas resemble one another.
 
-**An optional bridge to quantum matter.** Tetrads also let us couple spin-$1/2$ fields to gravity. A **spinor** has complex components whose rotation and boost rules differ from those of a spacetime vector. For example, a spin-$1/2$ state acquires a minus sign under a full $2\pi$ rotation and returns to itself after $4\pi$; an overall sign alone does not change its measurement probabilities. This is a property of a quantum transformation law, not a small object literally spinning inside the particle. Constructing that representation is new material from quantum theory, not a consequence we have already proved using tensors.
+<details class="history-note" data-no-narration>
+<summary>Further calculation: how spinor frames rotate</summary>
+
+Tetrads also let us couple spin-$1/2$ fields to gravity. A **spinor** has complex components whose rotation and boost rules differ from those of a spacetime vector. For example, a spin-$1/2$ state acquires a minus sign under a full $2\pi$ rotation and returns to itself after $4\pi$; an overall sign alone does not change its measurement probabilities. This is a property of a quantum transformation law, not a small object literally spinning inside the particle. Constructing that representation is new material from quantum theory, not a consequence we have already proved using tensors.
 
 For the four-component Dirac spinor $\psi$, use four $4\times4$ **gamma matrices** $\gamma^a$, one for each local frame direction. Their entries act on the spinor components; the label $a$ is not a matrix-row index. The **anticommutator** is $\{A,B\}=AB+BA$, where matrix multiplication need not commute. Choose matrices satisfying
 
@@ -7254,9 +7336,24 @@ D_\mu\psi=\partial_\mu\psi
 +\frac14\omega_{ab\mu}\gamma^a\gamma^b\psi.
 $$
 
-Products of gamma matrices supply the infinitesimal rotation and boost matrices for spinors, giving the displayed connection term. We state that representation result here; deriving it and the Dirac field equation requires a quantum-field continuation. The connection is still solving the familiar problem of comparing components defined using different local frames. Globally, the spinor transformation rules on overlapping patches must fit together consistently. Such a choice is called a **spin structure**, and its existence depends on topology. Local gamma matrices alone do not establish it. [Tong's introduction to the spinor representation](https://davidtong.org/teaching/quantum-field-theory/qfthtml/S4) provides that continuation; translate its metric-sign convention when comparing formulas.
+The matrix algebra lets us check this frame law. Define $\Sigma^{ab}=[\gamma^a,\gamma^b]/4$. Using the anticommutator twice gives
 
-### 21.7 Torsion, nonmetricity, and the limits of the Palatini shortcut
+$$
+[\Sigma^{ab},\gamma^c]=\eta^{bc}\gamma^a-\eta^{ac}\gamma^b.
+$$
+
+The spinor connection $\omega_{ab\mu}\Sigma^{ab}/2=\omega_{ab\mu}\gamma^a\gamma^b/4$ therefore transforms the gamma matrices consistently with a Lorentz vector index. For a rotation in the 1–2 plane, its finite matrix can be written
+
+$$
+S(\theta)=\exp(\theta\gamma^1\gamma^2/2)
+=I\cos(\theta/2)+\gamma^1\gamma^2\sin(\theta/2).
+$$
+
+The equality follows by separating the even and odd powers and using $(\gamma^1\gamma^2)^2=-I$. At $2\pi$ it is $-I$; at $4\pi$ it is $I$. This derives the half-angle rotation rule from the supplied matrix algebra. The direction sign depends on whether we rotate a frame or a state; either convention has the same full-turn behavior. Constructing quantum-field dynamics still requires additional physical input. The connection is still solving the familiar problem of comparing components defined using different local frames. Globally, the spinor transformation rules on overlapping patches must fit together consistently. Such a choice is called a **spin structure**, and its existence depends on topology. Local gamma matrices alone do not establish it. [Tong's introduction to the spinor representation](https://davidtong.org/teaching/quantum-field-theory/qfthtml/S4) provides that continuation; translate its metric-sign convention when comparing formulas.
+
+</details>
+
+### 21.7 What changes with an independent connection
 
 Three different geometric properties deserve three different names:
 
@@ -7272,7 +7369,7 @@ In the **Palatini approach**, vary the metric and connection independently in an
 
 Why does this work? The action's curvature is linear in derivatives of the connection. Integrating by parts transfers those derivatives onto $\sqrt{-g}g^{\mu\nu}$. The resulting equation requires compatibility of the connection with that metric density; in dimensions above two, under these assumptions, it reduces to metric compatibility. Torsion freedom then selects the unique Levi-Civita connection.
 
-There are important exceptions to the slogan “independent connection variation always gives GR.” Allowing completely general connections introduces projective gauge subtleties. Connection-dependent matter changes the connection equation; spinor matter can source torsion in Einstein-Cartan formulations. Replacing $R$ by a nonlinear function $f(R)$ generally makes metric and Palatini variation different theories. The careful equivalence statement is analyzed in [Dadhich and Pons's paper on Einstein-Hilbert and Einstein-Palatini formulations](https://arxiv.org/abs/1010.0869).
+There are important exceptions to the slogan “independent connection variation always gives GR.” For a completely general connection, a change $\Gamma^\rho{}_{\mu\nu}\mapsto\Gamma^\rho{}_{\mu\nu}+\delta^\rho{}_\nu A_\mu$ changes Ricci only by $\partial_\mu A_\nu-\partial_\nu A_\mu$. Contracting that antisymmetric change with $g^{\mu\nu}$ gives zero, so the scalar-curvature action alone cannot determine $A_\mu$. This is **projective freedom**. The added term generally introduces torsion, so it was excluded by the torsion-free assumption in Chapter 14. Connection-dependent matter changes the connection equation; spinor matter can source torsion in Einstein-Cartan formulations. Replacing $R$ by a nonlinear function $f(R)$ generally makes metric and Palatini variation different theories. The careful equivalence statement is analyzed in [Dadhich and Pons's paper on Einstein-Hilbert and Einstein-Palatini formulations](https://arxiv.org/abs/1010.0869).
 
 Using forms, a corresponding first-order gravitational action can be written, with $c=1$ and a consistently chosen orientation,
 
@@ -7284,7 +7381,7 @@ $$
 
 Here $\varepsilon_{0123}=+1$ is the internal alternating symbol and $\mathcal R^{cd}=\eta^{de}\mathcal R^c{}_e$. For an invertible tetrad, a Lorentz-compatible independent connection, and no torsion-sourcing matter, varying the connection imposes zero torsion; varying the tetrad gives Einstein's equation. The apparent change of language has exposed a new organization of the same dynamics.
 
-The payoff is larger than elegant notation. We now understand a metric formulation, a moving-laboratory formulation, and a gauge-connection formulation as different ways of asking the same questions about comparison, motion, and curvature.
+To check the action’s normalization, the alternating-symbol contraction gives $\varepsilon_{abcd}e^a\wedge e^b\wedge\mathcal R^{cd}=2R\,\mathrm{vol}$ and $\varepsilon_{abcd}e^a\wedge e^b\wedge e^c\wedge e^d=24\,\mathrm{vol}$, where $\mathrm{vol}=\sqrt{-g}\,d^4x$ in the chosen orientation. The two terms therefore reproduce $(R-2\Lambda)\mathrm{vol}/(16\pi G_N)$. The frame variables give the same gravitational action when the stated compatibility and torsion conditions hold.
 
 ### 21.8 Your turn: make the sphere calculation work harder
 

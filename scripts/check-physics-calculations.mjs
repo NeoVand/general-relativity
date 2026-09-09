@@ -145,6 +145,39 @@ for(const k of [-1,0,1]){
  }
 }
 // Full-index contraction checks the signs and multiplicities of the six-entry table.
+// A spatially varying, anisotropically evolving slice checks the ADM signs.
+// Freeze its time dependence to obtain intrinsic curvature independently of
+// the spacetime calculation; derive K directly from the metric's time change.
+{
+ const metric=([t,x,y,z])=>{const g=matrix();g[0][0]=-1;
+  g[1][1]=Math.exp(.06*t+.04*t*x);g[2][2]=Math.exp(.08*t*x+.03*y);g[3][3]=Math.exp(.1*t+.02*x*z);return g;};
+ const point=[.4,.3,.2,.1],g=metric(point),inverse=invert(g);
+ const spatial=curvature(p=>metric([point[0],...p.slice(1)]),point),four=curvature(metric,point);
+ const K=p=>{const [t,x]=p,g=metric(p),rates=[0,.06+.04*x,.08*x,.1];return g.map((row,i)=>row.map(value=>-.5*rates[i]*value));};
+ const trace=p=>{const inv=invert(metric(p)),k=K(p);return k.reduce((sum,row,i)=>sum+row.reduce((sum,v,j)=>sum+inv[i][j]*v,0),0);};
+ const derivative=(fn,p,dir)=>{const a=[...p],b=[...p];a[dir]+=h;b[dir]-=h;return(fn(a)-fn(b))/(2*h);};
+ const k=K(point),tr=trace(point);let norm=0;
+ for(let i=1;i<4;i++)for(let j=1;j<4;j++)norm+=inverse[i][i]*inverse[j][j]*k[i][j]**2;
+ near(2*four.G00,spatial.scalar+tr*tr-norm,2e-6);
+ near(four.scalar,spatial.scalar+norm+tr*tr-2*derivative(trace,point,0),2e-6);
+ for(let i=1;i<4;i++)for(let j=1;j<4;j++){
+  const kdot=derivative(p=>K(p)[i][j],point,0);
+  const square=k[i].reduce((sum,value,m)=>sum+value*inverse[m][m]*k[m][j],0);
+  near(four.ricci[i][j],spatial.ricci[i][j]-kdot+tr*k[i][j]-2*square,2e-6);
+  for(let l=1;l<4;l++)for(let m=1;m<4;m++)near(four.lowered[flatIndex([i,j,l,m])],spatial.lowered[flatIndex([i,j,l,m])]+k[i][l]*k[j][m]-k[i][m]*k[j][l],2e-6);
+ }
+ const gamma=connection(p=>metric([point[0],...p.slice(1)]),point);
+ const mixed=p=>{const inv=invert(metric(p)),k=K(p);return k.map((row,i)=>row.map((_,j)=>inv[i].reduce((sum,v,m)=>sum+v*k[m][j],0)));};
+ const km=mixed(point);
+ for(let i=1;i<4;i++){
+  let divergence=0;
+  for(let j=1;j<4;j++){
+   divergence+=derivative(p=>mixed(p)[j][i],point,j);
+   for(let m=1;m<4;m++)divergence+=gamma[j][j][m]*km[m][i]-gamma[m][j][i]*km[j][m];
+  }
+  near(four.ricci[0][i],derivative(trace,point,i)-divergence,2e-6);
+ }
+}
 function contract(values){const tensor=Array.from({length:4},()=>tensor3()),pairs=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]],sign=[-1,1,1,1];
  pairs.forEach(([a,b],i)=>{tensor[a][b][a][b]=tensor[b][a][b][a]=values[i];tensor[a][b][b][a]=tensor[b][a][a][b]=-values[i]});
  const ricci=matrix();for(let b=0;b<4;b++)for(let d=0;d<4;d++)for(let a=0;a<4;a++)ricci[b][d]+=sign[a]*tensor[a][b][a][d];

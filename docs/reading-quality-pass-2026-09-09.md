@@ -90,8 +90,16 @@ Cosmology introduces comoving labels, explains the domain of the closed radial c
 
 Static and prerequisite checks, 74 browser page/viewport checks, and narration-context checks passed after this batch.
 
+## Chapters 20 and 21
+
+Lapse and shift now have an explicit flat-spacetime coordinate example. The constraint discussion derives the Gauss and Codazzi projections from the Gaussian-normal connection. The evolution section gives the corresponding spatial Ricci expression and tracks the scalar-curvature boundary divergence. Numerical differentiation of a spatially varying, anisotropically evolving metric independently checks these projection, evolution, and boundary signs.
+
+The frame chapter starts with cylindrical ruler components, gives the coefficient rule for a general exterior derivative, connects Cartan torsion to coordinate torsion, and shows the cancellation in the twice-applied frame derivative. An expandable spinor calculation obtains the half-angle rotation from the supplied gamma-matrix algebra. Projective freedom is explained by an explicit connection change and its antisymmetric Ricci change. Mobile inspection prompted stacking the three Gaussian-normal connection entries.
+
+All 37 lessons passed 680 browser interactions after this batch; static pages and authored prerequisite order also passed.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 20.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 22.

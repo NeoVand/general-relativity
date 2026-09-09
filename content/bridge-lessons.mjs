@@ -108,7 +108,7 @@ export const bridgeLessons = [
  },
  {
   id:'oriented-stokes',chapter:21,
-  after:'21.2 Differential forms: antisymmetry earns its keep',
+  after:'21.2 Oriented measurements and differential forms',
   title:'Calculate both sides of Stokes’ theorem',
   question:'Why can a measurement around an edge equal an accumulation over its interior?',
   intuition:s`Tile a region with little squares and walk around each square counterclockwise. Every shared edge is traversed twice in opposite directions, so its contributions cancel. Only the outer boundary remains. Differential forms organize the signed measurements needed to turn that picture into a calculation.`,
