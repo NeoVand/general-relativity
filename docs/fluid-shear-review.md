@@ -19,3 +19,6 @@ Validation:
 Sources: [Tong, Fluid Mechanics](https://www.damtp.cam.ac.uk/user/tong/fluids/fluids.pdf), and [Cambridge, Fluid Dynamics II](https://www.damtp.cam.ac.uk/user/examples/D23Le.pdf). The implementation and drawings are original.
 
 This completes the planned elementary continuum comparison. Observer-dependent tensor readings, a movable particle subvolume, and a broader field-energy visual remain outstanding in Chapter 11.
+# Phone control alignment follow-up
+
+The Linux browser run exposed a wrapped value in the moving-plate control at phone width, shifting its slider below the viscosity slider. Each label/value pair now uses separate grid columns, and neighboring control groups align their sliders at the bottom even when a label needs another line. Both physical models and the full browser checks pass locally. Additional inspection at 320/390 px with wider fallback glyphs verifies both rows remain aligned. The deployment run must still confirm the Linux result.
