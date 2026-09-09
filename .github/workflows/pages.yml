@@ -74,6 +74,8 @@ jobs:
         run: npm run test:geometry-foundations
       - name: Check flow order and Lie bracket preparation
         run: npm run test:flow-order
+      - name: Check particle crossings and stress-energy measurements
+        run: npm run test:particle-flow
       - name: Check continuous transport and surface holonomy
         run: npm run test:parallel-transport
       - name: Check manifold charts and orbital precession

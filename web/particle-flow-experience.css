@@ -1,0 +1,46 @@
+.particle-flow-experience .scene-heading p{max-width:61ch}
+.pf-workbench{display:grid;grid-template-columns:minmax(0,1fr) 224px;align-items:center;gap:16px;padding:18px 28px 16px}
+.pf-cube{display:block;width:100%;height:auto;max-height:425px}
+.pf-floor{fill:color-mix(in srgb,var(--geometry) 5%,transparent);stroke:none}
+.pf-edge{fill:none;stroke:var(--muted);stroke-opacity:.3;stroke-width:1}
+.pf-axis{fill:none;stroke:var(--muted);stroke-width:1}
+.pf-label{font:13px Manrope,Arial,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--figure-bg);stroke-width:3;stroke-linejoin:round}
+.pf-axis-label{font-size:16px;font-style:italic}
+.pf-caption-label{font-size:11px;fill:var(--muted)}
+.pf-detector{fill:color-mix(in srgb,var(--matter) 12%,transparent);stroke:var(--matter);stroke-width:1.2;stroke-opacity:.8}
+.pf-detector-label{fill:var(--matter);font-size:12px}
+.pf-normal{fill:none;stroke:var(--matter);stroke-width:2}
+.pf-trail{fill:none;stroke-width:1.4;stroke-linecap:round;opacity:.45}
+.pf-positive{fill:var(--transport);stroke:var(--transport)}.pf-negative{fill:var(--observer);stroke:var(--observer)}.pf-neutral{fill:var(--muted);stroke:var(--muted);opacity:.45}
+.pf-particle{stroke-width:.6}.pf-trail.pf-positive,.pf-trail.pf-negative,.pf-trail.pf-neutral{fill:none}
+.pf-legend{display:flex;align-items:center;flex-wrap:wrap;gap:12px 18px;padding:18px 28px 0;color:var(--muted);font:10px/1.6 Manrope,Arial,sans-serif}
+.pf-legend>span:not(:last-child){display:flex;align-items:center;gap:6px}.pf-legend>span:not(:last-child)::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--transport)}.pf-legend>span.pf-key-negative::before{background:var(--observer)}.pf-legend>span.pf-key-detector::before{background:var(--matter);border-radius:0}
+.pf-choice{margin-bottom:16px}.pf-choice>span{display:block;font:10px/1.6 Manrope,Arial,sans-serif;color:var(--muted);margin-bottom:7px}
+.pf-choice .scene-view-switch{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%}
+.pf-choice:first-child .scene-view-switch{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pf-choice .scene-view-switch button{padding:7px 5px;font-size:10px;min-height:34px}
+.pf-controls{display:grid;gap:12px;padding:0!important;max-width:none}
+.pf-controls .scene-parameter{gap:10px}.pf-controls .scene-parameter label{max-width:none}
+.pf-controls .scene-experiment-bar{display:flex;align-items:center;gap:10px;margin-top:0}
+.pf-controls .scene-experiment-bar>span{font:10px/1.6 Manrope,Arial,sans-serif;color:var(--muted)}
+.pf-readout{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:14px 28px 8px}
+.pf-readout>div{display:flex;flex-direction:column;gap:8px}.pf-readout span{font-size:10px;line-height:1.6;color:var(--muted)}.pf-readout strong{font:450 18px/1.6 Manrope,Arial,sans-serif;font-variant-numeric:tabular-nums}.pf-measured{color:var(--transport)}
+.particle-flow-experience .pf-units{font:10px/1.8 Manrope,Arial,sans-serif;color:var(--muted);padding:0 28px;margin:6px 0 0;max-width:85ch}
+.particle-flow-experience .pf-insight{padding:0 28px 20px;font-size:13px;margin-top:16px}
+.pf-matrix-label{font:11px/1.7 Manrope,Arial,sans-serif;color:var(--muted);margin:20px 0 10px}
+.pf-matrix{display:grid;gap:4px;font:11px/1.6 Manrope,Arial,sans-serif;font-variant-numeric:tabular-nums;margin:0 0 22px;max-width:520px}
+.pf-matrix [role=row]{display:grid;grid-template-columns:90px repeat(4,minmax(0,1fr));gap:3px;align-items:center}.pf-matrix [role=cell]{padding:7px 2px;text-align:center}.pf-matrix .pf-selected{color:var(--transport);background:color-mix(in srgb,var(--transport) 12%,transparent);border-radius:6px}.pf-row-name{color:var(--muted)}
+@container(max-width:590px){
+ .pf-workbench{grid-template-columns:1fr;gap:20px;padding:6px 20px 12px}.pf-cube{max-height:340px}
+ .pf-label{font-size:19px}.pf-axis-label{font-size:21px}.pf-caption-label{font-size:15px}.pf-detector-label{font-size:16px}
+ .pf-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+ .pf-choice{margin-bottom:0}.pf-choice .scene-view-switch{grid-template-columns:repeat(2,minmax(0,1fr))}.pf-choice>span{min-height:32px}.pf-choice .scene-view-switch button{font-size:10px}
+ .pf-controls{grid-column:1/-1;grid-template-columns:1fr 1fr;gap:12px 18px}.pf-controls .scene-parameter{flex-wrap:wrap;gap:0 8px}.pf-controls .scene-parameter label{min-height:32px}.pf-controls .scene-experiment-bar{grid-column:1/-1}
+ .pf-readout{padding:14px 20px 8px;gap:10px}.pf-readout span{min-height:32px}.pf-readout strong{font-size:14px}
+ .particle-flow-experience .pf-units{padding:0 20px}.particle-flow-experience .pf-insight{padding:0 20px 18px;font-size:12px}
+ .pf-legend{padding:16px 20px 0;gap:8px 14px;font-size:9px}.particle-flow-experience .scene-viewbar{flex-wrap:wrap;gap:8px}.particle-flow-experience .scene-view-switch button{padding-inline:6px}
+ .pf-matrix{font-size:10px}.pf-matrix [role=row]{grid-template-columns:64px repeat(4,minmax(0,1fr))}
+}
+
+.particle-flow-experience .pf-crossing{padding:0 28px;margin:8px 0 0;font:11px/1.8 Manrope,Arial,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink)}
+@container(max-width:590px){.particle-flow-experience .pf-crossing{padding:0 20px;font-size:10px}}

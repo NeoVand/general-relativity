@@ -3575,6 +3575,14 @@ The **stress-energy tensor** provides that description. Once we understand its e
 
 ### 11.1 Energy density and momentum flux
 
+Put an imaginary detector through the gas. It does not block the particles; it records each crossing. A particle carries energy and a momentum arrow. The arrow can point sideways to the detector, so we must specify both **which direction is crossed** and **which momentum component is carried**.
+
+First watch a single stream cross the detector. Then choose balanced motion. There is no average motion of the gas, but particles still cross in both directions. Their energies can flow equally both ways while their normal momentum transfers add. This is how pressure can remain when the bulk flow is zero.
+
+<div data-foundation-insert="particle-flow"></div>
+
+A density measures what is present per volume. A flux measures what crosses a surface per area per time. The distinction is physical: counting the particles inside the cube and recording passages through the detector are different experiments. In the lab, selecting “In the box” performs the first; selecting “Across x,” “Across y,” or “Across z” performs the second. The finite crossing estimate fluctuates around the volume average because a short count samples only some of the particles.
+
 Start in a tiny laboratory with orthonormal axes, using $x^{\hat 0}=ct$. Hats distinguish physically calibrated local axes from arbitrary coordinate axes. Let
 
 - $\epsilon$ be energy per volume, in $\mathrm{J/m^3}$;

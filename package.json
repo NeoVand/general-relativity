@@ -28,7 +28,8 @@
     "test:mechanics": "node scripts/check-mechanics-experience.mjs",
     "test:geometry-foundations": "node scripts/check-geometry-foundations.mjs && node scripts/check-vector-fields.mjs",
     "test:parallel-transport": "node scripts/check-parallel-transport.mjs",
-    "test:flow-order": "node scripts/check-flow-order.mjs"
+    "test:flow-order": "node scripts/check-flow-order.mjs",
+    "test:particle-flow": "node scripts/check-particle-flow.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",
