@@ -16,6 +16,7 @@ const publishedCourse=JSON.parse(fs.readFileSync('site/course-data.json','utf8')
 validateCourse();
 assert.equal(lessons.length,13,'the reviewed first course has thirteen complete bridges');
 assert.equal(prerequisites.length,25);
+assert.equal(new Set(lessons.map(l=>l.practice.choices.findIndex(c=>c.correct))).size,3,'correct options do not share one position');
 const documents=new Map();
 function documentFor(file){
  if(!documents.has(file))documents.set(file,parseHTML(fs.readFileSync(`site/${file}`,'utf8')).document);
@@ -73,6 +74,7 @@ async function stored(page){return page.evaluate(k=>JSON.parse(localStorage.getI
 async function importFile(page,name,value){
  await page.locator('[data-import-notebook]').setInputFiles({name,mimeType:'application/json',buffer:Buffer.from(value)});
  await page.waitForFunction(()=>document.querySelector('[data-import-notebook]').value==='');
+ if(await page.locator('.notebook-import-preview').isVisible())await page.locator('[data-apply-import]').click();
 }
 async function verifyRouteNavigation(page,width){
  const cases=[
@@ -137,7 +139,7 @@ try{
      const actualText=await root.locator('.practice-feedback').evaluate(element=>{const copy=element.cloneNode(true);copy.querySelector('strong').remove();return copy.textContent});
      assert.equal(actualText,expectedText,`${lesson.id}: the explanation belongs to the selected choice`);
      assert.equal(await root.locator('.practice-choices [aria-pressed="true"]').getAttribute('data-choice'),String(index));
-     const record=(await stored(page)).evidence[lesson.id];assert.equal(record.choice,index);assert.equal(record.predicted,choice.correct);interactions++;
+     const record=(await stored(page)).evidence[lesson.id];assert.equal(record.choiceId,choice.id);assert.equal(record.choice,index);assert.equal(record.predicted,choice.correct);interactions++;
     }
     const input=root.locator('[data-transfer] input'),submit=root.locator('[data-transfer] button');
     const wrong=lesson.transfer.answer+Math.max(1,lesson.transfer.tolerance*10+1);
@@ -152,6 +154,17 @@ try{
     await root.locator('.transfer-solution>summary').click();
     await page.waitForFunction(({key,id})=>JSON.parse(localStorage.getItem(key)).evidence[id].solutionSeen,{key,id:lesson.id});
     evidence=(await stored(page)).evidence[lesson.id];assert.equal(evidence.solutionSeen,true,'viewed solutions are distinguished from unaided work');
+    await root.locator('[data-new-example]').click();
+    const variant=lesson.variants[0];
+    assert.equal(await root.getAttribute('data-transfer-item'),variant.id);
+    assert.equal(await input.inputValue(),'','the fresh example starts blank');
+    await input.fill(String(variant.answer));await submit.click();
+    evidence=(await stored(page)).evidence[lesson.id];
+    assert.equal(evidence.history.at(-1).itemId,variant.id);
+    assert.equal(evidence.history.at(-1).correct,true);
+    assert.equal(evidence.history.at(-1).help,'none','fresh attempts have their own assistance history');
+    await root.locator('[data-new-example]').click();
+    await input.fill(String(lesson.transfer.answer));await submit.click();
     // Explicitly save one bridge in each chapter. A clicked bookmark must not
     // silently depend on an API provider or a separately mounted chat panel.
     await root.locator('[data-save-lesson]').click();assert.equal(await root.locator('[data-save-lesson]').getAttribute('aria-pressed'),'true');
@@ -220,7 +233,7 @@ try{
   }
   await page.screenshot({path:`qa/course-map-${width}.png`,animations:'disabled'});
   await visit(page,'course-map.html');await page.locator('[data-route="horizons"][aria-pressed="true"]').waitFor();
-  assert.match(await page.locator(`[data-evidence-for="${anchor.id}"]`).innerText(),/Worked through/,'viewing the solution does not imply an unaided transfer');
+  assert.match(await page.locator(`[data-evidence-for="${anchor.id}"]`).innerText(),/Independent check/,'opening a solution preserves earlier unassisted attempts');
 
   await visit(page,'notebook.html');await page.locator(`[data-note="${anchor.id}"]`).waitFor();
   const note='I must convert the angular rate into a length rate before combining it with radial speed. <b>This is literal note text.</b>';
@@ -229,7 +242,7 @@ try{
   assert.equal(await page.locator(`[data-note="${anchor.id}"]`).inputValue(),note);
   const jsonDownload=page.waitForEvent('download');await page.locator('[data-export-notebook="json"]').click();
   const json=await jsonDownload;assert.equal(json.suggestedFilename(),'gr-field-notebook.json');
-  const exported=JSON.parse(fs.readFileSync(await json.path(),'utf8'));assert.equal(exported.version,1);assert.equal(exported.notes[anchor.id].text,note);assert.equal(exported.evidence[anchor.id].transfer,true);
+  const exported=JSON.parse(fs.readFileSync(await json.path(),'utf8'));assert.equal(exported.version,2);assert.equal(exported.notes[anchor.id].text,note);assert.equal(exported.evidence[anchor.id].transfer,true);
   const mdDownload=page.waitForEvent('download');await page.locator('[data-export-notebook="md"]').click();
   const markdown=fs.readFileSync(await (await mdDownload).path(),'utf8');assert.ok(markdown.includes(note));assert.ok(markdown.includes(`chapter-${anchor.chapter}.html#${anchor.id}`));
 

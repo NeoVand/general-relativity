@@ -53,6 +53,8 @@ jobs:
         run: npm run test:study
       - name: Verify readable lessons when enhancement is unavailable
         run: npm run test:resilience
+      - name: Check notebook history and backup migration
+        run: npm run test:learning-state
       - name: Check worked lessons and learning routes
         run: npm run test:course
       - name: Check guided visual lessons

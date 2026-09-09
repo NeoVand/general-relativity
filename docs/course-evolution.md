@@ -6,7 +6,7 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 
 - [x] Scientific definitions, curvature notation, repeated Cartan derivation (F01, F02, F09).
 - [x] Accessible progressive enhancement and reliable scene visibility checks (F05).
-- [ ] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
+- [x] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
 - [ ] Reading-position restoration and honest route status (F06, F08).
 - [ ] Skill-based prerequisites, diagnostic entry, and the missing foundations.
 - [ ] Independent practice, misconceptions, and curved/matter capstones throughout the core.
@@ -38,3 +38,10 @@ The review and its reproduction evidence are preserved as the implementation bas
 - Disabled-JavaScript, blocked-reader, and failed-course-data browser checks cover every bridge and now run in CI.
 - Wave animation checks explicitly restore stage visibility after tall screenshots and view switches.
 - Verified: reader build, all 260 existing course interactions, resilience suite, semantic narration checks and live mocked narration/source retrieval.
+
+### Practice that records learning after help
+
+- Stable choice IDs and varied answer positions replace positional evidence. Each of the 13 bridges has an authored additional calculation; numerical input accepts finite decimals, fractions, and scientific notation.
+- Version 2 notebooks retain attempt histories, item identities, and assistance at the time of each attempt. Later errors or opened solutions preserve earlier evidence. The notebook exposes the history and distinguishes an independent check from mastery.
+- Version 1 imports conservatively preserve aggregate evidence and retain an automatic migration backup. Import previews allow cancellation and conflict selection, restore route/depth/visuals, and merge attempts without duplicate entries.
+- Verified: pure migration/history/parser checks, fresh-browser recovery and cancellation, desktop/mobile interaction checks for every choice and both examples in every bridge, static site checks, and Svelte diagnostics.

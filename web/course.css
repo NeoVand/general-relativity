@@ -17,3 +17,16 @@
 .visual-summary dd{margin:5px 0;overflow-x:auto}
 .practice-choices button:disabled{cursor:default;color:var(--ink)}
 @media print{.guided-lesson .lesson-panel[hidden]{display:block}.guided-lesson .lesson-depths,.lesson-save{display:none}.guided-lesson[data-enhanced="true"] .lesson-depth-title{display:block}}
+
+.transfer-next[hidden],.notebook-import-preview[hidden]{display:none}
+.transfer-heading{display:flex;gap:12px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+[data-transfer-item-label]{font:500 11px/1.5 Manrope,sans-serif;color:var(--muted)}
+.transfer-next{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:24px 0 10px}
+.transfer-next button,.notebook-import-preview button{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--paper);color:var(--geometry);font:600 12px/1.5 Manrope,sans-serif}
+.transfer-next span{font:450 11px/1.5 Manrope,sans-serif;color:var(--muted)}
+.notebook-import-preview{background:var(--wash);padding:24px;border-radius:18px;margin:24px 0}
+.notebook-import-preview label{display:grid;gap:8px;font:500 12px/1.7 Manrope,sans-serif}
+.notebook-import-preview select{background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:10px;max-width:100%}
+.notebook-import-preview>div{display:flex;gap:12px;flex-wrap:wrap}
+
+.attempt-history{border-block-end:1px solid var(--line);padding:1rem 0}.attempt-history summary{cursor:pointer;font-weight:600}.attempt-history li{padding:.6rem 0}.attempt-history li p{margin:.25rem 0}.attempt-history time{font-size:.78rem;opacity:.7}
