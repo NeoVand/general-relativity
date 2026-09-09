@@ -6,6 +6,7 @@ const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
 const page=await browser.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:1});
 async function go(url){const response=await page.goto(url);await page.waitForFunction(()=>document.body.dataset.readingReady==='true');return response;}
+const navToggle=()=>page.locator(page.viewportSize().width<=800?'#mobile-menu-button':'#menu-button');
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 fs.mkdirSync('qa',{recursive:true});
 const files=fs.readdirSync('site').filter(f=>f.endsWith('.html'));
@@ -40,7 +41,7 @@ try{
  assert.equal(await page.locator('.chapter-card .chapter-visual svg').count(),25);
  for(const label of ['Ricci scalar','Ricci tensor','Metric tensor','Cosmological constant','Einstein constant','Stress–energy tensor'])assert.ok((await page.locator('.equation-pieces').innerText()).includes(label));
  await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-desktop.png'});
- await page.locator('#menu-button').click();
+ await navToggle().click();
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
  assert.equal(await page.locator('#book-navigation').evaluate(e=>e.inert),false,'Collapsed desktop rail remains usable');
  assert.ok(await page.locator('.nav-children').evaluateAll(items=>items.every(e=>e.inert)));
@@ -52,7 +53,7 @@ try{
  assert.equal(await boxed.locator('.fbox').first().evaluate(e=>getComputedStyle(e).borderTopWidth),'0px');
  assert.equal(await boxed.evaluate(e=>getComputedStyle(e).borderTopWidth),'1px');
  await boxed.screenshot({path:'qa/equation-container-border.png'});
- await page.locator('#menu-button').click();
+ await navToggle().click();
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
  await page.setViewportSize({width:390,height:844});
  await go(new URL('index.html',base).href);
@@ -106,7 +107,7 @@ try{
  await page.locator('#type-button').click();assert.match(await page.locator('html').getAttribute('class'),/large-type/);
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  await page.screenshot({path:'qa/dark-large-mobile.png'});
- await page.locator('#menu-button').click();assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
+ await navToggle().click();assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
  await page.keyboard.press('Escape');assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
  await go(new URL('chapter-0.html',base).href);await page.locator('.checkpoint summary').first().click();assert.equal(await page.locator('.checkpoint').first().getAttribute('open'),'');
  assert.deepEqual(errors,[]);

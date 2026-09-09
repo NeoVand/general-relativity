@@ -212,3 +212,16 @@ html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sid
 @media print{.sidebar,.nav-preview,.nav-scrim{display:none}.page{margin:0;padding-top:0}}
 
 @media(max-width:800px){body:has(.sidebar.open) .sidebar{z-index:70}body:has(.sidebar.open) .nav-scrim{z-index:69}body:has(.sidebar.open) .topbar{z-index:80}}
+
+/* The Black Hole mark belongs to the app; the toggle belongs to its contents. */
+.app-brand{display:flex;align-items:center;gap:20px;min-width:0}
+.app-logo{display:grid;place-items:center;width:44px;height:44px;flex-shrink:0;padding:8px;border:0;border-radius:12px;color:var(--ink);background:transparent;text-decoration:none}
+.app-logo .hugeicon{width:28px;height:28px}
+.app-logo:hover{color:var(--curvature);background:color-mix(in srgb,var(--curvature) 6%,transparent)}
+.mobile-logo{display:none}
+.nav-home{display:flex;align-items:center;gap:2px;min-height:48px;padding:0 10px}
+.nav-home #menu-button{flex:0 0 44px;color:var(--muted)}
+.nav-home-link{text-decoration:none;color:var(--ink);padding:10px 0;font-size:12px;font-weight:650}
+.nav-home-link:hover{color:var(--geometry)}
+@media(max-width:800px){.desktop-logo{display:none}.mobile-logo{display:grid}.app-brand{gap:0}}
+@media(max-width:600px){.topbar.search-open .app-brand{visibility:hidden}}

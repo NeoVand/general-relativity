@@ -10,7 +10,7 @@ function themeLabel(){$('#theme-button')?.setAttribute('aria-label',`Switch to $
 $('#theme-button')?.addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';storage.set('gr-theme',dark?'dark':'light');themeLabel()});
 $('#type-button')?.setAttribute('aria-pressed',String(document.documentElement.classList.contains('large-type')));
 $('#type-button')?.addEventListener('click',()=>{const large=document.documentElement.classList.toggle('large-type');storage.set('gr-type',large?'large':'normal');$('#type-button').setAttribute('aria-pressed',String(large))});
-const sidebar=$('#book-navigation'),menu=$('#menu-button'),navScroll=$('.nav-scroll'),preview=$('.nav-preview'),scrim=$('.nav-scrim');
+const sidebar=$('#book-navigation'),menu=$('#menu-button'),mobileMenu=$('#mobile-menu-button'),navScroll=$('.nav-scroll'),preview=$('.nav-preview'),scrim=$('.nav-scrim');
 const narrowNavigation=matchMedia('(max-width:800px)');
 const navPage=document.body.dataset.page||'index';
 let groupPrefs={};try{groupPrefs=JSON.parse(storage.get('gr-nav-groups')||'{}')||{}}catch{}
@@ -31,7 +31,8 @@ let previewTimer;
 function hidePreview(){clearTimeout(previewTimer);preview.hidden=true;preview.replaceChildren()}
 function syncNavigation(){
  const open=navigationOpen();
- menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Collapse contents':'Expand contents');
+ for(const toggle of [menu,mobileMenu]){toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Collapse contents':'Expand contents')}
+ $('.nav-home-link').inert=!open;
  sidebar.inert=narrowNavigation.matches&&!open;scrim.hidden=!(narrowNavigation.matches&&open);
  for(const group of navGroups){const list=group.querySelector('.nav-children'),expanded=open&&list.classList.contains('is-expanded');list.inert=!expanded;group.querySelector('.nav-group-toggle').setAttribute('aria-expanded',String(expanded))}
  if(sectionList){const expanded=sectionList.classList.contains('is-expanded');sectionList.inert=!expanded;sectionToggle.setAttribute('aria-expanded',String(expanded));sectionToggle.setAttribute('aria-label',`${expanded?'Hide':'Show'} sections in this chapter`)}
@@ -44,9 +45,10 @@ function setNavigation(open){
  else{document.documentElement.dataset.sidebar=open?'expanded':'collapsed';storage.set('gr-sidebar',open?'expanded':'collapsed')}
  syncNavigation();
 }
-function closeMenu(){if(narrowNavigation.matches&&navigationOpen()){setNavigation(false);if(sidebar.contains(document.activeElement))menu.focus()}}
+function closeMenu(){if(narrowNavigation.matches&&navigationOpen()){setNavigation(false);if(sidebar.contains(document.activeElement))mobileMenu.focus()}}
 function keepNavVisible(element){if(!navScroll.contains(element))return;const rect=element.getBoundingClientRect(),frame=navScroll.getBoundingClientRect();if(rect.top<frame.top)navScroll.scrollTop+=rect.top-frame.top-8;else if(rect.bottom>frame.bottom)navScroll.scrollTop+=rect.bottom-frame.bottom+8}
-menu.addEventListener('click',()=>{setNavigation(!navigationOpen());if(narrowNavigation.matches&&navigationOpen())sidebar.querySelector('a').focus()});
+menu.addEventListener('click',()=>{setNavigation(!navigationOpen());if(narrowNavigation.matches&&!navigationOpen())mobileMenu.focus()});
+ mobileMenu.addEventListener('click',()=>{setNavigation(!navigationOpen());if(navigationOpen())menu.focus()});
 scrim.addEventListener('click',closeMenu);
 sectionToggle?.addEventListener('click',()=>{sectionList.classList.toggle('is-expanded');storage.set(`gr-nav-sections-${navPage}`,sectionList.classList.contains('is-expanded')?'open':'closed');syncNavigation()});
 for(const group of navGroups){
@@ -80,21 +82,25 @@ for(const item of sidebar.querySelectorAll('.nav-group-toggle,.nav-destination')
  item.addEventListener('focus',()=>{keepNavVisible(item);show()});
  item.addEventListener('blur',hidePreview);
 }
-listen(narrowNavigation,'change',()=>{sidebar.classList.remove('open');syncNavigation()});syncNavigation();
+// CSS may blur a newly hidden control before the media-query event arrives.
+let navigationFocus=null;
+listen(document,'focusin',e=>{if(e.target!==document.body)navigationFocus=sidebar.contains(e.target)||e.target===mobileMenu?e.target:null});
+listen(document,'pointerdown',e=>{if(!sidebar.contains(e.target)&&!mobileMenu.contains(e.target))navigationFocus=null});
+listen(narrowNavigation,'change',()=>{const focused=document.activeElement===document.body?navigationFocus:document.activeElement;sidebar.classList.remove('open');syncNavigation();if(narrowNavigation.matches&&sidebar.contains(focused))mobileMenu.focus();else if(!narrowNavigation.matches&&focused===mobileMenu)menu.focus()});syncNavigation();
 listen(window,'resize',hidePreview);navScroll.addEventListener('scroll',hidePreview,{passive:true});
 listen(document,'keydown',e=>{
  if(e.key==='Escape'){
   if(!preview.hidden){e.preventDefault();e.stopImmediatePropagation();hidePreview();return}
-  if(narrowNavigation.matches&&navigationOpen()){e.preventDefault();e.stopImmediatePropagation();closeMenu();menu.focus()}
+  if(narrowNavigation.matches&&navigationOpen()){e.preventDefault();e.stopImmediatePropagation();closeMenu();mobileMenu.focus()}
  }
  if(e.key==='Tab'&&narrowNavigation.matches&&navigationOpen()){
-  const links=[menu,...sidebar.querySelectorAll('a,button')].filter(el=>!el.closest('[inert]')&&el.getClientRects().length);
+  const links=[...sidebar.querySelectorAll('a,button')].filter(el=>!el.closest('[inert]')&&el.getClientRects().length);
   const at=links.indexOf(document.activeElement);
   if(e.shiftKey&&(at<=0)){e.preventDefault();links.at(-1).focus()}
   else if(!e.shiftKey&&(at===links.length-1||at===-1)){e.preventDefault();menu.focus()}
  }
 },true);
-listen(document,'click',e=>{if(!sidebar.contains(e.target)&&!menu.contains(e.target))closeMenu()});
+listen(document,'click',e=>{if(!sidebar.contains(e.target)&&!mobileMenu.contains(e.target))closeMenu()});
 sidebar.addEventListener('click',e=>{if(e.target.closest('a[href]'))closeMenu()});
 const page=document.body.dataset.page;
 if(/^chapter-\d+$/.test(page))storage.set('gr-last-chapter',page);
