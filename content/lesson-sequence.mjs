@@ -21,7 +21,7 @@ const entries=[
  ['fields-carry-energy','section-start','Supply the string and electromagnetic energy vocabulary used by the field examples.'],
  ['poisson-from-a-flux','section-start','Explain Poisson normalization before using it to calibrate Einstein’s equation.'],
  ['variations-and-boundary-data','section-end','Define a variation before adding endpoint and constrained examples.'],
- ['boundary-action-is-part-of-the-question','section-end','Explain the boundary obstruction before the elementary counterexample.'],
+ ['boundary-action-is-part-of-the-question','section-end','Explain the boundary obstruction and define induced curvature before the exercise and its cylindrical example.'],
  ['symmetry-earns-a-charge','section-start','Give a particle symmetry calculation before the local field identity.'],
  ['orbit-conservation','section-start','Derive angular momentum and the orbit equation before the Mercury calculation.'],
  ['phase-drift','section-start','Explain resonant phase drift after orbit conservation and before the precession calculation.'],

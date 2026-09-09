@@ -71,5 +71,17 @@
   "12.4": "12-4-deriving-the-newtonian-limit-including-the-factor-of-two",
   "12.5": "12-5-a-calculation-trap-that-catches-experienced-students",
   "12.6": "12-6-ten-components-with-structure",
-  "12.7": "12-7-why-the-coupling-has-units-of-inverse-force"
+  "12.7": "12-7-why-the-coupling-has-units-of-inverse-force",
+  "13.4": "13-4-varying-the-inverse-metric-prove-the-minus-sign-once",
+  "14.1": "14-1-choosing-an-action-and-checking-what-is-assumed",
+  "14.2": "14-2-first-split-curvature-changes-volume-changes",
+  "14.5": "14-5-put-the-pieces-together",
+  "14.6": "14-6-why-the-boundary-term-vanishes-is-not-always-a-legal-sentence",
+  "15.1": "15-1-diffeomorphisms-moving-the-mathematical-description-coherently",
+  "15.2": "15-2-noether-s-theorem-has-a-local-gauge-version",
+  "15.3": "15-3-local-conservation-is-not-automatically-a-global-energy-account",
+  "15.4": "15-4-a-killing-vector-supplies-the-missing-comparison-rule",
+  "15.5": "15-5-where-gravitational-energy-lives",
+  "15.7": "15-7-why-adding-a-constant-to-a-lagrangian-suddenly-matters",
+  "15.8": "15-8-minimal-coupling-and-what-it-does-not-settle"
 }

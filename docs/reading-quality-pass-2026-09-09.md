@@ -64,8 +64,18 @@ The matter introduction starts with gas in a box. The observer decomposition is 
 
 The divergence theorem is introduced through cancellation of shared box faces before the wall-stress integral uses it. The Newtonian matching then derives Poisson's normalization. The weak-field calculation keeps separate temporal and spatial perturbations, derives both Ricci and Einstein components, and explains the boundary assumptions under which the two potentials agree. Independent numerical metric derivatives verify those formulas, including the failure of a time-only perturbation to source G00.
 
+## Chapters 13 through 15
+
+The variational chapter now connects the path calculation to a field calculation. The oscillator's trial displacement includes an amplitude with length units; previously a dimensionless sine was added to a dimensional position. The scalar example defines its potential and inverse-length parameter and checks a plane-wave solution. Electromagnetic potential, field strength, and their gauge change are introduced before a metric variation holds the potential fixed.
+
+The independent-connection calculation explains a tensor density's transformation and derivative, performs the connection-equation trace, and derives metric compatibility under its stated assumptions. The boundary exercise now follows the definition of extrinsic curvature instead of using it before its introduction. Saved section and exercise links are preserved.
+
+The symmetry chapter derives the metric Lie derivative's connection form and the mixed-index balance identity. It states the physical units of photon energy, defines the observer's spatial slice, and derives the dilution of dust and radiation after defining the expansion scale. Repeated commentary about the elegance or difficulty of the subject is replaced with the calculation itself.
+
+All 37 lessons passed 680 browser interactions after this batch. Narration-context and hidden-panel retrieval checks passed with mocked providers.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 13.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 16.

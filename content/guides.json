@@ -136,7 +136,7 @@
   },
   "15": {
     "title": "Symmetry and conservation",
-    "deck": "Local accounting survives curved spacetime. A global conserved energy needs an additional symmetry.",
+    "deck": "Use a symmetry to turn local stress-energy balance into a conserved charge.",
     "question": "When can we compare energy at different events?",
     "payoff": "Construct a current using a Killing vector and interpret vacuum stress-energy.",
     "takeaway": "Local conservation is not by itself a universal total-energy account. A time-translation symmetry supplies a useful comparison rule when it exists.",

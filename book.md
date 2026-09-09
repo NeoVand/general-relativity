@@ -4143,11 +4143,11 @@ For a concrete scale, matter with negligible pressure and mass density $3000\,\m
 
 <a id="chapter-13"></a>
 
-## 13. Variational calculus: learning to ask a whole history a question
+## 13. Variational calculus for paths and fields
 
 An equation of motion tells you how a system evolves. An action assigns a number to an entire candidate history. The physical history makes that number stationary under appropriate small changes.
 
-For gravity, the “history” includes the geometry of spacetime itself. We are about to vary the rulers and clocks, not merely move a particle between them.
+Chapter 5 varied a particle’s path in a fixed metric. We now extend that procedure to matter fields and then to the metric itself. The position of a particle, the value of a field, and the geometry can each be varied independently when deriving their equations.
 
 ### 13.1 From an ordinary derivative to a variation
 
@@ -4159,7 +4159,7 @@ $$
 S[q]=\int_{t_1}^{t_2}L(q,\dot q,t)\,dt.
 $$
 
-A functional such as $S[q]$ eats a function and returns a number. To differentiate it, introduce a one-parameter family of nearby histories,
+The input of the functional $S[q]$ is the whole path $q(t)$; its output is one number. To differentiate it, introduce a one-parameter family of nearby histories,
 
 $$
 q_\lambda(t)=q(t)+\lambda\eta(t),
@@ -4167,7 +4167,7 @@ q_\lambda(t)=q(t)+\lambda\eta(t),
 \eta(t_1)=\eta(t_2)=0.
 $$
 
-The function $\eta(t)$ describes a proposed wiggle, and $\lambda$ controls its size. Define
+The function $\eta(t)$ specifies a proposed displacement at each time, and the dimensionless parameter $\lambda$ controls its size. The displacement has the same units as $q$. Define
 
 $$
 \delta S=\left.\frac{d}{d\lambda}S[q_\lambda]\right|_{\lambda=0}.
@@ -4183,7 +4183,7 @@ $$
 +\frac{\partial L}{\partial\dot q}\dot\eta\right)dt.
 $$
 
-We want every term proportional to the arbitrary wiggle $\eta$, not its derivative. Integration by parts moves a time derivative away from the wiggle:
+To extract an equation for $q(t)$, collect terms proportional to the allowed displacement $\eta$. Integration by parts transfers the derivative from $\dot\eta$ to its coefficient:
 
 $$
 \delta S=
@@ -4204,7 +4204,7 @@ $$
 }
 $$
 
-That last inference is the fundamental lemma of the calculus of variations. If a continuous coefficient were positive somewhere, we could choose a positive wiggle supported there and make the integral nonzero. The same argument excludes a negative coefficient. “For every wiggle” is an immensely powerful demand.
+That last inference is the fundamental lemma of the calculus of variations. If a continuous coefficient were positive somewhere, we could choose a smooth positive displacement that vanishes outside that small region. The integral would then be positive. A negative coefficient can be excluded in the same way. Stationarity for every allowed displacement therefore requires the coefficient to vanish at each interior time.
 
 For $L=\frac12m\dot q^2-V(q)$, the result is
 
@@ -4216,7 +4216,7 @@ Newton's equation has emerged from a statement about a complete history.
 
 ### 13.2 Stationary does not mean minimal
 
-The phrase “least action” is dangerously memorable. A stationary value can be a minimum, a maximum, or a saddle. The variation above only tests the first-order change.
+An action principle is often called a principle of “least action,” but its defining condition is stationarity. A stationary value can be a minimum, a maximum, or a saddle. The variation above only tests the first-order change.
 
 For a harmonic oscillator, $L=\frac12m\dot q^2-\frac12m\omega^2q^2$. About a solution, the quadratic change in action is
 
@@ -4225,16 +4225,16 @@ $$
 \int_{t_1}^{t_2}(\dot\eta^2-\omega^2\eta^2)\,dt.
 $$
 
-Let $T=t_2-t_1$ and choose $\eta=\sin[\pi(t-t_1)/T]$. Then
+Let $T=t_2-t_1$ and choose $\eta=A\sin[\pi(t-t_1)/T]$, where $A$ has the same units as $q$. This displacement vanishes at both endpoints. The integrals of sine squared and cosine squared are each $T/2$, so
 
 $$
-\Delta S=\frac{m\lambda^2T}{4}
+\Delta S=\frac{m\lambda^2A^2T}{4}
 \left(\frac{\pi^2}{T^2}-\omega^2\right).
 $$
 
-For a sufficiently long interval, this variation decreases the action. Higher-frequency wiggles can increase it. The physical path is then a saddle, not a minimum.
+For a sufficiently long interval, this variation decreases the action. Choosing $\eta=A\sin[k\pi(t-t_1)/T]$ with a sufficiently large positive integer $k$ replaces $\pi^2/T^2$ by $k^2\pi^2/T^2$ and increases the action. The physical path is then a saddle, not a minimum.
 
-Nor does the action principle require the universe to preview every future and run an optimization contest. It is a compact mathematical formulation equivalent to local differential equations under the stated assumptions. It becomes especially useful when symmetries and coupled fields make guessing the equations difficult.
+The comparison is a calculation we perform on candidate paths. Under the stated endpoint conditions, requiring stationarity gives the same local differential equation as Newton’s force law. It also provides a systematic way to derive the equations of coupled fields.
 
 ### 13.3 Fields: a degree of freedom at every point
 
@@ -4266,7 +4266,7 @@ P^\mu\nabla_\mu\delta\phi
 =\nabla_\mu(P^\mu\delta\phi)-(\nabla_\mu P^\mu)\delta\phi.
 $$
 
-The divergence becomes a boundary integral. For a compactly supported variation, or appropriate fixed boundary data, it vanishes. The field equation is
+The divergence becomes a boundary integral, using $\sqrt{-g}\nabla_\mu J^\mu=\partial_\mu(\sqrt{-g}J^\mu)$ from Chapter 6. It vanishes if the variation is identically zero near the boundary, as for a compactly supported interior variation. Suitable fixed boundary values can also remove this first-derivative boundary term. The field equation is
 
 $$
 \boxed{
@@ -4282,9 +4282,17 @@ $$
 \Box=\nabla_\mu\nabla^\mu.
 $$
 
-For $V=\frac12m^2\phi^2$ in units $c=\hbar=1$, this is the Klein–Gordon equation. In a local inertial frame $\Box=-\partial_t^2+\boldsymbol\nabla^2$ at the point, with these units and signature.
+A quadratic potential gives a useful extension of the massless wave equation in Chapter 6. Write $V=\tfrac12\mu^2\phi^2$, where $\mu$ is a constant with inverse-length units. The result is the **Klein–Gordon equation**, $\Box\phi-\mu^2\phi=0$.
 
-**Derivative trap.** The variation $\delta$ commutes with coordinate partial derivatives when comparing fields at the same coordinates. It does not blindly commute with a covariant derivative when the metric is varied. For a vector,
+In flat spacetime with $c=1$, try a wave $\phi=A\cos(\mathbf k\cdot\mathbf x-\omega t)$. Here $\mathbf k$ specifies how rapidly its phase changes with position and $\omega$ specifies how rapidly it changes with time. Substitution gives
+
+$$
+\omega^2=|\mathbf k|^2+\mu^2.
+$$
+
+If the field is interpreted quantum mechanically as particles of rest mass $m$, the quantum relations $E=\hbar\omega$ and $\mathbf p=\hbar\mathbf k$, together with $E^2=p^2c^2+m^2c^4$, identify $\mu=mc/\hbar$. Here $\hbar=h/(2\pi)$ is the reduced Planck constant, with units of action. This is the additional conversion behind writing $\mu=m$ in units $c=\hbar=1$. The classical field variation itself does not require that quantum interpretation.
+
+**Varying the comparison rule.** The variation $\delta$ commutes with coordinate partial derivatives when comparing fields at the same coordinates. When the metric varies, the covariant derivative varies through its connection as well. For a vector,
 
 $$
 \delta(\nabla_\mu V^\nu)
@@ -4292,9 +4300,9 @@ $$
 +\delta\Gamma^\nu{}_{\mu\rho}V^\rho.
 $$
 
-The connection is part of what changes. Forgetting this term would remove the central difficulty of gravity by accidentally deleting it.
+The second term accounts for the changed rule for comparing vector directions. It remains even if the coordinate components of the vector are held fixed.
 
-### 13.4 Varying the inverse metric: prove the minus sign once
+### 13.4 Varying a metric and its inverse
 
 The covariant and inverse metrics are not independent fields. They obey
 
@@ -4335,7 +4343,7 @@ $$
 k^{\mu\nu}=-\delta g^{\mu\nu}.
 $$
 
-“Raise the metric perturbation” and “vary the inverse metric” differ by a minus sign. This tiny distinction has ruined many otherwise pleasant afternoons.
+“Raise the metric perturbation” and “vary the inverse metric” differ by a minus sign. Keeping these operations separate fixes the sign of the later volume and curvature variations.
 
 ### 13.5 Why the volume element varies
 
@@ -4434,7 +4442,15 @@ $$
 
 Apply this in natural units to the scalar Lagrangian. Its explicit metric derivative is $-\frac12\partial_\mu\phi\partial_\nu\phi$. The first term in $T_{\mu\nu}$ becomes $\partial_\mu\phi\partial_\nu\phi$, and the volume variation supplies $g_{\mu\nu}\mathcal L_\phi$, reproducing Chapter 11's tensor.
 
-For the electromagnetic example, return to SI units and hold the covariant potential $A_\mu$ fixed. Then $F_{\mu\nu}$ is fixed under the metric variation, but its raised components are not. Write its contraction as
+For electromagnetism, return to SI units. A convenient field variable is the **electromagnetic potential**, a covector field $A_\mu$. It determines the field tensor locally by
+
+$$
+F_{\mu\nu}=\partial_\mu A_\nu-\partial_\nu A_\mu.
+$$
+
+Its antisymmetry is explicit. Changing $A_\mu$ to $A_\mu+\partial_\mu\chi$, for any smooth scalar $\chi$, leaves $F$ unchanged because the two mixed derivatives of $\chi$ cancel. This is electromagnetic **gauge freedom**: more than one potential describes the same electric and magnetic fields.
+
+Hold the functions $A_\mu$ fixed while varying the metric. Then the displayed $F_{\mu\nu}$ remains fixed, but raising its indices uses the changing metric. Write its contraction as
 
 $$
 F_{\alpha\beta}F^{\alpha\beta}
@@ -4450,19 +4466,19 @@ $$
 
 Thus the explicit metric derivative of $\mathcal L_{\rm EM}$ gives the $F_{\mu\alpha}F_\nu{}^\alpha/\mu_0$ term in its stress tensor, and the volume variation gives the $-g_{\mu\nu}F^2/(4\mu_0)$ term. Even when the field components held fixed do not change, the metric changes how they are contracted into a physical energy density.
 
-The physical interpretation is beautiful: **stress–energy measures how the matter action responds when its spacetime measuring apparatus is changed.** Spatial deformations reveal stress; temporal deformations reveal energy; mixed deformations reveal momentum and energy flow. The familiar idea of stress as a response to strain has become a spacetime statement.
+The resulting physical interpretation is: **stress–energy measures how the matter action responds when its spacetime measuring apparatus is changed.** Spatial deformations reveal stress; temporal deformations reveal energy; mixed deformations reveal momentum and energy flow. The familiar idea of stress as a response to strain has become a spacetime statement.
 
 For matter actions containing curvature or metric derivatives, use the full functional definition rather than the short partial-derivative formula. Likewise, a fluid's energy density depends on proper volume and other constrained variables. Treating it as a metric-independent number during a naive variation will generally produce the wrong fluid stress tensor.
 
 <a id="chapter-14"></a>
 
-## 14. The Einstein–Hilbert action, taken apart completely
+## 14. Deriving Einstein’s equation from an action
 
-The name is **Einstein–Hilbert**, after David Hilbert. We now have enough tools to derive the field equation without hiding its central steps behind “after some algebra.”
+The **Einstein–Hilbert action** integrates scalar curvature over spacetime volume. We will vary both the curvature and the volume, then combine their changes with the matter response derived in Chapter 13.
 
 Our dynamical variable will be the inverse metric $g^{\mu\nu}$. The connection is its Levi-Civita connection, not an independent field in this derivation. Matter fields are collectively denoted $\psi$.
 
-### 14.1 Choosing an action and checking what is assumed
+### 14.1 Choosing the gravitational action
 
 Take
 
@@ -4489,9 +4505,9 @@ $$
 
 so $S$ has units $\mathrm{kg\,m^2/s}=\mathrm{J\,s}$. Under an actual coordinate change from $x^0=ct$ to $t$, the invariant action keeps its $c^3$ prefactor: the transformed metric has $g_{tt}=c^2g_{00}$ and its determinant contributes $\sqrt{-g_{(t)}}=c\sqrt{-g_{(x^0)}}$. Some presentations factor that $c$ out of the determinant and write a $c^4$ prefactor with a reduced determinant convention. These are consistent bookkeeping choices. Do not transplant their prefactor into our $x^0=ct$ formula.
 
-The symbol $S_{\rm boundary}$ is not decorative. For deriving the local bulk equations, we may initially choose variations supported strictly inside the region. For a finite-region variational problem that fixes the boundary geometry, an additional boundary action will be required.
+The boundary term specifies part of the variational problem. For deriving the local bulk equations, we may initially choose variations supported strictly inside the region. For a finite-region variational problem that fixes the boundary geometry, an additional boundary action will be required.
 
-### 14.2 First split: curvature changes, volume changes
+### 14.2 Varying curvature and volume
 
 Write $A=c^3/(16\pi G_N)$ and vary the gravitational bulk term:
 
@@ -4518,7 +4534,7 @@ $$
 \right]d^4x.
 $$
 
-Most of Einstein's equation is already visible. The trace subtraction came from volume variation, and $+\Lambda g_{\mu\nu}$ came from multiplying $-2\Lambda$ by the $-1/2$ in that same variation. All that remains is to understand the last term honestly.
+Most of Einstein's equation is already visible. The trace subtraction came from volume variation, and $+\Lambda g_{\mu\nu}$ came from multiplying $-2\Lambda$ by the $-1/2$ in that same variation. The remaining term contains the variation of Ricci curvature. We must calculate it before deciding whether it contributes to the interior equation or to the boundary.
 
 ### 14.3 How a changing metric changes the connection
 
@@ -4553,9 +4569,9 @@ $$
 
 It resembles the Christoffel formula, but ordinary derivatives have become covariant derivatives of the metric variation.
 
-Why is this a tensor, when a connection is not? Two connections transform with the same inhomogeneous coordinate term, so their difference transforms tensorially. $\delta\Gamma$ is an infinitesimal difference of connections. You are allowed to take its covariant derivative as a genuine $(1,2)$ tensor.
+Why is this a tensor, when a connection is not? Two connections transform with the same inhomogeneous coordinate term, so their difference transforms tensorially. $\delta\Gamma$ is an infinitesimal difference of connections. Its covariant derivative therefore follows the $(1,2)$ tensor rule from Chapter 6.
 
-**Useful warning:** this statement compares two connections using the same coordinate identification of the underlying manifold. A separate coordinate transformation is a different operation, even though both can be written with small parameters.
+This comparison holds the coordinate identification of the underlying manifold fixed. A separate coordinate transformation is a different operation, even though both can be written with small parameters.
 
 ### 14.4 The Palatini identity: curvature variation becomes a derivative
 
@@ -4579,7 +4595,7 @@ $$
 }
 $$
 
-This is the **Palatini identity**. A clean way to verify the algebra is to choose normal coordinates for the unvaried metric at one point. There $\Gamma=0$, all the product-variation terms vanish at that point, and the identity reduces to the obvious variation of the two derivative terms. Both sides are tensors, so equality established that way holds in every chart. Normal coordinates simplify a tensor calculation; they do not make curvature vanish.
+This is the **Palatini identity**. A clean way to verify the algebra is to choose normal coordinates for the unvaried metric at one point. There $\Gamma=0$, all the product-variation terms vanish at that point, and the identity reduces to varying the two ordinary derivative terms. Both sides are tensors, so equality established that way holds in every chart. Normal coordinates simplify a tensor calculation; they do not make curvature vanish.
 
 Contract with $g^{\mu\nu}$. Because $\nabla g=0$, the inverse metric moves through the derivatives:
 
@@ -4610,9 +4626,9 @@ $$
 
 This is the key structural result. The remaining variation of curvature contributes a total divergence, rather than an additional bulk field equation.
 
-The Einstein–Hilbert integrand contains second derivatives of the metric. Nevertheless its bulk Euler–Lagrange equations contain only second derivatives, not generic fourth derivatives: this special linear-curvature structure sends the dangerous variation terms to the boundary. Curvature-squared actions do not generally share that simplification.
+The Einstein–Hilbert integrand contains second derivatives of the metric. Nevertheless its bulk Euler–Lagrange equations contain only second derivatives, not generic fourth derivatives: for an action linear in $R$, the terms containing derivatives of the metric variation combine into this boundary divergence. Curvature-squared actions do not generally share that simplification.
 
-### 14.5 Put the pieces together
+### 14.5 Obtaining the field equation
 
 We have established
 
@@ -4660,16 +4676,16 @@ The geometry and matter equations arise by independent variations of the metric 
 
 We have now derived the field equation in words as well as symbols: change the metric, account for the changed trace of curvature, account for the changed spacetime volume, separate a divergence from the curvature variation, measure the matter response by its stress tensor, and require the total first-order response to vanish.
 
-### 14.6 Why “the boundary term vanishes” is not always a legal sentence
+### 14.6 What fixed boundary values leave free
 
-In mechanics with a first-derivative Lagrangian, fixing $\delta q=0$ at the endpoints kills the integration-by-parts boundary term. Here $V^\rho$ contains derivatives of $\delta g$. Fixing the metric on a boundary does not fix its normal derivative there.
+In mechanics with a first-derivative Lagrangian, fixing $\delta q=0$ at the endpoints makes the integration-by-parts boundary term zero. Here $V^\rho$ contains derivatives of $\delta g$. Fixing the metric on a boundary does not fix its normal derivative there.
 
 The one-dimensional analogy is a function satisfying $f(0)=0$ while $f'(0)$ is completely arbitrary. The function can meet the wall at any slope. A fixed boundary metric likewise does not prevent its variation from changing immediately away from the boundary.
 
 There are two different legitimate problems:
 
 1. To derive **local bulk equations**, use compactly supported variations. No boundary term survives.
-2. To define a **finite-region Dirichlet variational principle**, fix the induced boundary geometry and add a term cancelling normal derivatives of its variation.
+2. To define a **finite-region Dirichlet variational principle**, fix the induced boundary geometry and add a term cancelling normal derivatives of its variation. “Dirichlet” means fixing the field values at the boundary; here those values specify its geometry.
 
 The second problem is solved, for smooth non-null boundaries, by the Gibbons–Hawking–York term.
 
@@ -4684,13 +4700,13 @@ s=n_\mu n^\mu=\begin{cases}
 \end{cases}
 $$
 
-We use $s$ for this sign so it cannot be confused with energy density $\epsilon$. The tensor projecting tangent to the boundary is
+We use $s$ for this sign so it cannot be confused with energy density $\epsilon$. Define a tensor that removes the normal direction:
 
 $$
 h_{\mu\nu}=g_{\mu\nu}-s n_\mu n_\nu.
 $$
 
-In boundary coordinates $y^a$ with tangent vectors $e_a^\mu=\partial x^\mu/\partial y^a$, the induced metric is
+It obeys $h_{\mu\nu}n^\nu=0$; raising its first index gives the tangent projector. In boundary coordinates $y^a$ with tangent vectors $e_a^\mu=\partial x^\mu/\partial y^a$, the induced metric is
 
 $$
 h_{ab}=g_{\mu\nu}e_a^\mu e_b^\nu.
@@ -4724,7 +4740,7 @@ $$
 
 so the Einstein–Hilbert boundary variation is $A\int s\sqrt{|h|}n_\rho V^\rho d^3y$. Defining $K$ with an overall minus sign, or choosing different normal orientations, changes the displayed boundary-action signs. Always compare definitions before comparing formulas.
 
-We can see the cancellation explicitly. Near a non-null boundary choose Gaussian normal coordinates with outward normal coordinate $r$:
+We can see the cancellation explicitly. Construct **Gaussian normal coordinates** by launching geodesics perpendicular to the boundary. Keep the boundary labels $y^a$ fixed along each such geodesic and use signed proper distance, or proper time multiplied by $c$, as $r$. Choose increasing $r$ outward. Sufficiently near the boundary these coordinates give
 
 $$
 ds^2=s\,dr^2+h_{ab}(r,y)dy^a dy^b,
@@ -4771,25 +4787,57 @@ There are deliberate limits to this formula. Corners and joints generally requir
 
 The **Palatini identity** used above is an identity for the variation of curvature. We used it while the connection was determined by the metric.
 
-The **Palatini formulation** changes the variational problem: it treats the metric and a connection $\widetilde\Gamma$ as independent variables. For the Einstein–Hilbert action, in dimension greater than two, assuming a torsion-free independent connection and matter that does not couple to it, the connection equation implies
+The **Palatini formulation** changes the variational problem: it treats $g_{\mu\nu}$ and a connection $\widetilde\Gamma$ as independent fields. Assume the independent connection is torsion-free and matter does not couple to it. We will see how its equation recovers the metric connection for the Einstein–Hilbert action in dimension $d>2$.
+
+Define $\mathcal H^{\mu\nu}=\sqrt{-g}\,g^{\mu\nu}$. This is a **tensor density of weight one**: under a coordinate change it transforms like an ordinary $(2,0)$ tensor, with an additional factor $|\det(\partial x/\partial x')|$ from the volume density. Its covariant derivative includes a correction for that factor:
 
 $$
-\widetilde\nabla_\lambda\bigl(\sqrt{-g}\,g^{\mu\nu}\bigr)=0,
+\begin{aligned}
+\widetilde\nabla_\lambda\mathcal H^{\mu\nu}
+={}&\partial_\lambda\mathcal H^{\mu\nu}
++\widetilde\Gamma^\mu{}_{\lambda\rho}\mathcal H^{\rho\nu}
++\widetilde\Gamma^\nu{}_{\lambda\rho}\mathcal H^{\mu\rho}\\
+&-\widetilde\Gamma^\rho{}_{\rho\lambda}\mathcal H^{\mu\nu}.
+\end{aligned}
 $$
 
-after the relevant traced equations are combined. Here $\widetilde\nabla$ acts on a tensor density of weight one, including the connection term appropriate to that density weight. Under these assumptions its solution is the Levi-Civita connection, and the metric equation reproduces general relativity.
+The final term differentiates the volume-density factor. For a weight-one vector density, contraction makes its connection terms cancel, so its covariant divergence equals its ordinary divergence. That allows integration by parts with these densities.
 
-The equivalence depends on the assumptions. Changing the curvature action or allowing matter to couple directly to the independent connection can change the result. Allowing torsion also requires a separate analysis. “We used the Palatini identity” does not mean “we made the connection an independent dynamical variable.”
+Hold the metric fixed and vary the independent connection in $\int\mathcal H^{\mu\nu}\widetilde R_{\mu\nu}\,d^dx$. The Palatini identity gives derivatives of $\delta\widetilde\Gamma$. Integrating them by parts and collecting the symmetric variations $\delta\widetilde\Gamma^\lambda{}_{\mu\nu}$ gives
+
+$$
+-\widetilde\nabla_\lambda\mathcal H^{\mu\nu}
++\delta^{(\mu}_{\lambda}
+\widetilde\nabla_\rho\mathcal H^{\nu)\rho}=0.
+$$
+
+Set $\lambda=\mu$ and sum. The result is $(d-1)\widetilde\nabla_\rho\mathcal H^{\nu\rho}/2=0$. Substituting this back yields
+
+$$
+\widetilde\nabla_\lambda(\sqrt{-g}\,g^{\mu\nu})=0.
+$$
+
+To see why this implies metric compatibility, put $q_\lambda=\widetilde\nabla_\lambda\sqrt{-g}/\sqrt{-g}$. The product rule says $\widetilde\nabla_\lambda g^{\mu\nu}=-q_\lambda g^{\mu\nu}$. Contract with $g_{\mu\nu}$ to obtain $-d q_\lambda$. Independently, the determinant identity gives
+
+$$
+2q_\lambda=g^{\mu\nu}\partial_\lambda g_{\mu\nu}
+-2\widetilde\Gamma^\rho{}_{\rho\lambda}
+=g^{\mu\nu}\widetilde\nabla_\lambda g_{\mu\nu}.
+$$
+
+Differentiating the inverse-metric identity makes $g_{\mu\nu}\widetilde\nabla_\lambda g^{\mu\nu}=-2q_\lambda$. Thus $(d-2)q_\lambda=0$. For $d>2$, $q_\lambda=0$ and $\widetilde\nabla g=0$. Together with zero torsion, this selects the Levi-Civita connection by Chapter 7's uniqueness result.
+
+This equivalence uses the stated action and matter assumptions. Changing the curvature action, allowing matter to couple to the independent connection, or allowing torsion changes the variational equations and requires a separate analysis.
 
 <a id="chapter-15"></a>
 
-## 15. Symmetry, conservation, vacuum energy, and the limits of slogans
+## 15. Symmetry, conservation, and vacuum energy
 
 We have reached the equation, but understanding it requires knowing what follows from its structure. Why is stress–energy conserved? What kind of conservation is that? Does the universe have one total energy? And why does an apparently harmless constant in a matter Lagrangian suddenly matter to gravity?
 
-These are places where the most memorable slogans are often one assumption shorter than the truth.
+We will derive the local conservation law first, then identify the symmetry that turns it into a conserved integrated quantity.
 
-### 15.1 Diffeomorphisms: moving the mathematical description coherently
+### 15.1 Smooth maps and changes of fields
 
 A **smooth map** $F:M\to N$ takes points of one manifold to points of another. “Smooth” means that its coordinate expression has continuous derivatives of every order in overlapping charts. Section 4.1's transition rules ensure this property does not depend on which compatible charts we choose. A **diffeomorphism** is a smooth map with a smooth inverse. It preserves the smooth structure; it need not preserve a chosen metric's distances. A diffeomorphism that does preserve the metric is an **isometry**.
 
@@ -4802,7 +4850,7 @@ $$
 
 This is the **pushforward**: apply the map to the curve, then take its tangent. The Jacobian carries the tangent from $T_pM$ to $T_{F(p)}N$. An arbitrary smooth map can squash a direction to zero; a diffeomorphism cannot, because its inverse Jacobian undoes the operation. The formula resembles a coordinate transformation, but the interpretation can differ: a chart transition relabels the same point, whereas a map of the manifold may send a point elsewhere.
 
-A covector is a measuring question, so it travels in the opposite direction. If $\omega$ measures vectors at $F(p)$, define a question at $p$ by first pushing a vector forward and then asking $\omega$:
+A covector is a linear measuring rule. We can use the map to define such a rule at its starting point. If $\omega$ measures vectors at $F(p)$, define a question at $p$ by first pushing a vector forward and then asking $\omega$:
 
 $$
 (F^*\omega)_p(V)=\omega_{F(p)}(F_*V),
@@ -4847,7 +4895,18 @@ $$
 +g_{\mu\rho}\partial_\nu\xi^\rho.
 $$
 
-Using the metric-compatible, torsion-free connection combines them into the compact expression below. The Lie derivative is not the covariant derivative $\nabla_\xi$: the latter uses the connection's parallel-comparison rule, while the former compares through the specified flow. The distinction will matter again when Chapter 20 describes moving spatial coordinates.
+To rewrite this using the connection, lower $\xi$ and expand:
+
+$$
+\begin{aligned}
+\nabla_\mu\xi_\nu+\nabla_\nu\xi_\mu
+={}&g_{\rho\nu}\partial_\mu\xi^\rho+g_{\mu\rho}\partial_\nu\xi^\rho\\
+&+\xi^\rho(\partial_\mu g_{\rho\nu}+\partial_\nu g_{\mu\rho}
+-2\Gamma^\lambda{}_{\mu\nu}g_{\lambda\rho}).
+\end{aligned}
+$$
+
+The Christoffel formula makes the bracket equal to $\partial_\rho g_{\mu\nu}$, reproducing the three terms above. This step uses the metric-compatible, torsion-free connection. The Lie derivative itself does not require a connection: it compares fields through the specified flow. In contrast, the covariant derivative $\nabla_\xi$ uses parallel transport to compare them.
 
 For the metric,
 
@@ -4873,9 +4932,9 @@ The sign convention here uses the pullback generated by $\xi$. One can formulate
 
 The essential idea is that the geometry and matter fields are transformed together. Changing only the matter field while leaving geometry fixed is generally a physical alteration, not the gauge redundancy being discussed.
 
-A relabeling analogy is helpful. If every street sign, map, address, and navigation instruction is translated coherently, the journey is unchanged. Translating only the street signs while leaving the navigation instructions untouched creates a different experience. The analogy's limitation is that diffeomorphisms act on smooth fields and their locations, not merely written names; in gravity the distinction between gauge transformations and physical boundary symmetries also depends on boundary conditions.
+The distinction can be checked on the dilation example. Pulling back both the metric and all matter fields describes the configuration consistently through the same map. Pulling back only a matter field while keeping the metric fixed can change measured lengths and energies. Whether a transformation counts as gauge freedom or as a physical boundary symmetry also depends on the boundary conditions.
 
-### 15.2 Noether's theorem has a local-gauge version
+### 15.2 Symmetry and local conservation
 
 In mechanics, a continuous global symmetry produces a conserved quantity. Diffeomorphism invariance has an arbitrary spacetime-dependent vector field as its generator. This local freedom leads to differential identities among equations of motion—an instance of Noether's second theorem.
 
@@ -4921,11 +4980,11 @@ $$
 \nabla^\mu(G_{\mu\nu}+\Lambda g_{\mu\nu})=0
 $$
 
-holds off shell for constant $\Lambda$. It is the contracted Bianchi identity in variational clothing. Einstein's equation joins an identically compatible geometric tensor to a matter tensor conserved when matter evolves consistently.
+holds off shell for constant $\Lambda$. This reproduces the contracted Bianchi identity from the action’s symmetry. Einstein's equation joins an identically compatible geometric tensor to a matter tensor conserved when matter evolves consistently.
 
 This is not circular reasoning. One route derives a geometric identity from curvature; another derives matter conservation from matter dynamics; the action explains why the two structures can be coupled.
 
-### 15.3 Local conservation is not automatically a global energy account
+### 15.3 From local balance to an integrated charge
 
 Expand the covariant divergence:
 
@@ -4953,13 +5012,20 @@ $$
 }
 $$
 
-It follows by expanding the covariant derivative and using symmetry of $T^{\alpha\beta}$. If the metric depends on the time coordinate, the corresponding coordinate energy equation has a geometric term on its right-hand side. It is not generally the ordinary flat-spacetime continuity equation for one global energy.
+To derive it, the lower-index correction in $\nabla_\mu T^\mu{}_{\nu}$ moves to the right as $\Gamma^\lambda{}_{\mu\nu}T^\mu{}_{\lambda}$. Lower the first connection index and substitute the Christoffel formula:
+
+$$
+\Gamma^\lambda{}_{\mu\nu}T^\mu{}_{\lambda}
+=\frac12 T^{\mu\alpha}
+(\partial_\mu g_{\nu\alpha}+\partial_\nu g_{\mu\alpha}
+-\partial_\alpha g_{\mu\nu}).
+$$
+
+The first and third terms cancel after exchanging the summed indices $\mu,\alpha$, since $T^{\mu\alpha}$ is symmetric. The middle term is the displayed metric derivative. If the metric depends on the time coordinate, the corresponding coordinate energy equation has a geometric term on its right-hand side. It is not generally the ordinary flat-spacetime continuity equation for one global energy.
 
 In a sufficiently small freely falling laboratory, the connection vanishes at a chosen event and the law reduces there to the familiar local conservation equations. Across a finite curved region, comparing different local laboratories is part of the problem.
 
-Think of keeping accounts in currencies whose conversion depends on both place and route. Each office can keep perfectly consistent local accounts, yet adding their bare numerical balances is meaningless without a conversion prescription. The limitation is that the geometry is exact and deterministic; no financial uncertainty or exchange-market mechanism is being asserted.
-
-### 15.4 A Killing vector supplies the missing comparison rule
+### 15.4 Conserved charges from Killing vectors
 
 A Killing vector satisfies
 
@@ -4983,7 +5049,7 @@ $$
 -T^{\mu\nu}\nabla_\mu\xi_\nu.
 $$
 
-The first term vanishes by matter conservation. Since $T^{\mu\nu}$ is symmetric, only the symmetric part of $\nabla_\mu\xi_\nu$ contributes to the second term. The Killing equation kills it. Therefore
+The first term vanishes by matter conservation. Since $T^{\mu\nu}$ is symmetric, only the symmetric part of $\nabla_\mu\xi_\nu$ contributes to the second term. The Killing equation makes that symmetric part zero. Therefore
 
 $$
 \boxed{\nabla_\mu J^\mu=0.}
@@ -4991,7 +5057,7 @@ $$
 
 A timelike Killing vector supplies an energy symmetry; a rotational Killing vector supplies angular-momentum symmetry. The same construction works for the corresponding charges, with their conventional normalizations.
 
-To make the energy case concrete, normalize a timelike $\xi^\mu$ so its components are dimensionless and it approaches a unit time direction in an appropriate asymptotically flat region. On a spacelike hypersurface $\Sigma$ with future-directed unit normal $n^\mu$, define the matter Killing energy
+To make the energy case concrete, normalize a timelike $\xi^\mu$ so its components are dimensionless and it approaches a unit time direction in an appropriate asymptotically flat region. On a spacelike hypersurface $\Sigma$—a three-dimensional slice with a timelike normal—choose its future-directed unit normal $n^\mu$ and define the matter Killing energy
 
 $$
 \boxed{
@@ -5003,15 +5069,15 @@ In Minkowski spacetime, with $n^\mu=\xi^\mu=(1,0,0,0)$, this is $\int\epsilon\,d
 
 The result requires the Killing symmetry, the field equations, and suitable boundaries or falloff. It is a **matter** Killing charge; it is not by itself a universal formula for the full gravitating system's total energy.
 
-In a static spacetime, let $N=\sqrt{-\xi^\mu\xi_\mu}$. Static observers have unit time direction $\xi^\mu/N$. A photon has conserved Killing energy
+For a static chart, the metric is time independent and has $g_{0i}=0$. Take $\xi=\partial_{x^0}$ and let $N=\sqrt{-\xi^\mu\xi_\mu}=\sqrt{-g_{00}}$. Observers at fixed spatial coordinates have unit time direction $n^\mu=\xi^\mu/N$. A photon with four-momentum $p^\mu$ has symmetry energy $E_\xi=-c\,p_\mu\xi^\mu$; its local measured energy is $E_{\rm local}=-c\,p_\mu n^\mu$. Substitution gives
 
 $$
 E_\xi=N E_{\rm local}.
 $$
 
-Two observers at different gravitational potentials can therefore assign different local photon energies while agreeing on the conserved symmetry charge. Gravitational redshift is consistent with energy conservation when the correct conserved quantity and observer normalization are used.
+The quantity $p\cdot\xi$ is conserved along the free ray: its derivative contracts the symmetric product of the ray tangent and momentum with $\nabla_{(\mu}\xi_{\nu)}=0$. Two static observers can therefore measure different local photon energies while agreeing on $E_\xi$. Gravitational redshift is consistent with energy conservation when the correct conserved quantity and observer normalization are used.
 
-### 15.5 Where gravitational energy lives
+### 15.5 Energy of gravitational fields
 
 Gravitational waves transfer energy to detectors, and black holes have measurable mass. Yet general relativity provides no universal, unique, exact local gravitational stress tensor playing the same role as matter's $T_{\mu\nu}$ in every spacetime.
 
@@ -5026,7 +5092,7 @@ Several well-defined constructions answer more specific questions:
 | Quasilocal energy | A finite boundary and a chosen prescription | Energy associated with a bounded region and boundary observers |
 | Averaged gravitational-wave stress tensor | A controlled short-wavelength approximation and averaging | Effective wave-energy transport relative to a background |
 
-These are not mutually contradictory definitions of one quantity that was obvious all along. They address different physical settings. Brown and York's quasilocal construction, for example, derives a boundary stress tensor from variation of a gravitational action with respect to the boundary metric; in the appropriate asymptotically flat limit it recovers ADM quantities. See their original [“Quasilocal Energy and Conserved Charges Derived from the Gravitational Action”](https://arxiv.org/abs/gr-qc/9209012).
+Each construction specifies its boundary conditions or approximation before defining an energy. Brown and York's quasilocal construction, for example, derives a boundary stress tensor from variation of a gravitational action with respect to the boundary metric; in the appropriate asymptotically flat limit it recovers ADM quantities. See their original [“Quasilocal Energy and Conserved Charges Derived from the Gravitational Action”](https://arxiv.org/abs/gr-qc/9209012).
 
 A generic expanding cosmology has no global timelike Killing vector. Photons redshift, and matter still obeys local covariant conservation. Asking where every lost photon joule “went” presupposes a globally conserved energy account that the spacetime may not possess.
 
@@ -5073,11 +5139,11 @@ $$
 \epsilon_\Lambda+3p_\Lambda=-2\epsilon_\Lambda.
 $$
 
-For positive $\Lambda$, that contribution has the opposite sign from positive-density, nonnegative-pressure matter. The resulting expansion or focusing behavior also depends on the spacetime and congruence being studied; Chapter 19 develops the cosmological case.
+For positive $\Lambda$, that contribution has the opposite sign from positive-density, nonnegative-pressure matter. The resulting expansion or focusing behavior also depends on the spacetime and family of observers being studied; Chapter 19 develops the cosmological case.
 
 There is also a thermodynamic check. If $\epsilon_\Lambda$ is constant while a comoving volume changes, $E=\epsilon_\Lambda V$ implies $dE=\epsilon_\Lambda dV$. Comparing with $dE=-p\,dV$ gives $p=-\epsilon_\Lambda$. The energy in the volume grows with the volume; the local work relation is satisfied by negative pressure.
 
-### 15.7 Why adding a constant to a Lagrangian suddenly matters
+### 15.7 Adding a constant to the matter Lagrangian
 
 In nongravitational mechanics, adding a constant to $L$ changes the action by a fixed amount for a fixed time interval and leaves the equations of motion unchanged.
 
@@ -5109,7 +5175,7 @@ $$
 
 A varying dark-energy model therefore needs additional consistent dynamics or energy exchange. Changing a parameter into a function is not a free modification of a constrained field theory.
 
-### 15.8 Minimal coupling, and what it does not settle
+### 15.8 Coupling a matter model to curved spacetime
 
 A common way to place a nongravitational field theory on curved spacetime is to begin with its special-relativistic action and make the replacements
 
@@ -5142,8 +5208,6 @@ is also generally covariant, with dimensionless coupling $\zeta$ in four dimensi
 
 The equation's assumptions should now be visible: a Lorentzian metric, a specified connection structure, chosen gravitational and matter actions, appropriate boundary data, and a consistent coupling between them. With those in place, covariance, curvature identities, local energy–momentum balance, and dynamics reinforce one another.
 
-That coherence is the achievement. The theory becomes more impressive when its assumptions are stated than when they are hidden inside a slogan.
-
 ### 15.9 Mach's question: what fixes an inertial frame?
 
 Imagine a rotating bucket of water. The surface becomes concave. Rotating relative to what? Relative to the bucket cannot be the whole answer: once the water co-rotates with the bucket, the concavity remains. Mach's critique of absolute space encouraged the idea that inertia might ultimately be tied to the matter elsewhere in the universe. Einstein found this line of thought influential.
@@ -5163,7 +5227,7 @@ $$
 
 Dividing by the mass of a hydrogen atom, about $1.67\times10^{-27}\,\mathrm{kg}$, gives the mass equivalent of roughly 3.5 hydrogen atoms per cubic metre. The vacuum component is not literally a gas of hydrogen. The comparison translates an unfamiliar density into a familiar mass scale.
 
-For a cosmological constant, the energy density $\epsilon_\Lambda=\rho_\Lambda c^2$ remains constant while a comoving region expands, and its pressure is $p_\Lambda=-\epsilon_\Lambda$. Ordinary dust dilutes as $a^{-3}$ and radiation as $a^{-4}$. Thus a constant component can eventually dominate even if it starts small. That conclusion assumes the component really is constant and the cosmological solution evolves into that regime; it is not a general forecast for every possible dark-energy model.
+For a cosmological constant, the energy density $\epsilon_\Lambda=\rho_\Lambda c^2$ remains constant while a comoving region expands, and its pressure is $p_\Lambda=-\epsilon_\Lambda$. For comparison, let $a$ denote a common scale factor multiplying all spatial lengths in a uniformly expanding region, so a comoving volume is proportional to $a^3$. Dust keeps the same rest energy in that volume and therefore has $\epsilon\propto a^{-3}$. For radiation, substitute $p=\epsilon/3$ into $d(\epsilon a^3)=-p\,d(a^3)$. Expanding gives $a^3d\epsilon+4\epsilon a^2da=0$, hence $\epsilon\propto a^{-4}$. A constant density can therefore become larger than these declining densities even if it starts smaller. That conclusion assumes the component really is constant and the cosmological solution evolves into that regime; it is not a general forecast for every possible dark-energy model.
 
 <a id="chapter-16"></a>
 
