@@ -42,7 +42,18 @@ try{
   }await page.close();
  }
  // Reduced motion is not the offscreen pause mechanism; this check explicitly plays.
- const page=await browser.newPage();await page.goto(new URL('chapter-16.html',base).href);const orbit=page.locator('[data-geometry-experience=precession]');await orbit.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('[data-geometry-experience=precession]')?.dataset.spatialReady==='true');await orbit.locator('[data-gx-play]').click();await page.waitForTimeout(200);await page.evaluate(()=>window.scrollTo(0,0));await page.waitForTimeout(200);const stopped=JSON.parse(await orbit.getAttribute('data-experience-state')).cycles;await page.waitForTimeout(300);near(JSON.parse(await orbit.getAttribute('data-experience-state')).cycles,stopped);await page.close();
+ const page=await browser.newPage();await page.goto(new URL('chapter-16.html',base).href);const orbit=page.locator('[data-geometry-experience=precession]');await orbit.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('[data-geometry-experience=precession]')?.dataset.spatialReady==='true');
+ await page.evaluate(async()=>{const data=JSON.parse(document.getElementById('reading-data').textContent);window.__geometryQA=await import(new URL(data.assets.geometryExperiences,location.href).href);});
+ const orbitState=()=>page.evaluate(()=>window.__geometryQA.getGeometryExperienceState().find(x=>x.type==='precession').state);
+ const initialCycles=(await orbitState()).cycles;await orbit.locator('[data-gx-play]').click();
+ await page.waitForFunction(initial=>window.__geometryQA.getGeometryExperienceState().find(x=>x.type==='precession').state.cycles>initial,initialCycles);
+ // Smooth scrolling can still leave the experiment visible after a fixed delay.
+ // Wait for actual nonintersection, then sample the live simulation, not its
+ // intentionally throttled readout (which can hide continued motion).
+ await orbit.evaluate(e=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>{observer.disconnect();reject(new Error('Orbit did not leave the viewport'));},5000);const observer=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){observer.disconnect();clearTimeout(timer);requestAnimationFrame(()=>requestAnimationFrame(resolve));}});observer.observe(e);window.scrollTo({top:0,behavior:'instant'});}));
+ const stopped=(await orbitState()).cycles;await page.waitForTimeout(350);near((await orbitState()).cycles,stopped);
+ await orbit.scrollIntoViewIfNeeded();await page.waitForFunction(previous=>window.__geometryQA.getGeometryExperienceState().find(x=>x.type==='precession').state.cycles>previous,stopped);
+ await page.close();
  const fallback=await browser.newPage();await fallback.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(kind,...args){return /^webgl/.test(kind)?null:get.call(this,kind,...args);};});
  for(const [type,chapter]of [['manifold',4],['precession',16]]){await fallback.goto(new URL(`chapter-${chapter}.html`,base).href);const el=fallback.locator(`[data-geometry-experience=${type}]`);await el.scrollIntoViewIfNeeded();await fallback.waitForFunction(t=>document.querySelector(`[data-geometry-experience=${t}]`)?.dataset.spatialReady==='fallback',type);assert.equal(await el.locator('.gx-fallback').isVisible(),true);await el.locator(type==='manifold'?'[data-gx-chart=b]':'[data-gx-step]').click();assert.ok(await el.locator('.gx-fallback svg path').count()>3);}
  await fallback.close();assert.deepEqual(errors,[]);fs.writeFileSync('qa/geometry-experiences-report.json',JSON.stringify({checks,errors},null,2));console.log(`Geometry experiences: ${checks.length} viewport/theme combinations, controls, mathematical readouts, animation, offscreen pause and SVG fallbacks passed.`);

@@ -33,6 +33,20 @@ const html=`<!doctype html><html><head><link rel="stylesheet" href="/katex.css">
 await page.route('http://curvature.test/**',route=>{const path=new URL(route.request().url()).pathname;if(path==='/')return route.fulfill({contentType:'text/html',body:html});const files={'/book.css':['web/styles.css','text/css'],'/experience.js':['web/curvature-experiences.js','text/javascript'],'/experience.css':['web/curvature-experiences.css','text/css'],'/katex.js':['node_modules/katex/dist/katex.min.js','text/javascript'],'/katex.css':['node_modules/katex/dist/katex.min.css','text/css'],'/manrope.woff2':['site/assets/fonts/manrope-latin-wght-normal.woff2','font/woff2']};let file=files[path];if(path.startsWith('/assets/fonts/'))file=['site'+path,'font/woff2'];if(path.startsWith('/fonts/'))file=['node_modules/katex/dist'+path,'font/woff2'];return file?route.fulfill({contentType:file[1],body:fs.readFileSync(root+'/'+file[0])}):route.fulfill({status:404,body:''});});
 fs.mkdirSync('qa',{recursive:true});
 async function layout(el,width){const metrics=await el.evaluate(e=>{const r=e.getBoundingClientRect();const visible=[...e.querySelectorAll('.cx-math')].filter(n=>n.checkVisibility());return {overflow:e.scrollWidth-e.clientWidth,doc:document.documentElement.scrollWidth,clipped:visible.map(n=>({tex:n.querySelector('annotation')?.textContent,...(()=>{const b=n.getBoundingClientRect();return {left:b.left,right:b.right}})()})).filter(b=>b.left<r.left-1||b.right>r.right+1),errors:e.querySelectorAll('.katex-error').length}});assert(metrics.overflow<=1,JSON.stringify(metrics));assert(metrics.doc<=width+1);assert.deepEqual(metrics.clipped,[]);assert.equal(metrics.errors,0);}
+async function scrollCloudVisibility(cloud,visible){return cloud.evaluate((e,wanted)=>new Promise((resolve,reject)=>{
+ const snapshot=()=>({actual:window.__cx.getCurvatureExperienceState().find(item=>item.id===e.id).state,published:JSON.parse(e.dataset.visualState),top:e.getBoundingClientRect().top,viewport:innerHeight,scrollY});
+ let frame=0;
+ const timeout=setTimeout(()=>{observer.disconnect();cancelAnimationFrame(frame);reject(Error(`Cloud did not become ${wanted?'visible':'offscreen'}`));},5000);
+ const observer=new IntersectionObserver(entries=>{
+  if(entries.at(-1).isIntersecting!==wanted)return;
+  observer.disconnect();
+  // Let the application's own observer cancel or schedule its frame first.
+  frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{clearTimeout(timeout);resolve(snapshot());});});
+ });observer.observe(e);
+ // The real book has smooth scrolling; a fixed delay does not establish visibility.
+ if(wanted)e.scrollIntoView({block:'center',behavior:'instant'});
+ else scrollTo({top:0,left:0,behavior:'instant'});
+}),visible);}
 try{
  for(const width of [1200,768,390])for(const theme of ['light','dark']){
   await page.setViewportSize({width,height:1000});await page.goto('http://curvature.test/');await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);await page.waitForFunction(()=>document.querySelectorAll('[data-curvature-ready=true]').length===2);await page.evaluate(()=>document.fonts.ready);
@@ -43,7 +57,16 @@ try{
   await cloud.screenshot({path:`qa/curvature-cloud-${width}-${theme}.png`});
  }
  const cloud=page.locator('[data-curvature-experience=cloud]');await cloud.locator('[data-cx-restart]').click();await cloud.locator('[data-cx-play]').click();await page.waitForTimeout(550);let s=JSON.parse(await cloud.getAttribute('data-visual-state'));assert(s.time>0&&s.playing);await cloud.locator('[data-cx-play]').click();s=JSON.parse(await cloud.getAttribute('data-visual-state'));await page.waitForTimeout(250);near(JSON.parse(await cloud.getAttribute('data-visual-state')).time,s.time);
- await cloud.locator('[data-cx-play]').click();await page.waitForTimeout(200);await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(200);s=JSON.parse(await cloud.getAttribute('data-visual-state'));await page.waitForTimeout(300);near(JSON.parse(await cloud.getAttribute('data-visual-state')).time,s.time);await cloud.scrollIntoViewIfNeeded();await page.waitForTimeout(350);assert(JSON.parse(await cloud.getAttribute('data-visual-state')).time>s.time);
+ await cloud.locator('[data-cx-play]').click();
+ await page.waitForFunction(time=>window.__cx.getCurvatureExperienceState().find(item=>item.type==='cloud').state.time>time+.005,s.time);
+ const hidden=await scrollCloudVisibility(cloud,false);assert.equal(hidden.scrollY,0);assert(hidden.top>=hidden.viewport,'The whole experience has left the viewport');assert(hidden.actual.playing,'Offscreen suspension preserves play intent');
+ await page.waitForTimeout(350);
+ const suspended=await cloud.evaluate(e=>({actual:window.__cx.getCurvatureExperienceState().find(item=>item.id===e.id).state,published:JSON.parse(e.dataset.visualState)}));
+ near(suspended.actual.time,hidden.actual.time);near(suspended.published.time,hidden.published.time);
+ const resumed=await scrollCloudVisibility(cloud,true);
+ assert(resumed.actual.time>=hidden.actual.time);assert(resumed.actual.time-hidden.actual.time<=.00600001,'The first resumed frames must not integrate hidden wall time');
+ await page.waitForFunction(time=>window.__cx.getCurvatureExperienceState().find(item=>item.type==='cloud').state.time>time+.005,hidden.actual.time);
+ await page.waitForFunction(time=>JSON.parse(document.querySelector('[data-curvature-experience=cloud]').dataset.visualState).time>time,hidden.published.time);
  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(200);assert.equal(JSON.parse(await cloud.getAttribute('data-visual-state')).playing,false);
  const stage=cloud.locator('.cx-cloud-stage');await stage.focus();await stage.press('ArrowRight');const changed=JSON.parse(await cloud.getAttribute('data-visual-state'));assert.notEqual(changed.yaw,1.1);await stage.press('Home');near(JSON.parse(await cloud.getAttribute('data-visual-state')).yaw,1.1);
  await page.evaluate(()=>window.__cx.restoreCurvatureExperienceState('curvature-cloud-explorer',{mode:'isotropic',time:.6,yaw:.2,pitch:.1}));assert.equal(JSON.parse(await cloud.getAttribute('data-visual-state')).mode,'isotropic');assert((await cloud.getAttribute('data-narration-source')).includes('isotropic focusing'));
