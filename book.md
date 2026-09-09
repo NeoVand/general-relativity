@@ -1933,13 +1933,47 @@ The next chapters build the language needed to express the last row without borr
 
 <a id="chapter-6"></a>
 
-## 6. Differentiation when your measuring axes will not sit still
+## 6. Differentiation in a changing basis
 
-### 6.1 The crime: an innocent derivative produces a coordinate-dependent answer
+### 6.1 A fixed arrow with changing components
 
-Imagine an ant walking across a flat dinner plate. At each location, a mischievous waiter draws a new pair of coordinate arrows, rotated relative to the previous pair. A vector that points toward the kitchen everywhere acquires changing components in these arrows. If the ant differentiates only those components, it announces that the vector field is turning. The kitchen, understandably, denies everything.
+Draw an arrow pointing east on a flat sheet. At each point of a circle around the origin, describe that same eastward direction using two local unit arrows: one pointing outward and one pointing around the circle. At the rightmost point, east is outward. At the top, east is opposite the direction of increasing angle. The direction stayed fixed, but its components changed.
 
-This is already a problem in flat space. Curvature makes the problem deeper, but does not create it. Coordinates can change their scale and orientation from point to point even on a perfectly ordinary plane.
+We can check this with the unit basis from §4.8. In fixed Cartesian components,
+
+$$
+\begin{aligned}
+\hat e_r&=(\cos\theta,\sin\theta),\\
+\hat e_\theta&=(-\sin\theta,\cos\theta).
+\end{aligned}
+$$
+
+The eastward unit vector $V=(1,0)$ can therefore be written as
+
+$$
+V=\cos\theta\,\hat e_r-\sin\theta\,\hat e_\theta.
+$$
+
+Differentiating its two coefficients gives $-\sin\theta$ and $-\cos\theta$. If we stop there, we predict a changing vector. But the basis vectors also change:
+
+$$
+\frac{d\hat e_r}{d\theta}=\hat e_\theta,\qquad
+\frac{d\hat e_\theta}{d\theta}=-\hat e_r.
+$$
+
+Apply the product rule to the whole expression for $V$:
+
+$$
+\begin{aligned}
+\frac{dV}{d\theta}
+&=(-\sin\theta\,\hat e_r+\cos\theta\,\hat e_\theta)\\
+&\quad+(-\cos\theta\,\hat e_\theta+\sin\theta\,\hat e_r)=0.
+\end{aligned}
+$$
+
+The cancellation agrees with the drawing. A useful derivative must account for changes of basis as well as changes of components.
+
+This example used unit vectors. The polar *coordinate* basis is $\partial_r=\hat e_r$, $\partial_\theta=r\hat e_\theta$: its angular vector also changes length with radius. We now work in coordinate bases and use the chain rule to identify the general problem.
 
 Let a vector field have components $V^\alpha$ in coordinates $x^\mu$. Under new coordinates $x'^\alpha(x)$, define the Jacobian and its inverse by
 
@@ -1961,7 +1995,7 @@ $$
 
 The first term is exactly how a tensor with one upper and one lower index should transform. The second term is the trouble: it involves derivatives of the coordinate transformation itself. A tensor transformation changes the description of an object using the Jacobian at the point; it does not need second derivatives of the map.
 
-Notice when the trouble disappears. A Cartesian rotation or a Lorentz transformation has a constant Jacobian, so the extra term vanishes. This is why ordinary component differentiation worked so comfortably in introductory mechanics and special relativity. Those courses usually handed you unusually well-behaved rulers.
+Notice when the trouble disappears. A Cartesian rotation or a Lorentz transformation has a constant Jacobian, so the extra term vanishes. For these transformations, differentiating the components already gives a tensor. A position-dependent change of coordinates requires the extra correction.
 
 The solution is to differentiate the geometric vector, accounting for the changing local basis. We call the resulting operation the **covariant derivative**.
 
@@ -1969,7 +2003,7 @@ The solution is to differentiate the geometric vector, accounting for the changi
 
 There is a subtlety even before the algebra. A vector at event $p$ belongs to $T_pM$, the tangent space at $p$. A vector at a neighboring event $q$ belongs to $T_qM$. These are different vector spaces. Subtracting their component lists does not, by itself, define a geometric subtraction.
 
-Think of two bank balances reported in currencies whose exchange rate changes between branches. Subtracting the printed numbers is possible; assigning an invariant meaning to the answer requires a comparison rule. Here the rule is a **connection**. The analogy is limited: a spacetime connection can mix directions, and comparisons generally depend on the path taken. There is no universal currency conversion table for separated tangent spaces.
+On the plane we could compare arrows using one fixed Cartesian basis. A general manifold does not come with that common basis. A **connection** supplies a rule for comparing vectors at neighboring points. Repeating the comparison along a path will let us transport a vector from one point to another; different paths can give different results.
 
 In a coordinate basis $e_\nu=\partial/\partial x^\nu$, define connection coefficients by
 
@@ -1977,7 +2011,7 @@ $$
 \nabla_\mu e_\nu=\Gamma^\rho{}_{\mu\nu}e_\rho.
 $$
 
-This does not mean that ordinary subtraction of basis vectors at different points was secretly available. The symbol $\nabla$ specifies the comparison rule that makes such a derivative meaningful.
+Here $\nabla_\mu$ means differentiation along coordinate direction $\mu$ using the chosen comparison rule. The coefficients $\Gamma^\rho{}_{\mu\nu}$ describe the resulting change of basis vector $e_\nu$. They generalize the basis derivatives we just calculated on the plane.
 
 Apply the product rule to $V=V^\nu e_\nu$:
 
@@ -2002,7 +2036,7 @@ The derivative index $\mu$ is a lower index because differentiation asks for a d
 
 ### 6.3 Why covectors acquire a minus sign
 
-A covector $\omega_\nu$ eats a vector and produces a scalar:
+A covector $\omega$ assigns a scalar to a vector $V$. In components,
 
 $$
 f=\omega_\nu V^\nu.
@@ -2023,7 +2057,7 @@ $$
 =\partial_\mu\omega_\nu-\Gamma^\lambda{}_{\mu\nu}\omega_\lambda.}
 $$
 
-The minus sign is not a mnemonic imposed by an unfriendly textbook. It is the price of preserving the scalar pairing. Vectors and covectors change in mutually compensating ways.
+The opposite signs keep differentiation of the scalar pairing consistent: the vector correction and covector correction cancel.
 
 For a general tensor, every upper index gets a plus correction and every lower index gets a minus correction. For example,
 
@@ -2037,7 +2071,7 @@ $$
 \end{aligned}
 $$
 
-Each correction replaces exactly one index with a summed index. Every term retains the same free indices $\mu,\alpha,\beta,\gamma$. This is an excellent way to catch mistakes before they breed.
+Each correction replaces exactly one index with a summed index. Every term retains the same free indices $\mu,\alpha,\beta,\gamma$. Checking those free indices helps catch an incorrectly placed index.
 
 Respecting contractions means, for example,
 
@@ -2046,9 +2080,9 @@ $$
 =(\nabla_\mu T)^\alpha{}_{\alpha}.
 $$
 
-The two connection corrections cancel after a dummy-index relabeling. However, **raising an index is an additional operation involving the metric**. Commuting differentiation with raising and lowering requires metric compatibility, $\nabla g=0$, which we will derive into the story shortly. Compatibility with vector–covector contraction and compatibility with the metric are related ideas, but are not identical assumptions.
+The two connection corrections cancel after a dummy-index relabeling. However, **raising an index is an additional operation involving the metric**. Commuting differentiation with raising and lowering requires metric compatibility, $\nabla g=0$, which we will impose and examine in §7.2. Compatibility with vector–covector contraction and compatibility with the metric are related ideas, but are not identical assumptions.
 
-### 6.4 The scalar trap: one derivative is easy; two derivatives are not
+### 6.4 Taking a second derivative of a scalar
 
 For a scalar field $f$,
 
@@ -2056,7 +2090,7 @@ $$
 \nabla_\mu f=\partial_\mu f.
 $$
 
-It is tempting to conclude that every derivative of a scalar is ordinary differentiation. The trap is that the first derivative is now a **covector**. Differentiating that covector gives
+After one differentiation, the result is the **covector** $df$, with components $\partial_\nu f$. Its derivative therefore needs the covector correction:
 
 $$
 \boxed{\nabla_\mu\nabla_\nu f
@@ -2064,7 +2098,7 @@ $$
 -\Gamma^\lambda{}_{\mu\nu}\partial_\lambda f.}
 $$
 
-This is the covariant Hessian. With a torsion-free connection, it is symmetric in $\mu,\nu$. Ordinary second partial derivatives are symmetric too, but generally fail to transform as a tensor. Symmetry alone is not a certificate of geometric respectability.
+This is the **covariant Hessian**. The metric connection derived in §5.5 has $\Gamma^\lambda{}_{\mu\nu}=\Gamma^\lambda{}_{\nu\mu}$, so this Hessian is symmetric in $\mu,\nu$. Section 7.2 will explain the name *torsion-free* for that symmetry in a coordinate basis. Ordinary second partial derivatives are symmetric too, but generally lack the correction needed to transform as a tensor.
 
 There is one useful special case. At a critical point, where $\partial_\lambda f=0$, the correction vanishes. The Hessian computed there with ordinary second derivatives has a coordinate-independent meaning as a bilinear form. This is why classifying a stationary point as a maximum, minimum, or saddle can be done intrinsically despite using coordinate derivatives.
 
@@ -2074,18 +2108,18 @@ $$
 (\operatorname{grad}f)^\mu=g^{\mu\nu}\partial_\nu f,
 $$
 
-and does require a metric. In Euclidean space these objects are often merged into one mental image. In spacetime, raising a time index even changes a sign in an orthonormal frame. The distinction earns its keep.
+and does require a metric. In Euclidean space these objects are often merged into one mental image. For example, in Cartesian Minkowski coordinates, $(\operatorname{grad}f)^0=-\partial_0f$. The covector and gradient vector therefore need different component lists even in this simple frame.
 
-### 6.5 Divergence and the hidden accounting of physical volume
+### 6.5 Divergence and physical volume
 
-Using the Levi-Civita connection introduced in the next chapter, the divergence of a vector is
+The **divergence** contracts the derivative index with the vector index. It extends the net-outflow calculation from Chapter 0 to general coordinates:
 
 $$
 \nabla_\mu V^\mu
 =\partial_\mu V^\mu+\Gamma^\mu{}_{\mu\nu}V^\nu.
 $$
 
-The trace of the connection simplifies dramatically:
+Use the Christoffel formula obtained from the free-particle action in §5.5. We will derive it again from geometric requirements in §7.3. In its trace $\Gamma^\mu{}_{\mu\nu}$, the first and third metric-derivative terms cancel after relabeling their summed indices. The remaining term gives
 
 $$
 \Gamma^\mu{}_{\mu\nu}
@@ -2094,7 +2128,20 @@ $$
 \qquad g=\det(g_{\alpha\beta}).
 $$
 
-The last step uses a matrix identity. For an invertible matrix $A$, an infinitesimal change satisfies $\delta\ln|\det A|=\operatorname{tr}(A^{-1}\delta A)$. Apply this to the metric, then take half because of the square root. In a Lorentzian chart with our signature, $g<0$.
+Here $g$ is the metric determinant, which is negative for our spacetime signature. The logarithmic derivative is shorthand for $(1/\sqrt{-g})\partial_\nu\sqrt{-g}$; equivalently one can take the logarithm of the ratio to a fixed reference with the same units.
+
+To see the matrix identity behind this step, perturb an invertible matrix $A$ by a small amount $\epsilon B$:
+
+$$
+\begin{aligned}
+\det(A+\epsilon B)
+&=\det A\,\det(I+\epsilon A^{-1}B)\\
+&=\det A\left[1+\epsilon\operatorname{tr}(A^{-1}B)
++O(\epsilon^2)\right].
+\end{aligned}
+$$
+
+Why does the trace appear? In the determinant of $I+\epsilon C$, a first-order contribution chooses one diagonal perturbation and leaves every other diagonal entry equal to one. Their sum is $\epsilon\sum_i C^i{}_i$. Terms involving off-diagonal entries require at least two perturbations. Thus the fractional change of $\det A$ is $\epsilon\operatorname{tr}(A^{-1}B)$ to first order. Taking its square root supplies the factor $1/2$ used above.
 
 Combining the two terms by the product rule gives
 
@@ -2107,7 +2154,7 @@ Why should the determinant appear? A coordinate box of side lengths $dx^\mu$ rep
 
 In an $n$-dimensional Riemannian space, replace $\sqrt{-g}$ by $\sqrt{g}$; the general expression uses $\sqrt{|g|}$. The idea is the same.
 
-Applying divergence to the gradient of a scalar yields the curved-spacetime wave operator:
+We can now take the divergence of a gradient. In spacetime this combination is called the **wave operator**, written $\Box$ (read “box”):
 
 $$
 \boxed{\Box f
@@ -2116,9 +2163,25 @@ $$
 \left(\sqrt{-g}\,g^{\mu\nu}\partial_\nu f\right).}
 $$
 
-In Cartesian Minkowski coordinates with $x^0=ct$, this becomes $-c^{-2}\partial_t^2f+\partial_x^2f+\partial_y^2f+\partial_z^2f$. The ordinary wave equation was already a geometric equation; its familiar coordinates hid the machinery.
+In Cartesian Minkowski coordinates, the metric and its determinant are constant. The inverse metric supplies one minus sign; $x^0=ct$ gives $\partial_0=c^{-1}\partial_t$. Therefore
 
-One warning will matter for stress-energy: a rank-two tensor has another index to correct. In particular,
+$$
+\Box f=-\frac1{c^2}\frac{\partial^2 f}{\partial t^2}
++\frac{\partial^2 f}{\partial x^2}
++\frac{\partial^2 f}{\partial y^2}
++\frac{\partial^2 f}{\partial z^2}.
+$$
+
+In the simplest scalar wave model, the field obeys the **wave equation** $\Box f=0$. As in Chapter 2, a scalar field assigns one coordinate-independent value to each event. We can see why this equation describes waves by constructing a solution. Choose a smooth profile $F$ and set $f(t,x)=F(x-ct)$, with no $y$ or $z$ dependence. The profile moves to the right at speed $c$: after time $\Delta t$, the same value of its argument occurs a distance $c\Delta t$ farther right. Differentiating gives
+
+$$
+\partial_t^2f=c^2F''(x-ct),\qquad
+\partial_x^2f=F''(x-ct),\qquad \Box f=0.
+$$
+
+The primes here mean derivatives of $F$ with respect to its one argument. We have verified a traveling-wave solution. The curved-spacetime formula above includes the metric and volume factors needed to state the same scalar-field law in other geometries. Other kinds of field can have different equations; this is the scalar example.
+
+A tensor with two upper indices has a second basis index to correct. Contracting one with the derivative index does not remove the other. Thus
 
 $$
 \nabla_\mu T^{\mu\nu}
@@ -2127,13 +2190,13 @@ $$
 +\Gamma^\nu{}_{\mu\lambda}T^{\mu\lambda}.
 $$
 
-Leaving off the last term does not create a clever conservation law. It creates an incorrect equation.
+The volume factor accounts for the contracted index $\mu$; the final connection term accounts for the remaining index $\nu$. We will need both terms when differentiating the stress-energy tensor in Chapter 11.
 
 <a id="chapter-7"></a>
 
 ## 7. The connection: how neighboring laboratories compare directions
 
-### 7.1 Parallel transport is an instruction, not a picture
+### 7.1 Parallel transport along a path
 
 Take a curve $x^\mu(\lambda)$ and a vector $V^\mu(\lambda)$ attached to its points. The covariant derivative along the curve is
 
@@ -2150,7 +2213,7 @@ $$
 \frac{DV^\mu}{d\lambda}=0.
 $$
 
-Given an initial vector and a smooth specified path, this is a linear first-order differential equation with a locally unique solution. Parallel transport is therefore an operational prescription: solve this equation while moving along the path.
+To carry this out, choose the vector at the starting point and rearrange the equation as $dV^\mu/d\lambda=-\Gamma^\mu{}_{\alpha\beta}\dot x^\alpha V^\beta$. The known path and connection tell us how to update its components at each step. This is a linear first-order differential equation, with a locally unique solution for smooth coefficients. In a flat Cartesian basis, $\Gamma=0$ and the components simply stay constant.
 
 If the transported vector is the tangent to the path itself, the prescription becomes
 
@@ -2160,7 +2223,7 @@ $$
 
 which is the affinely parameterized geodesic equation. A geodesic transports its own direction. This supplies a precise meaning of “as straight as possible” that does not require drawing the curve inside a larger space.
 
-A freely falling, torque-free gyroscope provides a physical way to think about parallel transport of orientation along a timelike geodesic. An accelerated observer needs a related rule, Fermi–Walker transport, if the goal is a nonrotating frame. Simply saying “a gyroscope always follows the connection” skips the effect of the observer's acceleration.
+An ideal gyroscope carried by a freely falling laboratory gives a physical example: its spin orientation is parallel transported when no torque acts on it. This example assumes free fall as well as the absence of torque.
 
 ### 7.2 Two requirements that select ordinary GR's connection
 
@@ -2197,11 +2260,11 @@ $$
 =\Gamma^\rho{}_{\mu\nu}-\Gamma^\rho{}_{\nu\mu}.
 $$
 
-Torsion-free therefore means symmetry of the lower two connection indices **in a coordinate basis**. In a noncoordinate frame, noncommuting basis vectors contribute to torsion too. Forgetting that qualification becomes painful when tetrads appear later.
+Torsion-free therefore means symmetry of the lower two connection indices **in a coordinate basis**. For a frame whose basis fields have a nonzero bracket, that bracket must still be subtracted. Symmetry of the connection coefficients alone would then be a different condition.
 
-An intuitive distinction is useful. Curvature concerns a mismatch in transported orientation around a loop. Torsion concerns a different infinitesimal closure defect associated with transporting directions to build a parallelogram. Neither is “how twisty a coordinate grid looks.” Torsion-free is a structural choice of ordinary GR, not a mathematical necessity for all theories of gravity.
+The flat-plane example above already has $[\partial_x,x\partial_y]=\partial_y$. Its ordinary Euclidean connection nevertheless has zero torsion: $\nabla_{\partial_x}(x\partial_y)=\partial_y$ and $\nabla_{x\partial_y}\partial_x=0$, so the bracket cancels their difference. A nonzero bracket of chosen fields therefore does not imply torsion. We choose zero torsion in ordinary GR; other gravity theories can make a different choice.
 
-### 7.3 Deriving the Christoffel symbols instead of receiving them as a curse
+### 7.3 Deriving the Christoffel symbols
 
 Expand metric compatibility:
 
@@ -2249,7 +2312,7 @@ $$
 
 This proves uniqueness: any torsion-free, metric-compatible connection must have these coefficients. Existence follows by checking the formula: it is symmetric in $\mu\nu$, substitution gives $\nabla g=0$, and the chain rule supplies the connection transformation law below. There is exactly one such connection for every smooth nondegenerate metric.
 
-The formula is a three-term balancing act. Two terms measure changes in the metric along the directions we are comparing; the third prevents counting the same metric variation twice in the wrong slot. It is less mysterious when remembered as the solution of three linear equations.
+This is the same formula that appeared in the free-particle equation in §5.5. It now has a second interpretation: it is the comparison rule that preserves inner products and has zero torsion.
 
 Metric compatibility also gives $\nabla_\lambda g^{\mu\nu}=0$. Differentiate $g^{\mu\alpha}g_{\alpha\nu}=\delta^\mu{}_{\nu}$, use the product rule and $\nabla g=0$, and multiply by the inverse metric. Raising and lowering indices now commute with covariant differentiation.
 
@@ -2272,9 +2335,18 @@ $$
 
 The first line resembles the transformation of a $(1,2)$ tensor. The second line is the essential extra term.
 
-You can derive it directly from $e'_\nu=(\partial x^\lambda/\partial x'^\nu)e_\lambda$. Apply $\nabla_{e'_\mu}$ and use the product rule. One contribution differentiates the old basis through the old connection; the other differentiates the coordinate-dependent coefficient multiplying that basis. Express the result in the primed basis. These are exactly the two lines above.
+Here is the product-rule step. Using the Jacobian $J$ and its inverse $K$ from Chapter 6, write $e'_\nu=K^\lambda{}_{\nu}e_\lambda$. Then
 
-The inhomogeneous term cancels the unwanted second derivatives in $\partial'_\mu V'^\alpha$. A connection's coefficients are non-tensorial for a very good reason: they must repair a non-tensorial partial derivative.
+$$
+\nabla_{e'_\mu}e'_\nu
+=K^\sigma{}_{\mu}(\partial_\sigma K^\rho{}_{\nu})e_\rho
++K^\sigma{}_{\mu}K^\lambda{}_{\nu}
+\Gamma^\rho{}_{\sigma\lambda}e_\rho.
+$$
+
+Replace $e_\rho$ by $J^\alpha{}_{\rho}e'_\alpha$ and read off its coefficient. The second term gives the first line of the transformation law. In the first term, $K^\sigma{}_{\mu}\partial_\sigma=\partial'_\mu$ differentiates $K^\rho{}_{\nu}=\partial x^\rho/\partial x'^\nu$, producing the second derivative on the second line.
+
+The inhomogeneous term cancels the unwanted second derivatives in $\partial'_\mu V'^\alpha$. This cancellation makes the complete covariant derivative transform as a tensor.
 
 A tensor that vanishes in one coordinate system at a point vanishes in every coordinate system there. Connection coefficients can vanish at a point in one system and be nonzero in another. They therefore cannot themselves be a tensor measuring gravitational curvature.
 
@@ -2282,9 +2354,9 @@ Nevertheless, the **difference of two connections** is a tensor. If $A^\rho{}_{\
 
 For additional derivations of connections and their relation to transport, see [Sean Carroll's university lecture notes, “Curvature”](https://ned.ipac.caltech.edu/level5/March01/Carroll3/Carroll3.html). The calculations here use the conventions stated in this book.
 
-### 7.5 A complete flat-space laboratory: polar coordinates
+### 7.5 Five calculations on the polar plane
 
-Let us make the distinction between connection and curvature impossible to forget. Work on an ordinary Euclidean plane away from the origin, with
+We can test the formulas by describing a flat plane in polar coordinates. The geometry is already known, so each calculation has an independent Cartesian check. Away from the origin, use
 
 $$
 x=r\cos\theta,\qquad y=r\sin\theta,
@@ -2298,7 +2370,16 @@ $$
 
 Thus $g_{rr}=1$, $g_{\theta\theta}=r^2$, and $g^{\theta\theta}=r^{-2}$. An angular coordinate is dimensionless, so $g_{\theta\theta}$ has units of length squared. Metric components need not all have the same units when their coordinates do not.
 
-Only one metric derivative is nonzero: $\partial_rg_{\theta\theta}=2r$. The Christoffel formula gives
+Only one metric derivative is nonzero: $\partial_rg_{\theta\theta}=2r$. For example, set the three free indices in the Christoffel formula to $r,\theta,\theta$. Since the inverse metric is diagonal, only its $rr$ entry contributes:
+
+$$
+\Gamma^r{}_{\theta\theta}
+=\frac12g^{rr}\left(2\partial_\theta g_{r\theta}
+-\partial_rg_{\theta\theta}\right)
+=\frac12(0-2r)=-r.
+$$
+
+Doing the same substitution for the other indices gives the complete nonzero list:
 
 $$
 \Gamma^r{}_{\theta\theta}=-r,
@@ -2334,7 +2415,7 @@ $$
 \end{aligned}
 $$
 
-The connection has successfully acquitted the kitchen-pointing vector.
+Every covariant derivative vanishes, agreeing with the constant Cartesian vector. Here $V^\theta=-\sin\theta/r$, while the unit-frame component in §6.1 was $V^{\hat\theta}=-\sin\theta$. The factor $1/r$ comes from the length of the angular coordinate basis vector.
 
 **Experiment 2: compatibility with a visibly changing metric.** Although $\partial_rg_{\theta\theta}=2r$,
 
@@ -2356,7 +2437,7 @@ $$
 
 where dots mean differentiation with respect to an affine parameter. The second equation says $d(r^2\dot\theta)/d\lambda=0$.
 
-Now describe the Cartesian straight line $x=v\lambda$, $y=b$, with $b>0$. Then
+For a concrete check, choose $\lambda$ to be time and take the Cartesian motion $x=v\lambda$, $y=b$, with constant speed $v>0$ and fixed distance $b>0$. Transforming to polar coordinates and differentiating gives
 
 $$
 r=\sqrt{v^2\lambda^2+b^2},
@@ -2378,16 +2459,16 @@ $$
 
 These are the equations for a rotating pair of components. The vector remains fixed in Cartesian space while the polar basis rotates underneath it. After $2\pi$, the components return to their initial values. The loop causes no net geometric rotation.
 
-**Experiment 5: the familiar polar Laplacian.** Since $\sqrt{g}=r$,
+**Experiment 5: divergence and the Laplacian.** Since $\sqrt{g}=r$,
 
 $$
 \nabla_aV^a
 =\frac1r\partial_r(rV^r)+\partial_\theta V^\theta,
 $$
 
-where $a$ here ranges over the two coordinates. The physical angular component in a unit-length basis is $V^{\hat\theta}=rV^\theta$. Replacing $V^\theta$ by $V^{\hat\theta}/r$ gives the familiar angular divergence term $r^{-1}\partial_\theta V^{\hat\theta}$.
+where $a$ here ranges over the two coordinates. The physical angular component in a unit-length basis is $V^{\hat\theta}=rV^\theta$. Replacing $V^\theta$ by $V^{\hat\theta}/r$ gives the angular divergence term $r^{-1}\partial_\theta V^{\hat\theta}$. The factor $1/r$ converts change per angular increment into change per physical length.
 
-Likewise,
+In this spatial geometry, the divergence of a gradient is called the **Laplacian**, written $\Delta$. Insert $(\operatorname{grad}f)^r=\partial_rf$ and $(\operatorname{grad}f)^\theta=r^{-2}\partial_\theta f$ into the divergence formula:
 
 $$
 \Delta f
@@ -2395,7 +2476,14 @@ $$
 +\frac1{r^2}\partial_\theta^2f.
 $$
 
-The additional terms in undergraduate vector calculus are connection effects. They were differential geometry wearing a cheaper jacket.
+Check it on $f=r^2=x^2+y^2$. The polar formula gives
+
+$$
+\Delta f=\frac1r\partial_r(r\,2r)
++\frac1{r^2}\partial_\theta^2(r^2)=4.
+$$
+
+In Cartesian coordinates, the same operator is $\partial_x^2+\partial_y^2$, giving $2+2=4$. Using just $\partial_r^2f+\partial_\theta^2f$ would instead give 2. The metric and volume factors are needed for the two calculations to agree.
 
 We have nonzero Christoffel symbols, changing basis components, and coordinate acceleration, all in flat space. The final experiment—checking the curvature itself—belongs to the next chapter.
 

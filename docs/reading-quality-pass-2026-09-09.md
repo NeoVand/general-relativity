@@ -38,8 +38,16 @@ Chapter 5 calculates the accelerating chart's differentials, clock rates, and pr
 
 Opening the AI study companion had a separate title-size override that made the chapter heading larger. Its heading now gets smaller as the available reading width shrinks; desktop screenshots confirm the first paragraph remains visible.
 
+## Chapters 6 and 7
+
+The derivative chapter now starts with a fixed eastward arrow in explicitly defined rotating unit axes. The product rule shows the complete cancellation before the general coordinate transformation. The connection definition then builds on that example instead of introducing a second, unrelated currency analogy. The chapter derives the determinant identity used in divergence and verifies a traveling scalar wave by differentiating its profile.
+
+Chapter 7 adds the actual basis-change product rule for the connection transformation, evaluates one Christoffel coefficient step by step, and tests the polar Laplacian against the same scalar function in Cartesian coordinates. Torsion is checked on the already taught pair of noncommuting flat-plane fields. Premature vocabulary in the chapter decks and the Chapter 5 check is removed. The early rotating-basis formulas are stacked to fit a phone screen.
+
+The geometry models and controls passed 20 viewport/theme combinations, with independent checks of basis cancellation and transport. All 37 lessons again passed 680 interactions, including persistence and prerequisite round trips. Desktop and mobile reading-position restoration passed.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 6.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 8.

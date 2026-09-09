@@ -75,7 +75,7 @@ export const foundationLessons=[
  variants:[number('compose-boosts',s`Compose two boosts in the same direction, each with $v/c=3/5$. Find the resulting velocity divided by $c$.`,15/17,'',s`Use $(\beta_1+\beta_2)/(1+\beta_1\beta_2)$.`,s`$(6/5)/(34/25)=15/17\simeq0.88235$.`)],sources:[gr],takeaway:'Rapidity adds for collinear boosts because it is the parameter of a hyperbola-preserving transformation.'
 },
 {
- id:'flows-that-do-not-commute',chapter:7,after:"7.2 Two requirements that select ordinary GR's connection",title:'Do the two moves in the other order',question:'Can two perfectly smooth directions disagree about where a tiny rectangle closes?',provides:['lie-bracket'],
+ id:'flows-that-do-not-commute',chapter:7,after:"7.2 Two requirements that select ordinary GR's connection",title:'Do the two moves in the other order',question:'If moving right changes how fast you can move upward, does the order of the moves matter?',provides:['lie-bracket'],
  intuition:s`Let $X$ say “move right at unit speed” and $Y$ say “move upward at a speed equal to your x coordinate.” Moving right first changes the speed of the upward move. Reversing the order reaches a different point. This is a property of the two vector fields, even on a flat plane.`,
  steps:[
  step('Treat a vector field as differentiation',s`For a scalar function $f$, write $Xf=X^a\partial_af$. Define the bracket by the difference between two ordered derivatives. Expanding with the product rule cancels the terms with second derivatives of $f$.`,s`[X,Y]f=X(Yf)-Y(Xf),\quad [X,Y]^a=X^b\partial_bY^a-Y^b\partial_bX^a.`, 'Ordinary mixed partial derivatives of a smooth scalar commute in a coordinate chart.'),

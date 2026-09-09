@@ -46,12 +46,12 @@
   },
   "5": {
     "title": "Free fall and the straightest path",
-    "deck": "The equivalence principle becomes a calculation: let a whole trajectory vary and see what survives.",
+    "deck": "Compare clocks and accelerometers, then derive a free particle’s motion from its elapsed proper time.",
     "question": "What equation replaces Newton’s force law for free fall?",
     "payoff": "Follow the worldline-action derivation of the geodesic equation.",
     "takeaway": "A geodesic transports its own tangent without turning. For a timelike free particle it also makes proper time stationary.",
     "check": "Does stationary proper time always mean a global maximum?",
-    "answer": "No. A timelike geodesic is locally maximizing on sufficiently short segments. Global claims need additional conditions, including the absence of relevant conjugate points."
+    "answer": "No. A timelike geodesic locally maximizes proper time on sufficiently short segments. A longer free-fall route need not record the greatest time of all possible connecting routes. Chapter 22 studies the conditions for this distinction."
   },
   "6": {
     "title": "Differentiating vector fields",
@@ -64,7 +64,7 @@
   },
   "7": {
     "title": "The connection and parallel transport",
-    "deck": "Two simple requirements determine the connection: preserve the metric and introduce no torsion.",
+    "deck": "Carry a direction along a path. Derive the comparison rule from the metric, then test it on a flat plane.",
     "question": "Where does the Christoffel formula come from?",
     "payoff": "Derive the Levi-Civita connection and test it on the flat polar plane.",
     "takeaway": "The connection is a rule for comparison. Its coefficients can be nonzero because the coordinate basis moves.",

@@ -36,5 +36,11 @@
   "5.6": "5-6-affine-parameters-the-route-and-the-speed-of-the-pen",
   "5.7": "5-7-null-curves-zero-clock-time-does-not-mean-zero-geometry",
   "5.8": "5-8-check-that-the-action-remembers-newton",
-  "5.9": "5-9-tides-the-gravity-a-falling-laboratory-cannot-remove"
+  "5.9": "5-9-tides-the-gravity-a-falling-laboratory-cannot-remove",
+  "6.1": "6-1-the-crime-an-innocent-derivative-produces-a-coordinate-dependent-answer",
+  "6.4": "6-4-the-scalar-trap-one-derivative-is-easy-two-derivatives-are-not",
+  "6.5": "6-5-divergence-and-the-hidden-accounting-of-physical-volume",
+  "7.1": "7-1-parallel-transport-is-an-instruction-not-a-picture",
+  "7.3": "7-3-deriving-the-christoffel-symbols-instead-of-receiving-them-as-a-curse",
+  "7.5": "7-5-a-complete-flat-space-laboratory-polar-coordinates"
 }
