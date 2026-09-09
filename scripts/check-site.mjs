@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import katex from 'katex';
 import {math,semanticTex} from './math-system.mjs';
 import {mathPalette} from './math-palette.mjs';
+import {parseHTML} from 'linkedom';
 const root=path.resolve('site');
 const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));
 const report=JSON.parse(fs.readFileSync('site/build-report.json'));
@@ -20,6 +21,11 @@ for(const [file,html]of cache){
  assert.ok(html.includes('<html lang="en">'),file);
  assert.ok(!html.includes('GRMATHTOKEN'),`Unresolved math in ${file}`);
  assert.ok(!html.includes('class="math-error"'),`Invalid math in ${file}`);
+ // A skipped equation never creates a KaTeX error node. Inspect the actual
+ // reading text, including closed proofs, for delimiters and unrendered TeX.
+ const {document}=parseHTML(html),reading=document.querySelector('main').cloneNode(true);
+ reading.querySelectorAll('script,style,.katex,svg,.narration-script,[data-tex]').forEach(node=>node.remove());
+ assert.ok(!/\$|\\(?:[a-zA-Z]+|[([])/.test(reading.textContent),`Raw mathematical source in ${file}`);
  const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(ids.length,new Set(ids).size,`Duplicate IDs in ${file}`);
  for(const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)){

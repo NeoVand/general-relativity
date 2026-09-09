@@ -68,6 +68,7 @@ function render(source,page){
  const math=[];
  let masked=source.replace(/\$\$([\s\S]+?)\$\$/g,(_,tex)=>stash(tex,true));
  masked=masked.replace(/(?<!\\)\$([^$\n]+?)\$/g,(_,tex)=>stash(tex,false));
+ if(/(?<!\\)\$/.test(masked))throw new Error(`${page.id}: unmatched math delimiter; use $$ for a displayed equation spanning lines.`);
  function stash(tex,display){
    const key=`GRMATHTOKEN${math.length}END`;
    try{math.push(typeset(tex.trim(),display,page.chapter));}
