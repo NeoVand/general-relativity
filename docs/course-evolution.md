@@ -7,7 +7,7 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 - [x] Scientific definitions, curvature notation, repeated Cartan derivation (F01, F02, F09).
 - [x] Accessible progressive enhancement and reliable scene visibility checks (F05).
 - [x] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
-- [ ] Reading-position restoration and honest route status (F06, F08).
+- [x] Reading-position restoration and honest route status (F06; route-end wording in F08).
 - [ ] Skill-based prerequisites, diagnostic entry, and the missing foundations.
 - [ ] Independent practice, misconceptions, and curved/matter capstones throughout the core.
 - [ ] Shared scientific records, accountable tutor workflows, evaluation corpus, and critical narration.
@@ -45,3 +45,9 @@ The review and its reproduction evidence are preserved as the implementation bas
 - Version 2 notebooks retain attempt histories, item identities, and assistance at the time of each attempt. Later errors or opened solutions preserve earlier evidence. The notebook exposes the history and distinguishes an independent check from mastery.
 - Version 1 imports conservatively preserve aggregate evidence and retain an automatic migration backup. Import previews allow cancellation and conflict selection, restore route/depth/visuals, and merge attempts without duplicate entries.
 - Verified: pure migration/history/parser checks, fresh-browser recovery and cancellation, desktop/mobile interaction checks for every choice and both examples in every bridge, static site checks, and Svelte diagnostics.
+
+### Continuity while following a question
+
+- Browser history stores a nearby content anchor, its viewport offset, and reading focus. Back, Forward, and reload restore their own positions after enhancement and fonts load, including visits without a fragment identifier.
+- The final chapter says “End of route.” Position in a route does not claim course completion or mastery.
+- Verified: desktop/mobile Back, Forward, reload and focus restoration; route navigation; existing navigation keyboard and responsive checks.

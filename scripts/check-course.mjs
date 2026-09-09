@@ -93,7 +93,7 @@ async function verifyRouteNavigation(page,width){
   const links=turn.locator('a');
   assert.equal(await links.first().getAttribute('href'),href(item.previous),`${width}/${item.route}/${item.chapter}: previous follows route`);
   assert.equal(await links.last().getAttribute('href'),href(item.next),`${width}/${item.route}/${item.chapter}: next follows route`);
-  if(item.next==='course-map')assert.match(await links.last().innerText(),/ROUTE COMPLETE\s+Choose what comes next/);
+  if(item.next==='course-map')assert.match(await links.last().innerText(),/END OF ROUTE\s+Choose what comes next/);
   if(!item.outside){
    assert.ok((await links.first().innerText()).includes(publishedCourse.chapterTitles[item.previous]),'route navigation uses the chapter title');
    assert.equal(await page.locator('[data-route-next] a').getAttribute('href'),href(item.next),'primary footer and compass agree');

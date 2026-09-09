@@ -39,12 +39,12 @@ function updateRoute(){
  document.querySelectorAll('[data-route]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.route===route.id)));
  document.querySelectorAll('[data-chapter-node]').forEach(el=>el.hidden=!route.chapters.includes(Number(el.dataset.chapterNode)));
  document.querySelectorAll('.route-status').forEach(el=>el.textContent=`${route.chapters.length} chapters · ${route.title}. Every required chapter is included.`);
- document.querySelectorAll('[data-route-next]').forEach(el=>el.innerHTML=index<0?'':next!==undefined?`<a href="chapter-${next}.html">Next on your route: Chapter ${String(next).padStart(2,'0')} →</a>`:'<a href="course-map.html">Route complete · choose what comes next →</a>');
+ document.querySelectorAll('[data-route-next]').forEach(el=>el.innerHTML=index<0?'':next!==undefined?`<a href="chapter-${next}.html">Next on your route: Chapter ${String(next).padStart(2,'0')} →</a>`:'<a href="course-map.html">End of route · choose what comes next →</a>');
  document.querySelectorAll('.page-turn').forEach(nav=>{
   if(!originalPageTurns.has(nav))originalPageTurns.set(nav,nav.innerHTML);
   nav.dataset.routeNavigation=index<0?'book':route.id;
   if(index<0){nav.innerHTML=originalPageTurns.get(nav);return;}
-  nav.innerHTML=(previous===undefined?'<span></span>':`<a href="chapter-${previous}.html"><small>← PREVIOUS ON YOUR ROUTE</small>${escape(chapterTitle(previous))}</a>`)+(next===undefined?'<a href="course-map.html"><small>ROUTE COMPLETE</small>Choose what comes next →</a>':`<a href="chapter-${next}.html"><small>NEXT ON YOUR ROUTE →</small>${escape(chapterTitle(next))}</a>`);
+  nav.innerHTML=(previous===undefined?'<span></span>':`<a href="chapter-${previous}.html"><small>← PREVIOUS ON YOUR ROUTE</small>${escape(chapterTitle(previous))}</a>`)+(next===undefined?'<a href="course-map.html"><small>END OF ROUTE</small>Choose what comes next →</a>':`<a href="chapter-${next}.html"><small>NEXT ON YOUR ROUTE →</small>${escape(chapterTitle(next))}</a>`);
  });
  document.querySelectorAll('[data-evidence-for]').forEach(el=>el.textContent=evidenceLabel(state.evidence[el.dataset.evidenceFor]));
 }
