@@ -1,4 +1,5 @@
 import katex from 'katex';
+import {timeSymbol, scientificSymbols} from '../web/scientific-symbols.js';
 
 // Color mathematical objects, never characters inside prose, command names,
 // units or operator names. Indices retain their usual neutral ink.
@@ -104,11 +105,12 @@ export function semanticTex(tex, context='', inspect=false) {
    }
    if(role==='matter')key=token==='T'&&count===2&&/^(11|12|13|14|15|16|17|18|19|20|22|23|24)$/.test(chapter)?'stress-energy':token==='\\rho'?'density':null;
    if(role==='observer'){
-    if(token==='\\tau'&&!parts.some(p=>/(?:^|[^a-z])E(?:$|[^a-z])/i.test(p.value)))key='proper-time';
+    if(token==='\\tau')key=timeSymbol(chapter,parts);
     if(token==='u'&&count===1&&!powerOnly&&/^(3|4|5|9|10|11|12|15|17|19|22|24)$/.test(chapter))key='four-velocity';
    }
    if(token==='\\Lambda'&&!indexed&&/^(1|12|15|19)$/.test(chapter))key='cosmological-constant';
   }
+  if(token==='\\tau'){const identity=timeSymbol(chapter,parts);role=identity?scientificSymbols[identity].role:null;}
   const classes=[role&&`math-${role}`,variant&&`math-detail-${variant}`,key&&`symbol-${key}`].filter(Boolean).join(' ');
   result+=classes?`{\\htmlClass{${classes}}{${token}}}`:token;i=end;
  }

@@ -40,7 +40,13 @@ const examples=[
  [String.raw`T^{\alpha\beta}{}_{\gamma}`,6,[]],
  [String.raw`T_{\mu\nu}`,6,[]],
  [String.raw`T^\rho{}_{\mu\nu}`,21,[]],
- [String.raw`\tau_E`,22,[]],
+ [String.raw`\tau_E`,22,['euclidean-time']],
+ [String.raw`\tau_{\rm plot}`,17,['plot-time']],
+ [String.raw`\tau_{\mathrm{plot}}`,17,['plot-time']],
+ [String.raw`\tau_{\rm plot}`,3,[]],
+ [String.raw`\tau_{unknown}`,17,[]],
+ [String.raw`\tau`,3,['proper-time']],
+ [String.raw`\tau`,2,[]],
 ];
 for(const [tex,chapter,expected] of examples)assert.deepEqual(classified(tex,chapter),expected,`${tex} in Chapter ${chapter}`);
 
@@ -66,6 +72,14 @@ page.on('pageerror',error=>errors.push(error.message));
 page.on('request',request=>{if(/(?:openai|elevenlabs)\.(?:com|io)/i.test(new URL(request.url()).hostname))providerRequests.push(request.url())});
 fs.mkdirSync('qa',{recursive:true});
 try{
+ await page.goto(new URL('chapter-17.html#horizon-directions-step-3',base).href);
+ await page.waitForFunction(()=>document.body.dataset.readingReady==='true');
+ const plotting=page.locator('#horizon-directions-step-3 .symbol-plot-time').first();
+ await plotting.scrollIntoViewIfNeeded();
+ await plotting.click();
+ assert.equal(await page.locator('#symbol-card').getAttribute('aria-label'),'Dimensionless plotting time');
+ assert.match(await page.locator('#symbol-card').innerText(),/not the elapsed time/);
+ assert.equal(await page.locator('#horizon-directions .symbol-proper-time').count(),0);
  for(const [width,height] of [[1440,1000],[390,844]]){
   await page.setViewportSize({width,height});
   await page.goto(new URL('chapter-9.html',base).href);

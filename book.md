@@ -2912,14 +2912,16 @@ $$
 
 Use $G_NM_\oplus=3.9860\times10^{14}\,\mathrm{m^3/s^2}$ and $R_\oplus=6.371\times10^6\,\mathrm m$. For $\ell=1\,\mathrm m$, this gives $\Delta a_r\simeq3.08\times10^{-6}\,\mathrm{m/s^2}$. It is a few millionths of a metre per second squared, not the approximately $9.8\,\mathrm{m/s^2}$ of a supported laboratory's accelerometer.
 
-In an orthonormal frame, the magnitude of the corresponding radial curvature component is
+In the static orthonormal frame outside Earth, the magnitude of the corresponding radial curvature component is
 
 $$
-\mathcal K=\frac{2G_NM_\oplus}{c^2R_\oplus^3}
+\mathcal R_{\rm tidal}=\frac{2G_NM_\oplus}{c^2R_\oplus^3}
 \simeq3.43\times10^{-23}\,\mathrm{m^{-2}}.
 $$
 
-The associated scale $\mathcal K^{-1/2}\simeq1.71\times10^{11}\,\mathrm m$ is about 1.14 astronomical units. This is a scale constructed from one component, not a literal circle into which four-dimensional spacetime bends. Notice the units: restoring $c^2$ gives a relative acceleration **per unit separation**, and multiplying by $\ell$ gives the acceleration difference. Curvature by itself does not determine the weight of one supported object.
+The associated scale $\mathcal R_{\rm tidal}^{-1/2}\simeq1.71\times10^{11}\,\mathrm m$ is about 1.14 astronomical units. This is a scale constructed from one component, not a literal circle into which four-dimensional spacetime bends. Notice the units: restoring $c^2$ gives a relative acceleration **per unit separation**, and multiplying by $\ell$ gives the acceleration difference. Curvature by itself does not determine the weight of one supported object.
+
+This symbol names a component magnitude, with units of inverse length squared. The Kretschmann scalar retains the symbol $\mathcal K$ and has units of inverse length to the fourth power. In Schwarzschild spacetime, $\mathcal K=12\mathcal R_{\rm tidal}^2$ for this radial component; the length $\mathcal K^{-1/4}$ differs from $\mathcal R_{\rm tidal}^{-1/2}$ by the factor $12^{-1/4}$.
 
 Here is a second useful conversion. Earth's geometrized mass is $G_NM_\oplus/c^2\simeq4.44\,\mathrm{mm}$, and its Schwarzschild radius is twice that, about $8.87\,\mathrm{mm}$. These are compactness scales. Earth is not a black hole: its actual radius is hundreds of millions of times larger.
 
@@ -6489,40 +6491,40 @@ Here $\varepsilon_{0123}=+1$ is the internal alternating symbol and $\mathcal R^
 
 The payoff is larger than elegant notation. We now understand a metric formulation, a moving-laboratory formulation, and a gauge-connection formulation as different ways of asking the same questions about comparison, motion, and curvature.
 
-### 21.8 Cartan on a sphere: every wedge product earns its sign
+### 21.8 Your turn: make the sphere calculation work harder
 
-Use the round two-sphere metric $ds^2=a^2(d\theta^2+\sin^2\theta\,d\phi^2)$. Its orthonormal coframe is
-
-$$
-e^1=a\,d\theta,\qquad e^2=a\sin\theta\,d\phi.
-$$
-
-First differentiate. Because $d(d\theta)=d(d\phi)=0$,
+The plane and sphere calculations in Section 21.5 used the same structure equations. Recover that method on a surface of revolution,
 
 $$
-de^1=0,\qquad de^2=a\cos\theta\,d\theta\wedge d\phi.
+ds^2=du^2+f(u)^2d\phi^2,\qquad f(u)>0.
 $$
 
-Metric compatibility in this Euclidean two-dimensional frame gives $\omega^1{}_2=-\omega^2{}_1$. The torsion-free equation for $e^2$ is $de^2+\omega^2{}_1\wedge e^1=0$. Choose $\omega^2{}_1=\cos\theta\,d\phi$. Then its contribution is
+Here $u$ and $f$ have units of length and $\phi$ is dimensionless. Choose $e^1=du$ and $e^2=f(u)d\phi$. Before calculating, predict what distinguishes a rotating coframe from a genuinely curved surface.
+
+**Try independently.** Find the connection one-forms and $\mathcal R^1{}_2$. Obtain the Gaussian curvature. Then compare $f(u)=u$, $f(u)=a\sin(u/a)$, and $f(u)=a\sinh(u/a)$ on regular patches. Finally, explain what happens for a cylinder with constant $f=a$.
+
+<details class="checkpoint"><summary>Compare your derivation, including the signs</summary>
+
+Differentiation gives $de^2=f'(u)du\wedge d\phi$. The torsion-free equation requires
 
 $$
-\omega^2{}_1\wedge e^1
-=a\cos\theta\,d\phi\wedge d\theta
-=-a\cos\theta\,d\theta\wedge d\phi,
+\omega^2{}_1=f'(u)d\phi,\qquad
+\omega^1{}_2=-f'(u)d\phi.
 $$
 
-which cancels $de^2$. The other structure equation also holds: $\omega^1{}_2\wedge e^2$ vanishes because it contains $d\phi\wedge d\phi$.
-
-Now compute curvature. In this two-dimensional orthonormal frame the matrix-product contribution to $\Omega^1{}_2$ vanishes because the diagonal connection entries vanish. Therefore
+The diagonal connection entries vanish, so the matrix wedge term in this curvature component vanishes. Therefore
 
 $$
-\Omega^1{}_2=d\omega^1{}_2
-=d(-\cos\theta\,d\phi)
-=\sin\theta\,d\theta\wedge d\phi
-=\frac1{a^2}e^1\wedge e^2.
+\mathcal R^1{}_2=-f''(u)du\wedge d\phi
+=-\frac{f''(u)}{f(u)}e^1\wedge e^2,
+\qquad K=-\frac{f''}{f},\qquad R=2K.
 $$
 
-The Gaussian curvature is $K=1/a^2$, so the scalar curvature is $R=2/a^2$, agreeing with Chapter 8's coordinate calculation. The sphere's curvature is positive even though this coframe fails at the poles. That failure belongs to the angular chart and frame, not to the smooth sphere. This worked calculation applies the structure equations developed above; it is not a new assumption about gravity.
+The plane has $K=0$ despite a nonzero connection in this polar coframe. The sphere has $K=1/a^2$; the hyperbolic metric has $K=-1/a^2$. The cylinder has $K=0$: its bending in an ambient three-dimensional picture is extrinsic and does not create intrinsic Gaussian curvature. The condition $f>0$ defines the regular coordinate/frame patch, not a claim that every excluded endpoint is a physical singularity.
+
+</details>
+
+**Change the problem.** If $f(u)=a\exp(u/a)$, determine $K$ and decide whether a nonzero connection alone would have told you its sign. Check the answer by differentiating $f$ twice, without referring to the three cases above.
 
 <a id="chapter-22"></a>
 

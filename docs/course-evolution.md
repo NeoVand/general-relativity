@@ -4,7 +4,7 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 
 ## Work sequence
 
-- [ ] Scientific definitions, curvature notation, repeated Cartan derivation (F01, F02, F09).
+- [x] Scientific definitions, curvature notation, repeated Cartan derivation (F01, F02, F09).
 - [ ] Accessible progressive enhancement and reliable scene visibility checks (F05).
 - [ ] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
 - [ ] Reading-position restoration and honest route status (F06, F08).
@@ -23,3 +23,10 @@ Automated and expert review can verify software behavior and specified scientifi
 ## Completed increments
 
 The review and its reproduction evidence are preserved as the implementation baseline.
+
+### Scientific identities and active Cartan practice
+
+- Shared authored symbol records distinguish clock time, Euclidean time, and dimensionless horizon plotting time. Unrecognized time labels remain unclassified.
+- Earth tidal component and Kretschmann scalar now have distinct symbols and an explicit dimensional relationship.
+- The second sphere derivation is now a surface-of-revolution calculation with plane, sphere, hyperbolic, and cylindrical checks.
+- Verified: reader build, static site/numerical checks, Svelte diagnostics, and 38 symbol-classification cases plus live desktop/mobile inspector tests.
