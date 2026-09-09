@@ -1,0 +1,540 @@
+{
+  "scope": "Chapters 0–24; generated HTML in site/, before browser interaction.",
+  "method": "Count displayed equation wrappers and approximate prose words before each outermost visual in document order. Exclude headers, controls, narration duplicates, mathematical glyphs, explicitly hidden content, closed disclosures, and visual internals. Record legacy .lab calculators separately. CSS-only visibility and runtime-inserted content are not simulated. Counts measure placement, not prerequisite difficulty or visual quality.",
+  "inputSha256": "b9a507a52a0311fe35f84b0b5dcc7ba737a6536bec76f82210466954dc42c51d",
+  "chapters": [
+    {
+      "chapter": 0,
+      "title": "Measurements and motion",
+      "proseWords": 2943,
+      "displayEquations": 29,
+      "visuals": [
+        {
+          "id": "figure-local-prediction",
+          "type": "static",
+          "section": "0.1 A derivative is a local prediction",
+          "proseWordsBefore": 370,
+          "displayEquationsBefore": 3
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 1,
+      "title": "Gravity, free fall, and clocks",
+      "proseWords": 2031,
+      "displayEquations": 4,
+      "visuals": [
+        {
+          "id": "figure-free-fall-comparison",
+          "type": "static",
+          "section": "1.1 Why does a falling scale read zero?",
+          "proseWordsBefore": 434,
+          "displayEquationsBefore": 0
+        },
+        {
+          "id": "scene-earth",
+          "type": "interactive",
+          "section": "1.10 Watching neighboring objects fall",
+          "proseWordsBefore": 1712,
+          "displayEquationsBefore": 1
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 2,
+      "title": "Vectors, covectors, and tensors",
+      "proseWords": 2124,
+      "displayEquations": 35,
+      "visuals": [
+        {
+          "id": "scene-covector",
+          "type": "interactive",
+          "section": "2.4 Changing coordinates with the chain rule",
+          "proseWordsBefore": 1104,
+          "displayEquationsBefore": 22
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 3,
+      "title": "What a clock actually measures",
+      "proseWords": 2983,
+      "displayEquations": 38,
+      "visuals": [
+        {
+          "id": "scene-cone",
+          "type": "interactive",
+          "section": "3.3 The spacetime interval",
+          "proseWordsBefore": 1172,
+          "displayEquationsBefore": 12
+        },
+        {
+          "id": "figure-twin-worldlines",
+          "type": "static",
+          "section": "3.5 Two clocks meet again",
+          "proseWordsBefore": 1960,
+          "displayEquationsBefore": 21
+        }
+      ],
+      "otherLabs": [
+        {
+          "title": "Two routes. One reunion.",
+          "section": "3.8 Proper acceleration",
+          "proseWordsBefore": 2959,
+          "displayEquationsBefore": 38
+        }
+      ]
+    },
+    {
+      "chapter": 4,
+      "title": "Manifolds, maps, and metrics",
+      "proseWords": 3545,
+      "displayEquations": 50,
+      "visuals": [
+        {
+          "id": "manifold-chart-experience",
+          "type": "interactive",
+          "section": "4.1 A manifold is a place where local coordinates work",
+          "proseWordsBefore": 675,
+          "displayEquationsBefore": 7
+        },
+        {
+          "id": "visual-two-maps-one-sphere",
+          "type": "interactive",
+          "section": "4.1 A manifold is a place where local coordinates work",
+          "proseWordsBefore": 1050,
+          "displayEquationsBefore": 11
+        },
+        {
+          "id": "visual-a-metric-converts-labels-into-lengths",
+          "type": "interactive",
+          "section": "4.5 A complete metric calculation in flat polar coordinates",
+          "proseWordsBefore": 2375,
+          "displayEquationsBefore": 29
+        },
+        {
+          "id": "figure-metric-volume",
+          "type": "static",
+          "section": "4.7 Measuring volume with a determinant",
+          "proseWordsBefore": 3206,
+          "displayEquationsBefore": 47
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 5,
+      "title": "Free fall and the straightest path",
+      "proseWords": 2632,
+      "displayEquations": 35,
+      "visuals": [
+        {
+          "id": "figure-rindler-worldlines",
+          "type": "static",
+          "section": "5.3 An accelerating laboratory in flat spacetime",
+          "proseWordsBefore": 786,
+          "displayEquationsBefore": 8
+        },
+        {
+          "id": "figure-affine-parameter",
+          "type": "static",
+          "section": "5.6 Affine parameters",
+          "proseWordsBefore": 1648,
+          "displayEquationsBefore": 22
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 6,
+      "title": "Differentiating vector fields",
+      "proseWords": 1790,
+      "displayEquations": 29,
+      "visuals": [
+        {
+          "id": "visual-differentiate-the-arrow-not-its-address",
+          "type": "interactive",
+          "section": "6.2 What a derivative must be able to compare",
+          "proseWordsBefore": 897,
+          "displayEquationsBefore": 13
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 7,
+      "title": "The connection and parallel transport",
+      "proseWords": 1575,
+      "displayEquations": 29,
+      "visuals": [
+        {
+          "id": "figure-connection-cancellation",
+          "type": "static",
+          "section": "7.5 Five calculations on the polar plane",
+          "proseWordsBefore": 1554,
+          "displayEquationsBefore": 29
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 8,
+      "title": "Curvature and parallel transport",
+      "proseWords": 2642,
+      "displayEquations": 29,
+      "visuals": [
+        {
+          "id": "visual-carry-a-direction-without-turning-it",
+          "type": "interactive",
+          "section": "8.3 Parallel transport around a loop",
+          "proseWordsBefore": 1413,
+          "displayEquationsBefore": 13
+        },
+        {
+          "id": "curvature-pair-explorer",
+          "type": "interactive",
+          "section": "8.5 Counting independent curvature components",
+          "proseWordsBefore": 1846,
+          "displayEquationsBefore": 19
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 9,
+      "title": "Ricci, Weyl, and Einstein curvature",
+      "proseWords": 1549,
+      "displayEquations": 23,
+      "visuals": [
+        {
+          "id": "curvature-cloud-explorer",
+          "type": "interactive",
+          "section": "9.3 Separating Ricci and Weyl curvature",
+          "proseWordsBefore": 975,
+          "displayEquationsBefore": 14
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 10,
+      "title": "Tides: curvature you can measure",
+      "proseWords": 2596,
+      "displayEquations": 29,
+      "visuals": [
+        {
+          "id": "scene-tides",
+          "type": "interactive",
+          "section": "10.5 Recovering Newtonian tides",
+          "proseWordsBefore": 957,
+          "displayEquationsBefore": 19
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 11,
+      "title": "Energy, momentum, and stress",
+      "proseWords": 2395,
+      "displayEquations": 43,
+      "visuals": [
+        {
+          "id": "figure-stress-energy",
+          "type": "static",
+          "section": "11.1 Energy density and momentum flux",
+          "proseWordsBefore": 398,
+          "displayEquationsBefore": 7
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 12,
+      "title": "Einstein’s field equation",
+      "proseWords": 1751,
+      "displayEquations": 33,
+      "visuals": [
+        {
+          "id": "figure-einstein-anatomy",
+          "type": "static",
+          "section": "12.1 Reading the field equation",
+          "proseWordsBefore": 293,
+          "displayEquationsBefore": 2
+        },
+        {
+          "id": "figure-newtonian-calibration",
+          "type": "static",
+          "section": "12.4 Matching Newtonian gravity",
+          "proseWordsBefore": 1242,
+          "displayEquationsBefore": 27
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 13,
+      "title": "Variations and stationary action",
+      "proseWords": 1756,
+      "displayEquations": 38,
+      "visuals": [
+        {
+          "id": "figure-action-variation",
+          "type": "static",
+          "section": "13.1 From an ordinary derivative to a variation",
+          "proseWordsBefore": 325,
+          "displayEquationsBefore": 7
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 14,
+      "title": "Deriving Einstein’s equation",
+      "proseWords": 1980,
+      "displayEquations": 37,
+      "visuals": [
+        {
+          "id": "figure-boundary-variation",
+          "type": "static",
+          "section": "14.6 What fixed boundary values leave free",
+          "proseWordsBefore": 1030,
+          "displayEquationsBefore": 19
+        },
+        {
+          "id": "figure-action-product-rule",
+          "type": "static",
+          "section": "14.7 Induced geometry and the Gibbons–Hawking–York term",
+          "proseWordsBefore": 1414,
+          "displayEquationsBefore": 30
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 15,
+      "title": "Symmetry and conservation",
+      "proseWords": 3057,
+      "displayEquations": 42,
+      "visuals": [
+        {
+          "id": "figure-killing-energy",
+          "type": "static",
+          "section": "15.4 Conserved charges from Killing vectors",
+          "proseWordsBefore": 1803,
+          "displayEquationsBefore": 29
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 16,
+      "title": "Clocks, light, and Mercury",
+      "proseWords": 3053,
+      "displayEquations": 44,
+      "visuals": [
+        {
+          "id": "figure-light-bending",
+          "type": "static",
+          "section": "16.4 Deriving the bending of light",
+          "proseWordsBefore": 1047,
+          "displayEquationsBefore": 20
+        },
+        {
+          "id": "orbital-precession-experience",
+          "type": "interactive",
+          "section": "16.6 Mercury and the rotation of an orbit",
+          "proseWordsBefore": 2312,
+          "displayEquationsBefore": 38
+        },
+        {
+          "id": "figure-gps-clocks",
+          "type": "static",
+          "section": "16.7 GPS: calculate the competing clock effects",
+          "proseWordsBefore": 2534,
+          "displayEquationsBefore": 40
+        },
+        {
+          "id": "figure-tossed-clock",
+          "type": "static",
+          "section": "16.8 A tossed clock can age more than the clock on the shelf",
+          "proseWordsBefore": 2685,
+          "displayEquationsBefore": 43
+        }
+      ],
+      "otherLabs": [
+        {
+          "title": "When does an orbiting clock gain time?",
+          "section": "16.9 Gyroscopes and a compact experimental map",
+          "proseWordsBefore": 3029,
+          "displayEquationsBefore": 44
+        }
+      ]
+    },
+    {
+      "chapter": 17,
+      "title": "Black holes: horizons and orbits",
+      "proseWords": 3083,
+      "displayEquations": 41,
+      "visuals": [
+        {
+          "id": "scene-embedding",
+          "type": "interactive",
+          "section": "17.2 Testing the horizon with curvature",
+          "proseWordsBefore": 568,
+          "displayEquationsBefore": 9
+        },
+        {
+          "id": "visual-horizon-directions",
+          "type": "interactive",
+          "section": "17.3 Repairing the horizon with Eddington–Finkelstein coordinates",
+          "proseWordsBefore": 1226,
+          "displayEquationsBefore": 17
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 18,
+      "title": "Gravitational waves",
+      "proseWords": 2985,
+      "displayEquations": 50,
+      "visuals": [
+        {
+          "id": "scene-wave",
+          "type": "interactive",
+          "section": "18.4 What a detector measures in TT coordinates",
+          "proseWordsBefore": 1435,
+          "displayEquationsBefore": 27
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 19,
+      "title": "Cosmology: an expanding universe",
+      "proseWords": 3059,
+      "displayEquations": 41,
+      "visuals": [
+        {
+          "id": "scene-expansion",
+          "type": "interactive",
+          "section": "19.1 A metric for uniform expansion",
+          "proseWordsBefore": 397,
+          "displayEquationsBefore": 3
+        },
+        {
+          "id": "figure-cosmic-horizons",
+          "type": "static",
+          "section": "19.8 The Hubble radius and the two cosmological horizons",
+          "proseWordsBefore": 1898,
+          "displayEquationsBefore": 33
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 20,
+      "title": "Initial data and numerical relativity",
+      "proseWords": 2423,
+      "displayEquations": 29,
+      "visuals": [
+        {
+          "id": "scene-slices",
+          "type": "interactive",
+          "section": "20.2 Spatial slices, lapse, and shift",
+          "proseWordsBefore": 317,
+          "displayEquationsBefore": 3
+        },
+        {
+          "id": "figure-constraint-count",
+          "type": "static",
+          "section": "20.6 Evolution and the two physical degrees of freedom",
+          "proseWordsBefore": 1491,
+          "displayEquationsBefore": 24
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 21,
+      "title": "Tetrads and differential forms",
+      "proseWords": 2107,
+      "displayEquations": 40,
+      "visuals": [
+        {
+          "id": "figure-cartan-comparison",
+          "type": "static",
+          "section": "21.5 Worked example: a rotating frame can have connection without curvature",
+          "proseWordsBefore": 1431,
+          "displayEquationsBefore": 38
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 22,
+      "title": "Singularities and black-hole thermodynamics",
+      "proseWords": 4183,
+      "displayEquations": 44,
+      "visuals": [
+        {
+          "id": "figure-focusing-caustic",
+          "type": "static",
+          "section": "22.5 Trapped surfaces and what Penrose actually proved",
+          "proseWordsBefore": 1437,
+          "displayEquationsBefore": 19
+        },
+        {
+          "id": "figure-horizon-area",
+          "type": "static",
+          "section": "22.9 Classical area increase, with the assumptions visible",
+          "proseWordsBefore": 3760,
+          "displayEquationsBefore": 44
+        },
+        {
+          "id": "figure-page-curve",
+          "type": "static",
+          "section": "22.10 The black-hole information question",
+          "proseWordsBefore": 4160,
+          "displayEquationsBefore": 44
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 23,
+      "title": "General relativity as an effective theory",
+      "proseWords": 3095,
+      "displayEquations": 16,
+      "visuals": [
+        {
+          "id": "figure-effective-theory",
+          "type": "static",
+          "section": "23.2 Why unresolved heavy physics becomes derivatives",
+          "proseWordsBefore": 871,
+          "displayEquationsBefore": 5
+        }
+      ],
+      "otherLabs": []
+    },
+    {
+      "chapter": 24,
+      "title": "From geometry to measurements",
+      "proseWords": 1910,
+      "displayEquations": 18,
+      "visuals": [
+        {
+          "id": "figure-calculation-map",
+          "type": "static",
+          "section": "24.1 From a spacetime model to a measurement",
+          "proseWordsBefore": 183,
+          "displayEquationsBefore": 0
+        }
+      ],
+      "otherLabs": []
+    }
+  ]
+}
