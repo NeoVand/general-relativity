@@ -62,12 +62,25 @@ export function orbitFallback(state = initial('precession')) {
   return svg('A Newtonian ellipse and a relativistic perihelion advance, with exaggerated rotation explicitly reported in the controls.',body);
 }
 
-function domainView(state) {
-  const R = SURFACE_CHART_RADIUS, other = state.chart === 'a' ? 'b' : 'a', to = ([u,v]) => [150+73*u,150-73*v], otherOrigin = surfaceToChart([...chartDefinitions[other].center,0],state.chart), q = surfaceToChart(state.point,state.chart);
-  let body = `<circle class="gx-domain-fill" cx="150" cy="150" r="${73*R}"/>`;
+export function domainLayout(chart = 'a') {
+  const other = chart === 'a' ? 'b' : 'a';
+  const otherOrigin = surfaceToChart(chartDefinitions[other].center, chart);
+  const center = otherOrigin.map(x => x / 2);
+  // Frame both disks about their midpoint. Their separation is unchanged by
+  // switching charts, so the scale stays fixed even as the axes rotate.
+  const scale = 150 / (SURFACE_CHART_RADIUS + Math.hypot(...otherOrigin) / 2 + .18);
+  return {
+    other, otherOrigin, scale,
+    to: ([u, v]) => [150 + scale * (u - center[0]), 150 - scale * (v - center[1])],
+    from: ([x, y]) => [center[0] + (x - 150) / scale, center[1] + (150 - y) / scale],
+  };
+}
+export function domainView(state = initial('manifold')) {
+  const R = SURFACE_CHART_RADIUS, {other, otherOrigin, scale, to} = domainLayout(state.chart), q = surfaceToChart(state.point,state.chart);
+  let body = circ(to([0,0]),scale*R,`gx-domain-fill gx-domain-fill-${state.chart}`);
   for(let k=-4;k<=4;k++){const t=k*.27,ext=Math.sqrt(R*R-t*t);body+=poly([to([t,-ext]),to([t,ext])],'gx-domain-grid')+poly([to([-ext,t]),to([ext,t])],'gx-domain-grid');}
-  body += `<circle class="gx-domain-other gx-chart-${other}" cx="${to(otherOrigin)[0]}" cy="${to(otherOrigin)[1]}" r="${73*R}"/>`;
-  body += `<circle class="gx-domain-rim gx-chart-${state.chart}" cx="150" cy="150" r="${73*R}"/>`+circ(to(q),6,'gx-point');
+  body += circ(to(otherOrigin),scale*R,`gx-domain-other gx-chart-${other}`);
+  body += circ(to([0,0]),scale*R,`gx-domain-rim gx-chart-${state.chart}`)+circ(to(q),6,'gx-point');
   return svg('Flat coordinate domain. Drag or click to move the point. Arrow keys change its coordinates; Home selects the overlap.',body,'0 0 300 300');
 }
 function publish(instance, interacted = false) {
@@ -140,7 +153,7 @@ function mount(el) {
   function animationState(){previousTime=0;cancelAnimationFrame(raf);raf=0;if(visible&&!document.hidden&&state.playing)raf=requestAnimationFrame(animate);}
   function movePoint(u,v){const length=Math.hypot(u,v),max=SURFACE_CHART_RADIUS*.975;if(length>max){u*=max/length;v*=max/length;}state.point=chartToSurface(u,v,state.chart).slice(0,2);update({user:true});}
   if(domain){
-    function pointer(event){const box=domain.getBoundingClientRect(),size=Math.min(box.width,box.height),left=box.left+(box.width-size)/2,top=box.top+(box.height-size)/2;movePoint(((event.clientX-left)/size*300-150)/73,(150-(event.clientY-top)/size*300)/73);}
+    function pointer(event){const box=domain.getBoundingClientRect(),size=Math.min(box.width,box.height),left=box.left+(box.width-size)/2,top=box.top+(box.height-size)/2;movePoint(...domainLayout(state.chart).from([(event.clientX-left)/size*300,(event.clientY-top)/size*300]));}
     domain.addEventListener('pointerdown',event=>{domain.setPointerCapture(event.pointerId);pointer(event);},{signal:abort.signal});
     domain.addEventListener('pointermove',event=>{if(domain.hasPointerCapture(event.pointerId))pointer(event);},{signal:abort.signal});
     domain.addEventListener('keydown',event=>{const q=surfaceToChart(state.point,state.chart),step=event.shiftKey?.2:.06;if(event.key==='Home'){state.point=[.12,.28];update({user:true});event.preventDefault();return;}const d={ArrowLeft:[-step,0],ArrowRight:[step,0],ArrowUp:[0,step],ArrowDown:[0,-step]}[event.key];if(d){movePoint(q[0]+d[0],q[1]+d[1]);event.preventDefault();}},{signal:abort.signal});
@@ -188,16 +201,78 @@ async function initSpatial(instance) {
   function ball(radius,role,parent=dynamic){const obj=new THREE.Mesh(new THREE.SphereGeometry(radius,28,20),material(role,'standard'));parent.add(obj);return obj;}
   function disposeGroup(group){group.traverse(o=>{o.geometry?.dispose();for(const mat of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean)){materials.delete(mat);mat.dispose();}});group.clear();}
   scene.add(new THREE.HemisphereLight(0xffffff,0x7b8da0,1.5));const light=new THREE.DirectionalLight(0xffffff,2.4);light.position.set(-3,-4,7);scene.add(light);const rim=new THREE.DirectionalLight(0x99dfee,.8);rim.position.set(4,2,2);scene.add(rim);
-  let surface,patchMeshes={},point,normalPlane,newtonPoint,grPoint,grTrail,periGroup,newtonOrbit,patchGrid;
-  function graphGeometry(radius,center=[0,0],resolution=70){const positions=[],indices=[];for(let j=0;j<=resolution;j++){const r=radius*j/resolution;for(let i=0;i<=128;i++){const t=i*TAU/128,x=center[0]+r*Math.cos(t),y=center[1]+r*Math.sin(t);positions.push(x,y,surfaceHeight(x,y));}}for(let j=0;j<resolution;j++)for(let i=0;i<128;i++){const a=j*129+i,b=a+129;indices.push(a,b,a+1,b,b+1,a+1);}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setIndex(indices);g.computeVertexNormals();return g;}
+  let surface,surfaceUniforms,point,normalPlane,newtonPoint,grPoint,grTrail,periGroup,newtonOrbit;
+  function graphGeometry(radius,resolution=70){
+    const positions=[],normals=[],indices=[];
+    for(let j=0;j<=resolution;j++)for(let i=0;i<=128;i++){
+      const r=radius*j/resolution,t=i*TAU/128,x=r*Math.cos(t),y=r*Math.sin(t);
+      const [hx,hy]=surfaceDerivatives(x,y),length=Math.hypot(hx,hy,1);
+      positions.push(x,y,surfaceHeight(x,y));normals.push(-hx/length,-hy/length,1/length);
+    }
+    for(let j=0;j<resolution;j++)for(let i=0;i<128;i++){const a=j*129+i,b=a+129;indices.push(a,b,a+1,b,b+1,a+1);}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));g.setIndex(indices);return g;
+  }
   if(type==='manifold'){
     const mat=material('surface','standard');
-    // Fade only the finite viewing window; it is not a physical boundary.
-    mat.roughness=.46;mat.transparent=true;mat.depthWrite=true;mat.onBeforeCompile=shader=>{shader.vertexShader='varying vec3 gxPosition;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ngxPosition=position;');shader.fragmentShader='varying vec3 gxPosition;\n'+shader.fragmentShader.replace('#include <dithering_fragment>','gl_FragColor.a *= 1.0-smoothstep(2.32,2.46,length(gxPosition.xy));\n#include <dithering_fragment>');};
+    surfaceUniforms={
+      gxChartA:{value:new THREE.Color()},gxChartB:{value:new THREE.Color()},gxInk:{value:new THREE.Color()},
+      gxSelectedB:{value:0},gxRadius:{value:SURFACE_CHART_RADIUS},
+      gxOriginA:{value:new THREE.Vector2(...chartDefinitions.a.center)},
+      gxOriginB:{value:new THREE.Vector2(...chartDefinitions.b.center)},
+      gxAngleB:{value:chartDefinitions.b.angle},
+    };
+    // Paint the patches, rims and grid onto a single surface. Separate meshes
+    // and lifted polylines competed for depth and flickered during rotation.
+    // Derivatives keep strokes about a pixel wide and fade an unresolved grid
+    // at grazing angles rather than letting it alias into a flashing pattern.
+    mat.roughness=.85;mat.metalness=0;mat.transparent=true;mat.depthWrite=true;
+    mat.onBeforeCompile=shader=>{
+      Object.assign(shader.uniforms,surfaceUniforms);
+      shader.vertexShader='varying vec2 gxPosition;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ngxPosition=position.xy;');
+      shader.fragmentShader=`
+        varying vec2 gxPosition;
+        uniform vec3 gxChartA, gxChartB, gxInk;
+        uniform vec2 gxOriginA, gxOriginB;
+        uniform float gxSelectedB, gxRadius, gxAngleB;
+        float gxGrid(vec2 q, float spacing) {
+          vec2 pixel=max(fwidth(q),vec2(0.00001));
+          vec2 distance=abs(q-spacing*floor(q/spacing+0.5));
+          vec2 stroke=1.0-smoothstep(0.2*pixel,0.9*pixel,distance);
+          stroke*=1.0-smoothstep(vec2(0.2*spacing),vec2(0.45*spacing),pixel);
+          return max(stroke.x,stroke.y);
+        }
+        float gxDisk(vec2 q) {
+          float r=length(q),pixel=max(fwidth(r),0.00001);
+          return 1.0-smoothstep(gxRadius-pixel,gxRadius+pixel,r);
+        }
+        float gxRim(vec2 q, float selected) {
+          float r=length(q),pixel=max(fwidth(r),0.00001);
+          float ring=1.0-smoothstep(0.4*pixel,1.4*pixel,abs(r-gxRadius));
+          float wave=cos(18.0*atan(q.y,q.x)),edge=max(fwidth(wave),0.0001);
+          float dash=smoothstep(-edge,edge,wave+0.15);
+          return ring*mix(dash*0.65,1.0,selected);
+        }
+      `+shader.fragmentShader.replace('#include <color_fragment>',`
+        #include <color_fragment>
+        vec2 qA=gxPosition-gxOriginA, offsetB=gxPosition-gxOriginB;
+        float c=cos(gxAngleB),s=sin(gxAngleB);
+        vec2 qB=vec2(c*offsetB.x+s*offsetB.y,-s*offsetB.x+c*offsetB.y);
+        float diskA=gxDisk(qA),diskB=gxDisk(qB);
+        vec3 chosen=mix(gxChartA,gxChartB,gxSelectedB);
+        vec3 other=mix(gxChartB,gxChartA,gxSelectedB);
+        float chosenDisk=mix(diskA,diskB,gxSelectedB),otherDisk=mix(diskB,diskA,gxSelectedB);
+        diffuseColor.rgb=mix(diffuseColor.rgb,gxInk,0.065*gxGrid(gxPosition,0.4)*(1.0-chosenDisk));
+        diffuseColor.rgb=mix(diffuseColor.rgb,other,0.12*otherDisk);
+        diffuseColor.rgb=mix(diffuseColor.rgb,chosen,0.32*chosenDisk);
+        float grid=mix(gxGrid(qA,0.27),gxGrid(qB,0.27),gxSelectedB);
+        diffuseColor.rgb=mix(diffuseColor.rgb,chosen,0.65*grid*chosenDisk);
+        diffuseColor.rgb=mix(diffuseColor.rgb,gxChartA,0.9*gxRim(qA,1.0-gxSelectedB));
+        diffuseColor.rgb=mix(diffuseColor.rgb,gxChartB,0.9*gxRim(qB,gxSelectedB));
+      `).replace('#include <dithering_fragment>',
+        'gl_FragColor.a *= 1.0-smoothstep(2.32,2.46,length(gxPosition));\n#include <dithering_fragment>');
+    };
     surface=new THREE.Mesh(graphGeometry(2.46),mat);base.add(surface);
-    for(let k=-5;k<=5;k++){const t=k*.4,extent=Math.sqrt(2.30**2-t*t);for(const transpose of [false,true])line(Array.from({length:81},(_,i)=>{const a=-extent+2*extent*i/80,[x,y]=transpose?[t,a]:[a,t];return [x,y,surfaceHeight(x,y)+.006];}),'ink',.13);}
-    for(const chart of ['a','b']){const mesh=new THREE.Mesh(graphGeometry(SURFACE_CHART_RADIUS,chartDefinitions[chart].center,36),material(chart==='a'?'geometry':'transport','standard',.38));mesh.position.z=.012;mesh.material.depthWrite=false;mesh.renderOrder=2;patchMeshes[chart]=mesh;base.add(mesh);line(sampleCircle(SURFACE_CHART_RADIUS,(u,v)=>{const p=chartToSurface(u,v,chart);p[2]+=.026;return p;}),chart==='a'?'geometry':'transport',.9);}
-    patchGrid=new THREE.Group();base.add(patchGrid);point=ball(.072,'observer');
+    point=ball(.072,'observer');
     normalPlane=new THREE.Mesh(new THREE.PlaneGeometry(.88,.88),material('observer','basic',.2));normalPlane.material.depthWrite=false;dynamic.add(normalPlane);
     normalPlane.add(new THREE.LineSegments(new THREE.EdgesGeometry(normalPlane.geometry),material('observer','line',.85)));
   }else{
@@ -206,13 +281,12 @@ async function initSpatial(instance) {
     line([[-2.0,0,-.025],[2.0,0,-.025]],'line',.4);line([[0,-1.75,-.025],[0,1.75,-.025]],'line',.4);
   }
   const label=document.createElement('span');label.className='gx-space-label';label.innerHTML=m(type==='manifold'?'P':String.raw`M_\odot`,type==='manifold'?'observer':'matter');stage.append(label);
-  function theme(){const css=getComputedStyle(el);for(const mat of materials)mat.color.set(mat.userData.role==='surface'?(document.documentElement.dataset.theme==='dark'?'#3d626d':'#9fbfbc'):css.getPropertyValue('--'+mat.userData.role).trim()||({geometry:'#007c78',transport:'#275dc5',observer:'#bb365d',matter:'#a25e00','figure-tint':'#dce9e4',line:'#d9dddf'}[mat.userData.role])||'#354951');render();}
+  function theme(){const css=getComputedStyle(el);for(const mat of materials)mat.color.set(mat.userData.role==='surface'?(document.documentElement.dataset.theme==='dark'?'#3d626d':'#9fbfbc'):css.getPropertyValue('--'+mat.userData.role).trim()||({geometry:'#007c78',transport:'#275dc5',observer:'#bb365d',matter:'#a25e00','figure-tint':'#dce9e4',line:'#d9dddf'}[mat.userData.role])||'#354951');if(surfaceUniforms){surfaceUniforms.gxChartA.value.set(css.getPropertyValue('--geometry').trim());surfaceUniforms.gxChartB.value.set(css.getPropertyValue('--transport').trim());surfaceUniforms.gxInk.value.set(css.getPropertyValue('--ink').trim());}render();}
   function setLine(obj,points){obj.geometry.dispose();obj.geometry=new THREE.BufferGeometry().setFromPoints(points.map(V));}
-  let lastChart='',lastE=-1,lastCycle=-1,lastMagnification=-1;
+  let lastE=-1,lastCycle=-1,lastMagnification=-1;
   function update(){
     if(type==='manifold'){
-      if(lastChart!==state.chart){lastChart=state.chart;disposeGroup(patchGrid);for(let k=-4;k<=4;k++){const t=k*.27,extent=Math.sqrt(SURFACE_CHART_RADIUS**2-t*t);for(const transpose of [false,true])line(Array.from({length:65},(_,i)=>{const s=-extent+2*extent*i/64,p=chartToSurface(...(transpose?[t,s]:[s,t]),state.chart);p[2]+=.029;return p;}),state.chart==='a'?'geometry':'transport',.6,patchGrid);}theme();}
-      patchMeshes.a.material.opacity=state.chart==='a'?.47:.15;patchMeshes.b.material.opacity=state.chart==='b'?.47:.15;
+      surfaceUniforms.gxSelectedB.value=state.chart==='b'?1:0;
       const p=surfacePoint(...state.point);point.position.set(...p);point.position.z+=.045;const [hx,hy]=surfaceDerivatives(...state.point);normalPlane.position.set(...p);normalPlane.position.z+=.017;normalPlane.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),new THREE.Vector3(-hx,-hy,1).normalize());normalPlane.visible=state.tangent;
     }else{
       const frame=orbitAt(state.cycles,state.eccentricity,state.magnification),n=Math.floor(state.cycles);newtonPoint.position.set(...frame.newton);grPoint.position.set(...frame.relativistic);newtonPoint.position.z=.025;grPoint.position.z=.045;
@@ -222,16 +296,39 @@ async function initSpatial(instance) {
     }
     render();
   }
-  function render(){if(disposed||!available)return;renderer.render(scene,camera);const p=(type==='manifold'?point.position.clone():new THREE.Vector3(0,0,.16)).project(camera);label.style.left=`${(p.x+1)/2*stage.clientWidth}px`;label.style.top=`${(1-p.y)/2*stage.clientHeight-20}px`;label.hidden=p.z>1;}
+  function render(){if(disposed||!available)return;renderer.render(scene,camera);stage.dataset.cameraDistance=String(camera.position.distanceTo(controls.target));const p=(type==='manifold'?point.position.clone():new THREE.Vector3(0,0,.16)).project(camera);label.style.left=`${(p.x+1)/2*stage.clientWidth}px`;label.style.top=`${(1-p.y)/2*stage.clientHeight-20}px`;label.hidden=p.z>1;}
   function fitOrbit(){if(type!=='precession')return;const direction=camera.position.clone().sub(controls.target).normalize(),distance=(1+state.eccentricity+.13)*1.10/(Math.tan(camera.fov*Math.PI/360)*Math.min(1,camera.aspect));camera.position.copy(direction.multiplyScalar(distance).add(controls.target));controls.update();}
-  const surfaceEnvelope=type==='manifold'?Array.from({length:129},(_,i)=>surfacePoint(2.46*Math.cos(i*TAU/128),2.46*Math.sin(i*TAU/128))):[];
-  let fitting=false;
-  function fitSurface(){if(type!=='manifold'||fitting)return;fitting=true;const direction=camera.position.clone().sub(controls.target).normalize();let distance=camera.position.distanceTo(controls.target);for(let i=0;i<8;i++){camera.lookAt(controls.target);camera.updateMatrixWorld();const extent=Math.max(...surfaceEnvelope.map(p=>{const q=V(p).project(camera);return Math.max(Math.abs(q.x)/.90,Math.abs(q.y)/.86);}));if(extent>.97&&extent<1.01)break;distance*=extent>1?Math.min(1.5,extent*1.01):Math.max(.75,extent);camera.position.copy(direction.clone().multiplyScalar(distance).add(controls.target));}controls.update();fitting=false;}
+  // A sphere about the orbit target encloses every surface triangle in every
+  // orientation. Fit it only when the viewport changes or the view is reset;
+  // fitting the current silhouette on each drag makes the surface "breathe".
+  let surfaceRadius=0;
+  if(surface){const positions=surface.geometry.attributes.position,p=new THREE.Vector3();for(let i=0;i<positions.count;i++)surfaceRadius=Math.max(surfaceRadius,p.fromBufferAttribute(positions,i).distanceTo(controls.target));}
+  function fitSurface(){
+    if(type!=='manifold')return;
+    const halfAngle=Math.atan(Math.tan(camera.fov*Math.PI/360)*Math.min(1,camera.aspect));
+    const distance=surfaceRadius*1.1/Math.sin(halfAngle);
+    const direction=camera.position.clone().sub(controls.target).normalize();
+    camera.position.copy(direction.multiplyScalar(distance).add(controls.target));controls.update();
+  }
   function resize(){const rect=el.querySelector('.gx-stage').getBoundingClientRect();camera.aspect=rect.width/rect.height;camera.updateProjectionMatrix();if(type==='precession')fitOrbit();else fitSurface();renderer.setSize(rect.width,rect.height,false);render();}
-  controls.addEventListener('change',()=>{fitSurface();render();});const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(el.querySelector('.gx-stage'));
+  controls.addEventListener('change',render);const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(el.querySelector('.gx-stage'));
   const themeObserver=new MutationObserver(theme);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']});
   function reset(){camera.position.set(...position);controls.target.set(...origin);fitOrbit();fitSurface();controls.update();render();}
-  function keyboard(event){const step=.12,spherical=new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));if(event.key==='Home'){reset();event.preventDefault();return;}if(event.key==='ArrowLeft')spherical.theta-=step;else if(event.key==='ArrowRight')spherical.theta+=step;else if(event.key==='ArrowUp')spherical.phi-=step;else if(event.key==='ArrowDown')spherical.phi+=step;else return;event.preventDefault();spherical.phi=Math.max(.15,Math.min(Math.PI*.77,spherical.phi));camera.position.copy(new THREE.Vector3().setFromSpherical(spherical).add(controls.target));controls.update();render();}
+  function keyboard(event){
+    if(event.key==='Home'){reset();event.preventDefault();return;}
+    if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+    event.preventDefault();
+    // Spherical uses Y-up; OrbitControls uses camera.up (Z-up here).
+    const toY=new THREE.Quaternion().setFromUnitVectors(camera.up,new THREE.Vector3(0,1,0));
+    const spherical=new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target).applyQuaternion(toY));
+    const step=.12;
+    if(event.key==='ArrowLeft')spherical.theta-=step;
+    if(event.key==='ArrowRight')spherical.theta+=step;
+    if(event.key==='ArrowUp')spherical.phi-=step;
+    if(event.key==='ArrowDown')spherical.phi+=step;
+    spherical.phi=Math.max(controls.minPolarAngle,Math.min(controls.maxPolarAngle,spherical.phi));
+    camera.position.copy(new THREE.Vector3().setFromSpherical(spherical).applyQuaternion(toY.invert()).add(controls.target));controls.update();render();
+  }
   stage.addEventListener('keydown',keyboard);
   function lost(event){event.preventDefault();available=false;stage.hidden=true;const fallback=el.querySelector('.gx-fallback');fallback.hidden=false;fallback.innerHTML=type==='manifold'?manifoldFallback(state):orbitFallback(state);el.dataset.spatialReady='fallback';}
   canvas.addEventListener('webglcontextlost',lost);

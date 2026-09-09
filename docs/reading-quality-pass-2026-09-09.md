@@ -128,6 +128,16 @@ The broader scene check also reproduced a stalled wave animation after resizing.
 
 Follow-up verification passed: all 37 pages' mathematical source checks; 74 page/viewport combinations with measured checkpoint spacing; 36 scene/theme/viewport combinations; the independent cone sightlines and elevated-camera interactions; geometry, curvature, and visual-lesson suites; Svelte checks; and prerequisite order. Screenshots of the repaired formula, panels, animation credit, and elevated cone are in `review-evidence/2026-09-09/rendering-polish/`.
 
+## Follow-up: Chapter 4 chart experiment
+
+The flat map clipped the other chart twice: its fixed origin placed part of the circle outside the SVG, and its container cropped the entire drawing to a circle. Both chart disks now fit around their shared midpoint with a margin. Their scale stays the same when changing charts. Pointer input uses the inverse of the drawing transform, so clicking or dragging still selects the point under the cursor. The initial map is also present in the static HTML. The hint explains the solid and dashed rims, and the chart and tangent controls use the same colors as their drawings.
+
+The surface camera previously fitted the projected silhouette on every OrbitControls change. That continuously altered its distance as the user rotated the view. The camera now fits a sphere enclosing the surface, then keeps its distance during rotation. It refits only on a viewport resize or reset. Keyboard rotation now uses the same vertical axis and angular limits as mouse rotation.
+
+The surface, colored patches, and grid previously used separate tessellations with small vertical offsets. They competed for depth, especially at shallow angles. The patches, outlines, and coordinate grid are now drawn in one surface material. Screen-space derivatives antialias the strokes and fade grid lines when their spacing becomes too small to resolve. The selected patch shows its own coordinate grid, without the background grid crossing through it. Analytical surface normals remove the radial seam and center inconsistencies in the old averaged normals.
+
+Regression checks cover both complete circle rims, constant scale between charts, pointer-to-coordinate agreement in the actual browser, mouse and keyboard camera-distance invariance, a nearly complete rotation, and views from grazing angles and underneath. The shared precession experience is included in the desktop/phone and light/dark suite, along with animation, offscreen pause, mathematical readouts, shader errors, and WebGL fallback. Visual evidence is in `review-evidence/2026-09-09/manifold-polish/`.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
