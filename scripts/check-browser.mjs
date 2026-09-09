@@ -42,7 +42,8 @@ try{
  await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-desktop.png'});
  await page.locator('#menu-button').click();
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
- assert.ok(await page.locator('#book-navigation').evaluate(e=>e.inert));
+ assert.equal(await page.locator('#book-navigation').evaluate(e=>e.inert),false,'Collapsed desktop rail remains usable');
+ assert.ok(await page.locator('.nav-children').evaluateAll(items=>items.every(e=>e.inert)));
  await go(new URL('chapter-6.html',base).href);
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
  assert.equal(await page.locator('main .color-key').count(),0);

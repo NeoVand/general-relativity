@@ -134,3 +134,81 @@ html[data-theme=dark] .theme-moon{display:none}
 #search-popover{width:100%;max-width:none;top:calc(100% + 8px)}
 @media(max-width:800px){:root{--header-height:64px}.sidebar.open{box-shadow:18px 24px 60px #0002}}
 @media print{.page{padding-top:0}}
+
+/* Navigation follows Terminalvibes' anchored icon rail: one tree, two widths. */
+:root{--sidebar-width:292px;--nav-rail-width:64px;--sidebar-space:var(--sidebar-width);--nav-motion:200ms}
+html[data-sidebar=collapsed]{--sidebar-space:var(--nav-rail-width)}
+.page{transition:margin-left var(--nav-motion) ease-out}
+.topbar{padding-left:10px}
+#menu-button{width:44px;height:44px;padding:11px}
+#menu-button span{display:none}
+.sidebar{width:var(--sidebar-space);padding:0;overflow:hidden;visibility:visible;transform:none;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(28px) saturate(145%);-webkit-backdrop-filter:blur(28px) saturate(145%);transition:width var(--nav-motion) ease-out;box-shadow:none}
+html[data-sidebar=collapsed] .sidebar{visibility:visible;transform:none}
+.nav-inner{width:var(--sidebar-width);height:100%;display:flex;flex-direction:column;padding:12px 0 14px}
+.nav-home{flex-shrink:0;margin-bottom:15px}
+.nav-scroll{flex:1;min-height:0;overflow:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:transparent transparent;scroll-padding:12px 0}
+.nav-scroll{mask-image:linear-gradient(to bottom,#000 calc(100% - 14px),transparent)}
+.nav-scroll:hover,.nav-scroll:focus-within{scrollbar-color:color-mix(in srgb,var(--muted) 25%,transparent) transparent}
+.nav-group{--nav-accent:var(--geometry);margin:0 0 6px}
+.nav-group-toggle,.sidebar .nav-destination{display:flex;align-items:center;gap:0;width:calc(100% - 16px);min-height:48px;margin:0 8px;padding:0;border:0;border-radius:12px;background:transparent;color:var(--muted);text-align:left;text-decoration:none;font:inherit;cursor:pointer}
+.nav-group-toggle:hover,.sidebar .nav-destination:hover{background:color-mix(in srgb,var(--ink) 4%,transparent);color:var(--ink)}
+.nav-glyph{flex:0 0 48px;height:44px;display:grid;place-items:center}
+.nav-glyph .hugeicon{width:21px;height:21px}
+.nav-copy{display:block;flex:1;min-width:0;font-size:13px;font-weight:650;line-height:1.5;white-space:nowrap;opacity:1;visibility:visible;transition:opacity var(--nav-motion) ease-out,visibility 0s}
+.nav-copy small{display:block;font-size:10px;font-weight:450;color:var(--muted);margin-top:1px}
+.nav-caret{width:14px;height:14px;flex-shrink:0;margin:0 15px 0 8px;opacity:.6;transition:transform var(--nav-motion) ease-out,opacity var(--nav-motion) ease-out}
+.nav-group-toggle[aria-expanded=true] .nav-caret{transform:rotate(180deg)}
+.contains-current>.nav-group-toggle{color:var(--nav-accent)}
+.contains-current>.nav-group-toggle .nav-glyph{position:relative}
+.contains-current>.nav-group-toggle .nav-glyph:before{content:'';position:absolute;inset:5px;border-radius:10px;background:color-mix(in srgb,var(--nav-accent) 9%,transparent)}
+.nav-children,.nav-sections{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows var(--nav-motion) ease-out,opacity var(--nav-motion) ease-out,visibility 0s linear var(--nav-motion)}
+.nav-children.is-expanded,.nav-sections.is-expanded{grid-template-rows:1fr;opacity:1;visibility:visible;transition:grid-template-rows var(--nav-motion) ease-out,opacity var(--nav-motion) ease-out,visibility 0s}
+.nav-children>div,.nav-sections>div{min-height:0;overflow:hidden}
+.nav-children>div{padding:0 12px 0 22px}
+.nav-chapter:first-child{margin-top:7px}
+.nav-chapter:last-child{margin-bottom:7px}
+.nav-chapter-row{display:flex;align-items:center;border-radius:10px;margin:2px 0}
+.nav-chapter-row>a{display:flex;align-items:baseline;gap:10px;min-width:0;flex:1;padding:10px 10px;color:var(--muted);text-decoration:none;font-size:12.5px;line-height:1.55;font-weight:500}
+.nav-number{font-size:10px;font-variant-numeric:tabular-nums;font-weight:500;opacity:.65;flex:0 0 18px}
+.nav-chapter-row:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.is-current>.nav-chapter-row{background:color-mix(in srgb,var(--nav-accent) 9%,transparent)}
+.is-current>.nav-chapter-row>a{color:var(--nav-accent);font-weight:750}
+.nav-section-toggle{flex-shrink:0;display:grid;place-items:center;border:0;background:transparent;border-radius:7px;color:var(--nav-accent);width:30px;height:30px;padding:7px;margin-right:5px}
+.nav-section-toggle:hover{background:color-mix(in srgb,var(--nav-accent) 10%,transparent)}
+.nav-section-toggle .hugeicon{width:14px;height:14px;transition:transform var(--nav-motion) ease-out}
+.nav-section-toggle[aria-expanded=true] .hugeicon{transform:rotate(180deg)}
+.sidebar .nav-sections nav>a{display:block;font-size:11px;line-height:1.65;padding:7px 10px 7px 39px;margin:0;color:var(--muted);font-weight:450;border-radius:8px}
+.sidebar .nav-sections nav>a.current{color:var(--nav-accent);background:color-mix(in srgb,var(--nav-accent) 6%,transparent)}
+.nav-utilities{flex-shrink:0;padding-top:14px}
+.sidebar .nav-utilities .nav-destination{min-height:35px;font-size:11px}
+.nav-utilities .nav-glyph{height:35px}
+.nav-utilities .nav-glyph .hugeicon{width:18px;height:18px}
+.nav-utilities .nav-copy{font-weight:500;font-size:11px}
+.sidebar .nav-destination[aria-current=page]{color:var(--geometry);background:color-mix(in srgb,var(--geometry) 8%,transparent)}
+html[data-sidebar=collapsed] .nav-copy,html[data-sidebar=collapsed] .nav-caret{opacity:0;visibility:hidden;transition:opacity var(--nav-motion) ease-out,visibility 0s linear var(--nav-motion)}
+html[data-sidebar=collapsed] .nav-children{grid-template-rows:0fr;opacity:0;visibility:hidden}
+html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sidebar .nav-destination{width:48px}
+.nav-preview{position:fixed;z-index:45;left:72px;width:268px;padding:18px 20px;border-radius:16px;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 12px 48px #0002;pointer-events:none;font:12px/1.5 Manrope,sans-serif;color:var(--muted)}
+.nav-preview strong{display:block;color:var(--ink);font-weight:750;margin-bottom:7px}
+.nav-preview p{margin:0 0 10px;font-size:10px}
+.nav-preview ol{list-style:none;padding:0;margin:0}
+.nav-preview li{display:flex;gap:12px;padding:5px 0;font-size:11px}
+.nav-preview li span{opacity:.6;font-variant-numeric:tabular-nums}
+.nav-preview li.is-current{color:var(--geometry)}
+.nav-preview small{display:block;margin-top:12px;font-size:10px;opacity:.65}
+.nav-scrim{position:fixed;inset:var(--header-height) 0 0;z-index:29;border:0;background:#0003;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+@media(max-width:800px){
+ :root,html[data-sidebar=collapsed]{--sidebar-space:0px;--sidebar-width:min(308px,calc(100vw - 48px))}
+ .sidebar,html[data-sidebar=collapsed] .sidebar{width:var(--sidebar-width);transform:translateX(-100%);visibility:hidden;transition:transform var(--nav-motion) ease-out,visibility 0s linear var(--nav-motion)}
+ .sidebar.open,html[data-sidebar=collapsed] .sidebar.open{transform:none;visibility:visible;box-shadow:none;transition:transform var(--nav-motion) ease-out,visibility 0s;background:color-mix(in srgb,var(--paper) 94%,transparent)}
+ html[data-sidebar=collapsed] .sidebar .nav-copy,html[data-sidebar=collapsed] .sidebar .nav-caret{opacity:1;visibility:visible}
+ html[data-sidebar=collapsed] .sidebar .nav-group-toggle,html[data-sidebar=collapsed] .sidebar .nav-destination{width:calc(100% - 16px)}
+ html[data-sidebar=collapsed] .sidebar .nav-children.is-expanded{grid-template-rows:1fr;opacity:1;visibility:visible}
+ .nav-preview{display:none}
+ body:has(.sidebar.open){overflow:hidden}
+ .page{transition:none}
+}
+@media(prefers-reduced-motion:reduce){:root{--nav-motion:0ms}.sidebar,.nav-copy,.nav-children,.nav-sections{transition:none!important}}
+@media print{.sidebar,.nav-preview,.nav-scrim{display:none}.page{margin:0;padding-top:0}}
+
+@media(max-width:800px){body:has(.sidebar.open) .sidebar{z-index:70}body:has(.sidebar.open) .nav-scrim{z-index:69}body:has(.sidebar.open) .topbar{z-index:80}}

@@ -10,26 +10,98 @@ function themeLabel(){$('#theme-button')?.setAttribute('aria-label',`Switch to $
 $('#theme-button')?.addEventListener('click',()=>{const dark=document.documentElement.dataset.theme!=='dark';document.documentElement.dataset.theme=dark?'dark':'light';storage.set('gr-theme',dark?'dark':'light');themeLabel()});
 $('#type-button')?.setAttribute('aria-pressed',String(document.documentElement.classList.contains('large-type')));
 $('#type-button')?.addEventListener('click',()=>{const large=document.documentElement.classList.toggle('large-type');storage.set('gr-type',large?'large':'normal');$('#type-button').setAttribute('aria-pressed',String(large))});
-const sidebar=$('#book-navigation'),menu=$('#menu-button');
+const sidebar=$('#book-navigation'),menu=$('#menu-button'),navScroll=$('.nav-scroll'),preview=$('.nav-preview'),scrim=$('.nav-scrim');
 const narrowNavigation=matchMedia('(max-width:800px)');
-function syncNavigation(){
- const open=narrowNavigation.matches?sidebar.classList.contains('open'):document.documentElement.dataset.sidebar!=='collapsed';
- menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Hide contents':'Show contents');sidebar.inert=!open;
+const navPage=document.body.dataset.page||'index';
+let groupPrefs={};try{groupPrefs=JSON.parse(storage.get('gr-nav-groups')||'{}')||{}}catch{}
+if(typeof groupPrefs!=='object'||Array.isArray(groupPrefs))groupPrefs={};
+const navGroups=[...sidebar.querySelectorAll('[data-nav-group]')];
+const changedChapter=storage.get('gr-nav-page')!==navPage;
+for(const [i,group] of navGroups.entries()){
+ const id=group.dataset.navGroup;
+ const current=group.classList.contains('contains-current');
+ const expanded=current&&changedChapter?true:typeof groupPrefs[id]==='boolean'?groupPrefs[id]:current||(navPage==='index'&&i===0);
+ group.querySelector('.nav-children').classList.toggle('is-expanded',expanded);
 }
-function closeMenu(){if(narrowNavigation.matches){sidebar?.classList.remove('open');syncNavigation()}}
-menu?.addEventListener('click',()=>{
- if(narrowNavigation.matches){const open=sidebar.classList.toggle('open');syncNavigation();if(open)sidebar.querySelector('a').focus()}
- else{const collapsed=document.documentElement.dataset.sidebar!=='collapsed';document.documentElement.dataset.sidebar=collapsed?'collapsed':'expanded';storage.set('gr-sidebar',collapsed?'collapsed':'expanded');syncNavigation()}
-});
+storage.set('gr-nav-page',navPage);
+const sectionToggle=$('.nav-section-toggle'),sectionList=$('.nav-sections');
+if(sectionList&&storage.get(`gr-nav-sections-${navPage}`)==='open')sectionList.classList.add('is-expanded');
+const navigationOpen=()=>narrowNavigation.matches?sidebar.classList.contains('open'):document.documentElement.dataset.sidebar!=='collapsed';
+let previewTimer;
+function hidePreview(){clearTimeout(previewTimer);preview.hidden=true;preview.replaceChildren()}
+function syncNavigation(){
+ const open=navigationOpen();
+ menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Collapse contents':'Expand contents');
+ sidebar.inert=narrowNavigation.matches&&!open;scrim.hidden=!(narrowNavigation.matches&&open);
+ for(const group of navGroups){const list=group.querySelector('.nav-children'),expanded=open&&list.classList.contains('is-expanded');list.inert=!expanded;group.querySelector('.nav-group-toggle').setAttribute('aria-expanded',String(expanded))}
+ if(sectionList){const expanded=sectionList.classList.contains('is-expanded');sectionList.inert=!expanded;sectionToggle.setAttribute('aria-expanded',String(expanded));sectionToggle.setAttribute('aria-label',`${expanded?'Hide':'Show'} sections in this chapter`)}
+ // Clipped labels must never make native focus scrolling slide the icon column.
+ navScroll.scrollLeft=0;sidebar.scrollLeft=0;
+ hidePreview();
+}
+function setNavigation(open){
+ if(narrowNavigation.matches)sidebar.classList.toggle('open',open);
+ else{document.documentElement.dataset.sidebar=open?'expanded':'collapsed';storage.set('gr-sidebar',open?'expanded':'collapsed')}
+ syncNavigation();
+}
+function closeMenu(){if(narrowNavigation.matches&&navigationOpen()){setNavigation(false);if(sidebar.contains(document.activeElement))menu.focus()}}
+function keepNavVisible(element){if(!navScroll.contains(element))return;const rect=element.getBoundingClientRect(),frame=navScroll.getBoundingClientRect();if(rect.top<frame.top)navScroll.scrollTop+=rect.top-frame.top-8;else if(rect.bottom>frame.bottom)navScroll.scrollTop+=rect.bottom-frame.bottom+8}
+menu.addEventListener('click',()=>{setNavigation(!navigationOpen());if(narrowNavigation.matches&&navigationOpen())sidebar.querySelector('a').focus()});
+scrim.addEventListener('click',closeMenu);
+sectionToggle?.addEventListener('click',()=>{sectionList.classList.toggle('is-expanded');storage.set(`gr-nav-sections-${navPage}`,sectionList.classList.contains('is-expanded')?'open':'closed');syncNavigation()});
+for(const group of navGroups){
+ const button=group.querySelector('.nav-group-toggle'),list=group.querySelector('.nav-children');
+ button.addEventListener('click',()=>{
+  const wasOpen=navigationOpen();
+  list.classList.toggle('is-expanded',!wasOpen||!list.classList.contains('is-expanded'));
+  groupPrefs[group.dataset.navGroup]=list.classList.contains('is-expanded');storage.set('gr-nav-groups',JSON.stringify(groupPrefs));
+  if(!wasOpen)setNavigation(true);else syncNavigation();
+ });
+}
+// Rail previews are a noninteractive reading surface. Enter unfolds the actual
+// navigation tree, so links never exist twice in the keyboard/accessibility tree.
+for(const item of sidebar.querySelectorAll('.nav-group-toggle,.nav-destination')){
+ const show=()=>{
+  if(navigationOpen()||narrowNavigation.matches)return;
+  hidePreview();
+  const title=document.createElement('strong');title.textContent=item.querySelector('.nav-copy>span')?.textContent||item.querySelector('.nav-copy').textContent;preview.append(title);
+  const group=item.closest('.nav-group');
+  if(group){
+   const detail=document.createElement('p');detail.textContent=item.querySelector('small').textContent;preview.append(detail);
+   const list=document.createElement('ol');
+   group.querySelectorAll('.nav-chapter-row>a').forEach(link=>{const li=document.createElement('li'),n=document.createElement('span');n.textContent=link.querySelector('.nav-number').textContent;li.append(n,document.createTextNode(link.lastElementChild.textContent));if(link.hasAttribute('aria-current'))li.className='is-current';list.append(li)});preview.append(list);
+   const hint=document.createElement('small');hint.textContent='Click to explore · Enter to open';preview.append(hint);
+  }
+  preview.hidden=false;
+  preview.style.top=Math.max(84,Math.min(item.getBoundingClientRect().top,innerHeight-preview.offsetHeight-16))+'px';
+ };
+ item.addEventListener('pointerenter',()=>{clearTimeout(previewTimer);previewTimer=setTimeout(show,160)});
+ item.addEventListener('pointerleave',hidePreview);
+ item.addEventListener('focus',()=>{keepNavVisible(item);show()});
+ item.addEventListener('blur',hidePreview);
+}
 listen(narrowNavigation,'change',()=>{sidebar.classList.remove('open');syncNavigation()});syncNavigation();
-listen(document,'keydown',e=>{if(e.key==='Escape'&&sidebar?.classList.contains('open')){closeMenu();menu?.focus()}});
-listen(document,'click',e=>{if(!sidebar?.contains(e.target)&&!menu?.contains(e.target))closeMenu()});
+listen(window,'resize',hidePreview);navScroll.addEventListener('scroll',hidePreview,{passive:true});
+listen(document,'keydown',e=>{
+ if(e.key==='Escape'){
+  if(!preview.hidden){e.preventDefault();e.stopImmediatePropagation();hidePreview();return}
+  if(narrowNavigation.matches&&navigationOpen()){e.preventDefault();e.stopImmediatePropagation();closeMenu();menu.focus()}
+ }
+ if(e.key==='Tab'&&narrowNavigation.matches&&navigationOpen()){
+  const links=[menu,...sidebar.querySelectorAll('a,button')].filter(el=>!el.closest('[inert]')&&el.getClientRects().length);
+  const at=links.indexOf(document.activeElement);
+  if(e.shiftKey&&(at<=0)){e.preventDefault();links.at(-1).focus()}
+  else if(!e.shiftKey&&(at===links.length-1||at===-1)){e.preventDefault();menu.focus()}
+ }
+},true);
+listen(document,'click',e=>{if(!sidebar.contains(e.target)&&!menu.contains(e.target))closeMenu()});
+sidebar.addEventListener('click',e=>{if(e.target.closest('a[href]'))closeMenu()});
 const page=document.body.dataset.page;
 if(/^chapter-\d+$/.test(page))storage.set('gr-last-chapter',page);
 const last=storage.get('gr-last-chapter');
 if(last&&/^chapter-\d+$/.test(last)&&$('#continue-link')){$('#continue-link').href=`${last}.html`;$('#continue-link').textContent=`Continue Chapter ${Number(last.split('-')[1])} →`}
-const current=sidebar?.querySelector('[aria-current]');if(current)sidebar.scrollTop=Math.max(0,current.offsetTop-sidebar.clientHeight*.45);
-const observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){document.querySelectorAll('.section-rail a').forEach(a=>a.classList.toggle('current',a.hash===`#${e.target.id}`))}},{rootMargin:'-90px 0px -65% 0px'});
+const current=sidebar.querySelector('[aria-current]');if(current&&navigationOpen())keepNavVisible(current);
+const observer=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){document.querySelectorAll('.section-rail a,.nav-sections a').forEach(a=>a.classList.toggle('current',a.hash===`#${e.target.id}`))}},{rootMargin:'-90px 0px -65% 0px'});
 document.querySelectorAll('.prose h3[id]').forEach(h=>observer.observe(h));
 let index, indexRequest, activeResult=-1;
 const search=$('.book-search'), searchInput=$('#search-input'), searchResults=$('#search-results');
@@ -123,5 +195,5 @@ function readingProgress(){if(frame)return;frame=requestAnimationFrame(()=>{cons
 listen(window,'scroll',readingProgress,{passive:true});listen(window,'resize',readingProgress);readingProgress();
 
 document.body.dataset.readingReady='true';
-return ()=>{delete document.body.dataset.readingReady;listeners.forEach(off=>off());observer.disconnect();cancelAnimationFrame(frame)};
+return ()=>{delete document.body.dataset.readingReady;listeners.forEach(off=>off());hidePreview();observer.disconnect();cancelAnimationFrame(frame)};
 }
