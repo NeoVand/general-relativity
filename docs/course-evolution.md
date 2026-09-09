@@ -67,3 +67,12 @@ The review and its reproduction evidence are preserved as the implementation bas
 - Cosmology now defines density parameters, H(z), radial/transverse comoving distances, angular-diameter distance, luminosity distance, and the assumptions behind distance duality.
 - The new physics calibration independently constructs Christoffels and Riemann curvature from the metric with finite differences, checks dust/radiation Einstein sources and invariants, and verifies curvature-table sums over all indices.
 - Verified: 720 desktop/mobile lesson interactions and both examples throughout, static links and mathematics, the independent physics checks, semantic narration boundaries, and Svelte diagnostics. The numeric checks do not certify a learner’s multi-step derivation; written-work rubrics and studies are separate evidence.
+
+### Novice entry correction — 2026-09-09
+
+Reader feedback revealed that the first new units bridge depended on metrics and intervals before they were taught. The previous prerequisite checks were structural; they did not establish a coherent learner path. The [follow-up audit](novice-sequencing-audit-2026-09-09.md) records the wider findings.
+
+- Rewrote the entry refresher and physical motivation around measurements, a supporting scale, free fall, and two test bodies. Rebuilt the first interval explanation from finite events and a numerical example.
+- Added elementary measurement-unit practice; moved the existing metric-component exercise to Chapter 4 without changing its practice identity; preserved old links.
+- Classified all 37 lesson placements, put practice after exposition, corrected thermal/quantum ordering, and kept required preparation visible in the reading flow.
+- Added generated-order and novice-entry regression checks. Human comprehension and the full later-chapter first-use review remain outstanding.

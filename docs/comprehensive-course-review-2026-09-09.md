@@ -1,5 +1,8 @@
 # Comprehensive review: General Relativity from the Inside Out
 
+**Follow-up correction:** Reader feedback exposed a serious first-use and lesson-order failure after this review. Its earlier verification did not establish novice readiness. See [the novice sequencing audit and repair record](novice-sequencing-audit-2026-09-09.md) for confirmed failures, corrected opening material, and the limits of the remaining audit.
+
+
 **Review date:** 9 September 2026  
 **Reviewed revision:** `ad6a533535f1b7c2209272ae48258359e910bfc5`  
 **Purpose:** assess the actual course against the ambition of an outstanding, self-contained learning resource, accessible from basic calculus and linear algebra and valuable through research level.

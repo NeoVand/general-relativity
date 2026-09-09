@@ -1,0 +1,57 @@
+Local verification of the novice-entry repair, 2026-09-09. These checks do not certify learner comprehension.
+
+static
+
+> general-relativity-from-the-inside-out@2.0.0 test
+> node scripts/check-site.mjs
+
+Verified 37 HTML pages, 3293 local links/assets, 40 figure placements, and numerical calibrations.
+
+svelte
+
+> general-relativity-from-the-inside-out@2.0.0 check
+> svelte-check --fail-on-warnings
+
+Loading svelte-check in workspace: /Users/neo/repos/general-relativity
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings
+
+physics
+
+> general-relativity-from-the-inside-out@2.0.0 test:physics
+> node scripts/check-physics-calculations.mjs
+
+All chapters have distinct transfer practice. Independent metric/connection calculation verifies dust and radiation curvature, source and invariants; full-index sums verify the curvature-table exercises.
+
+narration
+Verified semantic block boundaries, coherent visible/depth-specific source, context cache invalidation, editorial narration, bounded bridge ranges, and metadata.
+
+narration-browser
+Verified live source neighborhoods, hidden/off-page depth retrieval, narration context cache changes, bounded bridge playback, explicit exercise ranges, hidden-panel reveal, and chapter practice exclusion with mocked providers.
+
+course
+Verified 37 published lessons, 3 prerequisite-complete routes, 680 learning interactions, keyboard/deep-link behavior, route-aware page turns, and notebook persistence/export/import at desktop and mobile widths.
+
+resilience
+All bridge derivations, qualifications, solutions and static model measurements survive disabled JavaScript, a blocked reader, and unavailable learning data.
+
+diagnostics
+13 readiness checks verified at desktop/mobile widths, with correct/wrong feedback, teaching links and complete no-JavaScript reasoning.
+
+browser
+
+> general-relativity-from-the-inside-out@2.0.0 test:browser
+> node scripts/check-browser.mjs && node scripts/check-navigation.mjs && node scripts/check-reading-position.mjs && node scripts/check-symbols.mjs
+
+Browser checks passed: 74 page/viewport combinations, links to sections, images, compact header, search, controls, checkpoints, clock and GPS experiments.
+Sidebar checks passed: anchored morph, single nav tree, previews, saved disclosure, section tracking, keyboard, mobile dismissal, 12 visual states, and reduced motion.
+Back, Forward, reload and reading focus preserve independent desktop/mobile positions.
+Symbol checks passed: 38 classification cases, source preservation, 22 lesson anchors, desktop/mobile placement, equation geometry, dismissal and keyboard access.
+
+sequence
+
+> general-relativity-from-the-inside-out@2.0.0 test:sequence
+> node scripts/check-learning-sequence.mjs
+
+Verified 37 explicit placements and prerequisite order, an entry refresher without premature relativity notation, numerical opening examples, visible preparation, and relocated links at desktop/mobile widths and without JavaScript.

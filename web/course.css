@@ -8,7 +8,7 @@
 
 /* The authored lesson is complete before progressive enhancement succeeds. */
 .lesson-depths[hidden], .guided-lesson form[hidden]{display:none}
-.guided-lesson[data-enhanced="true"] .lesson-depth-title,
+.guided-lesson[data-enhanced="true"]:not([data-sequential="true"]) .lesson-depth-title,
 .guided-lesson[data-enhanced="true"] .practice-static{display:none}
 .lesson-depth-title{font:650 14px/1.5 Manrope,sans-serif;color:var(--geometry);margin:32px 0 14px}
 .visual-summary{border:1px solid var(--line);border-radius:18px;padding:22px;overflow-wrap:anywhere}
@@ -32,3 +32,9 @@
 .attempt-history{border-block-end:1px solid var(--line);padding:1rem 0}.attempt-history summary{cursor:pointer;font-weight:600}.attempt-history li{padding:.6rem 0}.attempt-history li p{margin:.25rem 0}.attempt-history time{font-size:.78rem;opacity:.7}
 
 .skill-preparation{list-style:none;padding:0!important;margin:1rem 0!important;display:grid;gap:.8rem}.skill-preparation li{margin:0!important}.skill-preparation a{font:600 12px/1.6 Manrope,sans-serif}.skill-preparation span{display:block;font:400 12px/1.6 Manrope,sans-serif;color:var(--muted);margin-top:.15rem}.entry-diagnostics{margin:3rem 0}.entry-diagnostics>p{max-width:65ch}.diagnostic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.diagnostic-grid>details{border:1px solid var(--line);padding:18px;border-radius:14px;min-width:0;align-self:start}.diagnostic-grid>details>summary{font:600 13px/1.6 Manrope,sans-serif;cursor:pointer}.diagnostic-grid p{font-size:1rem}.diagnostic-return{font:500 12px/1.6 Manrope,sans-serif;display:block;margin-top:1rem}.diagnostic-grid label{display:block;font:500 12px/1.6 Manrope,sans-serif;margin:1rem 0 .5rem}.diagnostic-grid form[hidden]{display:none}@media(max-width:650px){.diagnostic-grid{grid-template-columns:1fr}}
+
+/* Preserve old links without making a relocated advanced lesson part of the opening. */
+.relocated-lesson{display:none}
+.relocated-lesson:target{display:block;padding:1.25rem;border:1px solid var(--border);border-radius:1rem;scroll-margin-top:6rem}
+/* The first experiment has two short columns; both fit on a phone. */
+body[data-page="chapter-0"] .prose table{min-width:0;table-layout:fixed}

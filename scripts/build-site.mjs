@@ -1,3 +1,4 @@
+import {insertLessons} from './lesson-placement.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
@@ -142,15 +143,11 @@ for(let i=0;i<pages.length;i++){
  for(const f of figures){
   if(f.after&&!paired.has(f.id)&&!references.has(f.id)){const anchor=new RegExp(`(<h3[^>]*>${f.after.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}[\\s\\S]*?<\\/h3>)`);html=html.replace(anchor,`$1${chapterFigure(f)}`);}
  }
- // Insert together at an exact heading, preserving authored lesson order.
- for(const after of new Set(chapterLessons.map(l=>l.after))){
-  const anchor=new RegExp(`(<h3[^>]*>${md.renderInline(after).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}[\\s\\S]*?<\\/h3>)`);
-  if(!anchor.test(html))throw Error(`Missing lesson anchor: ${p.id}: ${after}`);
-  const additions=chapterLessons.filter(l=>l.after===after).map(l=>lessonHTML(l,render,referenceByLesson[l.id]?figure(figures.find(f=>f.id===referenceByLesson[l.id])):'')).join('');
-  html=html.replace(anchor,match=>match+additions);
- }
+ // Place prerequisites and worked practice on their reviewed sides of the exposition.
+ html=insertLessons(html,chapterLessons,h=>md.renderInline(h),l=>lessonHTML(l,render,referenceByLesson[l.id]?figure(figures.find(f=>f.id===referenceByLesson[l.id])):''));
+ if(p.chapter==='0')html+='<aside id="dimensions-before-symbols" class="relocated-lesson" data-no-narration><p>The lesson “Units belong to coordinates, too” now follows its preparation in Chapter 4. <a href="chapter-4.html#dimensions-before-symbols">Continue to the relocated lesson →</a></p></aside>';
  if(p.chapter==='8')html=html.replace('<section class="guided-lesson" id="carry-a-direction-without-turning-it"','<span id="scene-sphere"></span><section class="guided-lesson" id="carry-a-direction-without-turning-it"');
- if(p.chapter==='4')html=html.replace(/(<h3[^>]*>4\.1[\s\S]*?<\/h3>)/,match=>match+geometryExperienceHTML('manifold'));
+ if(p.chapter==='4')html=html.replace('<section class="guided-lesson" id="two-maps-one-sphere"',geometryExperienceHTML('manifold')+'<section class="guided-lesson" id="two-maps-one-sphere"');
  const opening=figures.filter(f=>!f.after&&!paired.has(f.id)&&!references.has(f.id)).map(chapterFigure).join('');
  const guide=g?`<details class="chapter-preparation"><summary>Before you begin</summary><div class="chapter-guide"><div><span class="eyebrow">THE QUESTION</span><p>${inline(g.question,p.chapter)}</p></div><div><span class="eyebrow">BRING WITH YOU</span>${preparationHTML(p.chapter,render)}</div><p class="chapter-payoff"><strong>By the end:</strong> ${inline(g.payoff,p.chapter)}</p></div></details>`:'';
  const check=g?`<section class="takeaway"><h2>The idea to keep</h2><p>${inline(g.takeaway,p.chapter)}</p><details class="checkpoint"><summary>${inline(g.check,p.chapter)}</summary><p>${inline(g.answer,p.chapter)}</p></details></section>`:'';

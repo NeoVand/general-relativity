@@ -6,10 +6,10 @@ export function lessonHTML(l,render,reference=''){
  const r=s=>render(s,{id:l.id,chapter:l.chapter}).html;
  const inline=s=>r(s).replace(/^<p>|<\/p>\n?$/g,'');
  const id=l.id;
- return `<section class="guided-lesson" id="${id}" data-lesson="${id}" aria-labelledby="${id}-title">
- <div class="lesson-topline"><span class="eyebrow">A WORKED BRIDGE</span><button disabled class="lesson-save" data-save-lesson="${id}" aria-label="Save ${esc(l.title)} to field notebook" title="Save to field notebook">${icon('Bookmark01Icon')}</button></div>
+ return `<section class="guided-lesson" id="${id}" data-lesson="${id}" data-sequential="${l.placement==='section-start'}" aria-labelledby="${id}-title">
+ <div class="lesson-topline"><span class="eyebrow">${l.placement==='section-start'?'PREPARATION FOR THIS SECTION':'A WORKED BRIDGE'}</span><button disabled class="lesson-save" data-save-lesson="${id}" aria-label="Save ${esc(l.title)} to field notebook" title="Save to field notebook">${icon('Bookmark01Icon')}</button></div>
  <h4 id="${id}-title" class="lesson-title">${esc(l.title)}</h4><p class="lesson-question">${inline(l.question)}</p>
- <div class="lesson-prerequisites" data-no-narration><span>Builds on</span>${l.requires.map(p=>`<a data-prerequisite href="${esc(p.href)}">${esc(p.label)} ${icon('ArrowUpRight01Icon')}</a>`).join('')}</div>
+ ${l.requires.length?`<div class="lesson-prerequisites" data-no-narration><span>Builds on</span>${l.requires.map(p=>`<a data-prerequisite href="${esc(p.href)}">${esc(p.label)} ${icon('ArrowUpRight01Icon')}</a>`).join('')}</div>`:''}
  <div class="lesson-depths" hidden role="tablist" aria-label="Explore ${esc(l.title)}">${[['intuition','See the idea'],['derive','Work it out'],['formal','Go deeper']].map(([key,label],i)=>`<button type="button" role="tab" id="${id}-tab-${key}" data-depth="${key}" aria-controls="${id}-${key}" aria-selected="${!i}" tabindex="${i?-1:0}">${label}</button>`).join('')}</div>
  <div class="lesson-panel" role="region" id="${id}-intuition" data-depth="intuition" aria-label="See the idea"><h5 class="lesson-depth-title" data-no-narration>See the idea</h5>${r(l.intuition)}</div>
  <div class="lesson-panel" role="region" id="${id}-derive" data-depth="derive" aria-label="Work it out"><h5 class="lesson-depth-title" data-no-narration>Work it out</h5><ol class="derivation-steps">${l.steps.map((s,i)=>`<li id="${id}-step-${i+1}"><div class="step-number" aria-hidden="true">${String(i+1).padStart(2,'0')}</div><div><strong>${esc(s.title)}</strong>${r(s.body)}${s.tex?r(`$$${s.tex}$$`):''}<p class="step-reason"><span>Why this step works</span> ${esc(s.reason)}</p></div></li>`).join('')}</ol></div>

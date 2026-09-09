@@ -13,7 +13,7 @@ const baseSkills=[
  skill('calculus','Differentiate, integrate, and use the chain rule',0,'0-2-partial-derivatives-change-one-input-at-a-time','For f(x,y)=x²y along x=t, y=2t, find df/dt at t=1.'),
  skill('linear-algebra','Multiply matrices and read a bilinear form',0,'0-6-matrices-measure-pairs-of-arrows','For G=diag(1,4) and v=(3,2), calculate vᵀGv.'),
  skill('coordinate-changes','Transform vectors and covectors',2,'coordinates-change-measurements-do-not','Change coordinates in a directional derivative and recover the same scalar.',['calculus','linear-algebra']),
- skill('interval','Calculate a proper-time interval',3,'3-4-proper-time-your-life-is-a-line-integral','Compare two timelike paths between the same pair of events.',['coordinate-dimensions']),
+ skill('interval','Calculate a proper-time interval',3,'3-4-proper-time-your-life-is-a-line-integral','Compare two timelike paths between the same pair of events.',['measurement-units']),
  skill('metric','Use a metric to turn components into measurements',4,'a-metric-converts-labels-into-lengths','Find a speed from radial and angular coordinate rates.',['coordinate-changes','interval']),
  skill('covariant-derivative','Differentiate the vector and its basis',6,'differentiate-the-arrow-not-its-address','Explain a nonzero component derivative for a constant Cartesian arrow.',['metric']),
  skill('connection','Derive and use the Levi-Civita connection',7,'7-3-deriving-the-christoffel-symbols-instead-of-receiving-them-as-a-curse','Calculate both nonzero types of polar Christoffel coefficient.',['metric','covariant-derivative','lie-bracket']),
@@ -28,7 +28,7 @@ const baseSkills=[
  skill('forms','Integrate an oriented differential form',21,'oriented-stokes','Reverse an oriented boundary integral and check Stokes’ theorem.',['calculus','connection']),
 ];
 const dependencies={
- 'coordinate-dimensions':['calculus'],'ode-initial-data':['calculus'],'mechanics-energy':['calculus'],
+ 'measurement-units':[],'coordinate-dimensions':['measurement-units','metric'],'ode-initial-data':['calculus'],'mechanics-energy':['calculus'],
  'hyperbolic-functions':['ode-initial-data'],'lie-bracket':['coordinate-changes'],
  'field-energy':['mechanics-energy','calculus'],'poisson-sources':['mechanics-energy','calculus'],
  'admissible-variations':['mechanics-energy','ode-initial-data'],'wave-initial-data':['ode-initial-data','poisson-sources','field-energy'],
@@ -37,7 +37,7 @@ const dependencies={
 };
 export const skills=[...baseSkills,...foundationLessons.map(l=>({...skill(l.provides[0],l.title,l.chapter,l.id,l.transfer.prompt,dependencies[l.provides[0]]),lesson:l.id,firstSection:Number(l.after.match(/^\d+\.(\d+)/)?.[1]||0)}))];
 export const chapterSkills=[
- ['calculus','linear-algebra'],['mechanics-energy'],['calculus','linear-algebra'],['coordinate-dimensions','mechanics-energy','coordinate-changes'],
+ ['calculus','linear-algebra'],['mechanics-energy'],['calculus','linear-algebra'],['measurement-units','mechanics-energy','coordinate-changes'],
  ['coordinate-changes','interval'],['metric','ode-initial-data','hyperbolic-functions'],['metric','coordinate-changes'],['covariant-derivative','ode-initial-data'],
  ['connection','lie-bracket'],['curvature'],['curvature-contractions','connection'],['interval','mechanics-energy'],['curvature-contractions','stress-energy'],
  ['ode-initial-data','field-energy'],['action','einstein-equation'],['connection','action'],['interval','killing-charge','hyperbolic-functions'],

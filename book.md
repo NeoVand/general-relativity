@@ -4,20 +4,13 @@
 
 **For a reader with basic calculus and linear algebra.** Chapter 0 builds the needed mechanics, partial derivatives, differential equations, and flux accounting. You do not need a prior course in physics or relativity. Everything specifically geometric—manifolds, covectors, connections, covariant derivatives, curvature, and metric variations—is developed here. Some later sections introduce graduate-level ideas, but the conceptual staircase remains visible.
 
-The destination is this equation:
+Begin with a ruler, a clock, and a moving object. By the end, we want to calculate what clocks record near stars, how falling bodies move relative to one another, and what light can tell us about the universe. Einstein's equation will become useful after we have built the ideas it connects.
 
-$$
-\boxed{R_{\mu\nu}-\frac12 Rg_{\mu\nu}+\Lambda g_{\mu\nu}
-=\frac{8\pi G_N}{c^4}T_{\mu\nu}.}
-$$
-
-The goal is much more interesting than memorizing it. By the end, you should be able to explain why ordinary derivatives need repairing, what a connection actually compares, how curvature survives a change of coordinates, what pressure has to do with gravity, why the coefficient of $Rg_{\mu\nu}$ is exactly $-1/2$, and how a single action produces the entire field equation.
-
-You should also be able to recognize several seductive mistakes before they recognize you.
+[Start with measurements and motion in Chapter 0](#chapter-0), or use the route guide below to find a refresher.
 
 ## How to travel through this book
 
-Read with a pencil and occasionally stop before the next displayed equation. Predict its indices, its dimensions, or its sign. Understanding is much easier to counterfeit while reading than while predicting.
+Read with a pencil and occasionally pause to predict the next step. What quantity should the answer measure? Which direction should an object move? As new notation is introduced, use it to check your reasoning.
 
 Begin with Chapter 0 if mechanics or multivariable calculus is unfamiliar. Use its five checks to decide which refreshers you need. The recommended course runs through Chapters 0–19 and finishes with Chapter 24. Chapters 20–23 are optional deeper trails; their introductions explain the physical questions and identify additional mathematical or quantum input. Chapter 24 is the main course's synthesis, not an optional prerequisite for those trails.
 
@@ -37,7 +30,43 @@ Do some exercises while the corresponding ideas are fresh rather than saving all
 
 **About the sources.** The explanations, analogies, and worked calculations are written as an independent tutorial. Links identify historical evidence, research results, and places to pursue particular ideas; the book is not a paraphrase of a single textbook. The final reading guide distinguishes foundational notes from original research. Exact contemporary parameter estimates and speculative claims are deliberately unnecessary to the main argument.
 
-## Conventions: the treaty that prevents a thousand sign wars
+## Contents
+
+- [0. Before spacetime: the tools you already almost know](#chapter-0)
+- [1. The scandal: gravity changes the measuring equipment](#chapter-1)
+- [2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe](#chapter-2)
+- [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
+- [4. Spacetime as a manifold: maps, rulers, and the geometry beneath them](#chapter-4)
+- [5. Free fall, the equivalence principle, and the worldline action](#chapter-5)
+- [6. Differentiation when your measuring axes will not sit still](#chapter-6)
+- [7. The connection: how neighboring laboratories compare directions](#chapter-7)
+- [8. Curvature: what remains after the coordinate excuses run out](#chapter-8)
+- [9. Ricci, Weyl, and Einstein: different questions asked of curvature](#chapter-9)
+- [10. Tides: how to measure curvature without seeing spacetime from outside](#chapter-10)
+- [11. Energy, momentum, and stress: what gravity listens to](#chapter-11)
+- [12. Einstein's equation: every symbol earns its place](#chapter-12)
+- [13. Variational calculus: learning to ask a whole history a question](#chapter-13)
+- [14. The Einstein–Hilbert action, taken apart completely](#chapter-14)
+- [15. Symmetry, conservation, vacuum energy, and the limits of slogans](#chapter-15)
+- [16. Turning geometry into experiments: clocks, light, and Mercury](#chapter-16)
+- [17. Black holes: when the causal structure becomes the main character](#chapter-17)
+- [18. Gravitational waves: curvature can carry a message](#chapter-18)
+- [19. Cosmology: Einstein's equation for the large-scale universe](#chapter-19)
+- [20. Making spacetime run: initial data, constraints, and numerical relativity](#chapter-20)
+- [21. A local laboratory at every point: tetrads, forms, and the gauge viewpoint](#chapter-21)
+- [22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics](#chapter-22)
+- [23. Einstein's equation as a low-energy masterpiece: effective theory and the frontier](#chapter-23)
+- [24. Bringing the whole machine together](#chapter-24)
+- [Appendix A. Thirty exercises that turn recognition into understanding](#appendix-a)
+- [Appendix B. A working reference sheet](#appendix-b)
+- [Appendix C. A plain-language glossary](#appendix-c)
+- [Appendix D. Where to go next](#appendix-d)
+- [Appendix E. Index practice and three extra calculations](#appendix-e)
+
+<details class="course-conventions">
+<summary>Notation reference for returning readers</summary>
+
+### Conventions used in later chapters
 
 Different excellent books use different signs. A disagreement in notation need not be a disagreement about nature. This book keeps the following treaty throughout.
 
@@ -77,7 +106,7 @@ $$
 R_{\mu\nu}=R^\rho{}_{\mu\rho\nu}.
 $$
 
-Do not attempt to digest this on arrival. It is here so that later calculations have a definite address. With these conventions, a round two-sphere has positive scalar curvature.
+This reference collects notation taught in Chapters 2–14. With these conventions, a round two-sphere has positive scalar curvature.
 
 The physical point-particle action is $S=-mc^2\int d\tau$. In coordinates with $x^0=ct$, our gravitational action is
 
@@ -98,38 +127,8 @@ The action is called **Einstein–Hilbert**, after Einstein and David Hilbert. T
 
 A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\theta^2$, $g_{\theta\theta}=r^2$ has dimensions of length squared. It is the whole line element that must have the correct units, not every coordinate component separately.
 
-## Contents
 
-- [0. Before spacetime: the tools you already almost know](#chapter-0)
-- [1. The scandal: gravity changes the measuring equipment](#chapter-1)
-- [2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe](#chapter-2)
-- [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
-- [4. Spacetime as a manifold: maps, rulers, and the geometry beneath them](#chapter-4)
-- [5. Free fall, the equivalence principle, and the worldline action](#chapter-5)
-- [6. Differentiation when your measuring axes will not sit still](#chapter-6)
-- [7. The connection: how neighboring laboratories compare directions](#chapter-7)
-- [8. Curvature: what remains after the coordinate excuses run out](#chapter-8)
-- [9. Ricci, Weyl, and Einstein: different questions asked of curvature](#chapter-9)
-- [10. Tides: how to measure curvature without seeing spacetime from outside](#chapter-10)
-- [11. Energy, momentum, and stress: what gravity listens to](#chapter-11)
-- [12. Einstein's equation: every symbol earns its place](#chapter-12)
-- [13. Variational calculus: learning to ask a whole history a question](#chapter-13)
-- [14. The Einstein–Hilbert action, taken apart completely](#chapter-14)
-- [15. Symmetry, conservation, vacuum energy, and the limits of slogans](#chapter-15)
-- [16. Turning geometry into experiments: clocks, light, and Mercury](#chapter-16)
-- [17. Black holes: when the causal structure becomes the main character](#chapter-17)
-- [18. Gravitational waves: curvature can carry a message](#chapter-18)
-- [19. Cosmology: Einstein's equation for the large-scale universe](#chapter-19)
-- [20. Making spacetime run: initial data, constraints, and numerical relativity](#chapter-20)
-- [21. A local laboratory at every point: tetrads, forms, and the gauge viewpoint](#chapter-21)
-- [22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics](#chapter-22)
-- [23. Einstein's equation as a low-energy masterpiece: effective theory and the frontier](#chapter-23)
-- [24. Bringing the whole machine together](#chapter-24)
-- [Appendix A. Thirty exercises that turn recognition into understanding](#appendix-a)
-- [Appendix B. A working reference sheet](#appendix-b)
-- [Appendix C. A plain-language glossary](#appendix-c)
-- [Appendix D. Where to go next](#appendix-d)
-- [Appendix E. Index practice and three extra calculations](#appendix-e)
+</details>
 
 ---
 
@@ -137,162 +136,215 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 
 ## 0. Before spacetime: the tools you already almost know
 
-You need basic calculus and linear algebra to begin this book. You do not need a prior course in mechanics, special relativity, differential geometry, or variational calculus. We will build the missing bridges. Later chapters reach research-level questions; understanding their physical point comes before mastering their machinery.
+Watch a small cart move along a straight track. Mark its position with a ruler and record the time with a clock. That simple experiment gives us something physics needs before any grand theory: measurements we can compare, and a way to predict the next measurement.
 
-Here is the central question. **If a falling astronaut feels no gravity, what can a second falling astronaut measure that the first one cannot?** Their changing separation. Gravity has a locally removable part and a tidal part that survives. The book turns that observation into a theory of clocks, trajectories, and spacetime.
+General relativity will eventually let us predict how clocks run near a star and how light travels past it. We will get there by building on operations you can already try: measuring a distance, finding a rate of change, and adding small contributions. This chapter supplies the mechanics and calculus we need. No previous physics course is assumed.
+
+If derivatives and matrices are familiar, use the five checks at the end to choose your refreshers. If the physical vocabulary is new, begin here. The first experiment about gravity is in Chapter 1.
 
 ### 0.1 A derivative is a local prediction
 
-Suppose a position is $x(t)=3t^2$, with $x$ in metres and $t$ in seconds. Its velocity is $v(t)=dx/dt=6t$, and its acceleration is $a(t)=d^2x/dt^2=6$. At $t=2$, the velocity is $12\,\mathrm{m/s}$. That means a small extra time $\Delta t$ changes the position by approximately $12\Delta t$ metres. A derivative predicts a small change, not a whole future.
+Choose a mark on the track as the starting position and call it $x=0$. The number $x$ tells us how far the cart is from that mark, with positive values to the right. Start the clock at $t=0$. Suppose the measurements follow this pattern:
 
-Taylor's formula makes that prediction systematic:
+| Time $t$ in seconds | Position $x$ in metres |
+|---|---|
+| 0 | 0 |
+| 1 | 3 |
+| 2 | 12 |
+| 3 | 27 |
+
+During successive seconds the cart travels 3, then 9, then 15 metres. It is speeding up. One formula that fits these measurements is
 
 $$
-x(t+\Delta t)=x(t)+v(t)\Delta t+\frac12 a(t)(\Delta t)^2+\cdots.
+x(t)=At^2,\qquad A=3\,\mathrm{m/s^2}.
 $$
 
-The dots stand for terms of higher order in the small increment. For this quadratic example the displayed expression is exact. For a general smooth function it is an approximation whose omitted terms shrink as the increment shrinks.
+The coefficient $A$ has units too: multiplying metres per second squared by seconds squared gives metres. A **unit** specifies what we count, such as metres or seconds. The **dimension** describes the kind of quantity, such as length or time. Metres and centimetres are different units of the same dimension.
 
-The same idea will explain local flatness. Near an event, we can simplify a metric's value and first derivatives by changing coordinates. Terms quadratic in distance still carry curvature. “Locally flat” is a statement about the order of the approximation.
+The cart's **velocity** is its rate of change of position, including direction. Its **acceleration** is the rate of change of velocity:
+
+$$
+v(t)=\frac{dx}{dt}=2At,\qquad a(t)=\frac{dv}{dt}=2A.
+$$
+
+At $t=2\,\mathrm s$, these give $x=12\,\mathrm m$, $v=12\,\mathrm{m/s}$ and $a=6\,\mathrm{m/s^2}$. The velocity predicts the next small change. Over $\Delta t=0.1\,\mathrm s$, it predicts an extra $v\Delta t=1.2\,\mathrm m$. The exact change is $A[(2.1\,\mathrm s)^2-(2\,\mathrm s)^2]=1.23\,\mathrm m$. The extra $0.03\,\mathrm m$ comes from the increase in velocity during that tenth of a second.
+
+Taylor's formula keeps track of that correction:
+
+$$
+x(t+\Delta t)=x(t)+v(t)\Delta t+\frac12a(t)(\Delta t)^2+\cdots.
+$$
+
+The symbol $\Delta$ means a change; the dots stand for higher powers of that change. For this quadratic motion the displayed expression is exact. For a general smooth motion, keeping only the velocity term gives a local approximation. Shorten the time step, and the acceleration correction shrinks faster than the velocity contribution. **A derivative predicts a small change, not a whole future at one fixed rate.**
 
 ### 0.2 Partial derivatives: change one input at a time
 
-A temperature $f(x,y)=x^2+3y$ has two inputs. Its partial derivative $\partial_x f=2x$ asks how it changes if you move in $x$ while holding $y$ fixed. Its other partial derivative is $\partial_y f=3$. The symbol $\partial$ is the familiar derivative with an instruction about what to hold fixed.
+Suppose a calculator takes two numbers and returns $f(x,y)=x^2+3y$. Here $x$, $y$, and $f$ are dimensionless numbers. There are two different ways to change its output: change $x$, or change $y$.
 
-If a path supplies $x=x(s)$ and $y=y(s)$, both inputs can change. The chain rule says
+The **partial derivative** $\partial f/\partial x=2x$ holds $y$ fixed and differentiates with respect to $x$. The other partial derivative is $\partial f/\partial y=3$. We also write them as $\partial_x f$ and $\partial_y f$. The symbol $\partial$ is a derivative with an instruction about what to hold fixed.
+
+If a path through the inputs supplies $x=x(s)$ and $y=y(s)$, both can change. The chain rule adds their contributions:
 
 $$
 \frac{df}{ds}=\frac{\partial f}{\partial x}\frac{dx}{ds}
 +\frac{\partial f}{\partial y}\frac{dy}{ds}.
 $$
 
-Try $x=s$, $y=s^2$. Direct substitution gives $f=4s^2$, so $df/ds=8s$. The chain rule gives $(2s)(1)+(3)(2s)=8s$ too. Nothing new was hiding in the notation.
-
-In four coordinates we abbreviate this as $df/ds=(\partial_\mu f)(dx^\mu/ds)$, summing over $\mu=0,1,2,3$. An index here is a label, not an exponent. Chapter 2 develops why this notation is more than shorthand.
+Try $x=s$, $y=s^2$, with dimensionless $s$. Substitution gives $f=4s^2$, so $df/ds=8s$. The chain rule gives $(2s)(1)+(3)(2s)=8s$ too. Later we will use the same operation when a measurement depends on where and when we make it.
 
 ### 0.3 An integral adds local measurements
 
-Distance along a path is built by adding tiny distances. A clock does something analogous: it adds tiny amounts of its own elapsed time. In flat spacetime the result will be
+Water flows into an initially empty tank at a rate $q(t)$. The rate is measured in litres per second. If it is nearly constant during a short time $\Delta t$, the added volume is approximately $q(t)\Delta t$. Add the contributions from many short time steps. An **integral** is the limit as those steps become arbitrarily fine:
 
 $$
-\tau=\int_{t_1}^{t_2}\sqrt{1-\frac{v(t)^2}{c^2}}\,dt.
+V(T)=\int_0^T q(t)\,dt.
 $$
 
-For now, read this as a recipe. At each time, calculate a clock-rate factor, multiply by the tiny time step, and add. The constant $c$ is the speed of light. If $v=0$ throughout, the square root is one and $\tau=t_2-t_1$. Chapter 3 derives the recipe and explains why it changes when the path changes.
+For $q(t)=bt$ with $b=2\,\mathrm{litres/s^2}$, the flow increases steadily. After three seconds,
 
-An integral over a region works the same way. To add mass, sum density times a tiny physical volume: $M=\int\rho\,dV$. Coordinate rectangles do not always have equal physical size. In polar coordinates a cell has area approximately $(dr)(r\,d\theta)$, so $dA=r\,dr\,d\theta$. The extra $r$ is measuring geometry, not adding matter.
+$$
+V(3\,\mathrm s)=\left[\frac12bt^2\right]_0^{3\,\mathrm s}=9\,\mathrm{litres}.
+$$
+
+The brackets mean evaluate at the upper limit and subtract the value at the lower limit. The $dt$ contributes a time unit: flow rate multiplied by time gives volume. This is why checking units is part of understanding an integral.
+
+The same addition works across a region of space. **Mass density**, written $\rho$, is mass per volume. A small piece of volume $dV$ contains approximately $\rho\,dV$ of mass. Adding all the pieces gives $M=\int\rho\,dV$. For a uniform density $2\,\mathrm{kg/m^3}$ in a rectangular box of volume $3\,\mathrm{m^3}$, the integral is simply $M=6\,\mathrm{kg}$.
 
 ### 0.4 A differential equation needs a starting story
 
-The equation $d^2x/dt^2=-g$ tells you the acceleration of a falling object in a uniform Newtonian field. Integrate once and then again:
+Near Earth's surface, an ideal falling ball speeds up downward at nearly $g=9.8\,\mathrm{m/s^2}$. Ignore air resistance and restrict attention to heights small compared with Earth's radius. Choose upward as the positive $x$ direction. Its acceleration is then negative:
+
+$$
+\frac{d^2x}{dt^2}=-g.
+$$
+
+This is a **differential equation**: it specifies a derivative of the unknown function $x(t)$. Integrate once and then again:
 
 $$
 v(t)=v_0-gt,\qquad x(t)=x_0+v_0t-\frac12gt^2.
 $$
 
-The two constants have physical meanings: starting position $x_0$ and starting velocity $v_0$. The equation alone does not tell you whether the object was dropped, thrown up, or thrown down. A second-order equation normally needs two initial data per unknown function.
-
-Einstein's equation is also a differential equation, now for the metric throughout spacetime. Not every proposed set of initial data is allowed: some equations are constraints. Chapter 20 explains this carefully. Keep the simpler lesson now: **a law plus starting data produces a prediction.**
+The two constants have physical meanings: starting position $x_0$ and starting velocity $v_0$. The acceleration law alone does not say whether the ball was dropped, thrown up, or thrown down. Those choices give different motions that obey the same law. **A law plus starting measurements gives a prediction.**
 
 ### 0.5 The mechanics we will use
 
-Momentum in slow-motion mechanics is $\mathbf p=m\mathbf v$. Force changes momentum: $\mathbf F=d\mathbf p/dt$. For constant mass this is $\mathbf F=m\mathbf a$. A force is an interaction such as a floor pushing on your shoes. Coordinate acceleration is a change in position labels; later we will distinguish it from acceleration measured by an instrument.
+A **force** is a push or pull, such as a floor pushing on your shoes. To calculate what it does, introduce **momentum** $\mathbf p=m\mathbf v$: mass times velocity. Bold symbols here are arrows with a magnitude and a direction. In Newton's mechanics the total force changes momentum:
 
-For a slow particle, kinetic energy is $K=mv^2/2$. Near Earth, gravitational potential energy can be written $U=mgh$, choosing zero at $h=0$. Throw a ball upward: kinetic energy decreases while potential energy increases. Ignoring air resistance, their sum remains constant.
+$$
+\mathbf F=\frac{d\mathbf p}{dt}=m\mathbf a
+\quad\text{for constant mass}.
+$$
 
-More generally write $U=m\Phi$, where $\Phi$ is potential energy per unit mass. Outside a spherical mass $M$,
+The force unit is the newton: $1\,\mathrm N=1\,\mathrm{kg\,m/s^2}$. These equations describe ordinary speeds well; Chapter 3 develops their relativistic replacements.
+
+**Energy** accounts for changes that can be exchanged between motion, stored energy, heat, and other forms. A moving particle has kinetic energy $K=mv^2/2$ in this approximation, where $v$ is its speed. Near Earth it has gravitational potential energy $U=mgh$, choosing the height $h=0$ as the zero of $U$. Throw a ball upward: kinetic energy decreases while potential energy increases. Ignoring air resistance, their sum remains constant. The energy unit is the joule, $1\,\mathrm J=1\,\mathrm{kg\,m^2/s^2}$.
+
+More generally write $U=m\Phi$, where $\Phi$ is potential energy per unit mass. Outside a spherical body of mass $M$,
 
 $$
 \Phi(r)=-\frac{G_NM}{r},\qquad
 \mathbf a=-\boldsymbol\nabla\Phi.
 $$
 
-The gradient $\boldsymbol\nabla\Phi$ is the vector of partial derivatives in Cartesian coordinates. It points toward fastest increase of $\Phi$; the minus sign makes falling objects accelerate toward decreasing potential. Differentiating gives inward acceleration of magnitude $G_NM/r^2$. Here $G_N$ is Newton's gravitational constant. This is a low-speed, weak-field description; we use it as a calibration for the relativistic theory.
+Here $r$ is distance from the center and $G_N$ is Newton's gravitational constant. This choice makes $\Phi$ approach zero far away. The **gradient** $\boldsymbol\nabla\Phi$ is the arrow whose Cartesian components are the partial derivatives of $\Phi$. It points toward fastest increase. For this spherical example, differentiating with respect to $r$ gives $d\Phi/dr=G_NM/r^2$. The minus sign in the acceleration law therefore gives inward acceleration of magnitude $G_NM/r^2$.
 
-Pressure is force per area. Imagine a gas repeatedly hitting a wall: each collision transfers momentum. More collisions or harder collisions mean more pressure. This makes pressure a **flow of momentum**, which explains why it belongs in the same tensor as energy. Chapter 11 supplies the precise units and entries.
+**Pressure** is force per area. A gas exerts pressure on a wall because collisions transfer momentum to it. The pressure unit is the pascal, $1\,\mathrm{Pa}=1\,\mathrm{N/m^2}$. Pressure will matter when we ask how fluids move and how they affect gravity. The worked example below first shows how pressure can transfer energy.
 
 ### 0.6 Matrices measure pairs of arrows
 
-You already know a dot product. For $v=(2,1)$ and $w=(1,3)$, the Euclidean result is $v\cdot w=5$. Insert a symmetric matrix between the row and column:
+A map uses one metre per horizontal square and two metres per vertical square. An instruction to move two squares right and one square up has map components $v=(2,1)$, but its physical displacement is two metres right and two metres up. Pythagoras gives squared length $2^2+2^2=8$ square metres.
+
+We can keep the map components and let a matrix carry the scale factors. With distances expressed in metres, define
 
 $$
-g(v,w)=v^{\mathsf T}
-\begin{pmatrix}1&0\\0&4\end{pmatrix}w
-=(2)(1)+4(1)(3)=14.
+M=\begin{pmatrix}1&0\\0&4\end{pmatrix},\qquad
+v^{\mathsf T}Mv=(2)(2)+4(1)(1)=8.
 $$
 
-The matrix specifies a new measuring rule. In particular $g(v,v)=8$ is the squared length of $v$ under that rule. A metric is this kind of pair-measuring operation, supplied at every point. In spacetime the matrix has one negative direction. We will learn why that minus sign distinguishes clocks from rulers.
+The superscript $\mathsf T$ means transpose: turn the column into a row for matrix multiplication. The vertical scale factor is squared because we are computing squared length. If the second instruction is $w=(1,3)$, their physical dot product is
 
-The inverse matrix undoes the original linear map. It is not obtained by taking the reciprocal of every entry. For example,
+$$
+v^{\mathsf T}Mw=(2)(1)+4(1)(3)=14
+$$
+
+in square metres. This is a **bilinear form**: a rule linear in either arrow when the other is fixed. Its numbers need the map's scale to acquire physical meaning.
+
+An inverse matrix undoes a linear map. It is not obtained by taking the reciprocal of every entry. For example,
 
 $$
 \begin{pmatrix}2&1\\1&2\end{pmatrix}^{-1}
 =\frac13\begin{pmatrix}2&-1\\-1&2\end{pmatrix}.
 $$
 
-Multiply them to check that the diagonal entries become one and the off-diagonal entries zero. This is precisely the operation denoted by $g^{\mu\nu}$ later.
+Multiply them to check that the diagonal entries become one and the other entries zero. The result is the identity matrix, which leaves every input unchanged.
 
 ### 0.7 Flux and divergence, with a box before a theorem
 
-A field $\mathbf J$ can describe how much stuff crosses unit area per unit time. Its flux through a small surface is the normal component of $\mathbf J$ times that area. To find net outflow from a box, subtract inflow through one face from outflow through the opposite face, then add the three directions.
+Imagine water flowing through an imaginary box. Let the arrow $\mathbf J$ describe the mass crossing a unit area per unit time, in $\mathrm{kg/(m^2s)}$. This is a **flux density**. Only the part of the flow perpendicular to a face crosses that face. Multiply that component by the face area to obtain a mass flow rate.
 
-In a box of width $\Delta x$, the $x$ contribution is approximately $(\partial_x J^x)\Delta x\Delta y\Delta z$. Dividing total outflow by the box volume gives
+Subtract inflow through the left face from outflow through the right face. If $J^x$ denotes the $x$ component of the flux density, this difference is approximately $(\partial_xJ^x)\Delta x\Delta y\Delta z$. Here the superscript $x$ is a direction label, not a power. Do the same for the other two pairs of faces and divide by the volume:
 
 $$
 \boldsymbol\nabla\cdot\mathbf J
 =\partial_xJ^x+\partial_yJ^y+\partial_zJ^z.
 $$
 
-This is **divergence**. Positive divergence means net outflow per volume. Conservation then reads $\partial_t\rho+\boldsymbol\nabla\cdot\mathbf J=0$: if more leaves than arrives, the amount inside falls. The divergence theorem adds this accounting over many little boxes; flows across shared internal faces cancel, leaving only the outer boundary. Curved geometry changes the volume factors, not this accounting idea.
+This quantity is **divergence**, the net outflow per volume. Its units here are $\mathrm{kg/(m^3s)}$. If more mass leaves than enters, the density $\rho$ inside decreases. Local conservation of mass is therefore
+
+$$
+\partial_t\rho+\boldsymbol\nabla\cdot\mathbf J=0.
+$$
+
+Add this accounting over many little boxes. Flow across a shared face is outflow from one box and inflow to its neighbor, so it cancels. Only the outer boundary remains. That cancellation is the idea behind the **divergence theorem**: total divergence over a volume equals net flux through its boundary.
 
 ### 0.8 Approximation is a skill, not an apology
 
-For a small dimensionless $q$,
+For a small dimensionless number $q$, Taylor expansion gives
 
 $$
 \sqrt{1+q}\simeq1+\frac q2,\qquad
-\frac{1}{1-q}\simeq1+q,\qquad e^q\simeq1+q.
+\frac1{1-q}\simeq1+q,\qquad e^q\simeq1+q.
 $$
 
-Each discards terms beginning at order $q^2$. For $q=0.01$, those terms are on the scale of $10^{-4}$, though the coefficient depends on the function. We will always identify what is small: $v/c$, $G_NM/(rc^2)$, a wave amplitude, or a short distance compared with a curvature scale. “Small” without a ratio is not a usable approximation.
+Each approximation discards terms beginning at order $q^2$. For $q=0.01$, those terms are on the scale of $10^{-4}$, though the coefficient depends on the function. “Small” requires a comparison: an extra centimetre compared with one metre is the ratio $0.01$. An extra centimetre compared with a millimetre is not small.
 
-Check dimensions before arithmetic. An equation for acceleration must have units of length/time squared on both sides. You can add energy density to pressure, because both have units $\mathrm{J/m^3}$. You cannot add mass density to pressure without the appropriate $c^2$. A dimension check often catches a mistake before a page of algebra does.
+Check dimensions before arithmetic. An acceleration must have length/time squared units on both sides of its equation. A distance and a time cannot be added directly. Different units of the same dimension, such as metres and centimetres, must first be expressed consistently. These checks often catch a mistake before a page of algebra does.
 
 ### 0.9 Your first five-minute check
 
-Try these before revealing the answers. They test the actual prerequisites, not whether you remember physics vocabulary.
+Try these before revealing the answers. They test operations taught above.
 
-<details class="checkpoint"><summary>1. If $x(t)=2t^3$, what are its velocity and acceleration?</summary>
+<details class="checkpoint"><summary>1. If $x(t)=Bt^3$ with $B=2\,\mathrm{m/s^3}$, what are its velocity and acceleration?</summary>
 
-$v=6t^2$ and $a=12t$. If $t$ is in seconds and $x$ in metres, the coefficient 2 carries units $\mathrm{m/s^3}$.
+$v=3Bt^2$ and $a=6Bt$. At $t=1\,\mathrm s$, these are $6\,\mathrm{m/s}$ and $12\,\mathrm{m/s^2}$. The units of $B$ make both dimension checks work.
 
 </details>
 
-<details class="checkpoint"><summary>2. For $f(x,y)=xy^2$, what is $df/ds$ along $x=s$, $y=2s$?</summary>
+<details class="checkpoint"><summary>2. For $f(x,y)=xy^2$, what is $df/ds$ along $x=s$, $y=2s$? All inputs are dimensionless.</summary>
 
 Substitution gives $f=4s^3$, so $df/ds=12s^2$. The chain rule gives $y^2(1)+2xy(2)=4s^2+8s^2$, the same result.
 
 </details>
 
-<details class="checkpoint"><summary>3. Why is a polar cell wider when it is farther from the origin?</summary>
+<details class="checkpoint"><summary>3. A tank receives water at $2\,\mathrm{litres/s}$ for three seconds. How much volume is added?</summary>
 
-The same angle $d\theta$ subtends arc length $r\,d\theta$. A cell's area is therefore $r\,dr\,d\theta$. Changing labels has not curved the plane.
-
-</details>
-
-<details class="checkpoint"><summary>4. Does specifying acceleration specify a unique trajectory?</summary>
-
-No. You also need initial position and velocity. Dropping and throwing can obey the same acceleration law.
+$\Delta V=\int_0^{3\,\mathrm s}(2\,\mathrm{litres/s})dt=6\,\mathrm{litres}$. The time unit cancels the rate's denominator.
 
 </details>
 
-<details class="checkpoint"><summary>5. What is the first-order approximation to $\sqrt{1-v^2/c^2}$?</summary>
+<details class="checkpoint"><summary>4. Why does $d^2x/dt^2=-g$ fail to specify one particular throw?</summary>
 
-$1-v^2/(2c^2)$, when $v^2/c^2\ll1$. The expansion parameter is $v^2/c^2$, not a speed with units.
+It specifies acceleration but leaves starting position and starting velocity free. Integrating twice exposes those two constants.
 
 </details>
 
-If a check was unfamiliar, revisit that one section. You do not need perfect fluency to start. Chapter 1 introduces the physical puzzle; Chapter 2 teaches the index language with explicit examples; Chapter 3 builds special relativity. The rest grows from those three foundations.
+<details class="checkpoint"><summary>5. Estimate $\sqrt{1.04}$ to first order. What is the small parameter?</summary>
+
+Write $1.04=1+q$ with $q=0.04$. Then $\sqrt{1.04}\simeq1+0.04/2=1.02$. Squaring this estimate gives $1.0404$, close to the original input. The first discarded term in the square-root expansion is $-q^2/8=-0.0002$.
+
+</details>
+
+If a check was unfamiliar, revisit that section. Chapter 1 now starts with a scale and a falling cabin. Chapter 2 will develop vectors and changes of description. Chapter 3 will build the clock measurements of special relativity. Each step has its own job.
 
 
 <a id="chapter-1"></a>
@@ -301,95 +353,70 @@ If a check was unfamiliar, revisit that one section. You do not need perfect flu
 
 ### 1.1 What a theory of gravity must explain
 
-Imagine two spacecraft drifting side by side toward Earth with their engines off. Inside either craft, a released pen floats. The accelerometer reads zero. Nobody feels a downward force.
+Stand on a spring scale. Its spring compresses because it supports you. The scale measures the force with which it pushes on your feet; its familiar kilogram display converts that force using Earth's usual surface gravity. Your mass and this supporting force are different quantities.
 
-Yet the separation between the spacecraft changes. If they are side by side at the same altitude, their trajectories aim toward the same center and tend to converge. If one is directly above the other, the lower one accelerates toward Earth more strongly in the Newtonian description, and their radial separation tends to grow.
+Now imagine you and the scale inside a cabin that is falling freely. This is a thought experiment: ignore air resistance, rotation, and any contact with the outside. You, the scale, and the cabin all fall together. The scale no longer needs to support you, so its reading drops to zero. Your mass has not vanished. Neither has Earth.
 
-Something gravitational remains after both crews have removed the experience of weight.
+This is **weightlessness**: the absence of a supporting force. **Free fall** means motion with no rocket thrust, floor, or other nongravitational push. It need not mean falling straight down; an orbiting spacecraft can be in free fall too.
 
-That “something” is the first clue to spacetime curvature. **The most revealing local gravitational experiment compares neighboring free-fall trajectories.** A single freely falling laboratory can erase the connection coefficients at an event by choosing suitable coordinates. A family of laboratories can detect tidal effects that no coordinate change removes.
+An **accelerometer** makes a related measurement. Imagine a small test mass suspended by springs inside a case. When the case pushes the mass away from its natural free fall, the springs deform. Their deformation gives an acceleration reading. On the ground the reading is about $9.8\,\mathrm{m/s^2}$; in ideal free fall it is zero. We call this instrument reading **proper acceleration**. Acceleration obtained by differentiating a position on a ground-based map answers a different question. A falling ball has nonzero downward acceleration on that map while its ideal accelerometer reads zero.
 
-Now imagine standing on the ground. Your accelerometer reads approximately $9.8\,\mathrm{m/s^2}$. In relativistic language, the ground is preventing your natural free-fall motion. The electromagnetic forces holding the floor together push upward on you.
+So far, a small falling cabin can imitate a cabin drifting far from significant gravity. There is a more revealing experiment. Release two small test balls at rest relative to one another, with no springs joining them. Ignore their mutual attraction. Track the distance between them over time.
 
-Your everyday intuition says the person standing still is unaccelerated and the falling person accelerates. An accelerometer says the opposite, because it measures **proper acceleration**: departure from inertial free fall, rather than the second derivative of a chosen coordinate.
+If the balls start side by side at the same height near Earth, their downward directions point toward the same center: they tend to approach one another. If one starts directly above the other, the lower one falls more strongly, so their separation tends to grow. These are **tidal effects**: differences in free-fall acceleration across a region. The effect is very small in a small cabin over a short time, but it is a measurable prediction.
 
-This does not make Newtonian physics foolish. Near Earth's surface, Newtonian coordinates are extremely useful. It means “acceleration” has more than one meaning, and a good theory must specify which one an instrument reads.
+**Predict before continuing:** could a zero scale reading establish that gravity is absent?
 
-> **First trap door:** “Gravity disappears in free fall” means the locally removable inertial–gravitational effects disappear to first order. Tidal curvature generally remains. A falling laboratory is not a universe-sized eraser.
+<details class="checkpoint"><summary>Compare your reasoning</summary>
+
+No. The scale tests whether it must support you. Comparing two freely falling test balls tests whether free fall changes from place to place. You can have zero support and still detect a changing relative acceleration. One observer can carry out this comparison; the experiment requires two test bodies, not two people with different powers of observation.
+
+</details>
+
+General relativity will describe these tidal effects using **spacetime curvature**. For now, that name points to an experiment we can state without knowing its mathematics. Chapters 8–10 build and measure the corresponding geometry. The small-region qualification is essential to the equivalence principle: a finite falling room does not remove tidal effects. [Einstein Online: the equivalence principle](https://www.einstein-online.info/en/spotlight/equivalence_principle/).
 
 ### 1.2 The weak spot in the old division of labor
 
-In elementary mechanics, space and time provide an arena. A particle has a trajectory through that arena. Forces change its motion. Rulers and clocks are assumed to provide the arena's fixed geometry.
+Ordinary mechanics treats rulers and clocks as a fixed background: we first agree on distances and times, then use forces to predict motion. Relativity asks us to examine the measuring procedures too.
 
-Special relativity already complicates this arrangement: different observers split spacetime into “space” and “time” differently, and elapsed time depends on a worldline. But the flat spacetime metric is still prescribed.
+Imagine two identical clocks meeting, separating, and later meeting again. They can compare their elapsed times directly at reunion. Could their readings depend on their journeys? Special relativity says yes, even when gravity is negligible. Chapter 3 will derive that prediction from the measured speed of light and a careful definition of distant clock synchronization.
 
-General relativity takes the next step. The metric becomes a dynamical field.
+Gravity adds another question. Hold one clock higher above Earth than the other and compare their rates using light signals. General relativity predicts a difference even though the clocks are stationary relative to the ground. Chapter 16 will calculate it, with the clocks and comparison procedure specified.
 
-A metric tells us the interval between infinitesimally separated events:
+A theory of gravity must therefore predict both falling motion and clock comparisons. **Spacetime** is our name for considering where and when things happen together. An **event** is one occurrence with a place and a time, such as a particular flash or two clocks meeting. These words help us describe the experiments; the mathematical measuring rule comes later, in Chapters 3 and 4.
 
-$$
-ds^2=g_{\mu\nu}(x)\,dx^\mu dx^\nu.
-$$
-
-For a massive object's timelike trajectory, it determines the time on a clock carried with that object:
-
-$$
-d\tau^2=-\frac{ds^2}{c^2}.
-$$
-
-It also determines which directions are null, and therefore the local light cones. Those cones organize which events can influence which other events.
-
-So when the metric becomes dynamical, gravity changes more than paths through an arena. It changes the physical structure used to assign lengths, times, and causal relations.
-
-Think of a board game whose pieces influence the ruler used to measure each move and the clocks used to time each turn. The analogy captures mutual dependence. Its limitation is that real spacetime is not an elastic tabletop inside a larger room. The metric is an intrinsic field; an outside embedding is optional mathematical visualization, not required physics.
+The point is already concrete: a path on a map does not tell the whole story. We must also ask what a clock carried along that path records.
 
 ### 1.3 What the Einstein equation actually connects
 
-The equation relates two tensor fields at each event.
+Earth's mass affects the motion of a nearby ball. The ball also contributes, by a much smaller amount, to the gravitational situation. A complete theory must describe this mutual influence.
 
-The right-hand side describes **energy density, momentum density, energy flux, and stress**. Matter includes fields: electromagnetic radiation contributes even though photons have no rest mass. Pressure contributes because it is momentum transport.
+Einstein's equation is the rule connecting the distribution and motion of matter with the geometry that determines clock readings and free-fall behavior. Its source includes energy and pressure as well as mass. We have begun defining those quantities in Chapter 0; Chapter 11 will show how to collect the relevant measurements.
 
-The left-hand side describes a specific contraction of spacetime curvature, plus the cosmological constant term. It contains the metric and its derivatives. Once written in a coordinate chart, the equation becomes coupled nonlinear partial differential equations for the metric components.
+There is an essential limit to the slogan “matter determines geometry.” An empty region can still have tidal effects because matter lies elsewhere. Gravitational disturbances can also travel through an empty region. Specifying the local matter alone does not settle the whole problem: we need suitable starting and boundary information, just as an acceleration law alone did not specify a particular throw.
 
-But “the matter at a point determines the curvature at that point” needs an important repair. The stress tensor determines the **Ricci part** of curvature through the equation. It does not fix the entire Riemann tensor point by point. Free gravitational degrees of freedom, encoded in the Weyl part in four dimensions, depend on initial and boundary information and can propagate through vacuum.
-
-This is why black-hole exteriors and gravitational waves can have $T_{\mu\nu}=0$ while remaining gravitationally interesting.
-
-A useful comparison is electromagnetism. Source-free Maxwell equations allow electromagnetic waves. They do not say “no charges here, therefore no electromagnetic field here.” Vacuum Einstein equations deserve the same courtesy.
-
-> **Second trap door:** For $\Lambda=0$, vacuum implies $R_{\mu\nu}=0$, not $R^\rho{}_{\sigma\mu\nu}=0$. “Ricci-flat” and “flat” are different statements.
+Chapter 12 will state the equation precisely, after we have built its ingredients. For now, its job is to connect the behavior of matter with a consistent account of clocks, light, and falling bodies.
 
 ### 1.4 Two questions that must not be merged
 
-There are two separate jobs:
+There are two different calculations ahead of us:
 
-1. Given a spacetime metric, determine how clocks, light, and freely falling bodies behave.
-2. Determine which metric is produced by matter and gravitational initial data.
+1. Given a gravitational situation, predict how a test clock, a light pulse, or a freely falling object behaves.
+2. Determine the gravitational situation itself from matter and suitable starting or boundary information.
 
-The first is largely geometry plus the coupling of matter to that geometry. The second is gravitational dynamics.
+A **test object** is small enough that we can neglect its effect on the situation we are studying. Predicting the fall of one small ball near Earth usually uses this approximation. Predicting two stars orbiting each other requires accounting for both stars.
 
-The geodesic equation addresses the first job for suitable test bodies. The Einstein equation addresses the second. The Einstein–Hilbert action packages the second into a variational principle.
-
-There is also a third, easily forgotten job: determine how the matter itself evolves. A fluid needs an equation of state and fluid equations. Electromagnetism needs Maxwell's equations. A scalar field needs its field equation. The stress tensor is not usually a freely prescribed movie that can ignore the geometry it lives in.
-
-A self-consistent solution is a joint history of geometry and matter.
-
-This is more like solving an ecosystem than painting scenery behind an actor. The actor changes the scenery; the scenery changes the actor's possible movements; both must obey their evolution equations.
+We must also describe how matter behaves. Does a gas resist compression? Does it exchange heat? The gravitational equation alone does not answer those questions. We supply physical models for the matter and solve them together with gravity. A successful calculation states those assumptions and ends with a measurement we could compare with an experiment.
 
 ### 1.5 Why the rubber sheet is both useful and dangerous
 
-The standard image is a heavy ball dimpling a rubber sheet while smaller balls roll around it.
+You may have seen a heavy ball make a dip in a rubber sheet while smaller balls roll around it. The picture helps suggest that geometry can differ from a flat plane. It is a poor explanation of why gravity works.
 
-It can help you imagine a geometry that differs from a plane. Beyond that, the image acquires several debts:
+The small balls roll because ordinary gravity pulls them downward; the demonstration already uses the effect it is meant to explain. It also leaves out clocks. A picture of space at one instant cannot show how elapsed times depend on a journey.
 
-- The sheet bends into an outside dimension, while intrinsic curvature needs no such dimension.
-- The balls roll because ordinary gravity pulls them downward, so the picture uses gravity to explain gravity.
-- The picture shows curved space at an instant. General relativity concerns spacetime; changes in clock rates are indispensable.
-- A visual dip does not tell you whether the relevant spacetime curvature is positive, negative, vacuum, or matter-sourced.
+Nor does the sheet's outside room belong to the theory. In Chapter 4 we will learn how inhabitants can study a surface's geometry using measurements within it, without looking from outside.
 
-Use the sheet for one idea: distances need not obey Euclidean rules. Then retire it before it starts teaching unauthorized physics.
-
-A better everyday starting point is a network of clocks exchanging light signals and free-fall laboratories comparing relative acceleration. Clocks and light are actual measurement procedures. A rubber universe suspended over a basement is not.
+Keep the falling cabin, the two test balls, and the two clocks as our starting experiments. A useful picture should help us predict one of those measurements. A distorted grid by itself is not evidence of gravity.
 
 ### 1.6 A little history, without the lightning-bolt mythology
 
@@ -401,38 +428,28 @@ Einstein presented the final field equations on 25 November 1915, after several 
 
 The surrounding mathematics was a collective inheritance: non-Euclidean and intrinsic geometry, tensor calculus, curvature, and eventually a clearer language of connections and parallel transport. Learning GR does not require reenacting the order in which these tools were historically discovered. We can use the completed toolkit and explain what problem each tool solves.
 
-That is our modern approach: begin with operational measurements and geometric objects, distinguish coordinate freedom from physical freedom, derive dynamics from an action while stating its assumptions, and understand GR as both a classical theory and the leading part of a low-energy description.
+Our teaching route begins with measurements, then builds the mathematics needed to compare them. We will state our physical assumptions, derive their consequences, and explain where the resulting theory has limits.
 
 ### 1.7 What “understanding the equation” will eventually mean
 
-When you first see $R_{\mu\nu}-\tfrac12 Rg_{\mu\nu}$, it may look as though someone took an already difficult object and subtracted a second difficult object to ensure job security.
+Our destination is a calculation you can explain, not a formula you can recognize. The route has several concrete milestones:
 
-By chapter 14, the two pieces will have distinct origins:
+- Change the numbers on a map while keeping the physical displacement unchanged: Chapter 2.
+- Calculate what a traveling clock records between two meetings: Chapter 3.
+- Turn small changes in position labels into measured lengths and times: Chapter 4.
+- Predict a free-fall path and the changing separation of neighboring paths: Chapters 5–10.
+- Relate those predictions to matter, then derive the governing equation from a stated physical principle: Chapters 11–15.
+- Compare clocks near a star, follow light toward a black hole, and model an expanding universe: Chapters 16–19.
 
-- Varying the curvature scalar produces a Ricci-tensor contribution, plus a boundary term.
-- Varying the spacetime volume measure produces the $-\tfrac12 Rg_{\mu\nu}$ contribution.
-
-The geometry's own differential identity then ensures that this combination has vanishing covariant divergence. Matter's local energy–momentum balance fits that identity.
-
-The coefficient $8\pi G_N/c^4$ will not be decorative. Matching the weak-field limit to Newton's Poisson equation fixes it. The factor of two comes from trace reversal; the $4\pi$ comes from the familiar three-dimensional inverse-square-field normalization; the powers of $c$ reconcile relativistic energy density with curvature.
-
-And $\Lambda$ will not be merely a late footnote about cosmology. A constant scalar term is allowed in the action, and its variation produces exactly $\Lambda g_{\mu\nu}$.
-
-The equation will become a compressed record of several ideas you have actually earned.
+Each milestone introduces the mathematics it needs. The later formula will compress relationships we have already learned to use.
 
 ### 1.8 A promise and a discipline
 
-We will repeatedly ask four questions:
+For each new idea, we will ask what it helps us measure, what each symbol means, and which assumptions make the calculation valid. Then we will change an example and make another prediction.
 
-**What object is this?** A scalar, vector, covector, tensor, connection coefficient, density, or coordinate choice?
+Keep those questions beside you. If you can follow a line of algebra but cannot say what its answer measures, return to the experiment. If a technical word appears before its explanation, that is a gap in the teaching to repair, not a test of your intelligence.
 
-**What comparison does it perform?** Between directions at one event, fields at neighboring events, nearby free-fall trajectories, or entire spacetime histories?
-
-**What would an observer measure?** Proper time, acceleration, frequency, energy, relative displacement, or a coordinate-dependent intermediate quantity?
-
-**Under which assumptions is the statement true?** Vacuum or matter? Local or global? Weak field or exact? Classical or semiclassical? A point particle or an extended spinning body?
-
-Those questions are the real prerequisites. The calculus will follow them.
+The history that follows gives context. The next mathematical step is Chapter 2's distinction between an arrow and the numbers used to describe it.
 
 ### 1.9 The historical route was not a straight line
 
@@ -449,7 +466,7 @@ The order in this book is designed for learning. Discovery followed a much less 
 
 **1907: free fall becomes the clue.** Einstein recognized the special status of a freely falling observer. The equivalence principle suggested a link between acceleration, gravitational clock shifts, and gravity. It did not by itself supply the final field equation.
 
-**1912–1913: mathematical collaboration and a wrong turn.** Marcel Grossmann helped Einstein bring differential geometry into the problem. Their *Entwurf* theory had a metric description but restricted field equations. Recovering Newtonian gravity, interpreting coordinate conditions, and deciding what general covariance meant were entangled difficulties. The route was not “notice curvature, write the answer.”
+**1912–1913: mathematical collaboration and a wrong turn.** Marcel Grossmann helped Einstein bring differential geometry into the problem. Their *Entwurf* theory used a mathematical rule for distances and times but had restricted gravitational equations. Recovering Newtonian gravity and deciding which changes of description those equations should permit were entangled difficulties. The route was not “notice curvature, write the answer.”
 
 **November 1915: revision in public.** Einstein presented successive communications on November 4, 11, 18, and 25. The November 18 calculation explained Mercury's anomalous perihelion advance. The November 25 paper gave the final field equations. Hilbert was developing an action-based approach in the same period. The surviving documents matter more than a simple race narrative; a paper's submission date and the content of its later printed version are different evidence. [Einstein's November 25 paper](https://de.wikisource.org/wiki/Die_Feldgleichungen_der_Gravitation), [Norton's historical analysis](https://sites.pitt.edu/~jdnorton/papers/Einstein_field_eqn_1-4.pdf).
 
@@ -466,25 +483,24 @@ The historical lesson is useful while studying. Getting stuck on coordinate mean
 
 ### 1.10 A falling grid: give the picture its time dimension
 
-Imagine a fleet of tiny laboratories falling toward Earth from every direction. Draw a line between each laboratory and its neighbors. Advance time. The lines bend, the grid moves inward, and the shape of each cell changes. You have made time visible by allowing the picture to move.
+The opening animation draws lines between imagined small laboratories falling toward Earth. The laboratories move; the lines let us compare their positions. A changing grid does not mean that Earth consumes space.
 
-What is falling? The laboratories. The grid is a way to keep track of them. Earth does not consume space, and the geometry need not change with time. A stationary spacetime can contain a moving family of freely falling observers, just as a fixed globe can contain ants walking toward the north pole.
+Compare neighbors. Along the same outward radial line, the inner laboratory falls faster and the radial gap grows. Side-by-side laboratories fall toward the same center and their sideways gap shrinks. The grid makes the tidal pattern from §1.1 visible. Its motion is accelerated for display and stops at Earth's surface.
 
-In the opening interactive picture we choose a particularly simple family, called **rain observers**. Each one has fallen radially from rest infinitely far away. By the time it reaches the displayed region it is already moving. This is different from an apple held above the ground and then released: that apple has a different initial velocity and follows a different member of the full family of possible free-fall trajectories.
+The illustration chooses one particular family of falls. Each laboratory starts from rest infinitely far away, so it already has an inward speed when it enters the scene. It does not depict objects released from rest at the edge of the picture. Starting conditions matter here just as they did for the ball in Chapter 0.
 
-In the coordinates used for the animation, the radial speed of a rain observer is
+In the Newtonian approximation, the speed follows from the energy calculation in §0.5. Starting from rest infinitely far away gives total energy zero. At distance $r$ from a spherical body of mass $M$,
 
 $$
-\frac{dr}{dt}=-\sqrt{\frac{2GM}{r}}.
+\frac12mv^2-\frac{G_NMm}{r}=0,
+\qquad v=\sqrt{\frac{2G_NM}{r}}.
 $$
 
-Here $r$ is distance from Earth's center, $M$ is Earth's mass, and $G$ is Newton's gravitational constant. The minus sign says that distance is decreasing. The denominator inside the square root says that the inward speed grows as the observer approaches Earth. This familiar-looking escape-speed formula is also exact for these particular observers in the exterior Schwarzschild rain coordinates; it is not a formula for every possible velocity or every coordinate system.
+Here $m$ is a test body's mass and $v$ is its speed. For inward motion, distance from the center decreases, so $dr/dt=-v$. The test mass cancels: within this approximation, all of these laboratories obey the same speed rule.
 
-Now compare two observers. If they lie along the same outward radial line, the nearer one falls faster, increasing their radial separation. If they lie side by side at the same radius, their inward paths converge, decreasing their sideways separation. A tiny cell stretches one way and squeezes in the other two directions. Chapter 10 will turn this observation into a measurement of curvature.
+The full relativistic model used by the animation has additional coordinate assumptions. Its numerical motion is not a general formula for every possible observer's speed. We return to the distinction between chosen position labels and measured speeds in Chapters 16–17. The [river-model paper by Hamilton and Lisle](https://arxiv.org/abs/gr-qc/0411060) documents that model; it is further reading, not preparation for the next chapter.
 
-There are two safeguards for the picture. First, the connecting lines at a given instant are not themselves geodesics: the laboratories' **worldlines through spacetime** are geodesics. Second, bending the lines of a coordinate drawing is easy even in flat space. The physical evidence for curvature is the relative acceleration of nearby freely falling laboratories, not the appearance of a mesh.
-
-The [ScienceClic visualization by Alessandro Roussel](https://www.youtube.com/watch?v=wrwgIjBUYVc) motivates this moving-grid intuition. Our implementation uses the precise [river model developed by Hamilton and Lisle](https://arxiv.org/abs/gr-qc/0411060). Its motion runs faster than real time, and it stops following observers at Earth's surface. The animation shows an established, continuous flow: older, already-deformed reference grids fill the view from the first frame, while new ones enter from a boundary beyond its edges. There is no flat starting state or global replay. New lines mark additional falling observers entering the scene; they do not mean new space is being created.
+**What to read from the picture:** compare how neighboring falls change relative to one another. The connecting lines are a drawing aid. Their bend alone does not establish curvature. The [ScienceClic visualization by Alessandro Roussel](https://www.youtube.com/watch?v=wrwgIjBUYVc) motivates the moving-grid presentation.
 
 ---
 
@@ -731,17 +747,23 @@ You do not need to memorize an entire branch of mathematics before proceeding. C
 
 ### 3.1 Events, not photographs
 
-An event is something localized in space and time: a flash, a detector click, two particles meeting. In an inertial coordinate system, label it
+A particular flash is an **event**: something happening at one place and one time. To describe it, we need an address and a clock reading. A sequence of events along an object's motion is its **worldline**—its history, not a photograph at one instant.
+
+Begin with an ideal laboratory drifting without acceleration or rotation, far from significant gravity. Place mutually stationary rulers and clocks throughout it. Such a network defines an **inertial frame**. We want every observer using this network to assign the same time to a given distant event, so we must say how its clocks are synchronized.
+
+Send a light pulse from clock A to clock B and immediately reflect it back. If A sends it at $t_1$ and receives it at $t_2$, set B's reading at the reflection to $(t_1+t_2)/2$. This is Einstein synchronization: the outward and return light travel times are assigned equal values. It accounts for the travel delay; seeing a distant clock now is not the same as assigning a time to the event happening there.
+
+The physical starting points are that the laws of physics are the same in all inertial frames and that light in vacuum has the same speed $c$ in each. These are assumptions supported by experiment, not consequences of a coordinate trick. A laboratory moving relative to the first one builds its own synchronized network using the same procedure.
+
+For an event, collect the labels in one list:
 
 $$
 x^\mu=(ct,x,y,z).
 $$
 
-Writing $x^0=ct$ makes all four coordinates have length units in this chart. It does not turn time into ordinary space. The difference lives in the metric's sign.
+The index $\mu$ runs over $0,1,2,3$, as introduced in Chapter 2. The symbol $c$ is the vacuum speed of light. Multiplying a time by $c$ gives a length: $ct$ is how far light travels during that time. Thus all four entries in this list have length units. We have changed how we label time, not turned a clock into a ruler.
 
-An inertial frame is an ideal network of mutually stationary rulers and synchronized clocks in flat spacetime, with no acceleration or rotation of the network. “The time of a distant event” is the reading assigned by this network, not the time at which light from that event reaches your eye. Relativity of simultaneity remains after light-travel delays have been accounted for.
-
-Einstein's 1905 construction combined the equivalence of inertial frames for the laws of physics with the invariant vacuum speed of light. The original paper makes the operational treatment of clocks central to the theory. It is useful to meet that emphasis directly in [Einstein's 1905 paper, in English translation](https://sites.pitt.edu/~jdnorton/teaching/Einstein_graduate/pdfs/Einstein_STR_1905_English.pdf).
+Einstein's original account starts with this operational treatment of clocks. [Einstein's 1905 paper, in English translation](https://sites.pitt.edu/~jdnorton/teaching/Einstein_graduate/pdfs/Einstein_STR_1905_English.pdf).
 
 ### 3.2 Deriving a Lorentz boost without pulling a rabbit from a matrix
 
@@ -803,32 +825,56 @@ The everyday limit is sensible. If $v/c\ll1$, then $\gamma\approx1$ and $vx/c^2$
 
 ### 3.3 The interval: the quantity that refuses to change
 
-Insert the Lorentz formulas into $-c^2dt'^2+dx'^2$. Expanding both squares produces cross terms $+2v\,dt\,dx$ and $-2v\,dt\,dx$, which cancel. The remaining factor $\gamma^2(1-v^2/c^2)$ equals one. Thus
+Choose two events, A and B. Write $\Delta t=t_B-t_A$ for their time difference in one inertial frame, and similarly $\Delta x$, $\Delta y$, and $\Delta z$ for their position differences. Different moving frames generally assign different values to all of these differences. Is there a combination they agree on?
+
+There is a useful clue from ordinary geometry. Rotate a map and a displacement's horizontal and vertical components change, but the sum of their squares stays equal to the squared length. Try a related combination for time and position: square the spatial differences and **subtract** the squared time difference expressed as a length.
+
+Define the **spacetime interval** between the two events in flat spacetime by
+
+$$
+\Delta s^2=-c^2(\Delta t)^2+(\Delta x)^2+(\Delta y)^2+(\Delta z)^2.
+$$
+
+The symbol $\Delta s^2$ names this signed quantity. Despite the square in its notation, it can be negative; it is not the square of an ordinary positive distance. Every term has square-length units. The minus sign is a physical distinction between time and space, not a units conversion.
+
+Now test the proposed combination using the Lorentz transformation from §3.2. For the time and $x$ terms,
+
+$$
+\begin{aligned}
+-c^2(\Delta t')^2+(\Delta x')^2
+&=\gamma^2\left[-c^2\left(\Delta t-\frac{v\Delta x}{c^2}\right)^2
++(\Delta x-v\Delta t)^2\right]\\
+&=\gamma^2\left(1-\frac{v^2}{c^2}\right)
+\left[-c^2(\Delta t)^2+(\Delta x)^2\right]\\
+&=-c^2(\Delta t)^2+(\Delta x)^2.
+\end{aligned}
+$$
+
+The two mixed terms cancel. The transverse differences do not change in this boost. All inertial frames therefore assign the same interval, even when they disagree about the separate time and position differences. This agreement is what makes the interval useful.
+
+For a concrete example, one frame assigns $\Delta t=5\,\mathrm s$ and $\Delta x=c(3\,\mathrm s)$, with no sideways separation. The spatial gap is three **light-seconds**: the distance light travels in three seconds. The interval is $(-25+9)=-16$ square light-seconds. In a frame moving at $v=0.6c$, the Lorentz formulas give $\Delta x'=0$ and $\Delta t'=4\,\mathrm s$. Its answer is also $-16$ square light-seconds. The next section explains why the four seconds have a direct clock interpretation.
+
+The sign tells us which connections are possible:
+
+| Separation | Interval sign | Meaning in flat spacetime |
+|---|---|---|
+| Timelike | $\Delta s^2<0$ | Light has more than enough time to cross the gap; an object traveling below $c$ can connect the events. |
+| Null | $\Delta s^2=0$ | For distinct events, light has exactly enough time to connect them. |
+| Spacelike | $\Delta s^2>0$ | Crossing the gap in that time would require a speed greater than $c$. |
+
+For a signal emitted at A, also require B to be in A's future. The possible light signals form a **light cone**: after elapsed time $\Delta t$, light has reached a sphere of radius $c\Delta t$. Stack these spheres in a diagram that includes time, and they form a cone. Slower objects travel inside it. The surface is null; the interior is timelike. The spatially separated region outside is spacelike. Observers can disagree about the time order of spacelike events, but not about the order of two events joined by a future-directed signal.
+
+For small displacements we use differentials rather than finite changes:
 
 $$
 ds^2=-c^2dt^2+dx^2+dy^2+dz^2
-=\eta_{\mu\nu}dx^\mu dx^\nu,
-$$
-
-where
-
-$$
+=\eta_{\mu\nu}dx^\mu dx^\nu,\qquad
 \eta_{\mu\nu}=\operatorname{diag}(-1,1,1,1).
 $$
 
-All inertial frames assign the same interval. They disagree about its division into temporal and spatial components.
+The last expression uses Chapter 2's summation rule and the coordinates $x^0=ct$. The diagonal matrix packages the coefficients of the measuring rule; its other entries are zero. It is called the **Minkowski metric**. A metric is a rule for obtaining an interval from small coordinate displacements. Chapter 4 develops that rule on more general spaces. There the local formula cannot in general be turned into a finite separation by simply replacing every $d$ by $\Delta$.
 
-A useful analogy is an ordinary rotation: different observers assign different horizontal and vertical components to a rod while agreeing on its length. A Lorentz boost similarly changes temporal and spatial components while preserving a quadratic form. **The limitation is crucial:** the spacetime quadratic form has a minus sign. It is not Euclidean distance in disguise. Nonzero vectors can have zero norm, and the geometry distinguishes three causal types.
-
-| Separation or tangent | Interval sign | Physical significance |
-|---|---|---|
-| Timelike | $ds^2<0$ | A sufficiently small displacement can lie on a massive observer's worldline. |
-| Null | $ds^2=0$ | A nonzero displacement tangent to a vacuum light ray in geometric optics. |
-| Spacelike | $ds^2>0$ | No causal signal can connect sufficiently nearby events with that displacement. |
-
-In Minkowski space these classifications also apply directly to finite differences between two events. In curved spacetime the metric initially classifies tangent directions; global causal relationships require examining actual curves.
-
-The null directions form a **light cone** at each event. The future cone contains directions in which physical observers and signals can proceed. Proper Lorentz transformations preserving time orientation do not turn a future timelike direction into a past direction. The temporal order of spacelike-separated events can change between inertial frames; the causal order of connected events cannot.
+To compose boosts conveniently, we can build two new functions from exponentials. For a dimensionless number $\chi$, define $\cosh\chi=(e^\chi+e^{-\chi})/2$ and $\sinh\chi=(e^\chi-e^{-\chi})/2$, then $\tanh\chi=\sinh\chi/\cosh\chi$. Squaring and subtracting gives $\cosh^2\chi-\sinh^2\chi=1$. This resembles the circular identity $\cos^2\theta+\sin^2\theta=1$, with the sign needed for an interval.
 
 Rapidity makes the rotation analogy mathematically exact in its appropriate sense. Define $\chi$ by
 
@@ -3218,13 +3264,13 @@ The lesson is sharper than “pressure does not really gravitate.” It does. Th
 
 ### 11.6 Two field examples: scalar waves and electromagnetism
 
-For this scalar-field subsection only, use natural units $c=\hbar=1$. A canonically normalized real scalar field has Lagrangian
+For this scalar-field subsection only, choose time and length units with $c=1$. A real scalar field assigns one real number $\phi$ to each event. Choose its normalization so that squared derivatives have energy-density units, and let $V(\phi)$ be its potential energy density. A **Lagrangian density** is the local integrand used to build a field action, analogous to the particle Lagrangian of Chapter 5. The model considered here uses
 
 $$
 \mathcal L_\phi=-\frac12g^{\mu\nu}\partial_\mu\phi\partial_\nu\phi-V(\phi).
 $$
 
-In four dimensions, $\phi$ has mass dimension one; $V$ and $T_{\mu\nu}$ have mass dimension four. The sign of the kinetic term is chosen for signature $(-,+,+,+)$, so time-dependent excitations carry positive kinetic energy.
+This is a specified model for matter, an additional physical input to GR. Its kinetic sign is chosen for signature $(-,+,+,+)$, so time-dependent excitations have positive kinetic energy. For now we will evaluate its energy and pressure; Chapter 13 derives the field and stress equations by variation.
 
 The metric-variation method of Chapter 13 gives
 

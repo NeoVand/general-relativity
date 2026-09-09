@@ -119,6 +119,10 @@ try{
    await visit(page,`chapter-${chapter}.html`);
    for(const lesson of lessons.filter(lesson=>lesson.chapter===chapter)){
     await settled(page,lesson);const root=page.locator(`[data-lesson="${lesson.id}"]`);
+    if(lesson.placement==='section-start'){
+     assert.equal(await root.locator('[role=tablist]').isVisible(),false,'required preparation is a continuous reading sequence');
+     for(const name of ['intuition','derive','formal'])assert(await root.locator(`.lesson-panel[data-depth="${name}"]`).isVisible(),`${lesson.id}: prerequisite ${name} is not hidden`);
+    }else{
     for(const name of ['intuition','derive','formal']){
      await root.locator(`[role=tab][data-depth="${name}"]`).click();await assertDepth(root,name);interactions++;
     }
@@ -129,6 +133,7 @@ try{
     await page.keyboard.press('End');await assertDepth(root,'formal');
     await page.keyboard.press('ArrowRight');await assertDepth(root,'intuition');
     await page.keyboard.press('ArrowLeft');await assertDepth(root,'formal');
+    }
     await root.locator('.lesson-practice>summary').click();
     for(const [index,choice] of lesson.practice.choices.entries()){
      await root.locator(`.practice-choices [data-choice="${index}"]`).click();
@@ -175,7 +180,7 @@ try{
      assert.deepEqual((await stored(page)).notes[lesson.id].visual?.state,JSON.parse(await model.getAttribute('data-visual-state')),`${lesson.id}: bookmarking captures current model settings, including defaults`);
     }
     await root.locator('.lesson-practice>summary').click();
-    await root.locator('[role=tab][data-depth="derive"]').click();
+    if(lesson.placement!=='section-start')await root.locator('[role=tab][data-depth="derive"]').click();
     const bounds=await root.boundingBox();assert.ok(bounds.x>=-1&&bounds.x+bounds.width<=width+1,`${lesson.id}/${width}: bridge fits page`);
     interactions+=4;
    }

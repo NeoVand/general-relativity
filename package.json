@@ -21,7 +21,8 @@
     "test:resilience": "node scripts/check-resilience.mjs",
     "test:learning-state": "node scripts/check-learning-state.mjs && node scripts/check-notebook-recovery.mjs",
     "test:diagnostics": "node scripts/check-diagnostics.mjs",
-    "test:physics": "node scripts/check-physics-calculations.mjs"
+    "test:physics": "node scripts/check-physics-calculations.mjs",
+    "test:sequence": "node scripts/check-learning-sequence.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

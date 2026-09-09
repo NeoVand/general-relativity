@@ -28,5 +28,5 @@ try{
  const context=await browser.newContext({javaScriptEnabled:false});const page=await context.newPage();
  await page.goto(new URL('course-map.html',base).href);
  for(const lesson of foundationLessons){const root=page.locator(`[data-diagnostic="${lesson.id}"]`);await root.locator(':scope>summary').click();await root.locator('details>summary').click();assert(await root.locator('details p').isVisible());assert(!(await root.locator('form').isVisible()));}
- console.log('Twelve readiness checks verified at desktop/mobile widths, with correct/wrong feedback, teaching links and complete no-JavaScript reasoning.');
+ console.log(`${foundationLessons.length} readiness checks verified at desktop/mobile widths, with correct/wrong feedback, teaching links and complete no-JavaScript reasoning.`);
 }finally{await browser.close()}
