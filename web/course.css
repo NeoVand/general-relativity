@@ -5,3 +5,15 @@
 @media(max-width:650px){.course-compass{gap:12px;font-size:10px}.course-compass>span{order:3;width:100%}.lesson-depths button{padding:9px 12px;font-size:10px}.guided-lesson{margin:25px 0 50px}.lesson-practice{padding:0 16px;border-radius:14px}.prose .derivation-steps>li{grid-template-columns:20px minmax(0,1fr);gap:8px}.course-route-picker{grid-template-columns:1fr}.course-route-picker button{padding:16px;gap:5px}.course-node{grid-template-columns:24px minmax(0,1fr);gap:12px}.course-node-title{font-size:1.55rem}.map-lesson{display:block}.map-lesson small{display:block;text-align:left}.review-item{display:block}.review-item small{display:block}.notebook-entry{padding:18px}.lesson-prerequisites{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.lesson-depths button{transition:none}}
 .notebook-import{position:relative;display:inline-flex;align-items:center}.notebook-import input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;padding:0;margin:0;max-width:1px}.notebook-import:focus-within{outline:3px solid var(--curvature);outline-offset:4px}.contents-path{font:500 12px/1.6 Manrope,sans-serif;text-decoration:none;display:inline-block;margin-top:6px}
+
+/* The authored lesson is complete before progressive enhancement succeeds. */
+.lesson-depths[hidden], .guided-lesson form[hidden]{display:none}
+.guided-lesson[data-enhanced="true"] .lesson-depth-title,
+.guided-lesson[data-enhanced="true"] .practice-static{display:none}
+.lesson-depth-title{font:650 14px/1.5 Manrope,sans-serif;color:var(--geometry);margin:32px 0 14px}
+.visual-summary{border:1px solid var(--line);border-radius:18px;padding:22px;overflow-wrap:anywhere}
+.visual-summary dl{display:grid;gap:18px;margin:24px 0}
+.visual-summary dt{font:550 12px/1.6 Manrope,sans-serif;color:var(--muted)}
+.visual-summary dd{margin:5px 0;overflow-x:auto}
+.practice-choices button:disabled{cursor:default;color:var(--ink)}
+@media print{.guided-lesson .lesson-panel[hidden]{display:block}.guided-lesson .lesson-depths,.lesson-save{display:none}.guided-lesson[data-enhanced="true"] .lesson-depth-title{display:block}}

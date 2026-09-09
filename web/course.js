@@ -69,6 +69,11 @@ export function initCourse(){
   if(abort.aborted)return;course=d;state=read();
   document.querySelectorAll('[data-lesson]').forEach(root=>{
    const id=root.dataset.lesson,l=course.lessons.find(l=>l.id===id);if(!l)return;
+   root.dataset.enhanced='true';
+   root.querySelector('.lesson-depths').hidden=false;
+   root.querySelectorAll('.lesson-panel').forEach(panel=>{panel.setAttribute('role','tabpanel');panel.tabIndex=0;panel.setAttribute('aria-labelledby',`${id}-tab-${panel.dataset.depth}`);panel.removeAttribute('aria-label')});
+   root.querySelectorAll('button[disabled]').forEach(button=>button.disabled=false);
+   root.querySelector('[data-transfer]').hidden=false;
    depth(root,state.depths[id]||'intuition');
    const e=state.evidence[id];if(e?.answer)root.querySelector('[data-transfer] input').value=e.answer;
    const save=root.querySelector('[data-save-lesson]');save.setAttribute('aria-pressed',String(!!state.notes[id]));
@@ -87,6 +92,7 @@ export function initCourse(){
    });
    on(root.querySelector('.transfer-solution'),'toggle',event=>{if(event.target.open){state.evidence[id]={...state.evidence[id],solutionSeen:true,updated:Date.now()};persist();signal()}});
   });
+  document.querySelectorAll('[data-route]').forEach(button=>button.disabled=false);
   updateRoute();renderNotebook();
   // Reveal a deep link only after saved depth has been restored.
   if(location.hash){let anchor=location.hash.slice(1);try{anchor=decodeURIComponent(anchor)}catch{}const target=document.getElementById(anchor);revealCourseLocation(target);}

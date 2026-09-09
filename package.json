@@ -17,7 +17,8 @@
     "test:course": "node scripts/check-course.mjs",
     "test:visual-lessons": "node scripts/check-visual-lessons.mjs",
     "test:geometry-experiences": "node scripts/check-geometry-experiences.mjs",
-    "test:curvature-experiences": "node scripts/check-curvature-experiences.mjs --integrated"
+    "test:curvature-experiences": "node scripts/check-curvature-experiences.mjs --integrated",
+    "test:resilience": "node scripts/check-resilience.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

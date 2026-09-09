@@ -150,6 +150,9 @@ try{
  assert.equal(+(await wave.getAttribute('data-frequency')),2.5);
  await captureScene(wave,'qa/lab-wave-controls-cross-mobile.png');
  await wave.locator('[data-wave-play]').click();
+ // A tall screenshot changes viewport geometry; Play being visible does not
+ // establish that the independently observed drawing stage is visible.
+ await scrollSceneVisibility(wave,true);
  const initialWaveFrames=+(await wave.getAttribute('data-frames')||0);
  await page.waitForFunction(n=>+document.querySelector('#scene-wave').dataset.frames>n+4,initialWaveFrames);
  await wave.locator('[data-wave-play]').click();
@@ -160,6 +163,7 @@ try{
  const diagramFrames=await wave.getAttribute('data-frames');await page.waitForTimeout(160);
  assert.equal(await wave.getAttribute('data-frames'),diagramFrames,'The alternate diagram must suspend wave animation');
  await wave.locator('[data-scene-mode="3d"]').click();
+ await scrollSceneVisibility(wave,true);
  await page.waitForFunction(n=>+document.querySelector('#scene-wave').dataset.frames>n+2,+diagramFrames);
  const hiddenWave=await scrollSceneVisibility(wave,false);
  assert.ok(hiddenWave.bottom<=0||hiddenWave.top>=hiddenWave.viewport,'The wave stage must actually be outside the viewport');

@@ -5,7 +5,7 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 ## Work sequence
 
 - [x] Scientific definitions, curvature notation, repeated Cartan derivation (F01, F02, F09).
-- [ ] Accessible progressive enhancement and reliable scene visibility checks (F05).
+- [x] Accessible progressive enhancement and reliable scene visibility checks (F05).
 - [ ] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
 - [ ] Reading-position restoration and honest route status (F06, F08).
 - [ ] Skill-based prerequisites, diagnostic entry, and the missing foundations.
@@ -30,3 +30,11 @@ The review and its reproduction evidence are preserved as the implementation bas
 - Earth tidal component and Kretschmann scalar now have distinct symbols and an explicit dimensional relationship.
 - The second sphere derivation is now a surface-of-revolution calculation with plane, sphere, hyperbolic, and cylindrical checks.
 - Verified: reader build, static site/numerical checks, Svelte diagnostics, and 38 symbol-classification cases plus live desktop/mobile inspector tests.
+
+### Readable lessons before enhancement
+
+- Every bridge ships all derivations and deeper qualifications as readable HTML; tabs activate only after learning data loads. Native solution/feedback disclosures remain available without the app.
+- All five visual lessons ship calculated static measurements instead of indefinite loading placeholders.
+- Disabled-JavaScript, blocked-reader, and failed-course-data browser checks cover every bridge and now run in CI.
+- Wave animation checks explicitly restore stage visibility after tall screenshots and view switches.
+- Verified: reader build, all 260 existing course interactions, resilience suite, semantic narration checks and live mocked narration/source retrieval.
