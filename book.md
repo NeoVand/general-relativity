@@ -3756,6 +3756,14 @@ The qualification matters. Charged matter exchanging momentum with an electromag
 
 ### 11.4 Perfect fluids, derived from isotropy
 
+The particle experiment showed momentum crossing a surface because particles traveled through it. Real fluids also transmit tangential forces between neighboring layers. Slide a plate over a layer of oil: the oil beside the plate follows it and drags the oil farther away. The force required depends on how quickly velocity changes across the layers. The material coefficient relating that velocity gradient to force per area is its **viscosity**.
+
+In the next experiment, the blue dots are dye following the average fluid motion. The gold arrows show the forces between layers. A faster flow need not have a larger shear force: inspect the middle of the pressure-driven channel, where the fluid moves fastest but the velocity profile has zero slope.
+
+<div data-foundation-insert="fluid-shear"></div>
+
+We now make a simpler approximation, setting aside those viscous shear forces. It is useful when their effect on the motion is negligible over the distances and times being studied. The remaining rest-frame stress is pressure, acting equally in every direction.
+
 A **perfect fluid** can have pressure from microscopic particle motion, but its local rest frame has no preferred spatial direction and no net heat flow. The model neglects viscosity: the additional momentum transfer associated with neighboring layers moving differently. Rotating the rest-frame axes must leave its stress unchanged. This requires zero off-diagonal entries and equal diagonal entries, giving $p\delta^{ij}$, where $p$ is pressure.
 
 Let

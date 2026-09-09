@@ -13,7 +13,7 @@ The full course overhaul is **not finished**. A completed commit means the named
 | Flows and Lie bracket before torsion | Implemented and pushed | Missing §6.6 added, with an exact two-order flow experiment and moving-frame example. |
 | Connection and continuous parallel transport | Implemented and pushed | Continuous plane/cylinder/sphere transport before the equation; exact model, independent ODE, face-on view, orbit/fallback/reload checks. |
 | Curvature through two routes and closed loops | Implemented and pushed | Direct and via-B transport to the same endpoint before Riemann algebra; labeled angle, face-on view, loop relation, reversal/shrinking/radius experiments, independent ODE and browser checks. |
-| Stress–energy through particles and fluid flow | Partial | Particle crossings, zero-bulk-flow pressure, tilted-stream momentum flux and all tensor selections implemented. Continuum shear/pressure flow, movable subvolume and observer comparison remain. |
+| Stress–energy through particles and fluid flow | Partial | Particle crossings, zero-bulk-flow pressure, tilted-stream momentum flux, tensor selections, and continuous Couette/pressure-flow comparisons implemented. Movable particle subvolume and observer comparison remain. |
 | Variations and stationary action | Open | Reconcile symbols; label endpoints/displacement; linked histories and action; saddle example. |
 | Forms, exterior derivative and Stokes | Open | Level sets, oriented area/flux, cancellation along interior boundaries. |
 | Penrose diagrams and black-hole causal geometry | Open | Teach compactification; distinguish collapse from eternal extensions; light cones and singularities. |
