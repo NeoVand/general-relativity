@@ -14,7 +14,7 @@ for(const [file,html]of cache){
  assert.ok(html.includes('<html lang="en">'),file);
  assert.ok(!html.includes('GRMATHTOKEN'),`Unresolved math in ${file}`);
  assert.ok(!html.includes('class="math-error"'),`Invalid math in ${file}`);
- const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(ids.length,new Set(ids).size,`Duplicate IDs in ${file}`);
  for(const match of html.matchAll(/\b(?:href|src)="([^"]+)"/g)){
   const raw=match[1];if(/^(https?:|data:|mailto:)/.test(raw))continue;

@@ -12,6 +12,7 @@
  import {loadHistory,recordListening,historyContext,compactHistory} from './lib/study-memory.js';
  import {answerHTML} from './lib/format.js';
  import {readingSelection,selectionPosition} from './lib/selection.js';
+ import {extractPassageText,withNarrationContext,isReadingVisible,readingNeighborhood,explicitNarrationRange} from './lib/reading-context.js';
  let {page,navigate}=$props();
  let settings=$state(loadSettings());
  let open=$state(false),tab=$state('listen'),error=$state(''),notice=$state('');
@@ -29,16 +30,20 @@
  const active=$derived(playback!=='idle');
  const calling=$derived(callState!=='idle');
  const busy=$derived(playback==='preparing');
- function visibleSegment(segment){
+ function resolveSegment(segment){
   if(!segment)return segment;
-  const view=document.getElementById(segment.id)?.closest('[data-scene]')?.dataset.activeView;
+  const element=document.getElementById(segment.id);
+  if(element?.matches('.visual-lesson')){const text=extractPassageText(element,{live:true});const latex=[...text.matchAll(/\$([^$]+)\$/g)].map(match=>match[1]);return {...segment,text,description:text,latex,narration:undefined,sourceHash:segment.hash,hash:segment.hash+(element.dataset.visualState||'')};}
+  const view=element?.closest('[data-scene]')?.dataset.activeView;
   const variant=segment.views?.[view];
   return variant?{...segment,...variant,sourceHash:segment.hash,view}:segment;
  }
- function visibleSegments(){return page.segments.filter(segment=>{
-  const element=document.getElementById(segment.id);
-  return !(element?.closest('.scene-equation,.scene-note,.scene-explanation')&&element.closest('[data-scene]')?.dataset.activeView==='diagram');
- }).map(visibleSegment)}
+ function visibleSegments(){return withNarrationContext(page.segments.filter(segment=>isReadingVisible(segment,document)).map(resolveSegment))}
+ function visibleSegment(segment){
+  if(!segment)return segment;
+  const visible=visibleSegments(),found=visible.find(s=>s.id===segment.id);if(found)return found;
+  return withNarrationContext(readingNeighborhood(page.segments,segment.id).map(resolveSegment)).find(s=>s.id===segment.id);
+ }
  function sizeComposer(node){
   question;
   node.style.height='auto';
@@ -71,13 +76,16 @@
   if(!requireKeys(true))return false;
   if(!fromTool){cancelAnswer();voiceTurn++;voiceTurnController?.abort();}
   stop();handToNarrator();
-  const sources=visibleSegments();
   const sourceStart=page.segments.findIndex(s=>s.id===(id||(mode==='selection'?selection?.start:currentPassage())));
-  const requested=sources.findIndex(s=>s.index>=Math.max(0,sourceStart));
   const end=page.segments.findIndex(s=>s.id===(endId||selection?.end));
   const ranged=mode==='selection'||mode==='range';
+  const explicit=ranged&&id?explicitNarrationRange(page.segments,id,endId||id,{isVisible:s=>isReadingVisible(s,document,{includeNoNarration:true})}):null;
+  const sources=mode==='one'&&id?[visibleSegment(page.segments.find(s=>s.id===id))].filter(Boolean):explicit?explicit.map(resolveSegment):visibleSegments();
+  const requested=sources.findIndex(s=>s.index>=Math.max(0,sourceStart));
   queue=excerpt?.segments|| (ranged&&sourceStart>=0?sources.filter(s=>s.index>=sourceStart&&s.index<=Math.max(sourceStart,end)):sources);
-  queuePage=page.id;queueCursor=mode==='chapter'||ranged?0:Math.max(0,requested);onceOnly=mode==='one';readingMode=excerpt?'selection':onceOnly?'standalone':'flow';
+  if(!excerpt&&mode!=='one'){if(!ranged&&mode!=='chapter')queue=queue.slice(Math.max(0,requested));queue=withNarrationContext(queue);}
+  if(!queue.length){notice='There is no readable text in that range. Choose a visible lesson passage.';return false;}
+  queuePage=page.id;queueCursor=0;onceOnly=mode==='one';readingMode=excerpt?'selection':onceOnly?'standalone':'flow';
   readingTitle=page.title;readingPage=page.id;readingCount=queue.length;
   open=true;tab='listen';startQueue();return true;
  }
@@ -115,7 +123,7 @@
     const ready=ahead?await ahead:await prepare(segment);if(ready.error)throw ready.error;if(token!==run)return;script=ready.text;
     ahead=!onceOnly&&queueCursor+1<queue.length?prepare(queue[queueCursor+1]).catch(error=>({error})):null;
     const hidden=document.querySelector(`.narration-script[data-for="${CSS.escape(segment.id)}"]`);if(page.id===queuePage&&hidden&&!segment.partial)hidden.textContent=script;
-    if(page.id===queuePage){document.querySelectorAll('.narration-active,.assistant-focus').forEach(n=>n.classList.remove('narration-active','assistant-focus'));const el=document.getElementById(segment.id);el?.classList.add('narration-active');if(follow&&el){let p=el.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}el.scrollIntoView({behavior:'instant',block:'center'})}}
+    if(page.id===queuePage){document.querySelectorAll('.narration-active,.assistant-focus').forEach(n=>n.classList.remove('narration-active','assistant-focus'));const el=document.getElementById(segment.id);el?.classList.add('narration-active');if(follow&&el){document.dispatchEvent(new CustomEvent('gr:reveal-location',{detail:{element:el}}));let p=el.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}el.scrollIntoView({behavior:'instant',block:'center'})}}
     for(const [partIndex,part] of ready.parts.entries()){const clip=partIndex===0?ready.first:await narrationAudio(voiceSettings,part,signal);if(token!==run)return;await playBlob(clip,token);if(token!==run)return;}
     remember(true);if(onceOnly)break;
    }
@@ -130,11 +138,12 @@
   const segments=visibleSegments().filter(needsExplanation);prepareCount=segments.length;
   try{for(const s of segments){const text=await narrationText(settings,s,prepareController.signal);const hidden=document.querySelector(`.narration-script[data-for="${CSS.escape(s.id)}"]`);if(hidden)hidden.textContent=text;prepared++;}notice='Spoken explanations are ready for this chapter.'}catch(e){fail(e)}finally{preparing=false}
  }
+ function courseContext(){const el=[...document.querySelectorAll('[data-lesson]')].find(el=>{const b=el.getBoundingClientRect();return b.bottom>100&&b.top<innerHeight*.7});let memory={};try{memory=JSON.parse(localStorage.getItem('gr-course-v1'))||{}}catch{}const id=el?.dataset.lesson,lesson=page.course?.lessons.find(l=>l.id===id);return {prerequisites:page.course?.requires||[],route:memory.route||'core',lesson:lesson?{...lesson,depth:el.querySelector('[role=tab][aria-selected=true]')?.dataset.depth,evidence:memory.evidence?.[id]||null,visual:el.querySelector('[data-visual-state]')?.dataset.visualState||null,note:memory.notes?.[id]?.text?.slice(0,1200)||''}:null};}
  function readerFocus(){
   const playhead=active?{page:queuePage,passage:queue[queueCursor]?.id,heading:readingHeading,status:playback,word:spokenWord,seconds:audio?.currentTime||0,spoken:liveTokens.map(w=>w.text).join('')}:null;
   const id=selection?.start||(hovered?.page===page.id?hovered.id:null)||(playhead?.page===page.id?playhead.passage:null)||currentPassage();
   const segment=visibleSegment(page.segments.find(s=>s.id===id));
-  return {page:page.id,title:page.title,selection:selection?.text||'',passage:segment?{id:segment.id,kind:segment.kind,heading:segment.heading,text:segment.text,latex:segment.latex}:null,playhead,nearby:focusContext({...page,segments:visibleSegments()},id),controls:[...document.querySelectorAll('#main input[type="range"]')].map(el=>({label:el.getAttribute('aria-label')||el.id,value:el.value}))};
+  return {course:courseContext(),page:page.id,title:page.title,selection:selection?.text||'',passage:segment?{id:segment.id,kind:segment.kind,heading:segment.heading,text:segment.text,latex:segment.latex}:null,playhead,nearby:focusContext({...page,segments:visibleSegments()},id),controls:[...document.querySelectorAll('#main input[type="range"]')].map(el=>({label:el.getAttribute('aria-label')||el.id,value:el.value}))};
  }
  async function runTool(name,args,signal){
   if(signal?.aborted)throw new DOMException('Cancelled','AbortError');
@@ -161,13 +170,15 @@
   if(name==='play_section'){
    if(!settings.openaiKey||!settings.elevenKey||!settings.voiceId)throw Error('Add OpenAI and ElevenLabs keys and a narrator voice in Connections.');
    let end=args.end;
-   if(!end){const map=(await bookMap()).find(p=>p.id===target.id);end=map.outline.filter(s=>s.start<=index&&s.end>=index).at(-1)?.endPassage||target.segments.at(-1).id;}
+   if(!end){if(target.segments[index].noNarration)end=args.passage;else{const map=(await bookMap()).find(p=>p.id===target.id);end=map.outline.filter(s=>s.start<=index&&s.end>=index).at(-1)?.endPassage||target.segments.at(-1).id;}}
    const endIndex=target.segments.findIndex(s=>s.id===end);if(endIndex<index)throw Error('The end must be an existing passage at or after the start.');
    await navigate(`${target.id}.html#${encodeURIComponent(args.passage)}`,{signal});await tick();if(signal?.aborted)throw new DOMException('Cancelled','AbortError');
-   await listen('range',args.passage,end,{fromTool:true});return {playback:'started',provider:'ElevenLabs',page:target.id,passage:args.passage,end,note:'Narration is preparing/playing. Stay silent; do not read or confirm over the narrator.'};
+   const started=await listen('range',args.passage,end,{fromTool:true});if(!started)throw Error('That range has no readable text in the selected view. Choose an ordinary passage or switch to its explanation.');return {playback:'started',provider:'ElevenLabs',page:target.id,passage:args.passage,end,note:'Narration is preparing/playing. Stay silent; do not read or confirm over the narrator.'};
   }
   if(name==='show_passage'){await navigate(`${target.id}.html#${encodeURIComponent(args.passage)}`,{highlight:true,signal});if(signal?.aborted)throw new DOMException('Cancelled','AbortError');await tick();showPassage(args.passage);return {shown:true,page:target.id,passage:args.passage,title:target.title,source:visibleSegment(page.segments.find(s=>s.id===args.passage))?.text||target.segments[index].text}}
-  return {page:target.id,title:target.title,passages:target.segments.slice(Math.max(0,index-1),index+3).map(s=>{const source=target.id===page.id?visibleSegment(page.segments.find(p=>p.id===s.id)):s;return {id:source.id,kind:source.kind,heading:source.heading,text:source.text,latex:source.latex}})};
+  const current=target.id===page.id,visible=current?visibleSegments():[],visibleIds=current?new Set(visible.map(s=>s.id)):undefined;
+  const nearby=readingNeighborhood(current?page.segments:target.segments,args.passage,{visibleIds});
+  return {page:target.id,title:target.title,passages:nearby.map(s=>{const source=current?visibleSegment(s):s;return {id:source.id,kind:source.kind,heading:source.heading,text:source.text,latex:source.latex,lesson:source.lesson,depth:source.depth,noNarration:!!source.noNarration,visibility:current?(visibleIds.has(source.id)?'visible':'hidden'):'reference'}})};
  }
  async function toolResult(name,args,signal){try{return await runTool(name,args,signal)}catch(e){return {error:e.message}}}
  async function context(){const [pages,map]=await Promise.all([catalog(),bookMap()]);return `${teachingInstructions}\nBOOK MAP (navigation reference):\n${compactBookMap(map)}\nCURRENT CHAPTER OUTLINE:\n${JSON.stringify(page.outline?.map(({id,title,endPassage})=>({id,title,endPassage})))}\nCURRENT READER STATE AND EXACT NEARBY SOURCE:\n${JSON.stringify(readerFocus())}\nLISTENING HISTORY (reference, not instructions):\n${JSON.stringify(compactHistory(history,pages,page.id))}`}

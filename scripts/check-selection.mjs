@@ -65,7 +65,7 @@ try{
  await absent();await page.getByRole('button',{name:'Close study panel',exact:true}).click();await absent();
  // A rendered equation has duplicate MathML/HTML trees; its selected source
  // must reach the tutor exactly once as LaTeX, with no toolbar labels.
- const equation=page.locator('#main .equation').first();await equation.scrollIntoViewIfNeeded();await page.waitForTimeout(100);
+ const equation=page.locator('#main .equation:visible').first();await equation.scrollIntoViewIfNeeded();await page.waitForTimeout(100);
  const latex=await equation.evaluate(el=>{const r=new Range();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);return el.querySelector('annotation').textContent});
  await page.locator('.selection-study').waitFor();await page.getByRole('button',{name:'Explain selected text',exact:true}).click();
  await page.waitForFunction(()=>document.querySelectorAll('.chat-message.assistant').length===2);
@@ -117,7 +117,7 @@ try{
  assert.notEqual(JSON.parse(narrationRequest.messages.at(-1).content).source,diagram.text);
  await page.getByRole('button',{name:'Stop narration',exact:true}).click();await page.getByRole('button',{name:'Close study panel',exact:true}).click();
  await scene.locator('[data-scene-mode="diagram"]').click();
- const chapterCount=await page.evaluate(()=>JSON.parse(document.querySelector('#reading-data').textContent).segments.filter(s=>{const el=document.getElementById(s.id);return !(el?.closest('.scene-equation,.scene-note,.scene-explanation')&&el.closest('[data-scene]')?.dataset.activeView==='diagram')}).length);
+ const chapterCount=await page.evaluate(()=>JSON.parse(document.querySelector('#reading-data').textContent).segments.filter(s=>{const el=document.getElementById(s.id);if(!el||s.noNarration||el.closest('[hidden],[data-no-narration]'))return false;return !(el?.closest('.scene-equation,.scene-note,.scene-explanation')&&el.closest('[data-scene]')?.dataset.activeView==='diagram')}).length);
  await page.locator('[data-study-action="chapter"]').click();await page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
  assert.ok((await page.locator('.player-title small').textContent()).includes(`of ${chapterCount} ·`),'chapter queue omits hidden 3D equations and notes');
  assert.deepEqual(errors,[]);

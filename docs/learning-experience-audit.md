@@ -157,3 +157,23 @@ Section 4.1 now explains open sets, continuity, chart inverses, and smooth trans
 Section 15.1 now builds pushforward from a mapped curve, pullback from covector pairing, and Lie differentiation from a flow. An elementary dilation example distinguishes a diffeomorphism from an isometry. The coordinate formula for the metric's Lie derivative connects those constructions to the covariant expression already used by the action argument. The definitions and sign convention were checked against [Tong's differential-geometry chapter, §§2.2.4 and 2.3.2](https://davidtong.org/pdfs/teaching/general-relativity/gr2.pdf); the examples and explanations were independently written.
 
 Verification: exact rational-arithmetic checks of sphere membership, chart inverse, overlap round trip, Jacobian determinant, and pushforward/pullback pairing; numerical checks of the dilation derivative; successful rendering through the book's actual math system of all 74 displayed equations and 152 inline formulas in Chapters 4 and 15; comparison with the prior manuscript confirmed that every existing numbered heading and explicit chapter anchor was preserved. Full app/build validation remains the responsibility of the integrating change.
+
+## Guided course implementation
+
+The next implementation adds thirteen reviewed bridges across Chapters 2, 4,
+6, 8, 16, 17, 18, 21, and 22. They provide three authored depths, reasoned
+calculation steps, exact prerequisite links, conceptual feedback, and separate
+transfer calculations. Five of these arguments have synchronized visual models.
+The application now has dependency-complete routes, matching chapter navigation,
+local attempt evidence, a review queue, a field notebook with model snapshots,
+and compact course context for the tutor. Narration follows the selected layer.
+See [the implementation and verification record](course-architecture.md),
+[geometry review](geometry-review.md), [causality review](causality-review.md),
+and [visual argument review](visual-lessons-review.md).
+
+The proposal above remains a roadmap, not a claim that all twenty systems are
+complete throughout the manuscript. In particular, the current checks validate
+specific examples; they are not a symbolic-algebra grader or universal mastery
+assessment. The new diagrams are bounded arguments, not arbitrary ray tracers
+or manifold laboratories. Quantum and global-analysis inputs remain identified
+as additional structure rather than being hidden behind an introductory label.

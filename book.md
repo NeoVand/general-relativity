@@ -2260,7 +2260,7 @@ where all side lengths scale with a small parameter $\ell$. Reverse the loop and
 
 The net transformation obtained around a closed loop is called **holonomy**. Because the initial and final vectors live in the same tangent space, their mismatch is a genuine comparison. There is no need to argue about how to compare vectors at different endpoints.
 
-A sphere provides a delightful demonstration. Follow a geodesic triangle from the equator to the north pole, down to another point on the equator, then back along the equator. Parallel transport can return a vector rotated relative to its starting direction. For a spherical triangle on a sphere of radius $a$, the rotation magnitude is its area divided by $a^2$, equivalently its angular excess. A triangle covering an octant has three right angles and produces a $\pi/2$ rotation.
+A sphere provides a delightful demonstration. Follow a geodesic triangle from the equator to the north pole, down to another point on the equator, then back along the equator. Parallel transport can return a vector rotated relative to its starting direction. For a simple spherical geodesic triangle on a sphere of radius $a$, the signed rotation equals its oriented area divided by $a^2$, modulo $2\pi$ and with a chosen orientation convention. Its angular excess—the sum of its interior angles minus $\pi$—gives the corresponding area ratio. A final arrow cannot distinguish angles separated by a full turn, so an unrestricted area ratio should not be called the smallest rotation magnitude. An octant has three right angles and produces an unambiguous rotation magnitude $\pi/2$.
 
 This is not an argument that vectors are secretly mechanical arrows sliding through ambient three-dimensional space. Parallel transport on an embedded sphere can be visualized by requiring no tangential turning; the normal part of the ambient change is allowed. The intrinsic definition is the connection equation. No embedding is required.
 
@@ -6116,7 +6116,22 @@ $$
 
 There are no independent time derivatives of lapse and shift. In the Hamiltonian formulation they act as multipliers enforcing the constraints, rather than adding propagating gravitational polarizations.
 
-Now count carefully. The symmetric $\gamma_{ij}$ has six components. Its six conjugate momenta make twelve **phase-space** variables per spatial point. Four first-class constraints each remove one phase-space direction by imposing an equation and one by identifying gauge-equivalent descriptions:
+Before counting, give **phase space** a concrete meaning. For a particle with coordinate $q$ and Lagrangian $L(q,\dot q)$, its conjugate momentum is $p=\partial L/\partial\dot q$. For $L=m\dot q^2/2-V(q)$ this gives $p=m\dot q$. A state requires both position and momentum: $(q,p)$ is one point of a two-dimensional phase space. A field has a coordinate value and its conjugate momentum at each spatial point. Conjugate momentum need not equal mass times velocity in a general Lagrangian; the derivative definition is the rule.
+
+A constraint is an equation restricting the allowed states. Removing a redundant description is a separate operation. As a small model, start with $(q_1,q_2,p_1,p_2)$, impose $p_2=0$, and declare that changing $q_2$ does not change the physical state. The constraint removes one direction and the equivalence removes another, leaving the physical pair $(q_1,p_1)$.
+
+The formal test uses the **Poisson bracket**, defined for ordinary canonical coordinates by
+
+$$
+\{F,G\}=\sum_i\left(
+\frac{\partial F}{\partial q_i}\frac{\partial G}{\partial p_i}
+-\frac{\partial F}{\partial p_i}\frac{\partial G}{\partial q_i}
+\right).
+$$
+
+A constraint is **first-class** when its bracket with every constraint vanishes on the allowed constraint surface. In the regular canonical formulation of GR, the Hamiltonian and three momentum constraints are first-class and supply the associated gauge redundancy. Establishing their complete bracket algebra is an additional Hamiltonian calculation; we use that result here rather than deriving it from a count of components. Field-theory brackets replace the coordinate derivatives and sum above with functional derivatives and a spatial integral. The reduction to independent canonical variables is developed in [Arnowitt, Deser, and Misner's original account of GR dynamics](https://arxiv.org/abs/gr-qc/0405109).
+
+Now count the metric sector, excluding lapse and shift as multipliers. The symmetric $\gamma_{ij}$ has six components. Its six conjugate momenta make twelve phase-space variables per spatial point. The four independent first-class constraints each remove one phase-space direction by imposing an equation and one by identifying gauge-equivalent descriptions:
 
 $$
 12-2\times4=4\quad\text{physical phase-space dimensions}.
@@ -6427,20 +6442,22 @@ The shared idea is a freedom to choose a local reference convention, accompanied
 
 In GR, the tetrad ties the internal Lorentz frame to actual tangent directions: it connects the gauge description to rods, clocks, causal cones, and volume. The Einstein-Hilbert action is linear in curvature, while the usual Yang-Mills action is quadratic in its field strength. Their symmetry, variables, and dynamics therefore differ in crucial ways.
 
-Tetrads also let us couple spin-$1/2$ matter to gravity. Spinors transform under the spin representation associated with the local Lorentz group; they are not ordinary spacetime vectors with an unusual number of entries. Locally, choose gamma matrices satisfying
+**An optional bridge to quantum matter.** Tetrads also let us couple spin-$1/2$ fields to gravity. A **spinor** has complex components whose rotation and boost rules differ from those of a spacetime vector. For example, a spin-$1/2$ state acquires a minus sign under a full $2\pi$ rotation and returns to itself after $4\pi$; an overall sign alone does not change its measurement probabilities. This is a property of a quantum transformation law, not a small object literally spinning inside the particle. Constructing that representation is new material from quantum theory, not a consequence we have already proved using tensors.
+
+For the four-component Dirac spinor $\psi$, use four $4\times4$ **gamma matrices** $\gamma^a$, one for each local frame direction. Their entries act on the spinor components; the label $a$ is not a matrix-row index. The **anticommutator** is $\{A,B\}=AB+BA$, where matrix multiplication need not commute. Choose matrices satisfying
 
 $$
 \{\gamma^a,\gamma^b\}=2\eta^{ab}I.
 $$
 
-A compatible spinor derivative is
+Here $I$ is the identity matrix. In our signature, the relation says $(\gamma^0)^2=-I$, $(\gamma^i)^2=I$ for each spatial direction, and distinct gamma matrices anticommute. The relation imports the algebra used for spinors; it does not supply the dynamics of a quantum field. With this convention, a compatible spinor derivative is
 
 $$
 D_\mu\psi=\partial_\mu\psi
 +\frac14\omega_{ab\mu}\gamma^a\gamma^b\psi.
 $$
 
-The gamma matrices supply the Lorentz generators in the spinor representation. The connection is still solving the same problem: how to compare field components defined using different local frames. A global spinor theory also requires suitable global topology—a spin structure—not merely a locally clever notation.
+Products of gamma matrices supply the infinitesimal rotation and boost matrices for spinors, giving the displayed connection term. We state that representation result here; deriving it and the Dirac field equation requires a quantum-field continuation. The connection is still solving the familiar problem of comparing components defined using different local frames. Globally, the spinor transformation rules on overlapping patches must fit together consistently. Such a choice is called a **spin structure**, and its existence depends on topology. Local gamma matrices alone do not establish it. [Tong's introduction to the spinor representation](https://davidtong.org/teaching/quantum-field-theory/qfthtml/S4) provides that continuation; translate its metric-sign convention when comparing formulas.
 
 ### 21.7 Torsion, nonmetricity, and the limits of the Palatini shortcut
 

@@ -13,7 +13,9 @@
     "test:experience": "node scripts/check-experience.mjs",
     "build:reader": "node scripts/build-site.mjs && node scripts/build-reading.mjs && vite build && node scripts/attach-reader.mjs",
     "check": "svelte-check --fail-on-warnings",
-    "test:study": "node scripts/check-study-core.mjs && node scripts/check-study.mjs && node scripts/check-selection.mjs"
+    "test:study": "node scripts/check-study-core.mjs && node scripts/check-course-narration.mjs && node scripts/check-course-narration-browser.mjs && node scripts/check-study.mjs && node scripts/check-selection.mjs",
+    "test:course": "node scripts/check-course.mjs",
+    "test:visual-lessons": "node scripts/check-visual-lessons.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

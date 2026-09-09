@@ -53,3 +53,23 @@ The study tests mock the provider boundary and WebRTC peer, while exercising rea
 ## Voicebook reuse
 
 The Realtime transport was copied and adapted from `/Users/neo/repos/voicebook/src/lib/services/openai-realtime.ts`. The ElevenLabs and cloud text clients, narration rewriting, and grounded reader tools follow Voicebook's `elevenlabs.ts`, `cloud-llm.ts`, `narration-rewriter.ts`, and `assistant-context.ts`. Voicebook is copyright 2026 NeoVand and MIT licensed; its complete license is preserved in `vendor/voicebook/LICENSE`.
+
+## Worked bridges and the notebook
+
+The tutor receives the current bridge’s question, exact prerequisite links,
+selected explanation layer, exercise attempt record, and model settings. A
+saved learner observation can be included as a bounded reference excerpt.
+These observations are not instructions, and reading, listening, or a single
+correct calculation is not treated as mastery of a chapter.
+
+Continuous listening follows the selected lesson layer. Practice hints and
+solutions, optional reference figures, and navigation controls stay out of the
+chapter queue. An explicitly requested equation or diagram can still be heard
+on its own. Visual explanations use the current model settings, and their
+cache identity changes with those settings.
+
+The field notebook is local to this browser. JSON export/import carries notes,
+attempt records and model snapshots; Markdown export is a readable copy of
+saved observations. Imports preserve existing observations on duplicate IDs.
+Following a saved model link restores its snapshot independently of later
+experimentation in the same diagram. These features work without API keys.

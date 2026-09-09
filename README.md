@@ -1,6 +1,7 @@
 # General Relativity, From the Inside Out
 
 **[Read the HTML book](https://neovand.github.io/general-relativity/)** ·
+[Learning paths](https://neovand.github.io/general-relativity/course-map.html) ·
 [Visual atlas](https://neovand.github.io/general-relativity/figure-atlas.html) ·
 [Editorial comparison](docs/reference-comparison.md)
 
@@ -12,7 +13,8 @@ initial data, tetrads, focusing and thermodynamics, and effective field theory.
 
 The HTML edition contains 25 chapters (0–24), five appendices, 40 original SVG
 figures, 30 original solved exercises plus three new calculations, chapter
-checkpoints, three interactive experiments, and four documented public-domain
+checkpoints, thirteen worked bridges with conceptual and numerical checks,
+five integrated geometry and causality models, nine 3D explorations, and four documented public-domain
 historical images. Equations are rendered at build time as HTML and MathML;
 math fonts and all required assets are hosted with the book.
 
@@ -35,6 +37,9 @@ the repository's GitHub Pages subpath.
 | --- | --- |
 | `book.md` | Canonical complete manuscript, including all new sections. |
 | `content/guides.json` | Chapter questions, prerequisite guidance, takeaways, and checkpoints. |
+| `content/course.mjs`, `content/*-lessons.mjs` | Learning routes, prerequisite graph, authored bridges and exercises. |
+| `web/course.js`, `web/visual-lessons.js` | Layered lessons, field notebook, local practice and visual models. |
+| `docs/course-architecture.md` | Educational design, verification, and explicit scope boundaries. |
 | `content/credits.md` | Published edition notes and image credits. |
 | `scripts/build-site.mjs` | Static HTML generation, equation rendering, navigation, and search index. |
 | `scripts/figures.py` | Reproducible SVG diagrams and placement manifest. |
@@ -52,6 +57,10 @@ Keep the local server running, then run:
 npx playwright install chromium
 npm run test:browser
 npm run test:figures
+npm run test:experience
+npm run test:study
+npm run test:course
+npm run test:visual-lessons
 ```
 
 On macOS the checks use installed Google Chrome when available; elsewhere they
@@ -80,3 +89,12 @@ publication format and canonical reading experience are HTML.
 ## Listen and study with a tutor
 
 The Svelte reader supports ElevenLabs chapter narration, GPT Realtime 2.1 voice conversations, and a GPT-5.6 Terra/Sol text tutor using your own API keys. Equations and figures receive separate spoken explanations, and the tutor can navigate to and highlight passages across chapters. Open Listen or Ask, then Connections. See [the companion guide](docs/study-companion.md) for setup, storage behavior, architecture, and verification.
+
+## Learn, calculate, return
+
+The learning path page offers prerequisite-complete core, geometry, and black-hole
+routes. Thirteen bridges provide intuition, justified derivations, deeper
+mathematics, targeted feedback, and independent transfer calculations. Save an
+observation and its diagram settings in the field notebook, export it, and return
+to the exact lesson later. The core learning tools work without API keys. See
+[the course architecture](docs/course-architecture.md) for design and scope.

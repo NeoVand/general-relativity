@@ -13,7 +13,7 @@ try{
   await page.setViewportSize({width,height:width===390?844:1100});
   await page.goto(new URL('index.html',base).href);await page.evaluate(t=>localStorage.setItem('gr-theme',t),theme);
   for(const s of scenes){
-   await page.goto(new URL(`chapter-${s.chapter}.html#scene-${s.id}`,base).href);
+   await page.goto(new URL(`${s.id==='sphere'?'figure-atlas.html':`chapter-${s.chapter}.html`}#scene-${s.id}`,base).href);
    const el=page.locator(`#scene-${s.id}`);await el.scrollIntoViewIfNeeded();await page.waitForFunction(id=>document.getElementById(id).dataset.ready==='true',`scene-${s.id}`);
    await page.evaluate(()=>document.fonts.ready);
    const range=el.locator('input');
