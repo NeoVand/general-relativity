@@ -1,6 +1,6 @@
 import {surfaceFrame,transportAt,transportLoop,transportRoutesAt,transportRoutesResult} from './parallel-transport-model.js';
 
-export async function createTransportScene(root,getState,routes=false){
+export async function createTransportScene(root,getState,routes=false,onUnavailable=()=>{}){
  const frame=state=>routes?transportRoutesAt(state):transportAt(state);
  const [THREE,{OrbitControls}]=await Promise.all([import('three'),import('./assets/three/OrbitControls.js')]);
  const stage=root.querySelector('.tp-spatial');if(!stage.isConnected)return null;
@@ -12,10 +12,10 @@ export async function createTransportScene(root,getState,routes=false){
  const canvas=renderer.domElement;canvas.setAttribute('role','img');canvas.setAttribute('aria-label','Parallel transport on a surface. Drag to rotate, use arrow keys to orbit, or Home to reset the camera.');stage.append(canvas);stage.tabIndex=0;
  let controls=new OrbitControls(camera,canvas);controls.target.copy(target);controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=false;controls.minPolarAngle=.08;controls.maxPolarAngle=Math.PI-.08;controls.update();
  canvas.style.touchAction='pan-y';
- scene.add(new THREE.HemisphereLight(0xffffff,0x748392,2));const light=new THREE.DirectionalLight(0xffffff,2.4);light.position.set(-3,-5,7);scene.add(light);const rim=new THREE.DirectionalLight(0xb4d4f0,1);rim.position.set(4,3,1);scene.add(rim);
+ const fill=new THREE.HemisphereLight(0xffffff,0x748392,2);scene.add(fill);const light=new THREE.DirectionalLight(0xffffff,2.4);light.position.set(-3,-5,7);scene.add(light);const rim=new THREE.DirectionalLight(0xb4d4f0,1);rim.position.set(4,3,1);scene.add(rim);
  const terrain=new THREE.Group(),pathGroup=new THREE.Group(),angleGroup=new THREE.Group();scene.add(terrain,pathGroup,angleGroup);let angleKey='';
  const materials=new Set(),V=p=>new THREE.Vector3(...p);let surface,key='',lastSurface='',disposed=false,available=true;
- function material(role,opacity=1,standard=false){const m=new (standard?THREE.MeshStandardMaterial:THREE.MeshBasicMaterial)({side:THREE.DoubleSide,transparent:opacity<1,opacity,...(standard?{roughness:.85,metalness:0}:{})});m.userData.role=role;materials.add(m);return m}
+ function material(role,opacity=1,standard=false){const m=new (standard?THREE.MeshStandardMaterial:THREE.MeshBasicMaterial)({side:THREE.DoubleSide,transparent:opacity<1,opacity,...(standard?{roughness:.85,metalness:0}:{})});m.userData.role=role;materials.add(m);colorMaterial(m,getComputedStyle(root),document.documentElement.dataset.theme==='dark');return m}
  function disposeGroup(g){g.traverse(o=>{o.geometry?.dispose();for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean)){materials.delete(m);m.dispose()}});g.clear()}
  function arrow(role){const g=new THREE.Group(),m=material(role),shaft=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.4,12),m),head=new THREE.Mesh(new THREE.ConeGeometry(.055,.14,20),m);shaft.position.y=.2;head.position.y=.47;g.add(shaft,head);scene.add(g);return g}
  const initialArrow=arrow('transport'),movingArrow=arrow('observer');
@@ -37,7 +37,26 @@ export async function createTransportScene(root,getState,routes=false){
   }
  }
  function render(){if(disposed||!available)return;renderer.render(scene,camera);placeLabels();const f=frame(getState()),reference=routes?f.direct:{point:f.startPoint,vector:f.startVector},project=p=>V(p).project(camera).toArray();stage.dataset.projection=JSON.stringify({frustum:[camera.left,camera.right,camera.top,camera.bottom],start:project(reference.point),initialTip:project(reference.point.map((x,i)=>x+.52*reference.vector[i])),point:project(f.point),tip:project(f.point.map((x,i)=>x+.52*f.vector[i]))})}
- function theme(){const css=getComputedStyle(root);for(const m of materials){m.color.set(css.getPropertyValue(`--${m.userData.role}`).trim()||'#3f8f92');if(m.userData.surface&&document.documentElement.dataset.theme!=='dark')m.color.lerp(new THREE.Color('#6fd4c2'),.45)}render()}
+ function colorMaterial(m,css,dark){
+   m.color.set(css.getPropertyValue(`--${m.userData.role}`).trim()||'#3f8f92');
+   if(m.userData.surface){
+    if(dark)m.color.set(css.getPropertyValue('--tp-surface-dark').trim()||'#285a63');
+    else m.color.lerp(new THREE.Color('#6fd4c2'),.45);
+   }
+   // Unlit teaching marks should match their legend, without filmic whitening.
+   const toneMapped=!(dark&&m.isMeshBasicMaterial);
+   if(m.toneMapped!==toneMapped){m.toneMapped=toneMapped;m.needsUpdate=true}
+ }
+ function theme(){
+  const css=getComputedStyle(root),dark=document.documentElement.dataset.theme==='dark';
+  // Text colors are deliberately luminous in the dark theme; they are not
+  // surface albedos. Keep the surface below the teaching marks in brightness.
+  fill.intensity=dark?.85:2;rim.intensity=dark?.7:1;
+  fill.groundColor.set(dark?'#b7c7d2':'#748392');
+  light.position.set(-3,dark?5:-5,7);
+  for(const m of materials)colorMaterial(m,css,dark);
+  render();
+ }
  function makeSurface(s){
   disposeGroup(terrain);const positions=[],normals=[],uv=[],indices=[],rows=60,cols=96;
   for(let j=0;j<=rows;j++)for(let i=0;i<=cols;i++){
@@ -119,7 +138,7 @@ export async function createTransportScene(root,getState,routes=false){
   if(event.key==='ArrowLeft')spherical.theta-=.12;if(event.key==='ArrowRight')spherical.theta+=.12;if(event.key==='ArrowUp')spherical.phi-=.12;if(event.key==='ArrowDown')spherical.phi+=.12;
   spherical.phi=Math.max(.08,Math.min(Math.PI-.08,spherical.phi));camera.position.copy(new THREE.Vector3().setFromSpherical(spherical).applyQuaternion(toY.invert()).add(target));controls.update();render();
  }
- function lost(event){event.preventDefault();available=false;stage.hidden=true;root.querySelector('[data-tp-fallback]').hidden=false;root.dataset.transportSpatial='fallback'}
+ function lost(event){event.preventDefault();available=false;stage.hidden=true;root.querySelector('[data-tp-fallback]').hidden=false;root.dataset.transportSpatial='fallback';onUnavailable()}
  controls.addEventListener('change',render);stage.addEventListener('keydown',keyboard);canvas.addEventListener('webglcontextlost',lost);
  const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);
  const themeObserver=new MutationObserver(theme);themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme','class']});

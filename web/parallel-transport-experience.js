@@ -77,7 +77,7 @@ export function initParallelTransport(){
   for(const button of root.querySelectorAll('[data-tp-surface]'))on(button,'click',()=>{state.surface=button.dataset.tpSurface;state.progress=routes?1:0;playing=false;draw(true);schedule()});
   for(const input of root.querySelectorAll('[data-tp-parameter]'))on(input,'input',()=>{state=validate({...state,[input.dataset.tpParameter]:+input.value});playing=false;draw(true);schedule()});
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');on(reduced,'change',()=>{if(reduced.matches){playing=false;draw();schedule()}});on(document,'visibilitychange',schedule);
-  const observer=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;if(visible&&!requested){requested=true;createTransportScene(root,()=>state,routes).then(scene=>{if(disposed)scene?.dispose();else{spatial=scene;if(!scene)root.dataset.transportSpatial='fallback';draw()}}).catch(error=>{root.dataset.transportSpatial='fallback';root.dataset.transportError=error.message;draw()})}schedule()});observer.observe(root);
+  const observer=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;if(visible&&!requested){requested=true;createTransportScene(root,()=>state,routes,()=>draw()).then(scene=>{if(disposed)scene?.dispose();else{spatial=scene;if(!scene)root.dataset.transportSpatial='fallback';draw()}}).catch(error=>{root.dataset.transportSpatial='fallback';root.dataset.transportError=error.message;draw()})}schedule()});observer.observe(root);
   for(const el of root.querySelectorAll('[data-tp-controls]'))el.hidden=false;draw();root.dataset.transportReady='true';
   cleanups.push(()=>{disposed=true;stop();observer.disconnect();controller.abort();spatial?.dispose()});
  }

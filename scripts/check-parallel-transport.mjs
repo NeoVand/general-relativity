@@ -91,8 +91,11 @@ try{
   await root.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.getElementById('parallel-transport-lab').dataset.transportSpatial==='ready').catch(async error=>{console.error({errors,dataset:await root.evaluate(el=>({...el.dataset})),bounds:await root.boundingBox()});throw error});
   // Context loss preserves the complete SVG explanation and live model controls.
   await root.locator('canvas').evaluate(canvas=>canvas.dispatchEvent(new Event('webglcontextlost',{cancelable:true})));
-  await root.locator('[data-tp-corner]').click();assert(await root.locator('[data-tp-fallback] svg').isVisible());
+  const fallback=root.locator('[data-tp-fallback] svg');assert(await fallback.isVisible());
+  // Recovery must show the current geometry immediately, before another input.
+  const description=await fallback.getAttribute('aria-label');assert(description.startsWith(`${saved.surface}.`));assert(description.includes(`At ${Math.round(saved.progress*100)} percent`));
   assert(await root.locator('[data-tp-face]').isDisabled());assert(await root.locator('[data-tp-camera]').isDisabled());
+  await root.locator('[data-tp-corner]').click();
   await root.locator('[data-tp-reset]').click();assert.deepEqual((await context()).parameters,transportDefaults);
   assert.deepEqual(errors,[]);await page.close();
  }
