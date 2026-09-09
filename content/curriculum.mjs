@@ -22,6 +22,7 @@ const baseSkills=[
  skill('stress-energy','Measure energy and momentum flux',11,'11-2-energy-belongs-to-an-observer-the-tensor-belongs-to-everyone','Compare the energy density of dust in its rest frame and a boosted frame.',['interval']),
  skill('einstein-equation','Trace reverse and identify the Newtonian source',12,'12-3-trace-reversal-the-most-useful-algebraic-rearrangement','Recover the factor of one half in the trace-reversed source.',['curvature-contractions','stress-energy']),
  skill('action','Vary a path and a field with stated boundary data',13,'13-3-fields-a-degree-of-freedom-at-every-point','Derive a field Euler–Lagrange equation and name the boundary variation.',['admissible-variations','field-energy']),
+ skill('hamiltonian','Follow a state in phase space',13,'13-7-from-a-history-to-a-state-hamilton-s-equations','Derive Hamilton’s equations from a Lagrangian and interpret a momentum-zero turning point.',['action','mechanics-energy']),
  skill('killing-charge','Use a spacetime symmetry to find a conserved quantity',15,'15-4-a-killing-vector-supplies-the-missing-comparison-rule','Differentiate ξ·u along a geodesic and identify the Killing cancellation.',['connection']),
  skill('schwarzschild','Use Schwarzschild constants and regular horizon coordinates',17,'horizon-directions','Calculate outgoing null directions on both sides of the horizon.',['einstein-equation','killing-charge']),
  skill('expansion','Solve the Friedmann and fluid equations',19,'19-5-solving-for-the-scale-factor-three-recognizable-cosmic-personalities','Find a(t) for a spatially flat matter-only model.',['ode-initial-data','einstein-equation']),
@@ -42,7 +43,7 @@ export const chapterSkills=[
  ['connection','lie-bracket'],['curvature'],['curvature-contractions','connection'],['interval','mechanics-energy'],['curvature-contractions','stress-energy'],
  ['ode-initial-data','field-energy'],['action','einstein-equation'],['connection','action'],['interval','killing-charge','hyperbolic-functions'],
  ['einstein-equation','killing-charge'],['curvature-contractions','field-energy','poisson-sources'],['stress-energy','einstein-equation','ode-initial-data'],
- ['expansion','einstein-equation','global-causality'],['connection','curvature','action'],['global-causality','forms','wave-initial-data'],
+ ['expansion','einstein-equation','global-causality','hamiltonian'],['connection','curvature','action'],['global-causality','forms','wave-initial-data'],
  ['einstein-equation','quantum-states','expansion'],['curvature-contractions','schwarzschild','expansion'],
 ];
 export function requirementsFor(chapter){return (chapterSkills[chapter]||[]).map(id=>skills.find(skill=>skill.id===id));}

@@ -1,5 +1,6 @@
 /* Original linked surface/chart and apsidal-precession experiments.
  * Rendering is deliberately separate from the mathematical models below. */
+import {initMechanicsExperiences} from './mechanics-experience.js';
 const TAU = 2 * Math.PI;
 export const SURFACE_CHART_RADIUS = 1.35;
 export const MERCURY = Object.freeze({a: 5.7909e10, eccentricity: .2056, gravitationalRadius: 1476.625, periodDays: 87.969});
@@ -336,4 +337,4 @@ async function initSpatial(instance) {
   return {update:()=>{if(available)update();else el.querySelector('.gx-fallback').innerHTML=type==='manifold'?manifoldFallback(state):orbitFallback(state);},render,reset,dispose(){disposed=true;controls.dispose();resizeObserver.disconnect();themeObserver.disconnect();stage.removeEventListener('keydown',keyboard);canvas.removeEventListener('webglcontextlost',lost);disposeGroup(base);disposeGroup(dynamic);renderer.dispose();canvas.remove();label.remove();}};
 }
 export function restoreGeometryExperienceState(id,state){const instance=active.get(id);if(!instance||!state||typeof state!=='object')return false;instance.restore(state);return true;}
-export function initGeometryExperiences(){if(!window.katex)return ()=>{};const cleanups=[...document.querySelectorAll('[data-geometry-experience]')].map(mount).filter(Boolean);return ()=>cleanups.forEach(cleanup=>cleanup());}
+export function initGeometryExperiences(){if(!window.katex)return ()=>{};const cleanups=[initMechanicsExperiences(),...[...document.querySelectorAll('[data-geometry-experience]')].map(mount).filter(Boolean)];return ()=>cleanups.forEach(cleanup=>cleanup());}

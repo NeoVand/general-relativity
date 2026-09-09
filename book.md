@@ -261,6 +261,20 @@ Thus the work changes the quantity $K=mv^2/2$, called **kinetic energy**. If our
 
 A thrown ball gives us another way to store energy. As it rises, gravity does negative work and the ball loses kinetic energy. Near Earth's surface, we assign it **gravitational potential energy** $U=mgh$, where $h$ is its height above a chosen zero. A rise of $\Delta h$ increases $U$ by $mg\Delta h$, exactly the kinetic energy lost to gravity. Ignoring air resistance, $K+U$ stays constant. On the way down, the exchange reverses.
 
+A spring lets us watch this exchange repeatedly. Attach a cart to a spring on a level, frictionless track. Call its displacement from the unstretched position $q$, positive to the right. A stretched spring pulls the cart left; a compressed spring pushes it right. Its **stiffness** $k$ is the restoring force per metre of displacement. The experiment starts with a 1 kg cart, a stiffness of 1 N/m, and a stretch of 1 metre.
+
+Release the cart and follow the two energy amounts. At the middle, the spring is unstretched but the cart is moving. At either end of the motion, the cart is momentarily at rest but the spring stores energy. The cart's momentum changes sign when it reverses; its kinetic energy remains nonnegative.
+
+<div data-mechanics-insert="energy"></div>
+
+For this ideal spring the force is $F=-kq$, called **Hooke's law**. To stretch it slowly, we apply the opposite force, $kq$. The work stored in the spring is
+
+$$
+U(q)=\int_0^q kx\,dx=\frac12kq^2.
+$$
+
+This also gives positive stored energy for compression, where $q<0$: our applied force and displacement both point left. The default stretch stores $0.5\,\mathrm J$. At the middle, all of that energy is kinetic, so $mv^2/2=0.5\,\mathrm J$ gives a speed of $1\,\mathrm{m/s}$. On successive passes the momentum is $+1$ or $-1\,\mathrm{kg\,m/s}$, although the kinetic energy is the same. A real spring can dissipate energy into heating; this experiment omits that effect so the exchange is visible on its own.
+
 More generally write $U=m\Phi$, where $\Phi$ is potential energy per unit mass. Outside a spherical body of mass $M$,
 
 $$
@@ -4471,6 +4485,150 @@ Thus the explicit metric derivative of $\mathcal L_{\rm EM}$ gives the $F_{\mu\a
 The resulting physical interpretation is: **stress–energy measures how the matter action responds when its spacetime measuring apparatus is changed.** Spatial deformations reveal stress; temporal deformations reveal energy; mixed deformations reveal momentum and energy flow. The familiar idea of stress as a response to strain has become a spacetime statement.
 
 For matter actions containing curvature or metric derivatives, use the full functional definition rather than the short partial-derivative formula. Likewise, a fluid's energy density depends on proper volume and other constrained variables. Treating it as a metric-independent number during a naive variation will generally produce the wrong fluid stress tensor.
+
+### 13.7 From a history to a state: Hamilton's equations
+
+At the same position, a cart can be moving right, moving left, or standing still. Position alone cannot predict what it does next. Chapter 0 supplied both position and velocity as starting measurements. For the spring cart, momentum supplies the same missing information because $p=m\dot q$.
+
+Make a new plot: position on the horizontal axis, momentum on the vertical axis. The pair $(q,p)$ is one point, called a **state**. The space of such pairs is **phase space**. As time passes, the point traces a curve. This curve is not the cart's path on the track: its vertical coordinate is momentum, not a second spatial direction.
+
+Watch the cart pass the unstretched position twice. Both passages have $q=0$, but one has positive momentum and the other negative momentum. They are distinct points on the phase-space plot. At a turning point, the phase-space curve crosses $p=0$; it does not stop there, because the force is changing momentum.
+
+<div data-mechanics-insert="phase"></div>
+
+For the spring, the total energy expressed in these coordinates is
+
+$$
+H(q,p)=\frac{p^2}{2m}+\frac12kq^2.
+$$
+
+Holding $H$ fixed gives the ellipses in the plot. The actual motion follows one of them. Its direction can be found from two derivatives:
+
+$$
+\frac{\partial H}{\partial p}=\frac pm=\dot q,
+\qquad
+-\frac{\partial H}{\partial q}=-kq=\dot p.
+$$
+
+The first tells us how position changes; the second tells us how momentum changes. These are **Hamilton's equations** for this example. The function that generates them is the **Hamiltonian**. Here it is total mechanical energy. We next derive the general construction, including when that energy interpretation needs qualification.
+
+#### Replacing velocity by momentum
+
+Start with a Lagrangian $L(q,v,t)$, writing $v$ as a separate variable while taking partial derivatives. Define the **conjugate momentum**
+
+$$
+p=\frac{\partial L}{\partial v}.
+$$
+
+For $L=mv^2/2-U(q)$ this gives $p=mv$, so we can replace $v$ by $p/m$. More generally, suppose the momentum equation can be solved locally for $v=v(q,p,t)$. Define
+
+$$
+H(q,p,t)=p\,v(q,p,t)-L\bigl(q,v(q,p,t),t\bigr).
+$$
+
+This replacement is called a **Legendre transform**. It changes the independent variable from velocity to momentum. The cancellation that makes it useful is an ordinary product rule:
+
+$$
+\begin{aligned}
+dH&=v\,dp+p\,dv-
+\left(L_q\,dq+L_v\,dv+L_t\,dt\right)\\
+&=v\,dp-L_q\,dq-L_t\,dt,
+\end{aligned}
+$$
+
+because $L_v=p$. Subscripts here mean partial derivatives, with the other independent inputs held fixed. Compare this result with $dH=H_q\,dq+H_p\,dp+H_t\,dt$. The Euler–Lagrange equation already gives $\dot p=L_q$. Therefore
+
+$$
+\boxed{\dot q=H_p,\qquad\dot p=-H_q},
+\qquad H_t=-L_t.
+$$
+
+One second-order equation for $q$ has become two first-order equations for $(q,p)$. They need the same amount of initial information. For several coordinates, use one conjugate momentum $p_i=\partial L/\partial\dot q^i$ for each coordinate and replace $pv$ by $\sum_i p_i\dot q^i$.
+
+The local inversion is a real condition, not an automatic step. In one degree of freedom, $\partial^2L/\partial v^2\ne0$ ensures it locally. With several velocities, the matrix of second velocity derivatives must be invertible. When it is singular, relations among positions and momenta can become **constraints**. That possibility is central to relativity.
+
+#### Energy conservation and the direction of flow
+
+Along a solution,
+
+$$
+\frac{dH}{dt}=H_q\dot q+H_p\dot p+H_t
+=H_qH_p-H_pH_q+H_t=H_t.
+$$
+
+Thus a Hamiltonian with no explicit time dependence is conserved. For a particle with ordinary quadratic kinetic energy and a time-independent potential, the construction gives $H=K+U$. A time-dependent drive can change $H$, and an arbitrary coordinate choice or Lagrangian does not let us identify it with a chosen observer's energy without further argument.
+
+The oscillator's phase-space arrows follow $(\dot q,\dot p)=(p/m,-kq)$. At the rightmost point they point down, so the motion runs clockwise. That orientation is information beyond the shape of an energy ellipse. If the equations have no explicit time dependence, the system is called **autonomous**. When its smooth equations have unique solutions, distinct phase-space trajectories cannot cross at the same state: the same position and momentum cannot have two different next steps. A time-dependent system requires specifying the time as well.
+
+For any observable $f(q,p,t)$, meaning a quantity calculated from the state, the chain rule gives
+
+$$
+\frac{df}{dt}=f_qH_p-f_pH_q+f_t.
+$$
+
+Define the **Poisson bracket** by $\{f,g\}=f_qg_p-f_pg_q$. Then $df/dt=\{f,H\}+f_t$. For several canonical pairs, sum that expression over $i$. For example, $\{q,p\}=1$, $\{q,H\}=p/m$, and $\{p,H\}=-kq$ for the spring. The bracket records how a quantity changes under a specified Hamiltonian flow; it is not ordinary multiplication with different brackets.
+
+<details class="checkpoint"><summary>Try a state before revealing its next motion</summary>
+
+Take $m=2\,\mathrm{kg}$, $k=2\,\mathrm{N/m}$, $q=1\,\mathrm m$, and $p=-1\,\mathrm{kg\,m/s}$. Find the velocity, force, kinetic energy, potential energy, and total energy. Is the cart's speed increasing at this instant?
+
+<details><summary>Compare the calculation</summary>
+
+The velocity is $p/m=-0.5\,\mathrm{m/s}$ and the force is $-kq=-2\,\mathrm N$. They both point left, so the speed is increasing. The energies are $K=p^2/(2m)=0.25\,\mathrm J$ and $U=kq^2/2=1\,\mathrm J$, giving $H=1.25\,\mathrm J$. The instantaneous exchange rates are $dK/dt=Fv=+1\,\mathrm{J/s}$ and $dU/dt=kqv=-1\,\mathrm{J/s}$.
+
+</details>
+</details>
+
+<details class="history-note"><summary>Why conjugate momentum can differ from mass times velocity</summary>
+
+Add a total derivative to the spring Lagrangian:
+
+$$
+\widetilde L=\frac12m\dot q^2-\frac12kq^2+
+\frac{d}{dt}\left(\frac12\alpha q^2\right)
+=L+\alpha q\dot q.
+$$
+
+Here $\alpha$ is a constant with units $\mathrm{kg/s}$. The action changes only by an endpoint term. With fixed endpoint positions, its variation is unchanged, so the physical equation of motion is unchanged. But the conjugate momentum becomes $\widetilde p=m\dot q+\alpha q$. Solving for velocity gives
+
+$$
+\widetilde H(q,\widetilde p)
+=\frac{(\widetilde p-\alpha q)^2}{2m}+\frac12kq^2.
+$$
+
+The mechanical momentum remains $m\dot q=\widetilde p-\alpha q$. The example explains why the derivative definition of conjugate momentum matters even when the physical motion is familiar.
+
+</details>
+
+<details class="history-note"><summary>How the relativistic particle prepares us for constraints</summary>
+
+For a timelike worldline parametrized by $\lambda$, Chapter 5 used the action with Lagrangian
+
+$$
+L=-mc\sqrt{-g_{\mu\nu}\dot x^\mu\dot x^\nu},
+\qquad \dot x^\mu=\frac{dx^\mu}{d\lambda}.
+$$
+
+The conjugate momentum is
+
+$$
+p_\mu=\frac{mc\,g_{\mu\nu}\dot x^\nu}
+{\sqrt{-g_{\alpha\beta}\dot x^\alpha\dot x^\beta}},
+\qquad
+g^{\mu\nu}p_\mu p_\nu=-m^2c^2.
+$$
+
+Multiplying every velocity by the same positive factor leaves these momenta unchanged. Therefore the momenta cannot determine the arbitrary rate at which the parameter labels the worldline. The velocity-to-momentum map is not invertible. Direct contraction also gives $p_\mu\dot x^\mu=L$, so the naive canonical Hamiltonian $p_\mu\dot x^\mu-L$ vanishes. The particle still moves; its parametrization is redundant.
+
+The mass-shell relation $C=g^{\mu\nu}p_\mu p_\nu+m^2c^2=0$ is a constraint. Introduce an auxiliary function $N(\lambda)$ that multiplies this constraint, and use the phase-space action
+
+$$
+S=\int\left[p_\mu\dot x^\mu-\frac N2 C\right]d\lambda.
+$$
+
+Varying $N$ enforces $C=0$. Varying $p_\mu$ gives $\dot x^\mu=Ng^{\mu\nu}p_\nu$. Changing the positive multiplier changes how quickly the parameter runs along the same future-directed worldline. Chapter 20 returns to this freedom in labeling time when it introduces the lapse and constraints for spacetime geometry.
+
+</details>
 
 <a id="chapter-14"></a>
 

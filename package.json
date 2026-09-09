@@ -24,7 +24,8 @@
     "test:physics": "node scripts/check-physics-calculations.mjs",
     "test:sequence": "node scripts/check-learning-sequence.mjs",
     "test:relativity-models": "node scripts/check-relativity-models.mjs",
-    "test:relativity-labs": "node scripts/check-relativity-labs.mjs"
+    "test:relativity-labs": "node scripts/check-relativity-labs.mjs",
+    "test:mechanics": "node scripts/check-mechanics-experience.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

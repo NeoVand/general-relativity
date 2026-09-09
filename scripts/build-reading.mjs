@@ -22,8 +22,8 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  for(const el of main.querySelectorAll('details.history-note[data-no-narration]')){
   el.dataset.readingSupplement=el.id||`supplement-${createHash('sha256').update(source(el.querySelector('summary'))).digest('hex').slice(0,12)}`;
  }
- const experienceSelector='.visual-lesson,.geometry-experience,.curvature-experience';
- const candidates=[...main.querySelectorAll('h1,h2,h3,h4,p,li,summary,.equation,.equation-piece,figure,.scene-stage,.visual-lesson,.geometry-experience,.curvature-experience,table')].filter(el=>{
+ const experienceSelector='.visual-lesson,.geometry-experience,.curvature-experience,.mechanics-experience';
+ const candidates=[...main.querySelectorAll('h1,h2,h3,h4,p,li,summary,.equation,.equation-piece,figure,.scene-stage,.visual-lesson,.geometry-experience,.curvature-experience,.mechanics-experience,table')].filter(el=>{
   if(el.closest('nav,.contents-group,.chapter-preparation,.chapter-meta,.scene-heading,.scene-fallback,.scene-controls,.lab-directory,.hero-equation-key,.color-key'))return false;
   if(el.closest(experienceSelector)&&!el.matches(experienceSelector))return false;
   if(el.closest('.lesson-prerequisites,.lesson-sources,.course-compass,.chapter-bridges,.course-route-picker,.course-node-requires,.lesson-topline,.return-to-lesson'))return false;
@@ -50,7 +50,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   }
   if(kind==='visualization'&&spec){text=`${spec.title}. ${spec.deck} ${spec.note}`;description=text;latex.length=0;latex.push(spec.equation);}
   if(el.matches('.visual-lesson')){const lesson=lessons.find(l=>l.id===el.dataset.lessonId);text=lesson.title+'. '+lesson.question+' '+lesson.takeaway;description=text;el.id='visual-'+lesson.id;}
-  if(el.matches('.geometry-experience,.curvature-experience')){text=el.dataset.narrationSource||el.querySelector('.narration-script')?.textContent||text;description=text;latex.length=0;latex.push(...[...text.matchAll(/\$([^$]+)\$/g)].map(m=>m[1]));}
+  if(el.matches('.geometry-experience,.curvature-experience,.mechanics-experience')){text=el.dataset.narrationSource||el.querySelector('.narration-script')?.textContent||text;description=text;latex.length=0;latex.push(...[...text.matchAll(/\$([^$]+)\$/g)].map(m=>m[1]));}
   if(!text&&!latex.length)continue;
   const anchor=el.id||`passage-${segments.length+1}`;el.id=anchor;el.dataset.passage=String(segments.length);
   const hash=createHash('sha256').update(text+latex.join(' ')).digest('hex').slice(0,16);
@@ -80,7 +80,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   if(['equation','figure','visualization'].includes(kind)&&!el.matches('a')&&!el.closest('.hero-scene')){
    const tools=document.createElement('div');tools.className='passage-tools';
    for(const [action,label] of [['listen','Listen'],['explain','Explain']]){const button=document.createElement('button');button.type='button';button.dataset.studyAction=action;button.dataset.readTarget=anchor;button.innerHTML=icon(action==='listen'?'HeadphonesIcon':'Chat01Icon');const description=`${label}${action==='listen'?' to':''} this ${kind}`;button.setAttribute('aria-label',description);button.title=description;tools.append(button);}
-   if(kind==='visualization'&&scene?.querySelector('.scene-actions'))scene.querySelector('.scene-actions').append(tools);else el.append(tools);
+   if(kind==='visualization'&&(scene||el).querySelector('.scene-actions'))(scene||el).querySelector('.scene-actions').append(tools);else el.append(tools);
   }
  }
  segments.forEach((s,i)=>{const neighbors=segments.filter(t=>s.supplement?t.supplement===s.supplement:!t.noNarration&&(!t.depth||t.depth===(t.lesson===s.lesson?s.depth||'intuition':'intuition')));s.before=neighbors.filter(t=>t.index<i).slice(-3).map(t=>t.text).join('\n').slice(-3000);s.after=neighbors.filter(t=>t.index>i).slice(0,3).map(t=>t.text).join('\n').slice(0,3000);s.context=[s.before,'[NARRATION SLOT]',s.after].join('\n');s.hash=createHash('sha256').update(id+s.kind+s.heading+s.text+s.latex.join(' ')+s.context+(s.narration||'')).digest('hex').slice(0,16)});
