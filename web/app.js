@@ -57,8 +57,23 @@ storage.set('gr-nav-page',navPage);
 const sectionToggle=$('.nav-section-toggle'),sectionList=$('.nav-sections');
 if(sectionList&&storage.get(`gr-nav-sections-${navPage}`)==='open')sectionList.classList.add('is-expanded');
 const navigationOpen=()=>narrowNavigation.matches?sidebar.classList.contains('open'):document.documentElement.dataset.sidebar!=='collapsed';
-let previewTimer;
-function hidePreview(){clearTimeout(previewTimer);preview.hidden=true;preview.replaceChildren()}
+let previewTimer,previewCloseTimer,previewTrigger;
+function cancelPreviewClose(){clearTimeout(previewCloseTimer)}
+function hidePreview(){
+ clearTimeout(previewTimer);cancelPreviewClose();
+ if(previewTrigger?.matches('.nav-group-toggle')){
+  previewTrigger.setAttribute('aria-controls',previewTrigger.closest('.nav-group').querySelector('.nav-children').id);
+  if(!navigationOpen())previewTrigger.setAttribute('aria-expanded','false');
+ }
+ preview.hidden=true;preview.replaceChildren();previewTrigger=null;
+}
+function schedulePreviewClose(){
+ clearTimeout(previewTimer);cancelPreviewClose();
+ previewCloseTimer=setTimeout(()=>{
+  if(preview.matches(':hover')||preview.contains(document.activeElement)||previewTrigger===document.activeElement)return;
+  hidePreview();
+ },240);
+}
 function syncNavigation(){
  const open=navigationOpen();
  for(const toggle of [menu,mobileMenu]){toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'Collapse contents':'Expand contents')}
@@ -90,37 +105,72 @@ for(const group of navGroups){
   if(!wasOpen)setNavigation(true);else syncNavigation();
  });
 }
-// Rail previews are a noninteractive reading surface. Enter unfolds the actual
-// navigation tree, so links never exist twice in the keyboard/accessibility tree.
-for(const item of sidebar.querySelectorAll('.nav-group-toggle,.nav-destination')){
- const show=()=>{
-  if(navigationOpen()||narrowNavigation.matches)return;
-  hidePreview();
-  const title=document.createElement('strong');title.textContent=item.querySelector('.nav-copy>span')?.textContent||item.querySelector('.nav-copy').textContent;preview.append(title);
-  const group=item.closest('.nav-group');
-  if(group){
-   const detail=document.createElement('p');detail.textContent=item.querySelector('small').textContent;preview.append(detail);
-   const list=document.createElement('ol');
-   group.querySelectorAll('.nav-chapter-row>a').forEach(link=>{const li=document.createElement('li'),n=document.createElement('span');n.textContent=link.querySelector('.nav-number').textContent;li.append(n,document.createTextNode(link.lastElementChild.textContent));if(link.hasAttribute('aria-current'))li.className='is-current';list.append(li)});preview.append(list);
-   const hint=document.createElement('small');hint.textContent='Click to explore · Enter to open';preview.append(hint);
-  }
-  preview.hidden=false;
-  preview.style.top=Math.max(84,Math.min(item.getBoundingClientRect().top,innerHeight-preview.offsetHeight-16))+'px';
- };
- item.addEventListener('pointerenter',()=>{clearTimeout(previewTimer);previewTimer=setTimeout(show,160)});
- item.addEventListener('pointerleave',hidePreview);
- item.addEventListener('focus',()=>{keepNavVisible(item);show()});
- item.addEventListener('blur',hidePreview);
+// The collapsed rail offers real links. Keep them reachable across the gap,
+// and insert the flyout into the trigger's keyboard order while it is open.
+const railItems=[...sidebar.querySelectorAll('.nav-group-toggle,.nav-destination')];
+function showPreview(item){
+ if(navigationOpen()||narrowNavigation.matches)return;
+ cancelPreviewClose();clearTimeout(previewTimer);
+ if(previewTrigger===item&&!preview.hidden)return;
+ hidePreview();previewTrigger=item;
+ const label=item.querySelector('.nav-copy>span')?.textContent||item.querySelector('.nav-copy').textContent;
+ preview.setAttribute('aria-label',label);
+ const group=item.closest('.nav-group');
+ if(group){
+  const title=document.createElement('strong');title.textContent=label;preview.append(title);
+  const detail=document.createElement('p');detail.textContent=item.querySelector('small').textContent;preview.append(detail);
+  const list=document.createElement('ol');
+  group.querySelectorAll('.nav-chapter-row>a').forEach(link=>{
+   const li=document.createElement('li');li.append(link.cloneNode(true));list.append(li);
+  });preview.append(list);
+  item.setAttribute('aria-controls',preview.id);item.setAttribute('aria-expanded','true');
+ }else{
+  const link=document.createElement('a');link.href=item.getAttribute('href');link.textContent=label;
+  if(item.hasAttribute('aria-current'))link.setAttribute('aria-current','page');
+  preview.append(link);
+ }
+ preview.hidden=false;
+ preview.style.top=Math.max(72,Math.min(item.getBoundingClientRect().top,innerHeight-preview.offsetHeight-16))+'px';
 }
+for(const item of railItems){
+ item.addEventListener('pointerenter',()=>{
+  cancelPreviewClose();clearTimeout(previewTimer);previewTimer=setTimeout(()=>showPreview(item),120);
+ });
+ item.addEventListener('pointerleave',schedulePreviewClose);
+ item.addEventListener('focus',()=>{keepNavVisible(item);showPreview(item)});
+ item.addEventListener('blur',schedulePreviewClose);
+ item.addEventListener('keydown',e=>{
+  if(navigationOpen()||narrowNavigation.matches)return;
+  if(e.key==='ArrowRight'||(e.key==='Tab'&&!e.shiftKey&&previewTrigger===item&&!preview.hidden)){
+   e.preventDefault();showPreview(item);preview.querySelector('a')?.focus();
+  }
+ });
+}
+preview.addEventListener('pointerenter',cancelPreviewClose);
+preview.addEventListener('pointerleave',schedulePreviewClose);
+preview.addEventListener('focusin',cancelPreviewClose);
+preview.addEventListener('focusout',schedulePreviewClose);
+preview.addEventListener('keydown',e=>{
+ const links=[...preview.querySelectorAll('a')];
+ if(e.key==='Tab'&&e.shiftKey&&document.activeElement===links[0]){
+  e.preventDefault();previewTrigger.focus();
+ }else if(e.key==='Tab'&&!e.shiftKey&&document.activeElement===links.at(-1)){
+  const next=railItems[railItems.indexOf(previewTrigger)+1]||$('.desktop-logo');
+  e.preventDefault();hidePreview();next.focus();
+ }
+});
+listen(document,'pointerdown',e=>{
+ if(!preview.hidden&&!preview.contains(e.target)&&!previewTrigger?.contains(e.target))hidePreview();
+});
 // CSS may blur a newly hidden control before the media-query event arrives.
 let navigationFocus=null;
 listen(document,'focusin',e=>{if(e.target!==document.body)navigationFocus=sidebar.contains(e.target)||e.target===mobileMenu?e.target:null});
 listen(document,'pointerdown',e=>{if(!sidebar.contains(e.target)&&!mobileMenu.contains(e.target))navigationFocus=null});
-listen(narrowNavigation,'change',()=>{const focused=document.activeElement===document.body?navigationFocus:document.activeElement;sidebar.classList.remove('open');syncNavigation();if(narrowNavigation.matches&&sidebar.contains(focused))mobileMenu.focus();else if(!narrowNavigation.matches&&focused===mobileMenu)menu.focus()});syncNavigation();
+listen(narrowNavigation,'change',()=>{const focused=preview.contains(document.activeElement)?previewTrigger:document.activeElement===document.body?navigationFocus:document.activeElement;sidebar.classList.remove('open');syncNavigation();if(narrowNavigation.matches&&sidebar.contains(focused))mobileMenu.focus();else if(!narrowNavigation.matches&&focused===mobileMenu)menu.focus()});syncNavigation();
 listen(window,'resize',hidePreview);navScroll.addEventListener('scroll',hidePreview,{passive:true});
 listen(document,'keydown',e=>{
  if(e.key==='Escape'){
-  if(!preview.hidden){e.preventDefault();e.stopImmediatePropagation();hidePreview();return}
+  if(!preview.hidden){e.preventDefault();e.stopImmediatePropagation();if(preview.contains(document.activeElement))previewTrigger?.focus();hidePreview();return}
   if(narrowNavigation.matches&&navigationOpen()){e.preventDefault();e.stopImmediatePropagation();closeMenu();mobileMenu.focus()}
  }
  if(e.key==='Tab'&&narrowNavigation.matches&&navigationOpen()){

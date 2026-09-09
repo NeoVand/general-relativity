@@ -33,10 +33,38 @@ try{
  await group('part-1').locator('button').first().hover();
  await page.waitForFunction(()=>!document.querySelector('.nav-preview').hidden);
  assert.match(await page.locator('.nav-preview').innerText(),/Differential geometry/);
- assert.equal(await page.locator('.nav-preview a,.nav-preview button').count(),0);
+ assert.equal(await page.locator('.nav-preview a').count(),5,'Collapsed navigation offers real chapter links');
+ // Cross the gap slowly, then pause to read before clicking. A direct hover
+ // would miss the disappearing-popup regression reported by a reader.
+ const trigger=await group('part-1').locator('button').first().boundingBox();
+ const chapter=page.locator('.nav-preview a[href="chapter-6.html"]');
+ const destination=await chapter.boundingBox();
+ await page.mouse.move(64,trigger.y+trigger.height/2,{steps:8});
+ await page.waitForTimeout(120);
+ await page.mouse.move(destination.x+25,destination.y+destination.height/2,{steps:12});
+ await page.waitForTimeout(400);
+ assert.ok(await chapter.isVisible(),'Flyout stays open while moving to and reading its links');
  await page.screenshot({path:'qa/navigation-rail-preview.png',animations:'disabled'});
  await page.keyboard.press('Escape');
  assert.ok(await page.locator('.nav-preview').evaluate(e=>e.hidden));
+ await group('part-1').locator('button').first().hover();
+ await chapter.click();
+ await page.waitForFunction(()=>location.pathname.endsWith('/chapter-6.html')&&document.body.dataset.readingReady==='true');
+ await width(64);
+ // Tab enters the flyout; Escape returns to its trigger without reopening it.
+ await group('part-1').locator('button').first().focus();
+ await page.keyboard.press('Tab');
+ assert.equal(await page.evaluate(()=>document.activeElement.getAttribute('href')),'chapter-6.html');
+ await page.keyboard.press('Escape');
+ assert.ok(await page.locator('.nav-preview').evaluate(e=>e.hidden));
+ assert.equal(await page.evaluate(()=>document.activeElement.closest('[data-nav-group]')?.dataset.navGroup),'part-1');
+ await page.keyboard.press('ArrowRight');
+ await page.keyboard.press('Shift+Tab');
+ assert.equal(await page.evaluate(()=>document.activeElement.closest('[data-nav-group]')?.dataset.navGroup),'part-1');
+ await page.keyboard.press('ArrowRight');
+ for(let n=0;n<5;n++)await page.keyboard.press('Tab');
+ assert.equal(await page.evaluate(()=>document.activeElement.closest('[data-nav-group]')?.dataset.navGroup),'part-2','Tab leaves the last link for the next rail group');
+ await page.keyboard.press('Escape');
  // Keyboard commits the preview by opening the single, real chapter tree.
  await group('part-1').locator('button').first().focus();await page.keyboard.press('Enter');await width(292);
  assert.equal(await group('part-1').locator('button').first().getAttribute('aria-expanded'),'true');
@@ -115,5 +143,5 @@ try{
  await page.setViewportSize({width:1440,height:1000});
  await page.waitForFunction(()=>document.activeElement.id==='menu-button');
  assert.deepEqual(errors,[]);
- console.log('Sidebar checks passed: anchored morph, single nav tree, previews, saved disclosure, section tracking, keyboard, mobile dismissal, 12 visual states, and reduced motion.');
+ console.log('Sidebar checks passed: anchored morph, clickable flyouts, pointer travel, keyboard traversal, saved disclosure, section tracking, mobile dismissal, 12 visual states, and reduced motion.');
 }finally{await browser.close()}

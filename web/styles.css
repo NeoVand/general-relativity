@@ -188,14 +188,15 @@ html[data-sidebar=collapsed] .sidebar{visibility:visible;transform:none}
 html[data-sidebar=collapsed] .nav-copy,html[data-sidebar=collapsed] .nav-caret{opacity:0;visibility:hidden;transition:opacity var(--nav-motion) ease-out,visibility 0s linear var(--nav-motion)}
 html[data-sidebar=collapsed] .nav-children{grid-template-rows:0fr;opacity:0;visibility:hidden}
 html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sidebar .nav-destination{width:48px}
-.nav-preview{position:fixed;z-index:45;left:72px;width:268px;padding:18px 20px;border-radius:16px;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 12px 48px #0002;pointer-events:none;font:12px/1.5 Manrope,sans-serif;color:var(--muted)}
-.nav-preview strong{display:block;color:var(--ink);font-weight:750;margin-bottom:7px}
-.nav-preview p{margin:0 0 10px;font-size:10px}
+.nav-preview{position:fixed;z-index:45;left:64px;width:300px;max-height:calc(100dvh - 88px);padding:16px 12px;margin-left:0;border:1px solid color-mix(in srgb,var(--muted) 18%,transparent);border-radius:16px;background:var(--paper);box-shadow:0 12px 48px #0002;overflow-y:auto;overscroll-behavior:contain;font:13px/1.5 Manrope,sans-serif;color:var(--muted)}
+.nav-preview strong{display:block;color:var(--ink);font-weight:750;margin:0 10px 5px}
+.nav-preview p{margin:0 10px 12px;font-size:11px}
 .nav-preview ol{list-style:none;padding:0;margin:0}
-.nav-preview li{display:flex;gap:12px;padding:5px 0;font-size:11px}
-.nav-preview li span{opacity:.6;font-variant-numeric:tabular-nums}
-.nav-preview li.is-current{color:var(--geometry)}
-.nav-preview small{display:block;margin-top:12px;font-size:10px;opacity:.65}
+.nav-preview li{margin:2px 0}
+.nav-preview a{display:flex;align-items:baseline;gap:10px;min-height:44px;padding:11px 10px;border-radius:9px;color:var(--ink);text-decoration:none}
+.nav-preview a:hover,.nav-preview a:focus-visible{background:var(--wash);color:var(--geometry)}
+.nav-preview a:focus-visible{outline:2px solid var(--geometry);outline-offset:-2px}
+.nav-preview a[aria-current=page]{color:var(--geometry);background:color-mix(in srgb,var(--geometry) 9%,transparent);font-weight:700}
 .nav-scrim{position:fixed;inset:var(--header-height) 0 0;z-index:29;border:0;background:#0003;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 @media(max-width:800px){
  :root,html[data-sidebar=collapsed]{--sidebar-space:0px;--sidebar-width:min(308px,calc(100vw - 48px))}
