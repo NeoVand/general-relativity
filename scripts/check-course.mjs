@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {parseHTML} from 'linkedom';
-import {lessons, prerequisites, routes, validateCourse} from '../content/course.mjs';
+import {lessons, prerequisites, routes, skills, validateCourse} from '../content/course.mjs';
 
 const base=process.env.BOOK_URL||'http://localhost:4173/';
 const key='gr-course-v1';
@@ -14,7 +14,7 @@ const publishedCourse=JSON.parse(fs.readFileSync('site/course-data.json','utf8')
 // Test the published contract as well as the source: a valid dependency graph
 // is not useful when its links or authored explanation layers were not built.
 validateCourse();
-assert.equal(lessons.length,13,'the reviewed first course has thirteen complete bridges');
+assert.ok(lessons.length>=25,'the original bridges and twelve assessed foundations are present');
 assert.equal(prerequisites.length,25);
 assert.equal(new Set(lessons.map(l=>l.practice.choices.findIndex(c=>c.correct))).size,3,'correct options do not share one position');
 const documents=new Map();
@@ -36,6 +36,7 @@ for(const route of routes){
   targetExists(`chapter-${chapter}.html`);prior.add(chapter);
  }
 }
+for(const s of skills)targetExists(s.href);
 for(const lesson of lessons){
  const root=documentFor(`chapter-${lesson.chapter}.html`).getElementById(lesson.id);
  assert.ok(root,`published lesson: ${lesson.id}`);
@@ -85,7 +86,7 @@ async function verifyRouteNavigation(page,width){
   {route:'geometry',chapter:12,previous:11,next:13,outside:true}
  ];
  for(const item of cases){
-  await visit(page,'course-map.html');await page.locator('.route-status').filter({hasText:'Every required chapter is included'}).waitFor();
+  await visit(page,'course-map.html');await page.locator('.route-status').filter({hasText:'Chapter dependencies are included'}).waitFor();
   await page.locator(`[data-route="${item.route}"]`).click();
   await visit(page,`chapter-${item.chapter}.html`);
   const turn=page.locator(`.page-turn[data-route-navigation="${item.outside?'book':item.route}"]`);await turn.waitFor();
@@ -224,7 +225,7 @@ try{
   await page.reload();await settled(page,anchor);
   await page.waitForFunction(({id,snapshot})=>document.querySelector(`[data-lesson="${id}"] [data-visual-state]`)?.dataset.visualState===JSON.stringify(snapshot),{id:anchor.id,snapshot});
 
-  await visit(page,'course-map.html');await page.locator('.route-status').filter({hasText:'Every required chapter is included'}).waitFor();
+  await visit(page,'course-map.html');await page.locator('.route-status').filter({hasText:'Chapter dependencies are included'}).waitFor();
   for(const route of routes){
    await page.locator(`[data-route="${route.id}"]`).click();
    const shown=await page.locator('[data-chapter-node]:visible').evaluateAll(nodes=>nodes.map(node=>+node.dataset.chapterNode));
@@ -265,5 +266,5 @@ try{
   await context.close();
  }
  assert.deepEqual(errors,[],'course interactions produce no browser errors');
- console.log(navigationOnly?'Verified route-aware primary navigation, completion links, chapter titles, off-route navigation, and actual SPA round trips at desktop and mobile widths.':`Verified 13 published lessons, 3 prerequisite-complete routes, ${interactions} learning interactions, keyboard/deep-link behavior, route-aware page turns, and notebook persistence/export/import at desktop and mobile widths.`);
+ console.log(navigationOnly?'Verified route-aware primary navigation, completion links, chapter titles, off-route navigation, and actual SPA round trips at desktop and mobile widths.':`Verified ${lessons.length} published lessons, 3 prerequisite-complete routes, ${interactions} learning interactions, keyboard/deep-link behavior, route-aware page turns, and notebook persistence/export/import at desktop and mobile widths.`);
 }finally{await browser.close()}

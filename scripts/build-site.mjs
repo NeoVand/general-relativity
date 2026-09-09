@@ -6,7 +6,7 @@ import katex from 'katex';
 import {math as typeset, inline, legend} from './math-system.mjs';
 import {scenes, scenePanel, icon} from './scenes.mjs';
 import {lessons,validateCourse} from '../content/course.mjs';
-import {lessonHTML,compassHTML,courseMapHTML,notebookHTML,publicCourseData} from './course-content.mjs';
+import {lessonHTML,compassHTML,courseMapHTML,preparationHTML,notebookHTML,publicCourseData} from './course-content.mjs';
 import {geometryExperienceHTML} from './geometry-experiences.mjs';
 import {curvatureExperienceHTML} from './curvature-experiences.mjs';
 import {mathPaletteCSS} from './math-palette.mjs';
@@ -144,7 +144,7 @@ for(let i=0;i<pages.length;i++){
  }
  // Insert together at an exact heading, preserving authored lesson order.
  for(const after of new Set(chapterLessons.map(l=>l.after))){
-  const anchor=new RegExp(`(<h3[^>]*>${after.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}[\\s\\S]*?<\\/h3>)`);
+  const anchor=new RegExp(`(<h3[^>]*>${md.renderInline(after).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}[\\s\\S]*?<\\/h3>)`);
   if(!anchor.test(html))throw Error(`Missing lesson anchor: ${p.id}: ${after}`);
   const additions=chapterLessons.filter(l=>l.after===after).map(l=>lessonHTML(l,render,referenceByLesson[l.id]?figure(figures.find(f=>f.id===referenceByLesson[l.id])):'')).join('');
   html=html.replace(anchor,match=>match+additions);
@@ -152,7 +152,7 @@ for(let i=0;i<pages.length;i++){
  if(p.chapter==='8')html=html.replace('<section class="guided-lesson" id="carry-a-direction-without-turning-it"','<span id="scene-sphere"></span><section class="guided-lesson" id="carry-a-direction-without-turning-it"');
  if(p.chapter==='4')html=html.replace(/(<h3[^>]*>4\.1[\s\S]*?<\/h3>)/,match=>match+geometryExperienceHTML('manifold'));
  const opening=figures.filter(f=>!f.after&&!paired.has(f.id)&&!references.has(f.id)).map(chapterFigure).join('');
- const guide=g?`<details class="chapter-preparation"><summary>Before you begin</summary><div class="chapter-guide"><div><span class="eyebrow">THE QUESTION</span><p>${inline(g.question,p.chapter)}</p></div><div><span class="eyebrow">BRING WITH YOU</span><p>${inline(g.needs,p.chapter)}</p></div><p class="chapter-payoff"><strong>By the end:</strong> ${inline(g.payoff,p.chapter)}</p></div></details>`:'';
+ const guide=g?`<details class="chapter-preparation"><summary>Before you begin</summary><div class="chapter-guide"><div><span class="eyebrow">THE QUESTION</span><p>${inline(g.question,p.chapter)}</p></div><div><span class="eyebrow">BRING WITH YOU</span>${preparationHTML(p.chapter,render)}</div><p class="chapter-payoff"><strong>By the end:</strong> ${inline(g.payoff,p.chapter)}</p></div></details>`:'';
  const check=g?`<section class="takeaway"><h2>The idea to keep</h2><p>${inline(g.takeaway,p.chapter)}</p><details class="checkpoint"><summary>${inline(g.check,p.chapter)}</summary><p>${inline(g.answer,p.chapter)}</p></details></section>`:'';
  const label=p.chapter!==undefined?`CHAPTER ${String(p.chapter).padStart(2,'0')} ${+p.chapter>=20&&+p.chapter<=23?'· OPTIONAL DEEPER TRAIL':''}`:p.appendix?`APPENDIX ${p.appendix}`:'THE READING GUIDE';
  const heading=p.title.replace(/^\d+\. |^Appendix [A-Z]\. /,'');
@@ -182,7 +182,7 @@ const design=`<article><header class="chapter-header"><div class="eyebrow">THE D
 fs.writeFileSync(`${out}/visual-language.html`,layout('The language of color',design,{active:'visual-language'}));
 let creditHtml=render(fs.readFileSync('content/credits.md','utf8'),{id:'credits'}).html;
 fs.writeFileSync(`${out}/credits.html`,layout('Images & edition notes',`<article><header class="chapter-header"><div class="eyebrow">PROVENANCE & CRAFT</div><h1>Images & edition notes</h1></header><div class="prose">${creditHtml}</div></article>`));
-for(const [id,title,body] of [['course-map','Learning path',courseMapHTML(guides)],['notebook','Field notebook',notebookHTML()]]){fs.writeFileSync(`${out}/${id}.html`,layout(title,body,{active:id}));search.push({title,url:`${id}.html`,summary:title==='Learning path'?'Choose a route with explicit prerequisites':'Your observations and review queue',text:title});}
+for(const [id,title,body] of [['course-map','Learning path',courseMapHTML(guides,render)],['notebook','Field notebook',notebookHTML()]]){fs.writeFileSync(`${out}/${id}.html`,layout(title,body,{active:id}));search.push({title,url:`${id}.html`,summary:title==='Learning path'?'Choose a route with explicit prerequisites':'Your observations and review queue',text:title});}
 fs.writeFileSync(`${out}/course-data.json`,JSON.stringify(publicCourseData(render,guides)));
 fs.writeFileSync(`${out}/search-index.json`,JSON.stringify(search));
 fs.writeFileSync(`${out}/.nojekyll`,'');

@@ -55,6 +55,8 @@ jobs:
         run: npm run test:resilience
       - name: Check notebook history and backup migration
         run: npm run test:learning-state
+      - name: Verify foundation diagnostics and fallback reasoning
+        run: npm run test:diagnostics
       - name: Check worked lessons and learning routes
         run: npm run test:course
       - name: Check guided visual lessons

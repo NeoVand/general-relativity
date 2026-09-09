@@ -81,5 +81,5 @@ export function prepareLesson(lesson,index) {
  const extra=practiceVariants[lesson.id];
  const transfer={...lesson.transfer,id:'original',version:1};
  return {...lesson,practice:{...lesson.practice,choices:ordered},transfer,
-  variants:extra?[{...transfer,...extra,version:1}]:[]};
+  variants:extra?[{...transfer,...extra,version:1}]:(lesson.variants||[]).map(item=>({...transfer,...item,version:item.version||1}))};
 }

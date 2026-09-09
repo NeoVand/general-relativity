@@ -3281,7 +3281,7 @@ $$
 \epsilon_0\mu_0c^2=1.
 $$
 
-You recognize the energy density and Poynting vector from electromagnetism. The same tensor includes electric and magnetic stresses, so a magnetic field can affect geometry even in a region containing no material particles.
+The field-energy bridge above defines the energy density and the Poynting vector: the latter measures electromagnetic energy transported per unit area per unit time. The field-action formulas here preview the variational construction developed in Chapter 13. The same tensor includes electric and magnetic stresses, so a magnetic field can affect geometry even in a region containing no material particles.
 
 Its classical trace in four spacetime dimensions vanishes:
 

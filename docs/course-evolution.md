@@ -8,7 +8,7 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 - [x] Accessible progressive enhancement and reliable scene visibility checks (F05).
 - [x] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
 - [x] Reading-position restoration and honest route status (F06; route-end wording in F08).
-- [ ] Skill-based prerequisites, diagnostic entry, and the missing foundations.
+- [x] Skill-based prerequisites, diagnostic entry, and twelve assessed entry foundations.
 - [ ] Independent practice, misconceptions, and curved/matter capstones throughout the core.
 - [ ] Shared scientific records, accountable tutor workflows, evaluation corpus, and critical narration.
 - [ ] Relativistic stars, light/observer measurements, observational distances, and numerical laboratories.
@@ -51,3 +51,11 @@ The review and its reproduction evidence are preserved as the implementation bas
 - Browser history stores a nearby content anchor, its viewport offset, and reading focus. Back, Forward, and reload restore their own positions after enhancement and fonts load, including visits without a fragment identifier.
 - The final chapter says “End of route.” Position in a route does not claim course completion or mastery.
 - Verified: desktop/mobile Back, Forward, reload and focus restoration; route navigation; existing navigation keyboard and responsive checks.
+
+### Assessed preparation, available where it is needed
+
+- Twelve new lessons cover coordinate dimensions, ODE initial data, mechanics/pressure work, hyperbolic functions, Lie brackets, field energy, Poisson sources, admissible variations, waves/Green functions, global causality, thermal probabilities, and quantum/reduced states. Each has explanatory layers, misconception feedback, and two authored calculations.
+- One curriculum map supplies chapter dependencies, skill links, chapter preparation, and route checks. Its validator rejects unknown/cyclic skills and forward teaching dependencies. The obsolete duplicate preparation text was removed from guide metadata.
+- Readiness diagnostics offer a direct route to the relevant method, preserve native reasoning without JavaScript, and explicitly distinguish an example check from a placement grade. The horizon route no longer requires the unrelated numerical-evolution chapter before forms.
+- The field/EM discussion now defines its physical inputs and labels the later field-action construction as a preview.
+- Verified: 25 lessons, 500 desktop/mobile interactions plus both transfer variants, 28 skill destinations, all fallback cases, twelve diagnostics at two widths and without JavaScript, static links/mathematics, semantic narration boundaries, and Svelte diagnostics. These are structural and software checks; learner-study validation remains outstanding.

@@ -38,7 +38,7 @@ function updateRoute(){
  const chapterTitle=chapter=>course.chapterTitles?.[chapter]||`Chapter ${String(chapter).padStart(2,'0')}`;
  document.querySelectorAll('[data-route]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.route===route.id)));
  document.querySelectorAll('[data-chapter-node]').forEach(el=>el.hidden=!route.chapters.includes(Number(el.dataset.chapterNode)));
- document.querySelectorAll('.route-status').forEach(el=>el.textContent=`${route.chapters.length} chapters · ${route.title}. Every required chapter is included.`);
+ document.querySelectorAll('.route-status').forEach(el=>el.textContent=`${route.chapters.length} chapters · ${route.title}. Chapter dependencies are included; use the skill checks to judge readiness.`);
  document.querySelectorAll('[data-route-next]').forEach(el=>el.innerHTML=index<0?'':next!==undefined?`<a href="chapter-${next}.html">Next on your route: Chapter ${String(next).padStart(2,'0')} →</a>`:'<a href="course-map.html">End of route · choose what comes next →</a>');
  document.querySelectorAll('.page-turn').forEach(nav=>{
   if(!originalPageTurns.has(nav))originalPageTurns.set(nav,nav.innerHTML);
@@ -109,6 +109,13 @@ export function initCourse(){
     out.textContent=correct?'That result checks. Now explain why the method still works when the numbers change.':'That result does not match yet. Check the assumptions and units, then use the hint to choose your next step.';out.dataset.correct=String(correct);persist();signal();
    });
    root.querySelectorAll('[data-help]').forEach(details=>on(details,'toggle',()=>{if(details.open){state.evidence[id]=recordHelp(state.evidence[id],details.dataset.help,details.dataset.helpKind);persist();signal()}}));
+  });
+  document.querySelectorAll('[data-diagnostic]').forEach(root=>{
+   const lesson=course.lessons.find(l=>l.id===root.dataset.diagnostic),form=root.querySelector('form');if(!lesson||!form)return;
+   form.hidden=false;
+   on(form,'submit',event=>{event.preventDefault();const answer=parseNumericAnswer(form.querySelector('input').value),out=root.querySelector('[data-diagnostic-feedback]');
+    out.textContent=answer===null?'Enter a finite decimal, fraction, or scientific notation.':Math.abs(answer-lesson.transfer.answer)<=lesson.transfer.tolerance?'This example checks. Compare your reasoning, then try the different example before deciding to skip the preparation.':'This result needs another look. Compare the reasoning or follow the worked method below.';
+   });
   });
   document.querySelectorAll('[data-route]').forEach(button=>button.disabled=false);
   updateRoute();renderNotebook();
