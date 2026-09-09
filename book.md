@@ -3465,13 +3465,13 @@ This count explains the hierarchy: the metric's values supply local measuring un
 
 <a id="chapter-11"></a>
 
-## 11. Energy, momentum, and stress: what gravity listens to
+## 11. Energy, momentum, and stress
 
-Geometry has acquired a vocabulary. It can describe clocks, freely falling trajectories, and tidal stretching. But it has not yet acquired a law telling it which geometry to adopt. We now need the other protagonist: matter, including radiation and nongravitational fields.
+Consider gas in a box. It has energy, pushes on the walls, and can carry energy and momentum from one part of the box to another. An observer moving past the box measures different particle energies and sees a different flow. We need a description that relates all these measurements consistently.
 
-A useful first surprise is that gravity does not ask matter for a single number called “how much stuff?” It asks for a tensor. Energy can move; moving energy carries momentum; momentum itself can flow. A source description that ignores those flows would disagree with itself as soon as two observers passed each other.
+The **stress-energy tensor** provides that description. Once we understand its entries, we can connect matter to the geometry of the preceding chapters.
 
-### 11.1 A tensor is a shipping manifest for energy and momentum
+### 11.1 Energy density and momentum flux
 
 Start in a tiny laboratory with orthonormal axes, using $x^{\hat 0}=ct$. Hats distinguish physically calibrated local axes from arbitrary coordinate axes. Let
 
@@ -3529,11 +3529,11 @@ $$
 \boxed{\frac{\partial\pi_j}{\partial t}+\partial_i\Pi_{ij}=0.}
 $$
 
-That is the momentum balance law. A pressure gradient changes a fluid's momentum because one face receives a different momentum flux from the opposite face. The tensor is four conservation equations sharing one filing system.
+That is the momentum balance law. A pressure gradient changes a fluid's momentum because one face receives a different momentum flux from the opposite face. Together, these are the four local balance equations: one for energy and one for each component of momentum.
 
-**Gotcha: a coordinate component is not automatically a meter reading.** In spherical coordinates, $T^{\theta\theta}$ is not a pressure read directly from a gauge aligned with an angular ruler. The coordinate basis has its own normalization. Physical readings come from contraction with an observer's orthonormal frame.
+**Coordinate components and instrument readings.** In spherical coordinates, $T^{\theta\theta}$ is not a pressure read directly from a gauge aligned with an angular ruler. The coordinate basis has its own normalization. Physical readings come from contraction with an observer's orthonormal frame.
 
-**Another gotcha: index position changes signs.** In an orthonormal frame with signature $(-,+,+,+)$, lowering a single time index changes its sign. Thus a fluid at rest has
+**Lowering a time index.** In an orthonormal frame with signature $(-,+,+,+)$, lowering a single time index changes its sign. Thus a fluid at rest, with pressure $p$, has
 
 $$
 T^{\hat\mu\hat\nu}=\operatorname{diag}(\epsilon,p,p,p),
@@ -3541,9 +3541,9 @@ T^{\hat\mu\hat\nu}=\operatorname{diag}(\epsilon,p,p,p),
 T^{\hat\mu}{}_{\hat\nu}=\operatorname{diag}(-\epsilon,p,p,p).
 $$
 
-The energy has not become negative. You changed the kind of tensor components you were looking at.
+The measured energy density remains $T_{\hat0\hat0}=\epsilon$. The negative mixed component results from lowering just one time index; lowering both gives the positive energy-density component.
 
-### 11.2 Energy belongs to an observer; the tensor belongs to everyone
+### 11.2 Measurements made by a chosen observer
 
 A particle's energy depends on who measures it. So does a field's energy density. The covariant object is $T_{\mu\nu}$; “energy density” is one observer's projection of it.
 
@@ -3586,15 +3586,21 @@ T^{\mu\nu}=\epsilon_{(n)}n^\mu n^\nu
 }
 $$
 
-This is an unusually productive way to think about a tensor: choose your local time direction, and it decomposes into familiar laboratory quantities. Change observer, and the pieces reshuffle while the underlying tensor remains the same.
+Check these definitions in the observer's own orthonormal frame. There $n^\mu=(1,0,0,0)$, $n_\mu=(-1,0,0,0)$, and $H^\mu{}_{\nu}=\operatorname{diag}(0,1,1,1)$. Thus $\epsilon_{(n)}=T_{00}$, $j^i=T^{i0}=S_i/c$, and $P^{ij}=T^{ij}$. The minus sign in the definition of $j$ compensates for the negative lowered time component. We recover exactly the quantities in §11.1.
 
-The analogy is slicing a loaf at different angles. The slices look different because your slicing procedure changed. Its limitation is that Lorentz transformations mix time and space with a hyperbolic geometry, so an ordinary Euclidean loaf does not reproduce the quantitative transformation law. It is a reminder about observer-dependent decomposition, not a model of spacetime.
+For a numerical observer change, take a sample with negligible pressure and no energy flow in its own frame, so its only nonzero component is $T_{00}=\epsilon$. An observer moving along $x$ has $n^\mu=\gamma(1,\beta,0,0)$ and measures
+
+$$
+\epsilon_{(n)}=\gamma^2\epsilon.
+$$
+
+At $v=0.6c$, $\gamma=1.25$, giving $1.5625\epsilon$. One factor of $\gamma$ reflects the increased energy of each particle; the other reflects the increased number of particles per volume measured in the moving frame. The tensor describes both observers' results.
 
 Some matter admits a local rest frame with zero energy flux. A single beam of light does not: catching up with the beam would require a timelike observer to become null. Never assume that every stress tensor can be put into a perfect-fluid rest-frame form.
 
-### 11.3 Dust: a crowd that refuses to interact
+### 11.3 Dust: particles with negligible pressure
 
-“Dust” in relativity means an idealized collection of particles with negligible pressure and random velocity dispersion. It can represent cold matter on suitable scales; it does not mean that the universe has neglected its housekeeping.
+The pressureless sample just considered is called **dust**. Within a small fluid element, its particles share one velocity; their random motion and pressure are neglected. This is useful for sufficiently cold, dilute matter on scales where those approximations hold.
 
 In the common rest frame of a small dust element, only the energy-density component is nonzero. If its four-velocity is $u^\mu$, the covariant expression reproducing this is
 
@@ -3634,13 +3640,13 @@ $$
 u^\mu\nabla_\mu u^\nu=0.
 $$
 
-The same conservation law has produced both continuity of dust mass and geodesic motion. Geometry and matter dynamics fit together; geodesic motion is not an unrelated ornament attached to the field equations.
+The same conservation law has produced both continuity of dust mass and geodesic motion. For this pressureless model, continuity and free fall are two consequences of the same equation.
 
 The qualification matters. Charged matter exchanging momentum with an electromagnetic field need not have a separately conserved matter stress tensor. A pressured fluid accelerates because neighboring fluid elements push it. Extended spinning bodies can have curvature-dependent corrections to simple geodesic motion. Dust is a controlled idealization, not a universal description of matter.
 
 ### 11.4 Perfect fluids, derived from isotropy
 
-A perfect fluid has no heat flux, viscosity, or preferred spatial direction in its local rest frame. Rotational symmetry therefore requires its spatial stress to be $p\delta^{ij}$.
+A **perfect fluid** can have pressure from microscopic particle motion, but its local rest frame has no preferred spatial direction and no net heat flow. The model neglects viscosity: the additional momentum transfer associated with neighboring layers moving differently. Rotating the rest-frame axes must leave its stress unchanged. This requires zero off-diagonal entries and equal diagonal entries, giving $p\delta^{ij}$, where $p$ is pressure.
 
 Let
 
@@ -3669,7 +3675,18 @@ $$
 
 This follows by contracting $T_{\mu\nu}$ with the observer's unit time vector and using $u\cdot w=-c^2\gamma$. Even the energy density measured by a moving observer knows about pressure.
 
-Projecting $\nabla_\mu T^{\mu\nu}=0$ parallel to $u_\nu$ gives
+To extract the fluid equations, first apply the product rule to the full tensor:
+
+$$
+\begin{aligned}
+0={}&\frac{u^\nu}{c^2}\left[u^\mu\nabla_\mu(\epsilon+p)
++(\epsilon+p)\nabla_\mu u^\mu\right]\\
+&+\frac{\epsilon+p}{c^2}a^\nu+\nabla^\nu p,
+\qquad a^\nu=u^\mu\nabla_\mu u^\nu.
+\end{aligned}
+$$
+
+Contract with $u_\nu$. Normalization gives $u_\nu u^\nu=-c^2$ and $u_\nu a^\nu=0$. The two derivatives of $p$ cancel, leaving
 
 $$
 \boxed{
@@ -3683,9 +3700,9 @@ $$
 \frac{d(\epsilon V)}{d\tau}=-p\frac{dV}{d\tau}.
 $$
 
-It is the familiar pressure–volume work law, now embedded in relativistic geometry.
+This is the pressure–volume work law. To see the mechanical meaning, imagine a piston with area $A$ moving outward by $d\ell$. Pressure exerts force $pA$, doing work $pA\,d\ell=p\,dV$. The fluid’s energy decreases by that amount when there is no heat transfer.
 
-Projecting perpendicular to $u^\mu$ instead gives
+Now apply the spatial projector $H^\alpha{}_{\nu}$ to the expanded equation. It removes the term proportional to $u^\nu$ and leaves $a^\alpha$ unchanged because $u\cdot a=0$. The result is
 
 $$
 \boxed{
@@ -3697,9 +3714,9 @@ $$
 
 The pressure gradient supplies the force density; $(\epsilon+p)/c^2$ supplies the relativistic inertial coefficient. In a cold, slow fluid, $p\ll\epsilon\simeq\rho c^2$, recovering $\rho\mathbf a=-\boldsymbol\nabla p$ locally.
 
-**Stress-sign trap.** Relativity's $T^{ij}$ is momentum flux. Some engineering conventions define Cauchy stress as positive in tension, giving a stationary fluid the mechanical stress $-p\delta^{ij}$. The sign difference is bookkeeping, not a disagreement about which way a pressurized piston moves.
+**Pressure and tension conventions.** Relativity's $T^{ij}$ is momentum flux. Some engineering conventions define Cauchy stress as positive in tension, giving a stationary fluid the mechanical stress $-p\delta^{ij}$. When comparing formulas, check whether the tensor describes momentum flux or mechanical traction with this tension convention.
 
-### 11.5 Pressure gravitates—and the photon box is not a mass-doubling machine
+### 11.5 Radiation pressure and the mass of a box
 
 The field equation developed next implies, in an orthonormal frame comoving with an isotropic fluid,
 
@@ -3710,9 +3727,11 @@ $$
 
 The factor $3p$ is the sum of the stresses in three spatial directions. It describes a particular Ricci-curvature projection relevant to focusing timelike geodesics. It is not a universal instruction to replace all mass densities everywhere by $(\epsilon+3p)/c^2$.
 
-For isotropic radiation, $p=\epsilon/3$. One can see why: a photon carries momentum $E/c$, and its momentum crossing a surface brings another directional factor. Isotropy gives the average $\langle\cos^2\theta\rangle=1/3$. Hence each diagonal momentum flux is one third of the energy density.
+For isotropic radiation, $p=\epsilon/3$. Here is the momentum-flux calculation. A photon of energy $E$ traveling along a unit direction $n$ carries momentum $(E/c)n_j$ in direction $j$. Its crossing rate through a face normal to $i$ contains the velocity component $cn_i$. Thus a beam with energy density $\epsilon_{\rm beam}$ contributes $\epsilon_{\rm beam}n_in_j$ to the momentum flux.
 
-Now comes the trap: $\epsilon+3p=2\epsilon$. Does putting photons into a box make their gravitational mass twice $E/c^2$?
+Average over an isotropic distribution of directions. The three averages $\langle n_x^2\rangle$, $\langle n_y^2\rangle$, and $\langle n_z^2\rangle$ are equal and sum to one, so each is $1/3$. The off-diagonal averages vanish by symmetry. Each diagonal stress is therefore $\epsilon/3$.
+
+Substituting gives $\epsilon+3p=2\epsilon$. Taken alone, this appears to assign radiation twice the gravitational effect expected from its energy. To determine the mass of a box containing radiation, however, we must include the box’s stresses too.
 
 The missing member of that calculation is the box. Radiation pushes outward; walls develop stresses to hold it in. An isolated static system must include its supports in its total stress tensor. Wall tensions compensate the extra integrated radiation-pressure contribution in the regime of negligible internal self-gravity. This is the resolution studied explicitly by [Misner and Putnam in “Active Gravitational Mass”](https://link.aps.org/doi/10.1103/PhysRev.116.1045).
 
@@ -3728,7 +3747,7 @@ $$
 \partial_k(x^iT^{kj})=T^{ij}.
 $$
 
-Integrate over all space. If the complete system's stresses decay sufficiently fast, the surface term vanishes, leaving
+Integrate over a volume enclosing the system. The **divergence theorem** turns the integral of a divergence into outward flux through its boundary. It follows by assembling the small boxes from Chapter 0: neighboring boxes share a face with opposite outward normals, so their interior-face contributions cancel. Only the outer faces remain. Here the relevant flux is $x^iT^{kj}$. Take the enclosing boundary to infinity; if the complete system’s stresses decay sufficiently fast, its surface contribution vanishes. We obtain
 
 $$
 \int T^{ij}\,d^3x=0.
@@ -3742,7 +3761,7 @@ $$
 
 reduces to total energy divided by $c^2$ for the complete system under these assumptions. If you supply additional energy $E$ without otherwise changing the total energy accounting, the leading mass increase is $E/c^2$. Gravitational binding corrections require the appropriate relativistic total-energy definition.
 
-The lesson is sharper than “pressure does not really gravitate.” It does. The lesson is: **do not compute the gravity of a mechanically incomplete system and mistake the answer for the gravity of the complete one.**
+Pressure contributes to the field equation. In this stationary box, the wall tensions also contribute. Including both reconciles the local pressure term with the total mass inferred far from the complete system.
 
 ### 11.6 Two field examples: scalar waves and electromagnetism
 
@@ -3782,7 +3801,7 @@ $$
 F_{0i}=-\frac{E_i}{c},\qquad F_{ij}=\varepsilon_{ijk}B_k,
 $$
 
-in a local orthonormal frame. Here $\varepsilon_{ijk}$ is the three-dimensional antisymmetric symbol, unrelated to energy density $\epsilon$. The electromagnetic Lagrangian energy density and stress tensor are
+in a local orthonormal frame. Here $\varepsilon_{ijk}$ is the three-dimensional antisymmetric symbol: $\varepsilon_{123}=+1$, exchanging two indices reverses the sign, and repeating an index gives zero. It is unrelated to energy density $\epsilon$. The electromagnetic Lagrangian energy density and stress tensor are
 
 $$
 \mathcal L_{\rm EM}=-\frac1{4\mu_0}F_{\alpha\beta}F^{\alpha\beta},
@@ -3809,7 +3828,7 @@ $$
 \epsilon_0\mu_0c^2=1.
 $$
 
-The field-energy bridge above defines the energy density and the Poynting vector: the latter measures electromagnetic energy transported per unit area per unit time. The field-action formulas here preview the variational construction developed in Chapter 13. The same tensor includes electric and magnetic stresses, so a magnetic field can affect geometry even in a region containing no material particles.
+The preceding field-energy example defines the energy density and the Poynting vector: the latter measures electromagnetic energy transported per unit area per unit time. The field-action formulas here preview the variational construction developed in Chapter 13. The same tensor includes electric and magnetic stresses, so a magnetic field can affect geometry even in a region containing no material particles.
 
 Its classical trace in four spacetime dimensions vanishes:
 
@@ -3821,9 +3840,9 @@ Contract the displayed tensor: the first term gives $F_{\mu\alpha}F^{\mu\alpha}$
 
 <a id="chapter-12"></a>
 
-## 12. Einstein's equation: every symbol earns its place
+## 12. Einstein's field equation
 
-We can now put the two protagonists into one equation:
+The stress-energy tensor describes matter. The Einstein tensor describes a particular combination of curvature. Einstein’s field equation relates them:
 
 $$
 \boxed{
@@ -3833,9 +3852,9 @@ $$
 }
 $$
 
-It is a local differential equation for the spacetime metric, coupled to the equations governing matter. It does not say that geometry is a decorative picture pasted over Newtonian gravity. The metric determines clocks, distances, causal cones, and free-fall trajectories, and this equation governs that metric.
+This is a local differential equation for the spacetime metric, coupled to the matter equations. To make a prediction, solve for a metric and matter configuration together, with suitable initial or boundary conditions. Then use that metric to calculate clock readings, light signals, and free-fall trajectories.
 
-### 12.1 Reading the equation without mysticism
+### 12.1 Reading the field equation
 
 | Symbol | What it is | What job it does |
 |---|---|---|
@@ -3859,7 +3878,7 @@ the right-hand side has curvature units. In angular or differently normalized co
 
 The equation is nonlinear. The inverse metric appears in contractions; the connection contains $g^{-1}\partial g$; curvature contains $\partial\Gamma+\Gamma\Gamma$. The object being solved for helps define the differential operator acting on itself.
 
-An orchestra analogy is useful: the musicians affect the acoustics, and the acoustics affect what the musicians hear. Its limitation is that spacetime is not an external concert hall with a separate mechanical material; the metric is the gravitational field itself.
+For example, the field equation relates a fluid’s density and pressure to the metric. The fluid equation in Chapter 11 also contains that metric through its connection. Changing the geometry changes how the fluid moves, while changing the fluid changes the source of the geometry. These equations must be solved consistently.
 
 ### 12.2 Why subtract half the trace?
 
@@ -3887,11 +3906,11 @@ $$
 G_{\mu\nu}+\Lambda g_{\mu\nu}.
 $$
 
-The factor $1/2$ is therefore a geometric compatibility requirement within this ansatz. It is not a lucky fit to Mercury's orbit.
+The factor $1/2$ is required for the divergence to vanish within this chosen form of the equation. The coefficient multiplying the matter tensor still has to be fixed by measurement.
 
 This does **not** establish that “the equivalence principle uniquely proves Einstein's equation.” We selected a metric theory with a particular low-derivative curvature structure. More general curvature actions, extra fields, independent connections, or other assumptions can change the dynamics while retaining coordinate covariance. The equivalence principle guides the local relation between matter and geometry; it does not provide every dynamical postulate by itself.
 
-The action principle in Chapter 14 will supply a second route to precisely the same trace subtraction. Seeing the coefficient arise from both the Bianchi identity and the variation of volume is one of the satisfying internal checks of the theory.
+The action principle in Chapter 14 will supply a second route to precisely the same trace subtraction. That derivation will identify which part of the metric variation produces the trace term.
 
 ### 12.3 Trace reversal: the most useful algebraic rearrangement
 
@@ -3933,7 +3952,7 @@ $$
 
 which explains the pressure result from Chapter 11.
 
-If $T_{\mu\nu}=0$ and $\Lambda=0$, then $R_{\mu\nu}=0$. This does not force the entire Riemann tensor to vanish: Weyl curvature can remain. Black-hole exteriors and gravitational waves make excellent use of that permission.
+If $T_{\mu\nu}=0$ and $\Lambda=0$, then $R_{\mu\nu}=0$. This does not force the entire Riemann tensor to vanish: Weyl curvature can remain. Black-hole exteriors and gravitational waves provide examples with nonzero vacuum curvature.
 
 If $T=0$ but $T_{\mu\nu}\ne0$, then $R=4\Lambda$ while Ricci curvature still responds to matter. An electromagnetic field is the standard counterexample to the false statement “zero scalar curvature means empty, flat spacetime.”
 
@@ -3946,7 +3965,7 @@ $$
 
 The four-dimensional $1/2$ in trace reversal is dimension dependent. The $1/2$ in the definition of the Einstein tensor is not.
 
-### 12.4 Deriving the Newtonian limit, including the factor of two
+### 12.4 Matching Newtonian gravity
 
 We still owe an explanation of $8\pi G_N/c^4$. Temporarily write an unknown coupling $\kappa$ on the right-hand side.
 
@@ -4016,7 +4035,16 @@ $$
 =\frac\kappa2\rho c^2.
 $$
 
-Newtonian gravity requires Poisson's equation
+We also need the Newtonian equation relating potential to matter density. Its normalization follows from the inverse-square force law. For a spherical mass, $\partial_r\Phi=G_NM/r^2$, so the outward flux of $\boldsymbol\nabla\Phi$ through a sphere is $(G_NM/r^2)(4\pi r^2)=4\pi G_NM$.
+
+In Newtonian gravity the contributions from separate masses add. Summing them and applying the divergence theorem from §11.5 gives, for an enclosing volume,
+
+$$
+\int\boldsymbol\nabla^2\Phi\,d^3x
+=4\pi G_N\int\rho\,d^3x.
+$$
+
+Away from a point source, the flux through a small box is zero because the Hessian trace from §10.5 vanishes. Each enclosed point source contributes its spherical flux. Passing to a smooth density and requiring the relation for every small volume gives **Poisson's equation**:
 
 $$
 \boldsymbol\nabla^2\Phi=4\pi G_N\rho.
@@ -4028,7 +4056,7 @@ $$
 \boxed{\kappa=\frac{8\pi G_N}{c^4}.}
 $$
 
-The $4\pi$ is the familiar three-dimensional Gauss-law normalization: a spherical surface has area $4\pi r^2$. The additional factor of two came from trace reversal. The powers of $c$ came from relating temporal curvature to acceleration and energy density to mass density. No number in the coefficient arrived by ceremonial decree.
+The $4\pi$ came from spherical flux. Trace reversal supplied the additional factor of two. The powers of $c$ came from relating temporal curvature to acceleration and energy density to mass density.
 
 Keeping the cosmological constant gives, in this same static weak-field approximation,
 
@@ -4038,47 +4066,68 @@ $$
 
 For example, a local vacuum solution includes $\Phi_\Lambda=-\Lambda c^2r^2/6$. Its acceleration is $-\boldsymbol\nabla\Phi_\Lambda=+\Lambda c^2\mathbf r/3$: positive $\Lambda$ produces an outward contribution in this approximation. This is not a Newtonian description valid across an arbitrary cosmological spacetime.
 
-### 12.5 A calculation trap that catches experienced students
+### 12.5 Why the spatial metric matters
 
-For slow-particle acceleration, knowing $g_{00}$ is enough at leading order. For computing $G_{00}$, it is not.
+The preceding calculation needed $R_{00}$ at leading order. Computing $G_{00}$ also needs the scalar curvature $R$, which includes spatial metric derivatives. We can see their effect explicitly.
 
-In the Newtonian regime of general relativity with negligible anisotropic stress and suitable boundary conditions, a useful weak-field chart has
-
-$$
-ds^2\simeq
--\left(1+\frac{2\Phi}{c^2}\right)c^2dt^2
-+\left(1-\frac{2\Phi}{c^2}\right)\delta_{ij}dx^i dx^j.
-$$
-
-The spatial metric is perturbed too. Writing $\varphi=\Phi/c^2$, a first-order calculation gives
+Use two independent small, time-independent functions $\varphi$ and $\psi$:
 
 $$
-R_{00}\simeq\boldsymbol\nabla^2\varphi,
-\quad
-R_{ij}\simeq\delta_{ij}\boldsymbol\nabla^2\varphi,
-\quad
-R\simeq2\boldsymbol\nabla^2\varphi,
+ds^2\simeq-(1+2\varphi)c^2dt^2
++(1-2\psi)\delta_{ij}dx^i dx^j.
 $$
 
-so
+Slow-particle motion identifies $\varphi=\Phi/c^2$, as just derived. We have not yet assumed a relation between the temporal change $\varphi$ and spatial change $\psi$.
+
+Keeping only first-order terms in these functions, the nonzero connection types are
 
 $$
-G_{00}\simeq2\boldsymbol\nabla^2\varphi.
+\Gamma^0{}_{0i}=\partial_i\varphi,\qquad
+\Gamma^i{}_{00}=\partial^i\varphi,
 $$
 
-If you perturb only $g_{00}$ while artificially keeping the spatial metric exactly Euclidean, your first-order $G_{00}$ actually vanishes for a static perturbation. That ansatz can identify Newtonian accelerations but is not the complete weak-field solution sourced by ordinary matter.
+$$
+\Gamma^i{}_{jk}
+=-\delta^i_k\partial_j\psi-\delta^i_j\partial_k\psi
++\delta_{jk}\partial^i\psi.
+$$
 
-The larger lesson is methodological: **an approximation adequate for one observable can be inadequate for another equation.** Trace reversal made the coupling derivation especially clean because $R_{00}$ could be evaluated directly from the temporal perturbation at this order.
+The indices on spatial derivatives are raised with $\delta^{ij}$ at this order. Products of connection coefficients are second order, so the Ricci formula uses only their derivatives. Substitution gives
 
-### 12.6 Ten components, with structure
+$$
+\begin{aligned}
+R_{00}&\simeq\boldsymbol\nabla^2\varphi,\\
+R_{ij}&\simeq\delta_{ij}\boldsymbol\nabla^2\psi
++\partial_i\partial_j(\psi-\varphi),\\
+R&\simeq4\boldsymbol\nabla^2\psi-2\boldsymbol\nabla^2\varphi.
+\end{aligned}
+$$
 
-A symmetric four-by-four tensor has ten independent components. Einstein's equation supplies ten component equations, but the Bianchi identity imposes four differential relations among the geometric expressions. Four coordinate functions are also gauge choices. The resulting initial-value system contains constraint equations as well as evolution equations; Chapter 20 will unpack it.
+For example, the trace of the spatial connection is $\Gamma^k{}_{ki}=-3\partial_i\psi$. Together with $\Gamma^0{}_{0i}=\partial_i\varphi$, it supplies the second derivative of $\psi-\varphi$ in $R_{ij}$. Taking the Einstein combination yields
 
-This is why “solve ten independent wave equations for ten metric components” is the wrong computational picture. It is also why inserting an arbitrary, nonconserved $T_{\mu\nu}$ generally fails: geometry's identities require the matter equations and sources to fit together.
+$$
+\begin{aligned}
+G_{00}&\simeq2\boldsymbol\nabla^2\psi,\\
+G_{ij}&\simeq\partial_i\partial_j(\psi-\varphi)
+-\delta_{ij}\boldsymbol\nabla^2(\psi-\varphi).
+\end{aligned}
+$$
+
+In the leading static, pressureless Newtonian approximation, $T_{ij}$ is negligible. With $\Lambda=0$, set the displayed $G_{ij}$ to zero. Taking its spatial trace gives $\boldsymbol\nabla^2(\psi-\varphi)=0$, and substitution gives $\partial_i\partial_j(\psi-\varphi)=0$. Thus the difference is at most a constant plus a linear function. Boundary conditions that make both perturbations decay away from an isolated source set this difference to zero: $\psi=\varphi$.
+
+The consistent metric therefore has both $g_{00}\simeq-(1+2\Phi/c^2)$ and $g_{ij}\simeq(1-2\Phi/c^2)\delta_{ij}$. It gives $G_{00}\simeq2\boldsymbol\nabla^2\Phi/c^2$.
+
+If instead we set $\psi=0$ while retaining a nonzero $\varphi$, then $G_{00}$ vanishes to first order. That metric still predicts the chosen slow-particle acceleration, but it fails the density-sourcing part of Einstein's equation. An approximation sufficient for one measurement can omit terms essential for another calculation.
+
+### 12.6 Coordinate choices and dependent equations
+
+A symmetric four-by-four tensor has ten independent components. Einstein's equation supplies ten component equations, but the Bianchi identity imposes four differential relations among the geometric expressions. We may also choose the four coordinate functions used to label events. This freedom is called **coordinate gauge freedom**: different labels can describe the same physical geometry. The resulting initial-value system contains constraint equations as well as evolution equations; Chapter 20 will unpack it.
+
+The component equations must satisfy these relations together. In particular, specifying an arbitrary $T_{\mu\nu}$ that fails $\nabla_\mu T^{\mu\nu}=0$ is incompatible with the geometric identity on the other side. The matter equations are part of the problem.
 
 Finally, $T_{\mu\nu}$ here does not contain a universal local gravitational stress tensor added by hand. Gravitational self-interaction is already present in the nonlinear left-hand side. We will return to the important distinction between that fact and the existence of physically meaningful gravitational-wave energy or total mass.
 
-### 12.7 Why the coupling has units of inverse force
+### 12.7 Checking the size and units of the coupling
 
 Curvature in an orthonormal frame has units $\mathrm{m^{-2}}$. Energy density has units $\mathrm{J/m^3}=\mathrm{N/m^2}$. To turn the latter into the former, the coupling must have units $\mathrm{N^{-1}}$:
 
@@ -4090,7 +4139,7 @@ $$
 
 Using $G_N\simeq6.67430\times10^{-11}\,\mathrm{m^3\,kg^{-1}\,s^{-2}}$ gives $c^4/(8\pi G_N)\simeq4.82\times10^{42}\,\mathrm N$. Multiplying curvature by this factor produces the energy-density scale on the other side of Einstein's equation.
 
-This enormous conversion factor motivates the analogy that spacetime is “stiff.” It is not an elastic material modulus, and the inverse coupling is not itself a curvature or an energy density. Nor does this dimensional argument establish a universal maximum-force theorem. Its job is to check the equation's units and make the smallness of the coupling tangible.
+For a concrete scale, matter with negligible pressure and mass density $3000\,\mathrm{kg/m^3}$ has rest energy density about $2.70\times10^{20}\,\mathrm{J/m^3}$. Multiplying by $8\pi G_N/c^4$ gives about $5.60\times10^{-23}\,\mathrm{m^{-2}}$. This is the source of the time-time field-equation component in the matter’s rest frame. Determining the full curvature still requires solving the field equation, but the units and the scale of this contribution are now explicit.
 
 <a id="chapter-13"></a>
 

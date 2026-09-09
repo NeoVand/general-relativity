@@ -100,7 +100,7 @@
   },
   "11": {
     "title": "Energy, momentum, and stress",
-    "deck": "Energy, momentum, pressure, and their flows belong to one piece of bookkeeping.",
+    "deck": "Measure the energy in a sample and the momentum crossing its faces. Relate the readings made by moving observers.",
     "question": "Why is gravity’s source a tensor rather than just mass density?",
     "payoff": "Read each region of the stress-energy matrix and derive the perfect-fluid form.",
     "takeaway": "Energy density depends on the observer. Stress-energy packages that density together with momentum and stress so all observers can describe the same matter.",
@@ -111,7 +111,7 @@
     "title": "Einstein’s field equation",
     "deck": "Build the Einstein equation from curvature, local conservation, and the requirement to recover Newton.",
     "question": "Why subtract half the curvature trace?",
-    "payoff": "Trace-reverse the equation and recover the coefficient $8\\pi G/c^4$.",
+    "payoff": "Trace-reverse the equation and recover the coefficient $8\\pi G_N/c^4$.",
     "takeaway": "The trace subtraction makes the geometric side divergence-free. Matching the slow-motion weak-field limit fixes its coupling to matter.",
     "check": "For slow dust, is the trace-reversed 00 source $\\rho c^2$ or $\\rho c^2/2$?",
     "answer": "It is $\\rho c^2/2$. The trace $T$ is approximately $-\\rho c^2$ and $g_{00}$ approximately $-1$. Subtracting half their product removes half of $T_{00}$."

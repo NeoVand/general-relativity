@@ -58,8 +58,14 @@ Independent numerical differentiation of the metrics checks the added conformal 
 
 All 37 lessons passed their 680 browser interactions after these changes. The integrated curvature experiences, 74 page/viewport checks, reading-position restoration, and narration-context checks also passed.
 
+## Chapters 11 and 12
+
+The matter introduction starts with gas in a box. The observer decomposition is checked in its rest frame and on a moving pressureless sample. Fluid conservation is expanded before projecting it into energy and acceleration equations. Piston work explains the pressure-volume term, and a directional momentum-flux calculation explains radiation pressure. The field preparation now defines its derivative shorthand, derives the string's force balance, and explains the electromagnetic current and cross product.
+
+The divergence theorem is introduced through cancellation of shared box faces before the wall-stress integral uses it. The Newtonian matching then derives Poisson's normalization. The weak-field calculation keeps separate temporal and spatial perturbations, derives both Ricci and Einstein components, and explains the boundary assumptions under which the two potentials agree. Independent numerical metric derivatives verify those formulas, including the failure of a time-only perturbation to source G00.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 11.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 13.

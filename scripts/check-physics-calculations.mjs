@@ -74,6 +74,26 @@ for(const U of [.2,.7,1.1]){
  result.ricci.flat().forEach(value=>near(value,0));near(result.scalar,0);near(result.kretschmann,0);
  assert.ok(Math.max(...result.lowered.map(Math.abs))>.1,'Nonzero tidal curvature survives zero scalar contractions');
 }
+// At the origin these static quadratic potentials have zero value and first
+// derivatives. Curvature there depends only on their Hessians, so the test
+// isolates the separate temporal/spatial contributions without fitting a
+// numerical solution or reusing the chapter's Ricci formulas.
+const temporal=[.2,.3,.4],amplitude=.001;
+for(const spatial of [[0,0,0],temporal,[.5,.6,.7]]){
+ const metric=point=>{
+  const phi=amplitude*temporal.reduce((sum,value,i)=>sum+value*point[i+1]**2,0);
+  const psi=amplitude*spatial.reduce((sum,value,i)=>sum+value*point[i+1]**2,0);
+  const g=matrix();g[0][0]=-(1+2*phi);for(let i=1;i<4;i++)g[i][i]=1-2*psi;return g;
+ };
+ const result=curvature(metric,[0,0,0,0]);
+ const laplacianPhi=2*amplitude*temporal.reduce((a,b)=>a+b,0),laplacianPsi=2*amplitude*spatial.reduce((a,b)=>a+b,0);
+ near(result.ricci[0][0],laplacianPhi,2e-7);near(result.G00,2*laplacianPsi,2e-7);
+ near(result.scalar,4*laplacianPsi-2*laplacianPhi,2e-7);
+ for(let i=0;i<3;i++){
+  near(result.ricci[i+1][i+1],laplacianPsi+2*amplitude*(spatial[i]-temporal[i]),2e-7);
+  near(result.ricci[i+1][i+1]-result.scalar/2,2*amplitude*(spatial[i]-temporal[i])-(laplacianPsi-laplacianPhi),2e-7);
+ }
+}
 const flrw=power=>point=>{const g=matrix();g[0][0]=-1;for(let i=1;i<4;i++)g[i][i]=point[0]**(2*power);return g};
 for(const t of [1,2,3]){
  const dust=curvature(flrw(2/3),[t,0,0,0]);near(dust.scalar,4/(3*t*t));near(dust.kretschmann,80/(27*t**4));near(dust.G00,4/(3*t*t));near(dust.G11,0);
@@ -87,4 +107,4 @@ function contract(values){const tensor=Array.from({length:4},()=>tensor3()),pair
 }
 const vacuum=contract([-2,1,1,-1,-1,2]);assert.deepEqual(vacuum.ricci,matrix());assert.equal(vacuum.K,48);
 assert.equal(contract([-2,-2,-2,2,2,2]).scalar,24);assert.equal(contract([1,2,3,4,5,6]).ricci[2][2],8);
-console.log('All chapters have distinct transfer practice. Independent metric derivatives verify FLRW sources, conformal curvature, and nonzero wave curvature with vanishing scalar contractions; full-index sums verify the curvature-table exercises.');
+console.log('All chapters have distinct transfer practice. Independent metric derivatives verify FLRW sources, conformal curvature, wave invariants, and the separate weak-field potentials; full-index sums verify the curvature-table exercises.');
