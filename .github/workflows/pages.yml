@@ -57,6 +57,8 @@ jobs:
         run: npm run test:learning-state
       - name: Verify foundation diagnostics and fallback reasoning
         run: npm run test:diagnostics
+      - name: Calibrate the new curvature and matter examples
+        run: npm run test:physics
       - name: Check worked lessons and learning routes
         run: npm run test:course
       - name: Check guided visual lessons

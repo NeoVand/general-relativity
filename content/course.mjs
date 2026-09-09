@@ -1,10 +1,11 @@
 import {geometryLessons} from './geometry-lessons.mjs';
 import {bridgeLessons} from './bridge-lessons.mjs';
+import {corePractice} from './core-practice.mjs';
 import {foundationLessons} from './foundation-lessons.mjs';
 import {prerequisites,routes,skills,requirementsFor,validateCurriculum} from './curriculum.mjs';
 export {prerequisites,routes,skills,requirementsFor};
 import {prepareLesson} from './practice-variants.mjs';
-export const lessons=[...geometryLessons,...bridgeLessons,...foundationLessons].map(prepareLesson);
+export const lessons=[...geometryLessons,...bridgeLessons,...foundationLessons,...corePractice].map(prepareLesson);
 export function courseFor(chapter){const n=Number(chapter);return {chapter:Number.isInteger(n)?n:null,requires:prerequisites[n]||[],skills:requirementsFor(n),lessons:lessons.filter(l=>l.chapter===n).map(l=>({id:l.id,title:l.title,question:l.question,requires:l.requires,takeaway:l.takeaway}))};}
 export function validateCourse(){
  validateCurriculum(lessons);

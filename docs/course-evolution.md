@@ -9,7 +9,7 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 - [x] Stable choice identities, attempt history, fresh practice, and complete notebook recovery (F03, F04, F07).
 - [x] Reading-position restoration and honest route status (F06; route-end wording in F08).
 - [x] Skill-based prerequisites, diagnostic entry, and twelve assessed entry foundations.
-- [ ] Independent practice, misconceptions, and curved/matter capstones throughout the core.
+- [x] Independent practice in every chapter, misconception sequences, and a curved/matter capstone.
 - [ ] Shared scientific records, accountable tutor workflows, evaluation corpus, and critical narration.
 - [ ] Relativistic stars, light/observer measurements, observational distances, and numerical laboratories.
 - [ ] Graduate paths: rotating/charged holes, causal geometry, forms, perturbations, initial data, asymptotics.
@@ -59,3 +59,11 @@ The review and its reproduction evidence are preserved as the implementation bas
 - Readiness diagnostics offer a direct route to the relevant method, preserve native reasoning without JavaScript, and explicitly distinguish an example check from a placement grade. The horizon route no longer requires the unrelated numerical-evolution chapter before forms.
 - The field/EM discussion now defines its physical inputs and labels the later field-action construction as a preview.
 - Verified: 25 lessons, 500 desktop/mobile interactions plus both transfer variants, 28 skill destinations, all fallback cases, twelve diagnostics at two widths and without JavaScript, static links/mathematics, semantic narration boundaries, and Svelte diagnostics. These are structural and software checks; learner-study validation remains outstanding.
+
+### Every chapter asks the learner to calculate
+
+- Eleven new worked sequences cover tidal comparisons, observer Doppler shifts, affine parameters, full-index curvature contractions, tidal instrumentation, boundary terms, Noether charges, observational distances, numerical constraints, EFT error budgets, and a matter-filled cosmological capstone.
+- All 25 chapters now contain active practice. There are 36 lessons and 72 numerical examples, with further independent dust/radiation derivations in the capstone.
+- Cosmology now defines density parameters, H(z), radial/transverse comoving distances, angular-diameter distance, luminosity distance, and the assumptions behind distance duality.
+- The new physics calibration independently constructs Christoffels and Riemann curvature from the metric with finite differences, checks dust/radiation Einstein sources and invariants, and verifies curvature-table sums over all indices.
+- Verified: 720 desktop/mobile lesson interactions and both examples throughout, static links and mathematics, the independent physics checks, semantic narration boundaries, and Svelte diagnostics. The numeric checks do not certify a learner’s multi-step derivation; written-work rubrics and studies are separate evidence.

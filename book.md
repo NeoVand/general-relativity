@@ -5946,6 +5946,10 @@ Vanishing Weyl curvature does not mean vanishing geodesic deviation. De Sitter s
 
 <a id="chapter-20"></a>
 
+### 19.11 Observe an expansion history
+
+Redshift, brightness, and angular size give complementary questions to ask of the same expansion model. The worked lesson separates their distance definitions and builds the prediction from the Friedmann equation.
+
 ## 20. Making spacetime run: initial data, constraints, and numerical relativity
 
 ### 20.1 An equation is not yet a prediction
