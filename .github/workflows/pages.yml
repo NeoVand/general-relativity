@@ -70,6 +70,8 @@ jobs:
         run: npm run test:mechanics
       - name: Check guided visual lessons
         run: npm run test:visual-lessons
+      - name: Check polar coordinates and vector fields
+        run: npm run test:geometry-foundations
       - name: Check manifold charts and orbital precession
         run: npm run test:geometry-experiences
       - name: Check curvature components and tidal clouds

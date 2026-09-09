@@ -25,7 +25,8 @@
     "test:sequence": "node scripts/check-learning-sequence.mjs",
     "test:relativity-models": "node scripts/check-relativity-models.mjs",
     "test:relativity-labs": "node scripts/check-relativity-labs.mjs",
-    "test:mechanics": "node scripts/check-mechanics-experience.mjs"
+    "test:mechanics": "node scripts/check-mechanics-experience.mjs",
+    "test:geometry-foundations": "node scripts/check-geometry-foundations.mjs && node scripts/check-vector-fields.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

@@ -1292,7 +1292,11 @@ The sphere and spacetime models used here satisfy these conditions. The calculat
 
 ### 4.2 Where coordinates fail
 
-On an ordinary flat plane, **polar coordinates** describe a point by its distance $r$ from the origin and the angle $\theta$ from the positive $x$ axis. We measure the angle in radians: arc length divided by radius, so a full turn is $2\pi$. Their relation to Cartesian coordinates is
+On an ordinary flat plane, **polar coordinates** describe a point by its distance $r$ from the origin and the angle $\theta$ from the positive $x$ axis. We measure the angle in radians: arc length divided by radius, so a full turn is $2\pi$. Before calculating, try changing the distance and angle separately. A change in distance takes you along a spoke; a change in angle takes you around a circle.
+
+<div data-foundation-insert="polar"></div>
+
+The horizontal and vertical sides of the triangle from the origin to P are $r\cos\theta$ and $r\sin\theta$. Thus the same point has Cartesian coordinates
 
 $$
 x=r\cos\theta,\qquad y=r\sin\theta.
@@ -1387,7 +1391,9 @@ In four dimensions, a symmetric $4\times4$ metric has $4(4+1)/2=10$ independent 
 
 ### 4.5 A complete metric calculation in flat polar coordinates
 
-Differentiate the polar transformation:
+Return to the angular-step view in the [polar-coordinate experiment](#polar-coordinates). Moving outward by a small amount changes your position by that same length. Turning through a small angle changes it by a length proportional to $r$: the little arc is longer on a larger circle. At the point where you stand, these radial and tangential directions are perpendicular.
+
+This gives us a prediction. The two perpendicular legs of a very small displacement have lengths $dr$ and $r\,d\theta$, so Pythagoras should give $d\ell^2=dr^2+r^2d\theta^2$. The differentials describe the local limit; a finite straight chord need not equal a finite arc. We can now check the prediction by differentiating the coordinate formulas:
 
 $$
 dx=\cos\theta\,dr-r\sin\theta\,d\theta,
@@ -1955,7 +1961,13 @@ The next chapters build the language needed to express the last row without borr
 
 Draw an arrow pointing east on a flat sheet. At each point of a circle around the origin, describe that same eastward direction using two local unit arrows: one pointing outward and one pointing around the circle. At the rightmost point, east is outward. At the top, east is opposite the direction of increasing angle. The direction stayed fixed, but its components changed.
 
-We can check this with the unit basis from §4.8. In fixed Cartesian components,
+A **vector field** assigns a vector to each position. A velocity field, for example, tells you the direction and speed of flow at every location. Its arrows are instructions about motion at those locations; they are not a photograph of separate particles. Start with the uniform eastward field below. Move P and Q around the circle and compare their component readouts. Then bring the two physical arrows to the same origin, where their difference is easy to see.
+
+<div data-foundation-insert="vector-field"></div>
+
+The uniform field and the rotating field give opposite surprises. A fixed physical arrow can have changing components. A turning physical arrow can have constant components. In both cases, the missing information is how the local frame changes. Our derivative must keep track of the whole arrow.
+
+We can check the eastward example with the unit basis from §4.8. For the algebra, let $V$ denote the unit direction of the eastward flow. In fixed Cartesian components,
 
 $$
 \begin{aligned}
