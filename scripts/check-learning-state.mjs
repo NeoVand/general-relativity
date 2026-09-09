@@ -16,6 +16,7 @@ assert.equal(c.choiceId,'invariant-pairing');assert.equal(c.history[0].choiceId,
 
 const old=validateNotebook({version:1,route:'horizons',depths:{test:'formal'},notes:{test:{text:'My proof',saved:10}},evidence:{test:{transfer:true,attempts:5,answer:'4',updated:25}}});
 assert.equal(old.version,2);assert.equal(old.evidence.test.history[0].help,'unknown','old records cannot prove independence');assert.equal(old.evidence.test.attempts,5);
+old.experiments.star={version:1,parameters:{central:.4,step:.01},note:'Pressure supports the star',saved:20};old.journal={text:'A question beyond a chapter',saved:25};
 const restored=mergeNotebooks(emptyNotebook(),old);assert.deepEqual(restored,old,'every exported field survives a fresh-browser restore');
 const local=emptyNotebook();local.notes.test={text:'Local proof',saved:30,visual:null};local.evidence.test=e;
 const merged=mergeNotebooks(local,old);assert.equal(merged.notes.test.text,'Local proof');assert.equal(merged.route,'horizons');assert.equal(merged.evidence.test.history.length,4);assert.equal(merged.evidence.test.attempts,8,'preserve the old aggregate count plus the new attempts');

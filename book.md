@@ -5895,6 +5895,94 @@ Between this surface and the outer horizon lies the **ergoregion**. There, remai
 
 The useful physical idea is that an isolated black hole settling into the appropriate stationary vacuum state is described by very few exterior parameters. The assumptions determine when this description applies.
 
+### 17.8 A relativistic star has an interior
+
+Imagine a small slab of material inside a star. Gravity pulls it inward. Pressure pushes on both sides; the pressure on its inner face must be greater if the slab is to remain at rest. This is why a supported star needs a pressure that decreases toward its surface. A large pressure with no pressure gradient would push equally from both sides.
+
+Build the star outward from its centre. At each radius keep track of the mass enclosed and the pressure still needed to support the material above. The surface is where that pressure reaches zero. Increasing the central density changes the entire solution, including where its surface lies.
+
+The following experiment uses one specified relation between density and pressure, called an **equation of state**. Its three curves show pressure falling, density falling, and enclosed mass growing. Each curve is divided by its own reference value so that their shapes can be compared. The horizontal coordinate runs from the centre to the surface. The mass and radius readouts use the model's chosen scales, rather than solar masses and kilometres; those scales are derived below.
+
+<div data-lab-insert="star"></div>
+
+**From pressure support to the spacetime equations.** Start with a static, spherical perfect fluid, meaning that the local pressure is the same in every spatial direction. Let $\epsilon(r)$ be its rest-frame **energy density**, including rest energy, and let $p(r)$ be its pressure. Write
+
+$$
+ds^2=-e^{2\Phi(r)}c^2dt^2+
+\frac{dr^2}{1-2G_Nm(r)/(rc^2)}+r^2d\Omega^2.
+$$
+
+Here $r$ is areal radius, $m$ has units of mass, and $\Phi$ is dimensionless. Defining the mass function this way makes the radial metric coefficient a statement about the enclosed spherical gravitational mass; it is not simply the integral of rest-mass density over proper spatial volume.
+
+The time-time Einstein equation and the radial equation give, respectively,
+
+$$
+\frac{dm}{dr}=4\pi r^2\frac{\epsilon}{c^2},\qquad
+\Phi'=
+\frac{G_N(m+4\pi r^3p/c^2)}{c^2r(r-2G_Nm/c^2)}.
+$$
+
+These equations can be checked from the spherical connection in §17.1: replace the constant exterior mass by $m(r)$ before differentiating and retain the nonzero fluid source. The mass equation is the time-time curvature equation; the pressure term in $\Phi'$ is the radial stress source. They are not obtained by assigning a Newtonian potential to a relativistic star.
+
+Conservation supplies the mechanical balance. A static fluid has $u=e^{-\Phi}\partial_t$ and radial covariant acceleration $a_r=c^2\Phi'$. Projecting $\nabla_\mu T^{\mu\nu}=0$ orthogonal to $u$ gives
+
+$$
+\frac{dp}{dr}=-(\epsilon+p)\Phi'
+=-\frac{G_N(\epsilon+p)(m+4\pi r^3p/c^2)}
+{c^2r(r-2G_Nm/c^2)}.
+$$
+
+This is the **Tolman–Oppenheimer–Volkoff equation**. Three relativistic changes are visible: pressure contributes to inertial energy density, pressure also enters the source of the lapse gradient, and the radial geometry supplies a compactness factor. When $p\ll\epsilon$, $2G_Nm/(rc^2)\ll1$, and $\epsilon\simeq\rho c^2$, it reduces to $p'=-G_N\rho m/r^2$.
+
+The equations need an **equation of state**, a relation between pressure and energy density supplied by matter physics. Choose central pressure $p_c>0$, impose a regular centre $m(0)=0$, integrate outward, and identify the first zero-pressure surface $R$. Then $M=m(R)$. With no material surface layer, match to an exterior Schwarzschild solution and normalize the clock by $e^{2\Phi(R)}=1-2G_NM/(Rc^2)$. The central lapse is fixed by integrating $\Phi'$ inward from that boundary; it is not an independently adjustable physical clock rate after exterior normalization.
+
+The laboratory above uses an explicit, deliberately simple equation of state. In geometric units $G_N=c=1$, let $p=K\rho_0^2$ and $\epsilon=\rho_0+p$, where $\rho_0$ is rest-mass density in geometric units. Scale lengths and masses by $\sqrt K$ to set $K=1$. Its local sound-speed ratio is $dp/d\epsilon=2\rho_0/(1+2\rho_0)<1$. It is causal as a barotropic toy model, but it is not a fit to nuclear matter. Restoring a chosen $K$ sets the physical mass and radius scales; a plot without that choice is not a neutron-star prediction in solar masses and kilometres.
+
+The numerical integration uses **enthalpy** $h=\int_0^p dp'/(\epsilon+p')=\ln(1+2\rho_0)$, for which $h'=-(m+4\pi r^3p)/[r(r-2m)]$. Near the centre,
+
+$$
+m(r)=\frac{4\pi\epsilon_c}{3}r^3+O(r^5),\qquad
+h(r)=h_c-\frac{2\pi}{3}(\epsilon_c+3p_c)r^2+O(r^4).
+$$
+
+These expansions start the calculation away from the apparent $0/0$ at the origin. The displayed step-refinement difference measures numerical sensitivity. It is not a statement about uncertainty in the equation of state. The zero of enthalpy is located by linear interpolation, so the surface calculation can dominate the error even though the interior integrator is fourth order.
+
+**An independent limiting check.** In the weak-gravity, low-density limit, this $K=1$ equation of state has the Newtonian solution $\rho_0(r)=\rho_c\sin(\sqrt{2\pi}r)/(\sqrt{2\pi}r)$. Its first zero is $R=\sqrt{\pi/2}$ and its mass is $M=\sqrt{2\pi}\rho_c$. Derive this by eliminating $m$ between $2\rho_0'=-m/r^2$ and $m'=4\pi r^2\rho_0$. The automated model check compares against this independently solved limit.
+
+**A different analytic benchmark.** A constant-energy-density star, in $G_N=c=1$ units, has $m(r)=Mr^3/R^3$ and
+
+$$
+p(r)=\epsilon_0\,
+\frac{\sqrt{1-2Mr^2/R^3}-\sqrt{1-2M/R}}
+{3\sqrt{1-2M/R}-\sqrt{1-2Mr^2/R^3}}.
+$$
+
+Substitute it into the mass and pressure equations and check $p(R)=0$. Its central pressure diverges as $2M/R\to8/9$. This incompressible model has unphysical infinite sound speed and is a mathematical benchmark, not a viable matter model. The broader Buchdahl bound requires its own assumptions, including static spherical equilibrium, isotropic pressure, regularity, and a nonincreasing density profile; it is not a universal bound on every object called a star.
+
+A turning point on a one-parameter equilibrium mass–radius family can signal a change of radial stability under appropriate assumptions. Establishing stability requires perturbing the equilibrium and checking the resulting mode problem. A visually impressive mass–radius curve alone has not done that calculation.
+
+### 17.9 Separate the photon from the observers
+
+A light signal can climb outward while its receiver moves inward to meet it. The climb tends to lower the received frequency; motion toward the incoming light tends to raise it. Compare the two effects by holding the emission and reception events fixed and changing the observers' velocities at those events.
+
+In this experiment, the frequency ratio is the receiver's reading divided by the emitter's reading. One means equal readings; a value above one means a blueshift. Radii are multiples of the Schwarzschild radius. Both events stay outside it, where a hovering observer can provide a local reference for velocity. Each point on the graph describes a possible receiving observer, rather than successive positions of one moving receiver.
+
+<div data-lab-insert="photon"></div>
+
+Now derive the comparison. Let $f(r)=1-r_s/r$. A static observer measures photon energy $E_{\rm static}=E_\infty/\sqrt f$, where $E_\infty$ is the conserved energy associated with the stationary Killing vector normalized at infinity. Thus static source and receiver measure $\nu_r/\nu_e=\sqrt{f_e/f_r}$.
+
+At either event, a radial observer with local velocity $\beta c$ measures a further Doppler factor $\gamma(1-n\beta)$, where $n=+1$ for outward light and $n=-1$ for inward light. Dividing the receiver factor by the emitter factor gives the laboratory’s combined formula. This is an instantaneous comparison of specified four-velocities; it does not assume the moving observer remains at a fixed radius.
+
+For an outward radial null ray, $c\,dt/dr=1/f$. Integrating between exterior radii gives
+
+$$
+\frac{c\Delta t}{r_s}=(\rho_r-\rho_e)+
+\ln\frac{\rho_r-1}{\rho_e-1},\qquad \rho=r/r_s.
+$$
+
+This is Schwarzschild coordinate time. A static local observer uses $d\tau=\sqrt f\,dt$ and radial proper length $d\ell=dr/\sqrt f$, obtaining $d\ell/d\tau=c$. A changing coordinate slope has not changed the locally measured light speed. Static reference observers require infinite support at the horizon and do not exist inside it; the regular-coordinate lessons handle that different domain.
+
+
 <a id="chapter-18"></a>
 
 ## 18. Gravitational waves: from moving masses to a detector
@@ -6741,6 +6829,40 @@ $$
 
 At $z=1$, the same source has $D_L=4D_A$. The definitions differ because the brightness measurement includes two redshift effects that the angle measurement does not. This calculation assumes the smooth FLRW model, light wavelengths short compared with the curvature scale, and no absorption or conversion of photons along the beam. The worked example now obtains these distances from an expansion history.
 
+Compare those three distances below. Changing the Hubble constant changes the overall distance scale. Changing the matter and vacuum fractions changes how expansion proceeded and therefore changes the shapes of the curves. The vertical axis uses gigaparsecs; one gigaparsec is one thousand megaparsecs, the unit used in the readouts.
+
+<div data-lab-insert="distances"></div>
+
+### 19.12 A collapsing surface can cross its horizon in finite proper time
+
+A useful exact collapse model is a homogeneous pressureless ball, matched without a surface layer to a Schwarzschild exterior. It neglects pressure, rotation, inhomogeneity, and radiation. Use a closed FLRW interior,
+
+$$
+ds^2=-c^2d\tau^2+a(\eta)^2[d\chi^2+\sin^2\chi\,d\Omega^2],
+\qquad c\,d\tau=a\,d\eta.
+$$
+
+The surface follows a fixed $0<\chi_0<\pi/2$. Starting at rest at maximum size, the dust Friedmann equation has the parametric solution
+
+$$
+a(\eta)=\frac{a_{\max}}2(1+\cos\eta),\qquad
+\tau(\eta)=\frac{a_{\max}}{2c}(\eta+\sin\eta),
+\qquad0\le\eta<\pi.
+$$
+
+To check it, differentiate with respect to $\eta$, use $d\tau/d\eta=a/c$, and substitute into the closed dust Friedmann equation with conserved $\rho a^3$. The initial equation fixes $\rho_{\max}=3c^2/(8\pi G_Na_{\max}^2)$, where $\rho$ is mass-equivalent energy density. The areal surface radius is $R=a\sin\chi_0$, and the mass matching condition is
+
+$$
+M=\frac{4\pi}{3}\rho R^3
+=\frac{c^2a_{\max}}{2G_N}\sin^3\chi_0.
+$$
+
+This spherical gravitational mass is not the integral of rest density over the curved proper volume. The matching conditions require continuity of the induced metric and extrinsic curvature in the absence of a surface stress tensor. Zero pressure at the dust boundary makes this interior/exterior matching possible.
+
+The surface reaches $r_s=2G_NM/c^2$ when $a/a_{\max}=\sin^2\chi_0$, hence at $\eta_h=\pi-2\chi_0$. Its proper time then is finite and smaller than the singular endpoint $\tau_{\rm sing}=\pi a_{\max}/(2c)$. For $\chi_0=\pi/6$, crossing occurs at $\eta_h=2\pi/3$, while the surface has shrunk to one quarter of its initial radius.
+
+The event horizon inside the dust is an outgoing radial null line, $d\chi/d\eta=1$, traced backward from that crossing event. It obeys $\chi=\eta-\pi+3\chi_0$ until it reaches the centre. For the specified $\chi_0=\pi/6$ example, it begins at the centre at $\eta=\pi/2$, before the surface reaches its Schwarzschild radius. The horizon’s global definition and its smooth crossing by infalling matter are visible in the same solution. This exact dust model illustrates collapse; it is not a model of realistic stellar microphysics or an extension through its singular endpoint.
+
 <a id="chapter-20"></a>
 
 ## 20. Initial data, constraints, and numerical relativity
@@ -6987,6 +7109,43 @@ That means **two configuration degrees of freedom**, each with its conjugate mom
 
 ### 20.7 A stable spacetime simulator needs a good coordinate policy
 
+Begin with a smaller question: can a computed solution look convincing while violating an equation it is supposed to obey? We can test this in the flat dust universe already solved in Chapter 19.
+
+Measure the scale factor relative to its initial value, calling the ratio $A$. Measure elapsed time in units of the initial Hubble time, and call the resulting dimensionless time $t$. Write $V=dA/dt$ for the expansion rate. The dust acceleration equation and initial conditions become
+
+$$
+\dot A=V,\qquad \dot V=-\frac{1}{2A^2},
+\qquad A(0)=V(0)=1.
+$$
+
+The Friedmann constraint is $\mathcal C=V^2-1/A=0$. Differentiating it gives $\dot{\mathcal C}=2V\dot V+\dot A/A^2=0$: an exact evolution preserves the constraint. A numerical evolution uses finite steps, so this cancellation need not remain exact.
+
+The known solution $A(t)=(1+3t/2)^{2/3}$ gives us two checks. Compare the computed scale factor with the exact curve, then inspect the constraint residual. Halve the step and repeat, keeping the final time fixed. A smaller residual and a more accurate scale factor are related evidence, but they are different measurements.
+
+<div data-lab-insert="evolution"></div>
+
+<details class="checkpoint"><summary>How does the computer take one time step?</summary>
+
+The state is the pair $y=(A,V)$, and its derivative is $f(y)=(V,-1/(2A^2))$. **Forward Euler** follows the current slope for one step $h$: $y_{n+1}=y_n+h f(y_n)$. It treats that slope as constant across the step.
+
+The fourth-order **Runge–Kutta method**, abbreviated RK4, samples a beginning slope, two trial midpoint slopes, and a trial endpoint slope:
+
+$$
+k_1=f(y_n),\qquad k_2=f(y_n+hk_1/2),
+$$
+$$
+k_3=f(y_n+hk_2/2),\qquad k_4=f(y_n+hk_3),
+$$
+$$
+y_{n+1}=y_n+\frac h6(k_1+2k_2+2k_3+k_4).
+$$
+
+The weighted slopes account for the changing derivative inside the step. For smooth solutions in the regime where truncation error dominates, halving $h$ reduces the accumulated Euler error by roughly two and the RK4 error by roughly sixteen. This is a convergence expectation to test, rather than an error bound for an arbitrary calculation.
+
+</details>
+
+**Returning to a general spacetime.** The experiment evolves a homogeneous universe with no spatial grid. A full spacetime evolution must also handle coordinate freedom, disturbances propagating across the grid, and boundaries.
+
 Einstein's equations contain gauge freedom, so their unreduced component form is not simply ten independent wave equations. A coordinate condition can expose the wave structure. In harmonic coordinates, for example,
 
 $$
@@ -7002,7 +7161,7 @@ $$
 
 The metric itself supplies the coefficients that determine wave propagation: the unknown metric appears in the coefficients of its own highest derivatives. Those highest derivatives enter linearly, which is the meaning of **quasilinear**.
 
-A **well-posed** formulation has a solution, has the appropriate uniqueness, and makes that solution depend continuously on the initial data. The last requirement bounds how errors in the starting data affect the solution over a specified time interval. A formulation can be mathematically equivalent on exact constraint-satisfying solutions yet behave very differently when roundoff and discretization introduce small constraint violations. Generalized harmonic formulations prescribe the contracted connection through coordinate equations. The BSSN formulation, named for Baumgarte, Shapiro, Shibata, and Nakamura, instead separates the spatial volume factor from a unit-determinant spatial metric and separates the trace of extrinsic curvature from its trace-free part. It also evolves auxiliary connection variables. These are distinct organizations of the same physical solution, with different responses to numerical errors; deriving a full implementation goes beyond the homogeneous benchmark below.
+A **well-posed** formulation has a solution, has the appropriate uniqueness, and makes that solution depend continuously on the initial data. The last requirement bounds how errors in the starting data affect the solution over a specified time interval. A formulation can be mathematically equivalent on exact constraint-satisfying solutions yet behave very differently when roundoff and discretization introduce small constraint violations. Generalized harmonic formulations prescribe the contracted connection through coordinate equations. The BSSN formulation, named for Baumgarte, Shapiro, Shibata, and Nakamura, instead separates the spatial volume factor from a unit-determinant spatial metric and separates the trace of extrinsic curvature from its trace-free part. It also evolves auxiliary connection variables. These are distinct organizations of the same physical solution, with different responses to numerical errors; deriving a full implementation goes beyond the homogeneous benchmark above.
 
 The contracted Bianchi identity supplies constraint-propagation relations. With consistent matter evolution, exact constraints that hold initially continue to hold in a suitable exact evolution. A discretized evolution introduces errors, so constraint residuals must still be monitored and checked for convergence.
 

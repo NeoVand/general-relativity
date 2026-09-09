@@ -11,7 +11,8 @@ Implementation record for the [September 2026 review](comprehensive-course-revie
 - [x] Skill-based prerequisites, diagnostic entry, and twelve assessed entry foundations.
 - [x] Independent practice in every chapter, misconception sequences, and a curved/matter capstone.
 - [ ] Shared scientific records, accountable tutor workflows, evaluation corpus, and critical narration.
-- [ ] Relativistic stars, light/observer measurements, observational distances, and numerical laboratories.
+- [x] Calculated laboratories for relativistic stars, radial photon/observer measurements, observational distances, and homogeneous numerical evolution.
+- [ ] The connected visual curriculum: mechanics, polar fields, continuous transport, fluid stress, action, lensing, black-hole optics, forms, and causal diagrams.
 - [ ] Graduate paths: rotating/charged holes, causal geometry, forms, perturbations, initial data, asymptotics.
 - [ ] Quantum/EFT preparation and bounded research studios.
 - [ ] Accessibility/performance verification, errata workflow, and learner-study materials.
@@ -23,6 +24,17 @@ Automated and expert review can verify software behavior and specified scientifi
 ## Completed increments
 
 The review and its reproduction evidence are preserved as the implementation baseline.
+
+### Recovered calculated laboratories — September 9, 2026
+
+- Recovered the work paused for the novice-entry repair and reconciled it with the subsequent prose, placement, and spacing fixes. The original stash remains as a recovery copy.
+- Added four working laboratories: a polytropic TOV star, radial photon frequency comparisons, FLRW distance measures, and Euler/RK4 dust evolution. Each publishes a calculated default plot and data table without JavaScript, model assumptions, controls, CSV provenance, and saved observations.
+- Experiments and a general journal survive notebook export/import. Both tutor entry points receive the visible experiment's model, parameters, units, and computed readings; live tutor accuracy is still unverified.
+- Added a pressure-support introduction before the stellar equations and an observer-measurement introduction before the photon calculation. The evolution section now derives its test constraint and teaches both numerical stepping methods.
+- Moved the recovered dust-collapse calculation after the Friedmann equations it uses. It now occupies §19.12. This is not a substitute for the planned visual causal-structure lesson in Chapter 17.
+- Replaced compressed phone plots with separate compact layouts, fewer ticks, and readable labels. Reviewed the rendered desktop and mobile plots; repaired legend strokes and disclosure spacing.
+- Verified the reader build, site links and mathematics, Svelte diagnostics, original lesson sequencing, notebook recovery, independent model limits/refinement, and all four labs' controls, exports, saved state, and JavaScript-disabled equivalents. Added the lab checks to CI.
+- These are calculated scientific labs. The larger visual experiences in the [visual development plan](visual-development-plan-2026-09-09.md), including Penrose diagrams and 3D causal views, remain work to complete.
 
 ### Scientific identities and active Cartan practice
 

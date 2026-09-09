@@ -5,7 +5,7 @@ const object = value => value && typeof value === 'object' && !Array.isArray(val
 const text = (value, limit) => typeof value === 'string' ? value.slice(0, limit) : '';
 const time = value => Number.isFinite(value) && value >= 0 ? value : 0;
 const helpLevels = ['none', 'hint', 'solution', 'unknown'];
-export const emptyNotebook = () => ({version:notebookVersion,route:'core',depths:{},evidence:{},notes:{},visuals:{}});
+export const emptyNotebook = () => ({version:notebookVersion,route:'core',depths:{},evidence:{},notes:{},visuals:{},experiments:{},journal:{text:'',saved:0}});
 
 function cleanAttempt(a) {
  if (!object(a) || !validId(a.id) || !['transfer','concept','legacy'].includes(a.kind)) return null;
@@ -51,6 +51,8 @@ export function validateNotebook(input) {
  for(const [id,note] of Object.entries(input.notes||{}))if(validId(id)&&object(note)&&typeof note.text==='string')out.notes[id]={text:text(note.text,12000),saved:time(note.saved),visual:object(note.visual)?structuredClone(note.visual):null};
  for(const [id,e] of Object.entries(input.evidence||{}))if(validId(id)){const clean=cleanEvidence(e,input.version);if(clean)out.evidence[id]=clean;}
  for(const [id,value] of Object.entries(input.visuals||{}))if(validId(id)&&object(value))out.visuals[id]=structuredClone(value);
+ for(const [id,e] of Object.entries(input.experiments||{}))if(validId(id)&&object(e)&&object(e.parameters))out.experiments[id]={version:Number.isInteger(e.version)?e.version:1,parameters:structuredClone(e.parameters),note:text(e.note,4000),saved:time(e.saved)};
+ if(object(input.journal))out.journal={text:text(input.journal.text,12000),saved:time(input.journal.saved)};
  return out;
 }
 export function evidenceFor(e) {return cleanEvidence(e||{},notebookVersion);}
@@ -94,6 +96,8 @@ export function mergeNotebooks(local,imported,{preferImported=false}={}) {
  // Route and depth are part of the exported backup contract, even in a fresh browser.
  out.route=b.route;out.depths={...a.depths,...b.depths};
  out.notes=preferImported?{...a.notes,...b.notes}:{...b.notes,...a.notes};
+ out.experiments=preferImported?{...a.experiments,...b.experiments}:{...b.experiments,...a.experiments};
+ out.journal=preferImported||!a.journal.text?b.journal:a.journal;
  out.visuals=preferImported?{...a.visuals,...b.visuals}:{...b.visuals,...a.visuals};
  for(const id of new Set([...Object.keys(a.evidence),...Object.keys(b.evidence)])) {
   if(!a.evidence[id]||!b.evidence[id]){out.evidence[id]=a.evidence[id]||b.evidence[id];continue;}

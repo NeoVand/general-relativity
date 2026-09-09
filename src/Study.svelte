@@ -1,4 +1,5 @@
 <script>
+ import {visibleExperiments} from '../web/scientific-context.js';
  import {onMount,tick} from 'svelte';
  import {SvelteSet} from 'svelte/reactivity';
  import SafeHTML from './SafeHTML.svelte';
@@ -143,7 +144,7 @@
   const segments=visibleSegments().filter(needsExplanation);prepareCount=segments.length;
   try{for(const s of segments){const text=await narrationText(settings,s,prepareController.signal);const hidden=document.querySelector(`.narration-script[data-for="${CSS.escape(s.id)}"]`);if(hidden)hidden.textContent=text;prepared++;}notice='Spoken explanations are ready for this chapter.'}catch(e){fail(e)}finally{preparing=false}
  }
- function courseContext(){const el=[...document.querySelectorAll('[data-lesson]')].find(el=>{const b=el.getBoundingClientRect();return b.bottom>100&&b.top<innerHeight*.7});let memory={};try{memory=JSON.parse(localStorage.getItem('gr-course-v1'))||{}}catch{}const id=el?.dataset.lesson,lesson=page.course?.lessons.find(l=>l.id===id);return {prerequisites:page.course?.requires||[],route:memory.route||'core',lesson:lesson?{...lesson,depth:el.querySelector('[role=tab][aria-selected=true]')?.dataset.depth,transferProblem:el.querySelector('[data-transfer-prompt]')?.innerText||'',transferItem:el.dataset.transferItem,evidence:memory.evidence?.[id]||null,visual:el.querySelector('[data-visual-state]')?.dataset.visualState||null,note:memory.notes?.[id]?.text?.slice(0,1200)||''}:null};}
+ function courseContext(){const el=[...document.querySelectorAll('[data-lesson]')].find(el=>{const b=el.getBoundingClientRect();return b.bottom>100&&b.top<innerHeight*.7});let memory={};try{memory=JSON.parse(localStorage.getItem('gr-course-v1'))||{}}catch{}const id=el?.dataset.lesson,lesson=page.course?.lessons.find(l=>l.id===id);return {experiments:visibleExperiments(),skills:page.course?.skills||[],prerequisites:page.course?.requires||[],route:memory.route||'core',lesson:lesson?{...lesson,depth:el.querySelector('[role=tab][aria-selected=true]')?.dataset.depth,transferProblem:el.querySelector('[data-transfer-prompt]')?.innerText||'',transferItem:el.dataset.transferItem,evidence:memory.evidence?.[id]||null,visual:el.querySelector('[data-visual-state]')?.dataset.visualState||null,note:memory.notes?.[id]?.text?.slice(0,1200)||''}:null};}
  function readerFocus(){
   const playhead=active?{page:queuePage,passage:queue[queueCursor]?.id,heading:readingHeading,status:playback,word:spokenWord,seconds:audio?.currentTime||0,spoken:liveTokens.map(w=>w.text).join('')}:null;
   const id=selection?.start||(hovered?.page===page.id?hovered.id:null)||(playhead?.page===page.id?playhead.passage:null)||currentPassage();

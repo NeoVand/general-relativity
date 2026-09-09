@@ -32,6 +32,7 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: npm run check
+      - run: npm run test:relativity-models
       - name: Install browser for the reading checks
         run: npx playwright install --with-deps chromium
       - name: Start the book preview
@@ -63,6 +64,8 @@ jobs:
         run: npm run test:sequence
       - name: Check worked lessons and learning routes
         run: npm run test:course
+      - name: Calculated laboratories and experiment recovery
+        run: npm run test:relativity-labs
       - name: Check guided visual lessons
         run: npm run test:visual-lessons
       - name: Check manifold charts and orbital precession
