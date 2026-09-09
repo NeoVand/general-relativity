@@ -83,20 +83,39 @@ function createLab(el){
   const marker=dot(point(2.4,.5),'observer',.09);label('r=r_s',V(0,-2.45,1),'curvature');const rlabel=label('r',point(2.4,.5).add(V(0,.35,0)),'observer');
   update=()=>{const r=+input.value/100;marker.position.copy(point(r,.5));rlabel.position.copy(point(r,.5).add(V(0,.35,0)));output.innerHTML=window.katex.renderToString(`r/r_s=${r.toFixed(2)}`);el.dataset.measurement=2*Math.sqrt(r-1);};
  }else if(kind==='tides'){
-  camera.position.set(4,3,5);const cloud=new THREE.Group();root.add(cloud);sphereGrid(1.2,cloud);
-  const geometry=new THREE.SphereGeometry(.033,10,8),particles=new THREE.InstancedMesh(geometry,material('observer'),240);const dummy=new THREE.Object3D();
-  for(let i=0;i<240;i++){const y=1-2*(i+.5)/240,a=i*Math.PI*(3-Math.sqrt(5));dummy.position.set(1.2*Math.sqrt(1-y*y)*Math.cos(a),1.2*y,1.2*Math.sqrt(1-y*y)*Math.sin(a));dummy.updateMatrix();particles.setMatrixAt(i,dummy.matrix);}cloud.add(particles);
-  arrow(V(-2,0,0),V(2.1,0,0),'curvature');label('+2GM/r^3',V(2.15,.4,0),'curvature');label('-GM/r^3',V(0,1.75,0),'curvature');label('-GM/r^3',V(0,0,1.9),'curvature');
+  camera.position.set(4,3,5);const cloud=new THREE.Group();root.add(cloud);
+  // Keep a quiet initial sphere behind the changing cloud. Three great circles
+  // reveal its shape without turning the test particles into a wirework ball.
+  for(const plane of ['xy','xz','yz']){
+   const points=Array.from({length:97},(_,i)=>{const a=i*Math.PI/48,c=1.2*Math.cos(a),s=1.2*Math.sin(a);return plane==='xy'?V(c,s,0):plane==='xz'?V(c,0,s):V(0,c,s);});
+   const m=new THREE.LineDashedMaterial({transparent:true,opacity:.22,dashSize:.045,gapSize:.045});m.userData.role='ink';mats.push(m);
+   const reference=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),m);reference.computeLineDistances();root.add(reference);
+   line(points,'geometry',.68,cloud);
+  }
+  const count=96,geometry=new THREE.SphereGeometry(.027,10,8),particles=new THREE.InstancedMesh(geometry,material('observer',{roughness:.8,metalness:0}),count);const dummy=new THREE.Object3D();
+  for(let i=0;i<count;i++){const y=1-2*(i+.5)/count,a=i*Math.PI*(3-Math.sqrt(5));dummy.position.set(1.2*Math.sqrt(1-y*y)*Math.cos(a),1.2*y,1.2*Math.sqrt(1-y*y)*Math.sin(a));dummy.updateMatrix();particles.setMatrixAt(i,dummy.matrix);}cloud.add(particles);
+  arrow(V(-2,0,0),V(2.1,0,0),'curvature');label(String.raw`\hat r`,V(2.15,.4,0),'curvature');label(String.raw`\hat\theta`,V(0,1.75,0),'curvature');label(String.raw`\hat\phi`,V(0,0,1.9),'curvature');
   update=()=>{const s=+input.value*.0015;cloud.scale.set(1+2*s,1-s,1-s);output.innerHTML=window.katex.renderToString(`s=${s.toFixed(3)}`);el.dataset.scales=JSON.stringify(cloud.scale.toArray());};
  }else if(kind==='wave'){
-  camera.position.set(5,3.7,7);controls.target.set(0,0,0);arrow(V(0,0,-2.9),V(0,0,3),'transport');label('z',V(0,0,3.25),'transport');label('x',V(1.75,0,1.5));label('y',V(0,1.7,1.5));
+  camera.position.set(5,3.7,7);controls.target.set(0,0,0);arrow(V(0,0,-2.9),V(0,0,3),'transport');label('z',V(0,0,3.25),'transport');label('x',V(1.52,-.12,0));label('y',V(-.12,1.48,0));
+  // One detector plane carries the explanation; the others locate the phase
+  // along the propagation axis. The axes are fixed guides, not detector arms.
+  line([V(-1.32,0,0),V(1.32,0,0)],'ink',.24);line([V(0,-1.32,0),V(0,1.32,0)],'ink',.24);
   const rings=[];
-  for(let j=0;j<7;j++){const z=-2.4+j*.8,group=new THREE.Group();group.position.z=z;root.add(group);for(let i=0;i<32;i++){const a=i*Math.PI/16;dot(V(Math.cos(a),Math.sin(a),0),'observer',.035,group);}line(Array.from({length:65},(_,i)=>V(Math.cos(i*Math.PI/32),Math.sin(i*Math.PI/32),0)),'geometry',.75,group);rings.push(group);}
+  for(let j=0;j<7;j++){
+   const z=(j-3)*.8,focus=j===3,opacity=focus?1:Math.max(.13,.42-.08*Math.abs(j-3)),group=new THREE.Group();group.position.z=z;root.add(group);
+   for(let i=0;i<(focus?32:20);i++){
+    const a=i*2*Math.PI/(focus?32:20),particle=dot(V(Math.cos(a),Math.sin(a),0),'observer',focus?.036:.022,group);
+    particle.material.transparent=!focus;particle.material.opacity=opacity;particle.material.depthWrite=focus;
+   }
+   line(Array.from({length:65},(_,i)=>V(Math.cos(i*Math.PI/32),Math.sin(i*Math.PI/32),0)),focus?'observer':'geometry',focus?.95:opacity,group);rings.push(group);
+  }
   update=()=>{const phase=+input.value*Math.PI/100;for(const ring of rings){const h=.35*Math.sin(1.5*ring.position.z-phase);ring.scale.set(1+h/2,1-h/2,1);}output.innerHTML=window.katex.renderToString(String.raw`\omega t=${(+input.value/100).toFixed(2)}\pi`);el.dataset.phase=phase;};
  }else if(kind==='expansion'){
   camera.position.set(5,3.5,6);const lattice=new THREE.Group();root.add(lattice);
   for(let i=-1;i<=1;i++)for(let j=-1;j<=1;j++){line([V(-1.5,i*1.5,j*1.5),V(1.5,i*1.5,j*1.5)],'geometry',.6,lattice);line([V(i*1.5,-1.5,j*1.5),V(i*1.5,1.5,j*1.5)],'geometry',.6,lattice);line([V(i*1.5,j*1.5,-1.5),V(i*1.5,j*1.5,1.5)],'geometry',.6,lattice);for(let k=-1;k<=1;k++)dot(V(i*1.5,j*1.5,k*1.5),'matter',.065,lattice);}
-  const separation=label(String.raw`\ell=a\,\Delta\chi`,V(0,-1.7,1.3),'geometry');update=()=>{const a=+input.value/100;lattice.scale.setScalar(a);separation.position.set(0,-1.7*a,1.6*a);output.innerHTML=window.katex.renderToString(`a=${a.toFixed(2)}`);el.dataset.measurement=a;};
+  tube([V(-1.5,-1.5,1.5),V(0,-1.5,1.5),V(1.5,-1.5,1.5)],'observer',.018,lattice);dot(V(-1.5,-1.5,1.5),'observer',.083,lattice);dot(V(1.5,-1.5,1.5),'observer',.083,lattice);
+  const separation=label(String.raw`\ell`,V(0,-1.7,1.3),'observer');update=()=>{const a=+input.value/100;lattice.scale.setScalar(a);separation.position.set(0,-1.7*a,1.6*a);output.innerHTML=window.katex.renderToString(`a=${a.toFixed(2)}`);el.dataset.measurement=a;};
  }else if(kind==='slices'){
   camera.position.set(5,3.5,6);const top=new THREE.Group();root.add(top);
   for(const [y,parent] of [[-1,root],[1,top]]){const plane=new THREE.Mesh(new THREE.PlaneGeometry(3.6,3.6),material('geometry',{transparent:true,opacity:.09,depthWrite:false}));plane.rotation.x=-Math.PI/2;plane.position.y=y;parent.add(plane);grid(3.6,8,y,'geometry',parent);}

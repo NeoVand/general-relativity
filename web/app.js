@@ -1,6 +1,34 @@
 import {initSymbolInspector} from './symbols.js';
+
+// A figure has one semantic SVG. Authored panel transforms rearrange that same
+// drawing in a narrow column, preserving its labels, anchors, and narration.
+function setFigureLayout(svg,compact){
+ if(!svg.dataset.mobileViewbox)return;
+ if(!svg.dataset.desktopViewbox)svg.dataset.desktopViewbox=svg.getAttribute('viewBox');
+ const viewbox=compact?svg.dataset.mobileViewbox:svg.dataset.desktopViewbox;
+ const [, ,width,height]=viewbox.split(/\s+/).map(Number);
+ svg.setAttribute('viewBox',viewbox);svg.setAttribute('width',width);svg.setAttribute('height',height);
+ svg.classList.toggle('is-compact',compact);
+ svg.querySelectorAll('[data-mobile-transform]').forEach(panel=>{
+  if(!('desktopTransform' in panel.dataset))panel.dataset.desktopTransform=panel.getAttribute('transform')||'';
+  const transform=compact?panel.dataset.mobileTransform:panel.dataset.desktopTransform;
+  if(transform)panel.setAttribute('transform',transform);else panel.removeAttribute('transform');
+ });
+}
+function initFigureLayouts(){
+ const observer=new ResizeObserver(entries=>{for(const entry of entries){
+  if(!entry.contentRect.width)continue;
+  const svg=entry.target.querySelector(':scope > svg[data-mobile-viewbox]');
+  if(svg)setFigureLayout(svg,entry.contentRect.width<600);
+ }});
+ // The atlas is a uniform thumbnail gallery; its enlargement opens the full
+ // drawing. Reflow belongs to the reading column, not three isolated thumbnails.
+ document.querySelectorAll('.figure-surface:has(>svg[data-mobile-viewbox])').forEach(surface=>{if(!surface.closest('.atlas-item'))observer.observe(surface)});
+ return ()=>observer.disconnect();
+}
 export function initReading(){
 const offSymbols=initSymbolInspector();
+const offFigureLayouts=initFigureLayouts();
 const listeners=[];
 const listen=(el,...args)=>{el.addEventListener(...args);listeners.push(()=>el.removeEventListener(...args))};
 const $=s=>document.querySelector(s);
@@ -188,6 +216,7 @@ if($('#altitude')){$('#altitude').addEventListener('input',updateGPS);updateGPS(
 const figureDialog=$('#figure-dialog');
 document.querySelectorAll('[data-figure]').forEach(button=>button.addEventListener('click',()=>{
  const figure=button.closest('figure'),svg=figure.querySelector('.gr-figure').cloneNode(true);
+ setFigureLayout(svg,false);
  const ids=new Map([...svg.querySelectorAll('[id]')].map(e=>[e.id,'detail-'+e.id]));
  svg.querySelectorAll('*').forEach(el=>{for(const attr of [...el.attributes]){let value=attr.value;if(attr.name==='id')value=ids.get(value)||value;else if(attr.name==='aria-labelledby')value=value.split(' ').map(x=>ids.get(x)||x).join(' ');else value=value.replace(/url\(#([^\)]+)\)/g,(_,id)=>`url(#${ids.get(id)||id})`);el.setAttribute(attr.name,value);}});
  svg.setAttribute('aria-labelledby',svg.getAttribute('aria-labelledby').split(' ').map(x=>ids.get(x)||x).join(' '));
@@ -201,5 +230,5 @@ function readingProgress(){if(frame)return;frame=requestAnimationFrame(()=>{cons
 listen(window,'scroll',readingProgress,{passive:true});listen(window,'resize',readingProgress);readingProgress();
 
 document.body.dataset.readingReady='true';
-return ()=>{offSymbols();delete document.body.dataset.readingReady;listeners.forEach(off=>off());hidePreview();observer.disconnect();cancelAnimationFrame(frame)};
+return ()=>{offSymbols();offFigureLayouts();delete document.body.dataset.readingReady;listeners.forEach(off=>off());hidePreview();observer.disconnect();cancelAnimationFrame(frame)};
 }

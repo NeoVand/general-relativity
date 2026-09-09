@@ -125,10 +125,10 @@
     "number": 12,
     "chapter": 7,
     "title": "The connection cancels a false change",
-    "alt": "The partial derivative of the radial vector component is minus sine theta; its Christoffel correction is plus sine theta.",
-    "caption": "This is an exact calculation on the flat polar plane. The derivative direction is θ. The full indexed equation in the chapter identifies the single connection coefficient used in this cancellation.",
+    "alt": "The coordinate components of a fixed eastward unit vector are followed in the angular direction. The explicit Christoffel symbol supplies the opposite change.",
+    "caption": "On the flat polar plane, the radial component of the covariant derivative is zero. The derivative direction is θ, and Γ^r_{θθ} = −r. These are coordinate-basis components, not components in a unit basis.",
     "width": 1000,
-    "height": 480,
+    "height": 580,
     "after": null
   },
   {
@@ -191,10 +191,10 @@
     "number": 18,
     "chapter": 12,
     "title": "Read the equation as a relationship",
-    "alt": "The colored Einstein equation connects violet curvature and a teal metric to amber stress–energy. The constants and index letters remain neutral.",
-    "caption": "The equation constrains spacetime geometry and matter together. It is not a recipe that chooses arbitrary matter independently of its own dynamics and conservation.",
+    "alt": "The Einstein equation is followed by separate definitions of the Ricci tensor, Ricci scalar, metric tensor, cosmological constant, Einstein constant, and stress-energy tensor. Curvature is violet, the metric teal, matter amber, and constants neutral.",
+    "caption": "Each symbol has its own job. The equation constrains spacetime geometry and matter together; the matter must also obey its dynamics and conservation laws.",
     "width": 1000,
-    "height": 480,
+    "height": 620,
     "after": null
   },
   {
@@ -378,10 +378,10 @@
     "number": 35,
     "chapter": 21,
     "title": "Same method, different curvature",
-    "alt": "Side-by-side coframe, connection, and curvature formulas compare the polar plane with the sphere.",
-    "caption": "These are local formulas on regular angular charts. The polar origin and sphere poles need other frames; a singular coordinate expression there is not an extra curvature singularity.",
+    "alt": "A closed blue transport circuit lies on a flat polar plane and another on a round sphere. Local coframes translate coordinate steps into ruler readings. At each circuit’s starting point, an inset compares the initial and returned arrows in one orthonormal tangent plane.",
+    "caption": "The plane returns the arrow unchanged. On the sphere of radius a, a positively oriented loop encloses area A and returns the arrow rotated by A/a², modulo full turns. The pictured sphere patch has area πa²/6, so its tangent-plane inset shows a 30-degree return rotation. The surface perspective does not measure that angle. These are local coframes away from the polar origin and sphere poles; the figure illustrates a consequence of Cartan’s equations, not their full derivation.",
     "width": 1000,
-    "height": 480,
+    "height": 650,
     "after": null
   },
   {

@@ -79,7 +79,7 @@ const groups=[['FOUNDATIONS','0','5'],['DIFFERENTIAL GEOMETRY','6','10'],["MATTE
 // One navigation tree: the same group icons anchor the rail and open panel.
 const navParts=[
  ['Foundations','Clocks, rulers & motion','RulerIcon'],
- ['Differential geometry','Connections, curvature & tides','Orbit01Icon'],
+ ['Differential geometry','Connections, curvature & tides','Cone01Icon'],
  ['Matter & field equations','Sources, action & symmetry','FunctionIcon'],
  ['Applications','Orbits, black holes & cosmology','GalaxyIcon'],
  ['Further paths','Optional advanced introductions','Layers01Icon'],

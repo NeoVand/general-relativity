@@ -1,4 +1,12 @@
 {
+  "Γ^r_{θθ} = −r": "\\Gamma^r{}_{\\theta\\theta}=-r",
+  "∇θ Vr = ∂θ Vr + Γrθθ Vθ": "\\nabla_\\theta V^r=\\partial_\\theta V^r+\\Gamma^r{}_{\\theta\\theta}V^\\theta",
+  "Ricci tensor symbol": "R_{\\mu\\nu}",
+  "Ricci scalar symbol": "R",
+  "Metric tensor symbol": "g_{\\mu\\nu}",
+  "Cosmological constant symbol": "\\Lambda",
+  "Einstein constant symbol": "\\frac{8\\pi G_N}{c^4}",
+  "Stress energy tensor symbol": "T_{\\mu\\nu}",
   "If θ₀ < 0 and dθ/dτ ≤ −θ²/3,": "\\text{If }\\theta_0<0\\text{ and }\\frac{d\\theta}{d\\tau}\\leq-\\frac{\\theta^2}{3},",
   "τfocus ≤ 3 / |θ₀|": "\\tau_{\\mathrm{focus}}\\leq\\frac{3}{|\\theta_0|}",
   "Caustic ≠ singular spacetime": "\\text{Caustic}\\neq\\text{singular spacetime}",
@@ -183,5 +191,9 @@
   "30": "30",
   "-30": "-30",
   "60": "60",
-  "Einstein equation display": "R_{\\mu\\nu}-\\frac12 Rg_{\\mu\\nu}+\\Lambda g_{\\mu\\nu}=\\frac{8\\pi G_N}{c^4}T_{\\mu\\nu}"
+  "Einstein equation display": "R_{\\mu\\nu}-\\frac12 Rg_{\\mu\\nu}+\\Lambda g_{\\mu\\nu}=\\frac{8\\pi G_N}{c^4}T_{\\mu\\nu}",
+  "Plane rulers: e¹ = dr, e² = r dθ": "e^1=dr,\\qquad e^2=r\\,d\\theta",
+  "Sphere rulers: e¹ = a dθ, e² = a sinθ dφ": "e^1=a\\,d\\theta,\\qquad e^2=a\\sin\\theta\\,d\\varphi",
+  "Flat return: Δα = 0": "\\Delta\\alpha=0",
+  "Sphere return: Δα = A/a²": "\\Delta\\alpha=\\frac{A}{a^2}"
 }

@@ -30,10 +30,16 @@ def axes(x,y,w,h,xlabel,ylabel):
 def plot(fn,x0,x1,px,py,w,h,ymin,ymax,n=150,color=TEAL,dash=''):
  pts=[(px+w*i/n,py-h*(fn(x0+(x1-x0)*i/n)-ymin)/(ymax-ymin)) for i in range(n+1)]
  return poly(pts,color,3,dash=dash)
-def save(id,ch,title,alt,caption,body,height=480,after=None):
+def responsive_group(body,transform='',compact_hide=False):
+ return f'<g'+(f' data-mobile-transform="{transform}"' if transform else '')+(' data-compact-hide="true"' if compact_hide else '')+'>'+body+'</g>'
+def save(id,ch,title,alt,caption,body,height=480,after=None,mobile_viewbox=None):
  number=len(manifest)+1
  defs=''.join(f'<marker id="{c[1:]}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="{c}"/></marker>' for c in [INK,MUTED,TEAL,ORANGE,BLUE,GOLD,LINE])
- svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 {height}" width="1000" height="{height}" role="img" aria-labelledby="title desc"><title id="title">{html.escape(title)}</title><desc id="desc">{html.escape(alt+" "+caption)}</desc><defs>{defs}</defs><rect width="1000" height="{height}" fill="#f6f9fa"/><g font-family="Arial, Helvetica, sans-serif" stroke-linejoin="round" stroke-linecap="round">'+text(36,37,f'{number:02d} / '+title.upper(),14,MUTED,weight=650)+body+'</g></svg>'
+ responsive=f' data-mobile-viewbox="{mobile_viewbox}"' if mobile_viewbox else ''
+ background='<rect class="figure-background" width="100%" height="100%" fill="#f6f9fa"/>' if mobile_viewbox else f'<rect width="1000" height="{height}" fill="#f6f9fa"/>'
+ heading=text(36,37,f'{number:02d} / '+title.upper(),14,MUTED,weight=650)
+ if mobile_viewbox:heading=responsive_group(heading,compact_hide=True)
+ svg=f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 {height}" width="1000" height="{height}"{responsive} role="img" aria-labelledby="title desc"><title id="title">{html.escape(title)}</title><desc id="desc">{html.escape(alt+" "+caption)}</desc><defs>{defs}</defs>{background}<g font-family="Arial, Helvetica, sans-serif" stroke-linejoin="round" stroke-linecap="round">'+heading+body+'</g></svg>'
  (OUT/f'{id}.svg').write_text(svg)
  manifest.append(dict(id=id,number=number,chapter=ch,title=title,alt=alt,caption=caption,width=1000,height=height,after=after))
 
@@ -125,14 +131,13 @@ b+=text(690,140,'eastward field',21,TEAL)+text(690,183,'radial direction',21,ORA
 b+=text(180,443,'Component change + basis change = zero geometric change',23,INK)
 save('moving-basis',6,'Different components can describe the same arrow','At three points on a circle the eastward vector stays horizontal while radial and angular basis directions rotate.','The ordinary component derivatives see changing numbers. The connection correction accounts for the basis change. Together they report that this field is constant.',b)
 
-# 7: transport rule, explicit cancellation.
-b=label(50,100,'Polar components of an eastward unit vector')
-b+=rect(50,145,400,115)+text(250,190,'Vʳ = cos θ',29,TEAL,'middle')+text(250,235,'Vᶿ = −sin θ / r',29,TEAL,'middle')
-b+=rect(550,145,400,115)+text(750,186,'Relevant connection coefficient',20,ORANGE,'middle')+text(750,231,'−r',32,ORANGE,'middle')
-b+=line(250,275,250,313,TEAL,2,arrow=True)+line(750,275,750,313,ORANGE,2,arrow=True)
-b+=text(500,365,'−sin θ  +  (−r)(−sin θ/r)  =  0',31,INK,'middle')
-b+=text(500,425,'Partial change + basis correction = zero covariant change.',21,MUTED,'middle')
-save('connection-cancellation',7,'The connection cancels a false change','The partial derivative of the radial vector component is minus sine theta; its Christoffel correction is plus sine theta.','This is an exact calculation on the flat polar plane. The derivative direction is θ. The full indexed equation in the chapter identifies the single connection coefficient used in this cancellation.',b)
+# 7: show the actual indexed operation, without a second layer of card borders.
+b=responsive_group(label(50,98,'The arrow stays fixed. Its address changes.','Differentiate in the angular direction, at fixed radius.'),compact_hide=True)
+b+=responsive_group(text(65,200,'COMPONENTS IN THE COORDINATE BASIS',13,MUTED,weight=650)+text(65,254,'Vʳ = cos θ',29,BLUE)+text(65,309,'Vᶿ = −sin θ / r',29,BLUE),'translate(0 -100)')
+b+=responsive_group(text(565,200,'THE BASIS CORRECTION',13,MUTED,weight=650)+text(565,254,'Γ^r_{θθ} = −r',32,BLUE)+text(565,305,'The indices select the term we need.',18,MUTED),'translate(-500 80)')
+b+=responsive_group(text(500,404,'∇θ Vr = ∂θ Vr + Γrθθ Vθ',33,INK,'middle')+text(500,468,'−sin θ  +  (−r)(−sin θ/r)  =  0',33,INK,'middle'),'translate(-100 220) scale(.7)')
+b+=responsive_group(text(500,541,'Changing components and a changing basis cancel exactly.',21,MUTED,'middle'),compact_hide=True)
+save('connection-cancellation',7,'The connection cancels a false change','The coordinate components of a fixed eastward unit vector are followed in the angular direction. The explicit Christoffel symbol supplies the opposite change.','On the flat polar plane, the radial component of the covariant derivative is zero. The derivative direction is θ, and Γ^r_{θθ} = −r. These are coordinate-basis components, not components in a unit basis.',b,height=580,mobile_viewbox='0 0 500 620')
 
 # 8: orthographic projection of an octant and true parallel transport.
 def project(v):
@@ -180,13 +185,21 @@ for i in range(4):
 b+=label(535,177,'Energy density','ε: what the observer finds locally.',MATTER)+label(535,261,'Energy flow ↔ momentum density','For symmetric T: S/c = cπ.',MATTER)+label(535,345,'Stress','Diagonal pressure; off-diagonal shear.',MATTER)
 save('stress-energy',11,'The source has more than one kind of entry','A four-by-four stress-energy matrix colors energy density, mixed energy-momentum entries, and spatial stresses differently.','S is energy flux, π is momentum density, and σ denotes the spatial stress entries using the momentum-flux convention. The tensor is symmetric in ordinary metric GR.',b)
 
-# 12: typeset equation with aligned conceptual annotations.
-b=label(50,100,'One relationship. Every event.','Curvature, measurement geometry, and the local energy content.')
-b+=text(500,245,'Einstein equation display',49,INK,'middle')
-for x,title,sub,col in [(180,'Curvature','How nearby directions fail to agree.',CURV),(500,'Metric','How coordinate steps become intervals.',TEAL),(820,'Matter & energy','Energy, momentum, and stress.',MATTER)]:
- b+=line(x,305,x,330,col,2)+circle(x,305,3,col)
- b+=text(x,374,title,23,col,'middle',650)+text(x,410,sub,15,MUTED,'middle')
-save('einstein-anatomy',12,'Read the equation as a relationship','The colored Einstein equation connects violet curvature and a teal metric to amber stress–energy. The constants and index letters remain neutral.','The equation constrains spacetime geometry and matter together. It is not a recipe that chooses arbitrary matter independently of its own dynamics and conservation.',b)
+# 12: six distinct ingredients, with no anonymous constant or misleading leader.
+b=responsive_group(text(500,165,'Einstein equation display',48,INK,'middle'),'translate(0 10) scale(.5)')
+ingredients=[
+ (65,270,'Ricci tensor symbol','Ricci tensor',['A contraction of','spacetime curvature.'],CURV),
+ (385,270,'Ricci scalar symbol','Ricci scalar',['The metric trace of','the Ricci tensor.'],CURV),
+ (705,270,'Metric tensor symbol','Metric tensor',['Turns displacements','into intervals.'],TEAL),
+ (65,470,'Cosmological constant symbol','Cosmological constant',['Multiplies the metric','in the equation.'],INK),
+ (385,470,'Einstein constant symbol','Einstein constant',['Sets the strength','of the coupling.'],INK),
+ (705,470,'Stress energy tensor symbol','Stress–energy tensor',['Energy, momentum,','and stress.'],MATTER),
+]
+for i,(x,y,symbol,title,sub,col) in enumerate(ingredients):
+ my=170+i*112
+ b+=responsive_group(text(x,y,symbol,38,col),f'translate({55-x} {my+16-y})')
+ b+=responsive_group(text(x,y+48,title,21,col,weight=650)+text(x,y+81,sub[0],18,MUTED)+text(x,y+105,sub[1],18,MUTED),f'translate({155-x} {my-y-48})')
+save('einstein-anatomy',12,'Read the equation as a relationship','The Einstein equation is followed by separate definitions of the Ricci tensor, Ricci scalar, metric tensor, cosmological constant, Einstein constant, and stress-energy tensor. Curvature is violet, the metric teal, matter amber, and constants neutral.','Each symbol has its own job. The equation constrains spacetime geometry and matter together; the matter must also obey its dynamics and conservation laws.',b,height=620,mobile_viewbox='0 0 500 820')
 
 # 13: variations with endpoints fixed.
 b=axes(85,375,450,255,'time','position')
@@ -293,13 +306,74 @@ b+=circle(*p,5,INK)+text(303,270,'lapse × normal',19,TEAL,'end')+text(390,189,'
 b+=text(70,445,'Spatial metric γ: measurements within a slice. Extrinsic curvature K: how that slice sits in spacetime.',17,MUTED)
 save('adm-slicing',20,'Lapse and shift separate two choices','A diagonal coordinate-time step is decomposed into a normal step between slices and a tangential shift.','Lapse controls normal proper-time separation; shift controls the tangential relabeling. Arrow lengths are schematic and do not represent an ordinary Euclidean decomposition of a Lorentzian norm.',b)
 
-# 21: frame and coordinate lengths on sphere.
-b=label(45,95,'Coordinates versus local physical components','A coframe converts coordinate changes into ruler readings.')
-for x,title,rows,col in [(55,'Flat polar plane',['e¹ = dr','e² = r dθ','ω¹₂ = −dθ','Ω¹₂ = 0'],TEAL),(550,'Round sphere of radius a',['e¹ = a dθ','e² = a sinθ dφ','ω¹₂ = −cosθ dφ','Ω¹₂ = e¹ ∧ e² / a²'],ORANGE)]:
- b+=rect(x,145,395,255,'#fff',col)+text(x+197,184,title,24,col,'middle',650)
- for i,row in enumerate(rows):b+=text(x+35,232+i*43,row,25,col if i==3 else INK)
-b+=text(500,449,'A nonzero connection occurs in both. A nonzero curvature two-form distinguishes the sphere.',18,MUTED,'middle')
-save('cartan-comparison',21,'Same method, different curvature','Side-by-side coframe, connection, and curvature formulas compare the polar plane with the sphere.','These are local formulas on regular angular charts. The polar origin and sphere poles need other frames; a singular coordinate expression there is not an extra curvature singularity.',b)
+# 21: coframes measured on surfaces, then tested by a closed transport loop.
+# The sphere patch is theta in [pi/3, pi/2], phi in [-pi/6, pi/6].
+# Its oriented area is a^2*(pi/3)*(cos(pi/3)-cos(pi/2)) = pi*a^2/6.
+# Parallel transport therefore returns with angle pi/6, shown in an undistorted
+# tangent-plane inset. Perspective angles on the surface are not measured angles.
+def cartan_plane(r,phi):
+ return (250+102*r*sin(phi),280+61*r*cos(phi))
+def cartan_sphere(theta,phi):
+ x,y,z=sin(theta)*sin(phi),cos(theta),sin(theta)*cos(phi)
+ return (750+128*x,279-128*(cos(pi/6)*y-sin(pi/6)*z))
+def cartan_visible(theta,phi):
+ return cos(pi/6)*sin(theta)*cos(phi)+sin(pi/6)*cos(theta)>0
+
+def cartan_grid_curve(points):
+ return '<g opacity="0.36">'+poly(points,TEAL,1.3)+'</g>'
+def cartan_loop(points):
+ # Fill identifies the enclosed area; the boundary and arrow identify transport.
+ return '<g fill-opacity="0.17">'+poly(points+[points[0]],BLUE,0,'#e3eaf5')+'</g>'+poly(points+[points[0]],BLUE,2.8)
+def cartan_return(x,rotation):
+ # Both arrows are compared in one orthonormal tangent plane, never projected
+ # from two distinct surface points. The flat arrows coincide exactly.
+ s=line(x-60,518,x-33,518,MUTED,2.2,'5 4')+text(x-24,524,'initial',15,MUTED)
+ s+=line(x+74,518,x+101,518,BLUE,2.8)+text(x+110,524,'returned',15,BLUE)
+ s+=line(x,575,x+84,575,MUTED,2.5,'5 4',arrow=True)
+ if rotation:
+  s+=poly([(x+32*cos(t*rotation/32),575-32*sin(t*rotation/32)) for t in range(33)],CURV,2)
+ s+=line(x,575,x+84*cos(rotation),575-84*sin(rotation),BLUE,3,arrow=True)+circle(x,575,3,BLUE)
+ return s
+
+left=label(55,90,'Flat plane','A polar grid rotates; the plane stays flat.')
+left+='<g fill-opacity="0.7">'+poly([cartan_plane(1.7,2*pi*i/160) for i in range(161)],LINE,1.3,'#e3eaf5')+'</g>'
+for r in [.42,.85,1.28,1.7]:left+=cartan_grid_curve([cartan_plane(r,2*pi*i/120) for i in range(121)])
+for j in range(12):left+=cartan_grid_curve([cartan_plane(r,j*pi/6) for r in [0,1.7]])
+p1,p2=-pi/6,pi/6
+plane_loop=([cartan_plane(.65+i*.95/30,p1) for i in range(31)]+[cartan_plane(1.6,p1+i*(p2-p1)/40) for i in range(1,41)]+[cartan_plane(1.6-i*.95/30,p2) for i in range(1,31)]+[cartan_plane(.65,p2-i*(p2-p1)/40) for i in range(1,41)])
+left+=cartan_loop(plane_loop)+circle(*plane_loop[0],4,BLUE)
+left+=line(*cartan_plane(1.09,p1),*cartan_plane(1.34,p1),BLUE,2.8,arrow=True)
+left+=text(55,434,'Ruler readings from coordinate steps',16,MUTED)+text(55,475,'Plane rulers: e¹ = dr, e² = r dθ',26,TEAL)
+left+=cartan_return(145,0)+text(300,581,'Flat return: Δα = 0',29,CURV)
+left+=text(55,627,'No return rotation: the plane is flat.',18,INK)
+
+right=label(555,90,'Round sphere','A closed loop reveals intrinsic curvature.')
+right+='<g fill-opacity="0.7">'+circle(750,279,128,LINE,'#e3eaf5')+'</g>'
+# Draw only the visible wire curves. The silhouette carries the global shape;
+# hidden grid arcs would make the small transport circuit harder to read.
+for theta in [pi/6,pi/3,pi/2,2*pi/3,5*pi/6]:
+ run=[]
+ for i in range(241):
+  phi=-pi+2*pi*i/240
+  if cartan_visible(theta,phi):run.append(cartan_sphere(theta,phi))
+  elif len(run)>1:right+=cartan_grid_curve(run);run=[]
+ if len(run)>1:right+=cartan_grid_curve(run)
+for phi in [-2*pi/3,-pi/2,-pi/3,-pi/6,0,pi/6,pi/3,pi/2,2*pi/3]:
+ run=[]
+ for i in range(121):
+  theta=pi*i/120
+  if cartan_visible(theta,phi):run.append(cartan_sphere(theta,phi))
+  elif len(run)>1:right+=cartan_grid_curve(run);run=[]
+ if len(run)>1:right+=cartan_grid_curve(run)
+t1,t2=pi/3,pi/2
+sphere_loop=([cartan_sphere(t1+i*(t2-t1)/30,p1) for i in range(31)]+[cartan_sphere(t2,p1+i*(p2-p1)/40) for i in range(1,41)]+[cartan_sphere(t2-i*(t2-t1)/30,p2) for i in range(1,31)]+[cartan_sphere(t1,p2-i*(p2-p1)/40) for i in range(1,41)])
+right+=cartan_loop(sphere_loop)+circle(*sphere_loop[0],4,BLUE)
+right+=line(*cartan_sphere(t1+.20,p1),*cartan_sphere(t1+.36,p1),BLUE,2.8,arrow=True)
+right+=text(555,434,'Ruler readings from coordinate steps',16,MUTED)+text(555,475,'Sphere rulers: e¹ = a dθ, e² = a sinθ dφ',26,TEAL)
+right+=cartan_return(645,pi/6)+text(800,581,'Sphere return: Δα = A/a²',29,CURV)
+right+=text(555,627,'Return rotation measures the enclosed curvature.',18,INK)
+b='<g data-mobile-transform="translate(0 0)">'+left+'</g><g data-mobile-transform="translate(-500 620)">'+right+'</g>'
+save('cartan-comparison',21,'Same method, different curvature','A closed blue transport circuit lies on a flat polar plane and another on a round sphere. Local coframes translate coordinate steps into ruler readings. At each circuit’s starting point, an inset compares the initial and returned arrows in one orthonormal tangent plane.','The plane returns the arrow unchanged. On the sphere of radius a, a positively oriented loop encloses area A and returns the arrow rotated by A/a², modulo full turns. The pictured sphere patch has area πa²/6, so its tangent-plane inset shows a 30-degree return rotation. The surface perspective does not measure that angle. These are local coframes away from the polar origin and sphere poles; the figure illustrates a consequence of Cartan’s equations, not their full derivation.',b,height=650,mobile_viewbox='0 0 500 1270')
 
 # 22: caustic and focusing inequality.
 b=axes(80,385,400,250,'position','affine time')

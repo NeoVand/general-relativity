@@ -1,5 +1,7 @@
 # Visualization audit
 
+The later [collection-wide aesthetic review](aesthetic-review.md) revisits every authored visualization for composition, hierarchy and elegance, records remaining weaknesses, and documents the subsequent figure and scene refinements. The account below records the earlier revision.
+
 The weakest part of the original system was its composition. A large scene, a separate instruction bar, a full-width browser slider, floating listening buttons, an equation, an explanatory note, and then another drawing competed to introduce the same idea. The result was more interface than understanding. The controls also suggested that these were unrelated widgets rather than illustrations in one book.
 
 The revision uses one illustration container. **Explore** contains the spatial model; **Diagram** contains the companion drawing and its own caption. These are complementary explanations, not necessarily literal projections of the same geometry. The alternate diagram uses its own caption; the spatial model’s equation and caveat do not remain underneath it as though they described the same representation. The diagram remains a usable fallback when WebGL is unavailable. Its original figure anchor and enlargement control remain available. One reading passage represents the paired illustration, preventing the former automatic narration duplication.

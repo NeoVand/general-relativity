@@ -1,4 +1,9 @@
 {
+  "radius a": "\\text{radius }a",
+  "area A": "\\text{area }A",
+  "A/a²": "A/a^2",
+  "πa²/6": "\\pi a^2/6",
+  "Γ^r_{θθ} = −r": "\\Gamma^r{}_{\\theta\\theta}=-r",
   "10√(1 − 0.6²) = 8": "10\\sqrt{1-0.6^2}=8",
   "r² dθ²": "r^2d\\theta^2",
   "gθθ = r²": "g_{\\theta\\theta}=r^2",

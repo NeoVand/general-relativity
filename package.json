@@ -9,7 +9,7 @@
     "serve": "python3 -m http.server 4173 --directory site",
     "test": "node scripts/check-site.mjs",
     "test:browser": "node scripts/check-browser.mjs && node scripts/check-navigation.mjs && node scripts/check-symbols.mjs",
-    "test:figures": "node scripts/check-figures.mjs",
+    "test:figures": "node scripts/check-figures.mjs && node scripts/check-responsive-figures.mjs",
     "test:experience": "node scripts/check-experience.mjs",
     "build:reader": "node scripts/build-site.mjs && node scripts/build-reading.mjs && vite build && node scripts/attach-reader.mjs",
     "check": "svelte-check --fail-on-warnings",

@@ -267,6 +267,7 @@ html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sid
 .scene-equation.equation{background:color-mix(in srgb,var(--paper) 45%,transparent);padding:23px 28px;margin:0;border:0;border-radius:0;font-size:1.1rem}
 .scene-note{padding:20px 28px 26px;font-size:11px;line-height:1.8}
 .scene-note>strong{font-weight:650}
+.gr-figure.is-compact [data-compact-hide]{display:none}
 .scene-diagram[hidden]{display:none}
 [data-active-view=diagram] .scene-stage{height:auto!important;min-height:0;background:none;overflow:visible}
 [data-active-view=diagram] .scene-fallback,[data-active-view=diagram] .scene-stage>canvas,[data-active-view=diagram] .scene-labels,[data-active-view=diagram] .scene-controls,[data-active-view=diagram] .scene-camera-tools,[data-active-view=diagram] .scene-gesture-hint{display:none!important}
