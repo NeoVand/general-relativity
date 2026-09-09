@@ -312,11 +312,13 @@ html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sid
 .topbar{padding-right:24px;gap:14px;border-bottom-color:color-mix(in srgb,var(--line) 55%,transparent)}
 .app-brand{gap:14px}.app-logo .hugeicon{width:25px;height:25px}.top-title{letter-spacing:1.65px;font-size:8px}
 .reading-tools{gap:3px}.reading-tools>.text-button{width:38px;height:38px;padding:9px}
+.reading-tools>.github-link{color:var(--ink);text-decoration:none;flex-shrink:0}
 .book-search #search-button{padding:7px 10px;background:none}.book-search #search-button:hover{color:var(--ink);background:none}
 .book-search.open #search-button{color:var(--muted)}
 #search-suggestions button{border:0;background:color-mix(in srgb,var(--ink) 4%,transparent)}
 .search-hint{border-top:0;font-size:9px;padding-top:6px;padding-bottom:12px}
 @media(max-width:600px){.topbar{padding-right:14px}.book-search.open{top:6px;left:10px;right:10px}.book-search{width:38px}.book-search #search-button{padding:7px}.reading-tools>.text-button{width:36px;height:36px}.app-logo{height:40px}}
+@media(max-width:600px){.topbar.search-open .github-link{visibility:hidden}}
 .lab input[type=range]{--range-color:var(--observer);margin:8px 0 18px}
 [data-active-view=diagram]>.scene-equation,[data-active-view=diagram]>.scene-note,[data-active-view=diagram]>.scene-explanation{display:none}
 @media(max-width:600px){[data-scene=embedding] .scene-stage{height:270px}[data-scene=slices] .scene-stage{height:300px}}
