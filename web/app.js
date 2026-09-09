@@ -122,5 +122,6 @@ let frame;
 function readingProgress(){if(frame)return;frame=requestAnimationFrame(()=>{const extent=document.documentElement.scrollHeight-innerHeight;document.documentElement.style.setProperty('--progress',extent>0?Math.min(1,scrollY/extent):0);frame=null;});}
 listen(window,'scroll',readingProgress,{passive:true});listen(window,'resize',readingProgress);readingProgress();
 
-return ()=>{listeners.forEach(off=>off());observer.disconnect();cancelAnimationFrame(frame)};
+document.body.dataset.readingReady='true';
+return ()=>{delete document.body.dataset.readingReady;listeners.forEach(off=>off());observer.disconnect();cancelAnimationFrame(frame)};
 }

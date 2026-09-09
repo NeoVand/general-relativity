@@ -1,3 +1,4 @@
+import {alignedWords} from './speech.js';
 // Adapted from Voicebook's cloud-llm.ts and elevenlabs.ts (MIT, see vendor/voicebook/LICENSE).
 export async function providerRequest(url,key,body,{signal,eleven=false}={}){
  const timeout=AbortSignal.timeout(90000);
@@ -30,6 +31,9 @@ export async function voices(settings,signal){
 export async function synthesize(settings,text,signal){
  if(!settings.elevenKey)throw Error('Add your ElevenLabs API key in Connections.');
  if(!settings.voiceId)throw Error('Choose an ElevenLabs voice in Connections.');
- const response=await providerRequest(`https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(settings.voiceId)}?output_format=mp3_44100_128`,settings.elevenKey,{text,model_id:settings.ttsModel},{signal,eleven:true});
- const blob=await response.blob();if(!blob.size)throw Error('ElevenLabs returned no audio.');return blob;
+ const response=await providerRequest(`https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(settings.voiceId)}/with-timestamps?output_format=mp3_44100_128`,settings.elevenKey,{text,model_id:settings.ttsModel},{signal,eleven:true});
+ const data=await response.json();if(!data.audio_base64)throw Error('ElevenLabs returned no audio.');
+ const bytes=Uint8Array.from(atob(data.audio_base64),c=>c.charCodeAt(0));
+ const alignment=data.alignment||data.normalized_alignment;
+ return {blob:new Blob([bytes],{type:'audio/mpeg'}),words:alignedWords(alignment),text:alignment?.characters?.join('')||text};
 }

@@ -123,3 +123,14 @@ html[data-theme=dark] .theme-moon{display:none}
 @media(max-width:1000px){.equation-pieces{grid-template-columns:repeat(3,minmax(0,1fr));max-width:650px}.cover-equation{font-size:1.55rem}}
 @media(max-width:800px){:root{--sidebar-space:0px}#menu-button span{display:inline}.top-title{display:none}.reading-tools{margin-left:auto}}
 @media(max-width:600px){.cover-equation{padding:24px 0 0}.cover-equation .cover-math-compact{font-size:1.43rem}.equation-pieces{gap:10px 3px;margin:25px 0 0}.piece-symbol{font-size:1.16rem;min-height:52px}.piece-label{font-size:9px}.equation-piece{padding:9px 3px;gap:8px}.book-contents{padding-top:24px}.chapter-card,.chapter-card:last-child{gap:16px;padding:16px 8px;margin:3px -8px}.chapter-card:hover{padding-left:8px}.chapter-visual{width:44px;min-width:44px;height:56px;border-radius:10px}.chapter-visual .hugeicon{width:22px;height:22px}.chapter-card .card-arrow{display:none}.chapter-guide{padding:16px 0}.takeaway{margin:40px 0}.page-turn{padding-bottom:35px}}
+
+/* One continuous glass header; the contents drawer starts beneath it. */
+:root{--header-height:76px}
+.topbar{position:fixed;inset:0 0 auto;height:var(--header-height);z-index:40}
+.page{padding-top:var(--header-height)}
+.sidebar{top:var(--header-height);padding-top:18px}
+.sidebar>.brand{display:none}
+.reading-progress{left:0;width:calc(100% * var(--progress,0))}
+#search-popover{width:100%;max-width:none;top:calc(100% + 8px)}
+@media(max-width:800px){:root{--header-height:64px}.sidebar.open{box-shadow:18px 24px 60px #0002}}
+@media print{.page{padding-top:0}}

@@ -33,7 +33,7 @@ await page.route('https://api.openai.com/**',async route=>{
 await page.route('https://api.elevenlabs.io/**',async route=>{
  requests.push({url:route.request().url(),body:route.request().postDataJSON()});
  if(route.request().url().endsWith('/voices'))return route.fulfill({json:{voices:[{voice_id:'test-voice',name:'Test narrator'}]}});
- await route.fulfill({contentType:'audio/wav',body:wav});
+ const text=route.request().postDataJSON().text;const characters=Array.from(text);await route.fulfill({json:{audio_base64:wav.toString('base64'),alignment:{characters,character_start_times_seconds:characters.map((_,i)=>i*4/characters.length),character_end_times_seconds:characters.map((_,i)=>(i+1)*4/characters.length)}}});
 });
 await page.addInitScript(()=>{
  const NativeAudio=window.Audio;window.__audio=[];window.Audio=function(...args){const audio=new NativeAudio(...args);window.__audio.push(audio);return audio};
@@ -76,7 +76,7 @@ try{
  await page.locator('.equation [data-study-action="listen"]').first().click();
  await page.waitForFunction(()=>document.querySelector('.listening-bar')&&document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
  assert.ok(requests.some(r=>r.body?.model==='gpt-5.6-terra'&&r.body.reasoning_effort==='none'));
- const tts=requests.find(r=>r.url.includes('text-to-speech'));assert.equal(tts.body.text,speech);assert.equal(tts.body.model_id,'eleven_flash_v2_5');
+ const tts=requests.find(r=>r.url.includes('text-to-speech'));assert.equal(tts.body.text,speech);assert.equal(tts.body.model_id,'eleven_flash_v2_5');assert.ok(tts.url.includes('/with-timestamps'));await page.locator('.panel-spoken-words .spoken-current').waitFor();
  await page.getByRole('button',{name:'Pause narration',exact:true}).click();await page.getByRole('button',{name:'Resume narration',exact:true}).waitFor();
  await page.getByRole('button',{name:'Show spoken explanation',exact:true}).click();assert.equal(await page.getByLabel('Spoken explanation',{exact:true}).inputValue(),speech);
  await page.getByRole('button',{name:'Stop narration',exact:true}).click();
@@ -88,7 +88,7 @@ try{
  await page.getByRole('button',{name:'Listen to this chapter',exact:true}).click();
  await page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
  await page.evaluate(()=>window.__audio[0].dispatchEvent(new Event('ended')));
- await page.waitForFunction(()=>document.querySelector('.player-title small')?.textContent.startsWith('Passage 2 '));
+ await page.waitForFunction(()=>document.querySelector('.player-title small')?.textContent.startsWith('Passage 2 '));await page.waitForFunction(()=>CSS.highlights?.get('spoken-word')?.size>0);await page.screenshot({path:'qa/study-word-highlighting.png'});
  await page.getByRole('button',{name:'Next passage',exact:true}).click();
  await page.waitForFunction(()=>document.querySelector('.player-title small')?.textContent.startsWith('Passage 3 '));
  await page.getByRole('button',{name:'Stop narration',exact:true}).click();
@@ -108,13 +108,34 @@ try{
  await page.waitForTimeout(1400);assert.equal(await page.locator('.chat-message.assistant').count(),answersBefore);delay=0;
  // Realtime model, ephemeral authentication, tool outputs, navigation, and teardown.
  mode='normal';await page.getByRole('button',{name:'Talk about this page',exact:true}).click();await page.getByRole('button',{name:'Mute',exact:true}).waitFor();
- const secret=requests.find(r=>r.url.includes('client_secrets'));assert.equal(secret.body.session.model,'gpt-realtime-2.1');assert.equal(secret.body.session.tools.length,4);
+ const secret=requests.find(r=>r.url.includes('client_secrets'));assert.equal(secret.body.session.model,'gpt-realtime-2.1');for(const name of ['play_section','control_narration','get_book_outline','consult_text_tutor'])assert.ok(secret.body.session.tools.some(t=>t.name===name));assert.ok(secret.body.session.instructions.includes('CURRENT CHAPTER OUTLINE'));assert.ok(secret.body.session.instructions.includes('LISTENING HISTORY'));assert.ok(secret.body.session.instructions.length<65000);
  await page.getByRole('button',{name:'Mute',exact:true}).click();assert.equal(await page.evaluate(()=>window.__lifecycle.trackEnabled),false);
  await page.getByRole('button',{name:'Unmute',exact:true}).click();
  const other=index.find(p=>p.id==='chapter-8'),otherTarget=other.segments.find(s=>s.kind==='visualization');
  await page.evaluate(({other,otherTarget})=>window.__emit({type:'response.done',response:{status:'completed',output:[{type:'function_call',call_id:'voice-show',name:'show_passage',arguments:JSON.stringify({page:other.id,passage:otherTarget.id})}]}}),{other,otherTarget});
  await page.waitForURL('**/chapter-8.html#'+otherTarget.id);await page.waitForFunction(()=>window.__lifecycle.sent.some(e=>e.item?.call_id==='voice-show'));
  assert.equal(await page.getByRole('button',{name:'End call',exact:true}).count(),1);assert.equal(await page.evaluate(()=>window.__lifecycle.stopped),0);
+ // Voice hands an exact range to ElevenLabs without another spoken response.
+ const responseCount=await page.evaluate(()=>window.__lifecycle.sent.filter(e=>e.type==='response.create').length);
+ await page.evaluate(({other,otherTarget})=>window.__emit({type:'response.done',response:{status:'completed',output:[{type:'function_call',call_id:'voice-play',name:'play_section',arguments:JSON.stringify({page:other.id,passage:otherTarget.id,end:otherTarget.id})}]}}),{other,otherTarget});
+ await page.waitForFunction(()=>window.__lifecycle.sent.some(e=>e.item?.call_id==='voice-play'));
+ await page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
+ assert.equal(await page.evaluate(()=>window.__lifecycle.sent.filter(e=>e.type==='response.create').length),responseCount,'No voice follow-up over ElevenLabs');
+ assert.equal(await page.evaluate(()=>window.__lifecycle.trackEnabled),false,'Narrator cannot feed back into the microphone');
+ assert.equal(await page.evaluate(()=>window.__lifecycle.stopped),0,'Keep the conversation connected');await page.screenshot({path:'qa/study-narration-handoff.png'});
+ await page.evaluate(()=>{window.__audio[0].currentTime=1.2;window.__audio[0].dispatchEvent(new Event('timeupdate'))});
+ await page.getByRole('button',{name:'Ask about this reading',exact:true}).click();
+ assert.equal(await page.evaluate(()=>window.__audio[0].paused),true);assert.equal(await page.evaluate(()=>window.__lifecycle.trackEnabled),true);
+ const pausedTime=await page.evaluate(()=>window.__audio[0].currentTime);
+ await page.evaluate(()=>window.__emit({type:'conversation.item.input_audio_transcription.completed',item_id:'question-about-reading',transcript:'What does the part I just heard mean?'}));
+ await page.waitForFunction(()=>window.__lifecycle.sent.some(e=>e.type==='session.update'&&e.session.instructions?.includes('LISTENING HISTORY')));
+ const state=await page.evaluate(()=>window.__lifecycle.sent.filter(e=>e.session?.instructions).at(-1).session.instructions);assert.ok(state.includes('"status":"paused"'));assert.ok(state.includes(otherTarget.id));
+ await page.evaluate(()=>window.__emit({type:'response.done',response:{status:'completed',output:[{type:'function_call',call_id:'voice-consult',name:'consult_text_tutor',arguments:JSON.stringify({question:'Explain this geometric idea.'})}]}}));
+ await page.waitForFunction(()=>window.__lifecycle.sent.some(e=>e.item?.call_id==='voice-consult'));assert.ok(requests.some(r=>r.body?.messages?.some(m=>m.content?.includes('supplying the voice tutor'))&&r.body.model==='gpt-5.6-terra'));
+ await page.evaluate(()=>window.__emit({type:'response.done',response:{status:'completed',output:[{type:'function_call',call_id:'voice-resume',name:'control_narration',arguments:JSON.stringify({action:'resume'})}]}}));
+ await page.waitForFunction(()=>window.__lifecycle.sent.some(e=>e.item?.call_id==='voice-resume'));assert.ok(await page.evaluate(()=>window.__audio[0].currentTime)>=pausedTime,'Resume the same audio position');
+ await page.getByRole('button',{name:'Stop narration',exact:true}).click();
+ await page.getByRole('tab',{name:'Ask',exact:true}).click();
  await page.getByRole('button',{name:'End call',exact:true}).click();assert.equal(await page.evaluate(()=>window.__lifecycle.stopped),1);assert.ok(await page.evaluate(()=>window.__lifecycle.closed)>0);
  // Keys can be removed and failures remain actionable without losing the book.
  await page.getByRole('tab',{name:'Connections',exact:true}).click();await page.getByLabel('Text tutor & spoken explanations').selectOption('gpt-5.6-sol');await page.getByRole('button',{name:'Save connections',exact:true}).click();

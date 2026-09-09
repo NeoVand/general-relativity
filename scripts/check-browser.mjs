@@ -5,6 +5,7 @@ const base=process.env.BOOK_URL||'http://localhost:4173/';
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
 const page=await browser.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:1});
+async function go(url){const response=await page.goto(url);await page.waitForFunction(()=>document.body.dataset.readingReady==='true');return response;}
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 fs.mkdirSync('qa',{recursive:true});
 const files=fs.readdirSync('site').filter(f=>f.endsWith('.html'));
@@ -13,7 +14,7 @@ try{
  for(const width of [1440,390]){
   await page.setViewportSize({width,height:width===390?844:1000});
   for(const file of files){
-   const response=await page.goto(new URL(file,base).href);assert.equal(response.status(),200,file);
+   const response=await go(new URL(file,base).href);assert.equal(response.status(),200,file);
    await page.evaluate(()=>document.fonts.ready);
    const result=await page.evaluate(()=>({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,brokenImages:[...document.images].filter(i=>!i.complete||!i.naturalWidth).map(i=>i.src),mathErrors:document.querySelectorAll('.math-error').length}));
    // Lazy images are intentionally not loaded until approached; force them before evaluating.
@@ -32,7 +33,7 @@ try{
  // The opening goes straight from the equation to the contents, and reading
  // chrome can be put away without losing navigation or the saved preference.
  await page.setViewportSize({width:1440,height:1000});
- await page.goto(new URL('index.html',base).href);
+ await go(new URL('index.html',base).href);
  assert.equal(await page.locator('.welcome,.book-facts,main>.color-key,.site-footer').count(),0);
  assert.equal(await page.locator('.cover + #contents').count(),1);
  assert.equal(await page.locator('.equation-piece').count(),6);
@@ -42,7 +43,7 @@ try{
  await page.locator('#menu-button').click();
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
  assert.ok(await page.locator('#book-navigation').evaluate(e=>e.inert));
- await page.goto(new URL('chapter-6.html',base).href);
+ await go(new URL('chapter-6.html',base).href);
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
  assert.equal(await page.locator('main .color-key').count(),0);
  assert.equal(await page.locator('.chapter-preparation').getAttribute('open'),null);
@@ -53,21 +54,21 @@ try{
  await page.locator('#menu-button').click();
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
  await page.setViewportSize({width:390,height:844});
- await page.goto(new URL('index.html',base).href);
+ await go(new URL('index.html',base).href);
  await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-mobile.png'});
- await page.goto(new URL('chapter-16.html#16-7-gps-calculate-the-competing-clock-effects',base).href);
+ await go(new URL('chapter-16.html#16-7-gps-calculate-the-competing-clock-effects',base).href);
  await page.waitForFunction(()=>Math.abs(document.getElementById('16-7-gps-calculate-the-competing-clock-effects').getBoundingClientRect().top-90)<15);
  await page.screenshot({path:'qa/section-link-mobile.png'});
  await page.locator('#altitude').fill('20200');await page.locator('#altitude').dispatchEvent('input');
  assert.match(await page.locator('#gps-net').innerText(),/\+38\.51/);
  await page.locator('#altitude').fill('400');await page.locator('#altitude').dispatchEvent('input');
  assert.match(await page.locator('#gps-net').innerText(),/−/);
- await page.goto(new URL('chapter-3.html',base).href);
+ await go(new URL('chapter-3.html',base).href);
  await page.locator('#speed').fill('0.6');await page.locator('#speed').dispatchEvent('input');
  assert.match(await page.locator('#clock-result').innerText(),/8\.00 years/);
  await page.locator('#speed').fill('0');await page.locator('#speed').dispatchEvent('input');
  assert.match(await page.locator('#clock-result').innerText(),/10\.00 years/);
- await page.goto(new URL('chapter-18.html',base).href);
+ await go(new URL('chapter-18.html',base).href);
  await page.locator('#wave-phase').fill('50');await page.locator('#wave-phase').dispatchEvent('input');
  assert.ok(Number(await page.locator('.wave-dot').first().getAttribute('cx'))>330);
  for(const width of [1440,390])for(const theme of ['light','dark']){
@@ -77,6 +78,7 @@ try{
   await page.waitForFunction(()=>document.querySelectorAll('#search-results a').length>0);
   assert.ok((await page.locator('#search-results').innerText()).includes('Clocks, light, and Mercury'));
   assert.equal(await page.locator('dialog[open]').count(),0,'Search must not open a modal');
+  const dimensions=await page.evaluate(()=>{const field=document.querySelector('.search-field').getBoundingClientRect(),popover=document.querySelector('#search-popover').getBoundingClientRect(),header=document.querySelector('.topbar').getBoundingClientRect(),sidebar=document.querySelector('.sidebar').getBoundingClientRect();return {widthDifference:Math.abs(field.width-popover.width),headerLeft:header.left,headerWidth:header.width,sidebarTop:sidebar.top,headerBottom:header.bottom}});assert.ok(dimensions.widthDifference<1,'Search suggestions match the field width');assert.equal(dimensions.headerLeft,0);assert.equal(dimensions.headerWidth,width);assert.ok(Math.abs(dimensions.sidebarTop-dimensions.headerBottom)<1,'Sidebar begins below the complete header');
   const box=await page.locator('#search-popover').boundingBox();
   assert.ok(box.x>=0&&box.x+box.width<=width+1&&box.height<600,'Suggestions stay compact and inside the viewport');
   await page.keyboard.press('ArrowDown');
@@ -105,7 +107,7 @@ try{
  await page.screenshot({path:'qa/dark-large-mobile.png'});
  await page.locator('#menu-button').click();assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
  await page.keyboard.press('Escape');assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
- await page.goto(new URL('chapter-0.html',base).href);await page.locator('.checkpoint summary').first().click();assert.equal(await page.locator('.checkpoint').first().getAttribute('open'),'');
+ await go(new URL('chapter-0.html',base).href);await page.locator('.checkpoint summary').first().click();assert.equal(await page.locator('.checkpoint').first().getAttribute('open'),'');
  assert.deepEqual(errors,[]);
  fs.writeFileSync('qa/browser-report.json',JSON.stringify({checks,interactionChecks:'passed',errors},null,2));
  console.log(`Browser checks passed: ${checks.length} page/viewport combinations, links to sections, images, search, controls, checkpoints, and all three experiments.`);
