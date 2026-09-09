@@ -149,9 +149,16 @@ for(let i=0;i<pages.length;i++){
  if(p.chapter==='4')html=html.replace('<section class="guided-lesson" id="two-maps-one-sphere"',geometryExperienceHTML('manifold')+'<section class="guided-lesson" id="two-maps-one-sphere"');
  // A picture follows the explanation of its quantities, including on first load.
  const sceneSections={earth:'1.10',covector:'2.4',cone:'3.3',tides:'10.5',embedding:'17.2',wave:'18.4',expansion:'19.1',slices:'20.2'};
- const openingSections={'local-prediction':'0.1','free-fall-comparison':'1.1'};
+ const openingSections={
+  'local-prediction':'0.1','free-fall-comparison':'1.1',
+  'rindler-worldlines':'5.3','connection-cancellation':'7.5',
+  'ricci-weyl':'9.3','stress-energy':'11.1','einstein-anatomy':'12.1',
+  'action-variation':'13.1','action-product-rule':'14.7','killing-energy':'15.4',
+  'cartan-comparison':'21.5','focusing-caustic':'22.5','effective-theory':'23.2','calculation-map':'24.1',
+ };
+ for(const f of figures)if(!f.after&&!paired.has(f.id)&&!references.has(f.id)&&!openingSections[f.id])throw Error(`Unreviewed opening figure: ${f.id}`);
  const illustrations=figures.filter(f=>!paired.has(f.id)&&!references.has(f.id)).map(f=>({
-  section:f.after||openingSections[f.id]||`${p.chapter}.1`,html:chapterFigure(f),inside:f.id==='historical-timeline'?'details.history-note':undefined,
+  section:f.after||openingSections[f.id],html:chapterFigure(f),inside:f.id==='historical-timeline'?'details.history-note':undefined,
  }));
  for(const scene of chapterScenes){
   if(!sceneSections[scene.id])throw Error(`Unreviewed scene placement: ${scene.id}`);

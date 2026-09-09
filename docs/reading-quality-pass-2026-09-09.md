@@ -20,8 +20,18 @@ The first graph now depicts the same cart law and units as the text, removes its
 
 Chapter 1 removes repeated promises and motivational commentary, adds an explicit comparison of supported, falling, and rocket-driven cabins, and retains the illustrated history in an expandable section. The falling-grid model appears after its speed law; its explanation no longer introduces a spacetime metric before Chapter 3.
 
+## Chapters 2 and 3
+
+Chapter 2 now develops the same displacement and measuring rule through a basis change before generalizing to Jacobians and tensors. It expands matrix multiplication into its component sums, defines free and dummy indices at first use, and gives numerical tensor-product, symmetrization, and Taylor examples. Oriented area remains available as a further example.
+
+Chapter 3 constructs proper time from the momentarily stationary clock and the invariant interval. It explains the inverse-boost assumptions and intermediate substitution, defines index lowering before contracted four-momenta, and distinguishes coordinate changes from changes of physical observer. The two-clock example now matches its figure at 0.6c and eight traveling years out of ten. The photon-energy comparison explains the additional quantum input relating energy and frequency. Rapidity is available as a further calculation and remains linked by later prerequisites.
+
+All 14 previously unassigned opening figures now have explicit section placements, with a build failure for unreviewed additions. In particular, Rindler motion follows 5.3; polar connection cancellation 7.5; the Ricci/Weyl comparison 9.3; the action summary 14.7; Killing energy 15.4; Cartan's comparison 21.5; focusing versus singularity 22.5; and the effective-theory hierarchy 23.2. Chapter titles in navigation identify their subjects instead of relying on slogans. This placement review is not a sentence-level certification of those later chapters.
+
+The units lesson's unrelated ODE reference is replaced by the [BIPM SI Brochure](https://www.bipm.org/en/publications/si-brochure), checked against its current official page. The frequency discussion links [Einstein Online's Doppler explanation](https://www.einstein-online.info/en/spotlight/doppler/).
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 2.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 4.

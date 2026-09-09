@@ -54,7 +54,7 @@
     "answer": "No. A timelike geodesic is locally maximizing on sufficiently short segments. Global claims need additional conditions, including the absence of relevant conjugate points."
   },
   "6": {
-    "title": "Differentiating moving components",
+    "title": "Differentiating vector fields",
     "deck": "A fixed arrow can have changing numbers. Repair the derivative by accounting for the moving basis.",
     "question": "What is missing when we differentiate vector components?",
     "payoff": "Explain the connection correction and why lower indices acquire a minus sign.",
@@ -63,7 +63,7 @@
     "answer": "The radial and angular directions rotate from place to place. The changing components compensate for the changing basis; the covariant derivative cancels the two."
   },
   "7": {
-    "title": "How neighboring directions compare",
+    "title": "The connection and parallel transport",
     "deck": "Two simple requirements determine the connection: preserve the metric and introduce no torsion.",
     "question": "Where does the Christoffel formula come from?",
     "payoff": "Derive the Levi-Civita connection and test it on the flat polar plane.",
@@ -72,7 +72,7 @@
     "answer": "No. Flat polar coordinates already have nonzero Christoffel symbols. Curvature tests whether their effects can be removed consistently throughout a neighborhood."
   },
   "8": {
-    "title": "Curvature remembers the route",
+    "title": "Curvature and parallel transport",
     "deck": "Carry an arrow around a loop. Its return tells you something no coordinate label can erase.",
     "question": "What does the Riemann tensor actually measure?",
     "payoff": "Connect a transport loop, a derivative commutator, and the curvature of a sphere.",
@@ -81,7 +81,7 @@
     "answer": "Its sides are great-circle geodesics on a curved surface. The $90^\\circ$ excess over the planar angle sum equals the curvature integrated over that spherical octant."
   },
   "9": {
-    "title": "Different questions about curvature",
+    "title": "Ricci, Weyl, and Einstein curvature",
     "deck": "Riemann contains the full local curvature. Ricci and Weyl extract different parts of that information.",
     "question": "How can empty spacetime be curved?",
     "payoff": "Distinguish Ricci curvature, scalar curvature, Weyl curvature, and the Einstein tensor.",
@@ -99,7 +99,7 @@
     "answer": "The lower radial object falls more strongly. Side-by-side objects accelerate toward a common center. The radial stretching and two tangential squeezes have zero trace in the exterior vacuum."
   },
   "11": {
-    "title": "What gravity listens to",
+    "title": "Energy, momentum, and stress",
     "deck": "Energy, momentum, pressure, and their flows belong to one piece of bookkeeping.",
     "question": "Why is gravity’s source a tensor rather than just mass density?",
     "payoff": "Read each region of the stress-energy matrix and derive the perfect-fluid form.",
@@ -108,7 +108,7 @@
     "answer": "Spatial energy flux enters divided by $c$; momentum density enters multiplied by $c$. Pressure already equals energy per volume dimensionally."
   },
   "12": {
-    "title": "Every symbol earns its place",
+    "title": "Einstein’s field equation",
     "deck": "Build the Einstein equation from curvature, local conservation, and the requirement to recover Newton.",
     "question": "Why subtract half the curvature trace?",
     "payoff": "Trace-reverse the equation and recover the coefficient $8\\pi G/c^4$.",
@@ -117,7 +117,7 @@
     "answer": "It is $\\rho c^2/2$. The trace $T$ is approximately $-\\rho c^2$ and $g_{00}$ approximately $-1$. Subtracting half their product removes half of $T_{00}$."
   },
   "13": {
-    "title": "Ask a whole history a question",
+    "title": "Variations and stationary action",
     "deck": "Ordinary derivatives compare nearby numbers. Variations compare nearby functions.",
     "question": "How do we differentiate an action with respect to a path or a field?",
     "payoff": "Derive Euler–Lagrange equations and vary inverse metrics and determinants.",
@@ -126,7 +126,7 @@
     "answer": "The boundary term is momentum times the endpoint variation. Fixed endpoints set that variation to zero. Higher-derivative actions require more care."
   },
   "14": {
-    "title": "Take the action apart",
+    "title": "Deriving Einstein’s equation",
     "deck": "Curvature changes. Volume changes. Together they produce Einstein’s field equation.",
     "question": "How does one scalar action produce the full tensor equation?",
     "payoff": "Follow the Einstein–Hilbert variation, including its boundary term.",
@@ -135,7 +135,7 @@
     "answer": "No. A function can vanish on a surface while having a nonzero normal derivative there. The Einstein–Hilbert boundary variation must be handled with suitable terms and conditions."
   },
   "15": {
-    "title": "What conservation really promises",
+    "title": "Symmetry and conservation",
     "deck": "Local accounting survives curved spacetime. A global conserved energy needs an additional symmetry.",
     "question": "When can we compare energy at different events?",
     "payoff": "Construct a current using a Killing vector and interpret vacuum stress-energy.",
@@ -162,7 +162,7 @@
     "answer": "No. For Schwarzschild they lie at $2GM/c^2$, $3GM/c^2$, and $6GM/c^2$, respectively. They describe three different physical questions."
   },
   "18": {
-    "title": "Curvature carries a message",
+    "title": "Gravitational waves",
     "deck": "A gravitational wave changes distances in a characteristic pattern. Learn what a detector actually measures.",
     "question": "Why are there only two gravitational-wave polarizations?",
     "payoff": "Connect the linearized field equation to detector strain and quadrupole radiation.",
@@ -207,7 +207,7 @@
     "answer": "Even converging straight paths in flat spacetime form a caustic. Singularity theorems need additional global hypotheses to infer geodesic incompleteness."
   },
   "23": {
-    "title": "Effective theory and quantum frontiers",
+    "title": "General relativity as an effective theory",
     "deck": "Understand how a theory can remain predictive while leaving its microscopic completion open.",
     "question": "How can GR be incomplete and still be an excellent theory?",
     "payoff": "State what is known, what is an assumption, and what quantum gravity must explain.",
@@ -216,7 +216,7 @@
     "answer": "No. As an effective theory it makes controlled predictions at a specified order below its cutoff, with a finite set of parameters at that order."
   },
   "24": {
-    "title": "Synthesis: from a metric to a measurement",
+    "title": "From geometry to measurements",
     "deck": "One final calculation connects coordinates, connection, curvature, clocks, and physical interpretation.",
     "question": "Can I reconstruct the theory without memorizing a wall of equations?",
     "payoff": "Organize a metric-to-measurement calculation and explain the Einstein equation in plain language.",

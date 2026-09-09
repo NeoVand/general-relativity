@@ -230,7 +230,7 @@ $$
 
 The two constants have physical meanings: starting position $x_0$ and starting velocity $v_0$. For a ball released from rest 20 metres above the ground, set $x_0=20\,\mathrm m$ and $v_0=0$. After one second, the formulas give $x=15.1\,\mathrm m$ and $v=-9.8\,\mathrm{m/s}$. The negative velocity means downward motion. The model describes the fall until the ball hits the ground.
 
- The acceleration law alone does not say whether the ball was dropped, thrown up, or thrown down. Those choices give different motions that obey the same law. **A law plus starting measurements gives a prediction.**
+The acceleration law alone does not say whether the ball was dropped, thrown up, or thrown down. Those choices give different motions that obey the same law. **A law plus starting measurements gives a prediction.**
 
 ### 0.5 The mechanics we will use
 
@@ -251,7 +251,7 @@ $$
 
 A force in the direction of motion does positive work; a force opposing the motion does negative work. One **joule** is one newton metre, so $1\,\mathrm J=1\,\mathrm{kg\,m^2/s^2}$.
 
-Where does this energy appear? For a cart of constant mass, use $F=ma$ and $v=dx/dt$:
+Where does this energy appear? For a cart of constant mass whose wheels have negligible mass, use $F=ma$ and $v=dx/dt$:
 
 $$
 \frac{d}{dt}\left(\frac12mv^2\right)=mv\frac{dv}{dt}=Fv=\frac{dW}{dt}.
@@ -535,242 +535,304 @@ The full relativistic model used by the animation has additional coordinate assu
 
 ---
 
+<a id="chapter-2"></a>
+
 ## 2. Vectors, covectors, and tensors
 
 ### 2.1 Vectors and their components
 
-Imagine a drone receiving the instruction “move three meters east and four meters north.” Rotate the map on its screen. The command's two displayed numbers change, but the intended displacement does not. If the drone changes its destination because you rotated a map, you have found a software bug, not a new law of mechanics.
+A drone must move three metres east and four metres north. You can draw that displacement as an arrow from its starting point to its destination. Rotating the map changes the arrow's horizontal and vertical components on the screen, but the destination stays the same.
 
-General relativity elevates this ordinary distinction into an organizing principle: **physical objects and relationships must survive changes in the labels used to describe them.** Coordinates are an interface. They are not the world.
-
-In a vector space, choose a basis $\{e_1,e_2\}$. A vector $V$ is represented by
+We need to distinguish the displacement from the numbers used to describe it. Choose two **basis vectors**: $e_1$, one metre east, and $e_2$, one metre north. Any displacement in this plane can be written as a unique combination of these two arrows. Our drone's displacement is
 
 $$
-V=V^1e_1+V^2e_2=V^ie_i.
+V=3e_1+4e_2.
 $$
 
-The $V^i$ are components. The $e_i$ are basis vectors. Together they specify the vector. Either set by itself is insufficient: “three” is not a displacement until we know three of what, in which direction.
+The numbers 3 and 4 are its **components in this basis**. The basis vectors need not have unit length or meet at right angles. In a plane, they must be nonparallel and nonzero, so that they can describe both independent directions.
 
-The final expression uses **Einstein summation**: an index occurring once upstairs and once downstairs is summed. Here the range is the two directions of our example. In spacetime, Greek indices run over $0,1,2,3$; spatial Latin indices normally run over $1,2,3$.
+For a general vector, write the components as $V^1$ and $V^2$:
 
-Suppose a new basis uses twice as long a first basis vector:
+$$
+V=V^1e_1+V^2e_2=\sum_{i=1}^2 V^ie_i=V^ie_i.
+$$
+
+The superscripts 1 and 2 label components; they are not powers. The last expression uses **Einstein summation**: when an index appears once upstairs and once downstairs in a term, sum over its allowed values. Here $i$ takes the values 1 and 2. The index is an instruction to add the two contributions.
+
+Now keep the drone's destination fixed but choose a longer first basis vector:
 
 $$
 e'_1=2e_1,\qquad e'_2=e_2.
 $$
 
-Then
+A prime labels the new description. How many copies of the new first arrow do we need? Each copy covers twice the distance, so we need half as many:
 
 $$
 V=3e_1+4e_2=\frac32e'_1+4e'_2.
 $$
 
-The first component halves because the measuring stick doubled. Components and basis changes compensate. This is the small mechanical fact underneath the intimidating word *contravariant*.
+Thus $V'^1=3/2$ and $V'^2=4$. The vector has stayed the same while its components have changed. This compensating behavior is called **contravariant transformation**. We will calculate more general changes in §2.4.
 
-There are also two different operations that diagrams sometimes blur. A **passive** transformation changes the description of the same vector. An **active** transformation changes the vector while keeping the descriptive machinery fixed. Rotating the map and rotating the drone's actual flight direction are different experiments, even if the corresponding matrix calculations resemble each other.
+Changing the basis while keeping $V$ fixed is a **passive transformation**. Rotating the actual displacement while keeping the basis fixed is an **active transformation**. In the first case the drone reaches the same place; in the second it generally does not.
 
 ### 2.2 Linear maps and matrices
 
-A map $A$ is linear when
+A **linear map** takes a vector as input and gives a vector as output, respecting addition and scaling:
 
 $$
 A(aV+bW)=aA(V)+bA(W).
 $$
 
-It respects addition and scaling. A spring's force law in its linear regime, a small deformation, and a rotation are familiar examples. In a chosen basis,
+Here $a$ and $b$ are numbers. Knowing what $A$ does to the basis vectors determines what it does to every vector. Suppose
+
+$$
+A(e_1)=2e_1,\qquad A(e_2)=e_1+3e_2.
+$$
+
+For the drone's vector, linearity gives
+
+$$
+A(3e_1+4e_2)=3(2e_1)+4(e_1+3e_2)=10e_1+12e_2.
+$$
+
+The matrix stores the components of $A(e_1)$ and $A(e_2)$ in its first and second columns:
+
+$$
+\begin{pmatrix}2&1\\0&3\end{pmatrix}
+\begin{pmatrix}3\\4\end{pmatrix}
+=\begin{pmatrix}10\\12\end{pmatrix}.
+$$
+
+Index notation expresses this same multiplication as
 
 $$
 (AV)^i=A^i{}_jV^j.
 $$
 
-The lower $j$ consumes the input component; the upper $i$ identifies the output component. A matrix is the table of numbers representing this map in specified input and output bases.
+The summed index $j$ selects the input components. The unsummed index $i$ selects the output component: setting $i=1$ gives $2V^1+V^2$, while setting $i=2$ gives $3V^2$. We call $j$ a **dummy index** and $i$ a **free index**.
 
-The identity map has components
+The identity map leaves each basis vector unchanged. Its matrix has ones on the diagonal and zeros elsewhere. Its components have a special name, the **Kronecker delta**:
 
 $$
 \delta^i{}_j=
-\begin{cases}
-1&i=j,\\
-0&i\ne j.
-\end{cases}
+\begin{cases}1&i=j,\\0&i\ne j.\end{cases}
+\qquad \delta^i{}_jV^j=V^i.
 $$
 
-Thus $\delta^i{}_jV^j=V^i$. This is not merely notation for “make two letters the same.” It is the component representation of a geometric operation: do nothing.
-
-An important distinction will matter later. A two-index object can represent a linear map, a bilinear measurement, or something else depending on the positions and meanings of its indices. “It is a $4\times4$ matrix” does not specify which kind of geometric object it represents. A seating chart and a multiplication table can have the same dimensions without having interchangeable jobs.
+A matrix can also represent a rule with a different job. The matrix in §0.6 accepted two vectors and returned a dot product. The matrix here accepts one vector and returns another vector. When a matrix appears, identify its inputs and output before using it.
 
 ### 2.3 Covectors measure vectors
 
-A **covector** is a linear function that takes a vector and returns a number. Denote one by $\omega$:
+Suppose a measuring rule takes a vector's first component and adds twice its second component:
 
 $$
-\omega(V)\in\mathbb R.
+\omega(V)=V^1+2V^2.
 $$
 
-If a vector is a possible infinitesimal move, a covector can be a question such as “how much does temperature change under that move?” Its output depends on the move, and linearity means that doubling a sufficiently small move doubles the first-order response.
+For $V=(3,4)$, it returns $3+2(4)=11$. If we double the vector, the answer doubles. If we add two vectors, their answers add. A linear rule of this kind, taking a vector and returning one number, is called a **covector**.
 
-For every basis $e_i$, there is a **dual basis** $\theta^i$ defined by
+More generally, write
+
+$$
+\omega(V)=\omega_1V^1+\omega_2V^2=\omega_iV^i.
+$$
+
+The coefficients $\omega_1$ and $\omega_2$ specify the rule in this basis. In our example they are 1 and 2. This operation is called the **pairing** of a covector with a vector. It does not require an angle or a length.
+
+There is a useful covector for each component: the rule that extracts just that component. Call these rules $\theta^1$ and $\theta^2$. Then $\theta^1(V)=V^1$ and $\theta^2(V)=V^2$. Applied to the basis vectors themselves, they obey
 
 $$
 \theta^i(e_j)=\delta^i{}_j.
 $$
 
-The covector $\theta^1$ extracts the first component; $\theta^2$ extracts the second. Write
+These component extractors form the **dual basis**. Any covector can be assembled from them:
 
 $$
-\omega=\omega_i\theta^i.
+\omega=\omega_1\theta^1+\omega_2\theta^2=\omega_i\theta^i.
 $$
 
-Then
+In particular, $\omega_i=\omega(e_i)$: the coefficient tells us what the rule returns for one basis vector.
+
+Now reuse the longer basis vector $e'_1=2e_1$. The same rule returns $\omega(e'_1)=2\omega(e_1)$, so its new first coefficient is $\omega'_1=2\omega_1$. The drone's first component halved, but the measuring rule's coefficient doubled:
 
 $$
-\omega(V)=\omega_iV^i.
+\omega(V)=\omega'_iV'^i=(2)(3/2)+(2)(4)=11.
 $$
 
-This pairing needs no angles or distances. It follows from the definition of a covector as a linear measuring operation. For example, if $V=(3,4)$ and $\omega(V)=V^1+2V^2$, the answer is $11$; no length calculation entered.
+The answer is unchanged. Lower indices mark this transformation behavior of covector components. The dual basis changes too: $\theta'^1=\theta^1/2$, because its job is to extract the new, halved component.
 
-Return to $e'_1=2e_1$. The new extractor must be $\theta'^1=\theta^1/2$ so that $\theta'^1(e'_1)=1$. Consequently $\omega'_1=2\omega_1$. A vector's first component halves; a covector's first component doubles; their product stays the same:
+A **scalar field** assigns one value to each point: for example, the temperature $T(x,y)$ at each position on a plate. For this example, $x$ and $y$ are dimensionless labels counting steps on the plate’s grid. The first-order temperature change under a displacement with components $V^1,V^2$ is
 
 $$
-\omega'_1V'^1=(2\omega_1)(V^1/2)=\omega_1V^1.
+dT(V)=(\partial_xT)V^1+(\partial_yT)V^2.
 $$
 
-This is why covectors carry lower indices. Their components change oppositely to vector components. The difference is operational, not typographical.
+The measuring rule $dT$, called the **differential** of $T$, is a covector. It is exactly linear in its input. Its prediction of a finite temperature change is an approximation when the temperature field varies nonlinearly.
 
-> **A rate-of-change rule and an arrow have different jobs.** For a scalar function $f(x,y)$, the first-order change under a move $V$ is $df(V)=(\partial_xf)V^1+(\partial_yf)V^2$. This rule, called the **differential** $df$, is a covector. In ordinary Cartesian calculus we also collect the partial derivatives into a gradient arrow. Identifying that arrow with the covector uses the lengths and angles of the chosen axes; it is not supplied by the covector alone. Chapter 4 will construct this conversion for more general measuring rules.
+In Cartesian calculus we also arrange these partial derivatives into a gradient arrow. Converting a covector into that arrow uses the lengths and angles of the axes. Chapter 4 develops this conversion; a covector by itself only supplies the measuring rule.
 
 ### 2.4 Changing coordinates with the chain rule
 
-Let $x^\mu$ and $x'^\alpha$ label the same events. An infinitesimal displacement transforms by the chain rule:
+Consider a path whose position is described by $x=x(s)$ and $y=y(s)$, with $s$ a dimensionless parameter marking progress along the path. Its tangent vector has components $V^1=dx/ds$ and $V^2=dy/ds$: the rates at which the position labels change along the path.
+
+Relabel the same positions using $x'=x/2$ and $y'=y$. The chain rule gives $V'^1=V^1/2$ and $V'^2=V^2$. This is the longer-first-basis example again, expressed as a change of coordinates.
+
+For a general smooth, invertible change, each new coordinate can depend on several old ones. We will use Greek indices for general coordinates. In a two-dimensional example their range has two values; in spacetime it will be $0,1,2,3$. The chain rule reads
 
 $$
-dx'^\alpha=\frac{\partial x'^\alpha}{\partial x^\mu}\,dx^\mu.
+V'^\alpha=\frac{dx'^\alpha}{ds}
+=\frac{\partial x'^\alpha}{\partial x^\mu}\frac{dx^\mu}{ds}
+=J^\alpha{}_{\mu}V^\mu.
 $$
 
-Define the Jacobian and its inverse,
+The **Jacobian** $J$ is the matrix of first partial derivatives. Differentiating the inverse coordinate change gives its inverse matrix $K$:
 
 $$
 J^\alpha{}_{\mu}=\frac{\partial x'^\alpha}{\partial x^\mu},
-\qquad
-K^\mu{}_{\alpha}=\frac{\partial x^\mu}{\partial x'^\alpha}.
+\qquad K^\mu{}_{\alpha}=\frac{\partial x^\mu}{\partial x'^\alpha},
+\qquad K^\mu{}_{\alpha}J^\alpha{}_{\nu}=\delta^\mu{}_{\nu}.
 $$
 
-Their product satisfies $K^\mu{}_{\alpha}J^\alpha{}_{\nu}=\delta^\mu{}_{\nu}$. This follows by differentiating the identity obtained by composing a coordinate change with its inverse.
+For $x'=x/2$, $y'=y$, these are $J=\operatorname{diag}(1/2,1)$ and $K=\operatorname{diag}(2,1)$. The notation $\operatorname{diag}$ lists the diagonal entries; the other entries are zero.
 
-Vectors transform like tangent displacements:
-
-$$
-V'^\alpha=J^\alpha{}_{\mu}V^\mu.
-$$
-
-Now differentiate a scalar field $f$. A scalar has a single value at an event; its two coordinate representations obey $f'(x')=f(x)$. The chain rule gives
+To find how a covector transforms, require it to give the same answer on the same vector. Substitute $V^\mu=K^\mu{}_{\alpha}V'^\alpha$ into its pairing:
 
 $$
-\partial'_\alpha f'
-=\frac{\partial x^\mu}{\partial x'^\alpha}\partial_\mu f
-=K^\mu{}_{\alpha}\partial_\mu f,
-\qquad
-\partial_\mu\equiv\frac{\partial}{\partial x^\mu}.
+\omega_\mu V^\mu
+=\omega_\mu K^\mu{}_{\alpha}V'^\alpha
+=\omega'_\alpha V'^\alpha.
 $$
 
-That is the covector transformation law. In particular,
+Since this must hold for every input vector, the new coefficients are
+
+$$
+\omega'_\alpha=K^\mu{}_{\alpha}\omega_\mu.
+$$
+
+The vector uses $J$; the covector uses $K$. This is how their changes compensate.
+
+For a scalar field $f$, the value at a given point is unchanged by relabeling: $f'(x')=f(x)$. Applying the chain rule to its derivatives gives the same covector law:
+
+$$
+\partial'_\alpha f'=K^\mu{}_{\alpha}\partial_\mu f,
+\qquad \partial_\mu=\frac{\partial}{\partial x^\mu}.
+$$
+
+The differential is written
 
 $$
 df=(\partial_\mu f)dx^\mu,
-\qquad
-df(V)=V^\mu\partial_\mu f
+\qquad df(V)=(\partial_\mu f)V^\mu.
 $$
 
-is independent of the coordinates. The symbol $dx^\mu$ has two closely related uses: as a component of an infinitesimal displacement and as the coordinate covector that extracts a vector's $\mu$ component. The context tells you which use is intended.
+Here $dx^\mu$ denotes a coordinate component extractor: $dx^\mu(V)=V^\mu$. This connects two familiar uses of $dx$. Along a path, $dx/ds$ is a tangent component; the covector $dx$ measures exactly that component when applied to the tangent. In the illustration below, $dx$ counts the change in the $x$ label as we follow a vector through planes of constant $x$.
 
-The Jacobian can depend on position. This is harmless for a vector at one event, but it causes trouble when differentiating a vector field: a derivative can hit the Jacobian as well as the vector components. Chapter 6 will turn that apparently minor nuisance into the reason we need a connection.
+For a nonlinear coordinate change, $J$ and $K$ vary from point to point. The transformation rules above still work at each point. Chapter 6 will examine the extra term that appears when we differentiate components while the Jacobian itself changes.
 
 ### 2.5 Tensors, products, and contractions
 
-A bilinear object $B$ takes two vectors and returns a scalar:
+Chapter 0 introduced a bilinear form: a rule that takes two vectors and returns a number, linear in each input separately. Write it as
 
 $$
 B(V,W)=B_{\mu\nu}V^\mu W^\nu.
 $$
 
-It is linear in each input separately. Requiring the output to be unchanged by relabeling determines how its components transform:
+There are two independent sums. The components are the values on pairs of basis vectors: $B_{\mu\nu}=B(e_\mu,e_\nu)$.
+
+Change coordinates in each input, using $V^\mu=K^\mu{}_{\alpha}V'^\alpha$ and $W^\nu=K^\nu{}_{\beta}W'^\beta$. Then
 
 $$
-B'_{\alpha\beta}
-=K^\mu{}_{\alpha}K^\nu{}_{\beta}B_{\mu\nu}.
+B(V,W)=B_{\mu\nu}K^\mu{}_{\alpha}K^\nu{}_{\beta}V'^\alpha W'^\beta,
 $$
 
-There is one inverse Jacobian for each lower index. An upper index gets a forward Jacobian. For example,
+so the new components are
 
 $$
-A'^\alpha{}_{\beta}
-=J^\alpha{}_{\mu}K^\nu{}_{\beta}A^\mu{}_{\nu}.
+B'_{\alpha\beta}=K^\mu{}_{\alpha}K^\nu{}_{\beta}B_{\mu\nu}.
 $$
 
-A tensor of type $(r,s)$ has $r$ upper and $s$ lower indices. Abstractly, it is a multilinear object with the corresponding vector and covector slots. The word “rank” is often used for $r+s$, but beware: **tensor rank in that sense is not matrix rank**, which counts independent image directions of a linear map.
+Each lower index contributes one inverse Jacobian. For the linear map in §2.2, the output vector contributes a forward Jacobian and the input contributes an inverse Jacobian:
 
-One way to build tensors is the tensor product. If $\omega$ and $\eta$ are covectors,
+$$
+A'^\alpha{}_{\beta}=J^\alpha{}_{\mu}K^\nu{}_{\beta}A^\mu{}_{\nu}.
+$$
+
+These are examples of **tensors**. A tensor of type $(r,s)$ has $r$ upper and $s$ lower indices in its component description, transforming with one $J$ for each upper index and one $K$ for each lower index. Equivalently, it can be viewed as a multilinear rule taking $r$ covectors and $s$ vectors and returning a number. A bilinear form is type $(0,2)$. A linear map is type $(1,1)$: apply it to a vector, then let a covector measure its output.
+
+The total number of indices, $r+s$, is sometimes called tensor rank. This differs from **matrix rank**, the number of independent output directions of a linear map. A two-index tensor can have a matrix of rank one.
+
+A **tensor product** builds a rule with separate inputs. For two covectors,
 
 $$
 (\omega\otimes\eta)(V,W)=\omega(V)\eta(W).
 $$
 
-The two inputs remain separate. This is a richer object than one scalar $\omega(V)$. The symbol $\otimes$ is an instruction to preserve independent slots rather than multiply everything into a single number prematurely.
+For example, let $\omega=(1,2)$ and $\eta=(2,-1)$ in our two-dimensional basis. If $V=(3,4)$ and $W=(1,3)$, the result is $11\times(-1)=-11$. Exchanging the inputs gives $7\times2=14$. The order of the inputs matters.
 
-**Contraction** pairs an upper and a lower index and sums them. A linear map has the trace
+**Contraction** sums a matching upper and lower index. For a linear map, contracting its two indices gives its **trace**:
 
 $$
-A^\mu{}_{\mu}.
+A^i{}_i=A^1{}_1+A^2{}_2.
 $$
 
-Its value does not depend on the basis. For the identity in four dimensions, $\delta^\mu{}_{\mu}=4$. Contracting changes the tensor's type: one upper and one lower slot disappear.
+The matrix in §2.2 has trace $2+3=5$. Under a basis change, the $J$ and $K$ factors cancel in this sum, leaving the same answer. More generally, contraction removes one upper and one lower index and produces another tensor.
 
-The index language supplies excellent error detection:
+The indices also help check an equation before calculating:
 
-| Expression | Meaning or problem |
+| Expression | How to read it |
 |---|---|
-| $V^\mu\omega_\mu$ | Scalar contraction; legal. |
-| $A^\mu{}_{\nu}V^\nu=W^\mu$ | Vector equation; the free index $\mu$ agrees. |
-| $A^\mu{}_{\nu}=B^\mu{}_{\rho}$ | Malformed unless another operation is supplied; the free indices disagree. |
-| $V^\mu W^\mu$ | Not a valid Einstein contraction under our convention; pairing two vectors requires an additional measuring rule, developed in Chapter 4. |
-| $A^\mu{}_{\nu}B^\nu{}_{\rho}C^\rho{}_{\mu}$ | Scalar formed from a closed sequence of contractions. |
+| $V^\mu\omega_\mu$ | Sum over $\mu$; the result is a number. |
+| $A^\mu{}_{\nu}V^\nu=W^\mu$ | Sum over $\nu$; one equation remains for each value of $\mu$. |
+| $A^\mu{}_{\nu}=B^\mu{}_{\rho}$ | The free labels differ, so this does not state a consistent component equation. |
+| $V^\mu W^\mu$ | Two upper indices do not form an Einstein contraction. A rule for pairing two vectors is additional information. |
+| $A^\mu{}_{\nu}B^\nu{}_{\rho}C^\rho{}_{\mu}$ | All three labels are summed; the result is a number. |
 
-Dummy indices are replaceable labels: $V^\mu\omega_\mu=V^\alpha\omega_\alpha$. Free indices are the outputs of the expression and must match across an equation. An index should not occur three times in a single product under ordinary Einstein notation.
+A dummy index can be renamed without changing the sum: $V^\mu\omega_\mu=V^\alpha\omega_\alpha$. Free indices must match on both sides of an equation. A label must not appear three times in one product under this convention.
 
-Symmetrization and antisymmetrization will be useful:
+Finally, any two-input bilinear form can be split into a symmetric part and an antisymmetric part:
 
 $$
 B_{(\mu\nu)}=\frac12(B_{\mu\nu}+B_{\nu\mu}),
-\qquad
-B_{[\mu\nu]}=\frac12(B_{\mu\nu}-B_{\nu\mu}).
+\qquad B_{[\mu\nu]}=\frac12(B_{\mu\nu}-B_{\nu\mu}).
 $$
 
-Their sum reconstructs $B_{\mu\nu}$. The factor $1/2$ ensures that symmetrizing an already symmetric tensor does not double it.
+Parentheses denote **symmetrization**; square brackets denote **antisymmetrization**. Swapping the inputs leaves the first part unchanged and reverses the sign of the second. Adding the two parts recovers $B_{\mu\nu}$. For example, entries $B_{12}=5$ and $B_{21}=1$ give symmetric entry 3 and antisymmetric entry 2.
 
 ### 2.6 Approximations and oriented area
 
-For a smooth scalar,
+The same notation lets us write Taylor's formula for several inputs:
 
 $$
-f(x+\delta x)
-=f(x)+\partial_\mu f\,\delta x^\mu
-+\frac12\partial_\mu\partial_\nu f\,\delta x^\mu\delta x^\nu
-+\cdots.
+f(x+\delta x)=f(x)+\partial_\mu f\,\delta x^\mu
++\frac12\partial_\mu\partial_\nu f\,\delta x^\mu\delta x^\nu+\cdots.
 $$
 
-The first derivative measures the local slope. The second measures how that slope changes. The approximation uses the coordinates named in the formula. A coordinate-independent statement must account for how its components transform, just as the vector–covector pairing did in §2.4.
-
-A perturbative statement such as $F=F_0+\varepsilon F_1+O(\varepsilon^2)$ says that discarded terms are at least quadratic in a specified small parameter, in the regime under discussion. Always ask what is small. For dimensionless $x$, let $f(x)=\varepsilon\sin(kx)$. Its magnitude is at most $|\varepsilon|$, but its derivative is $f'(x)=\varepsilon k\cos(kx)$. Choosing $\varepsilon=0.001$ and $k=10{,}000$ makes the function small while its slope can reach $10$. A bound on a function is not automatically a bound on its derivatives.
-
-One short preview of differential forms will prevent future alarm. An antisymmetric covariant tensor is called a differential form. A one-form is a covector field; a two-form has two antisymmetric slots. The wedge product satisfies
+Here $x$ stands for the full coordinate list and $\delta x$ for a small change in that list. Repeated indices add the contributions from every direction. For $f(x,y)=x^2+3y$ near $(2,1)$, the expansion is
 
 $$
-(dx\wedge dy)(V,W)=V^xW^y-V^yW^x.
+f(2+\delta x,1+\delta y)=7+4\delta x+3\delta y+(\delta x)^2.
 $$
 
-This computes oriented coordinate area. Exchange the two input vectors and its sign flips. Two parallel inputs give zero. Forms are naturally suited to integrating along curves, over surfaces, and through higher-dimensional regions. Chapter 21 will use them to express geometry with surprisingly few symbols.
+In this example the expression is exact. For a general smooth function, more terms remain. The notation $F=F_0+\varepsilon F_1+O(\varepsilon^2)$ means that the omitted remainder is bounded in magnitude by a constant times $\varepsilon^2$ as the chosen small parameter approaches zero, within the specified regime.
 
-You do not need to memorize an entire branch of mathematics before proceeding. Carry three questions: **What object is this? What inputs does it consume? How do its components change when I relabel the situation?** These questions are more valuable than being able to pronounce “contravariant” without hesitation. For a formal development of the tangent-space and dual-space machinery, see [David Tong's differential-geometry chapter](https://davidtong.org/pdfs/teaching/general-relativity/gr2.pdf).
+A small function need not have small derivatives. For dimensionless $x$, consider $f(x)=\varepsilon\sin(kx)$. Its magnitude is at most $|\varepsilon|$, but $f'(x)=\varepsilon k\cos(kx)$. If $\varepsilon=0.001$ and $k=10{,}000$, the function never exceeds 0.001 in magnitude while its slope can reach 10. This distinction will matter when we approximate fields and then differentiate them.
+
+<details class="history-note" data-no-narration>
+<summary>Further example: oriented area and differential forms</summary>
+
+The antisymmetric rule
+
+$$
+(dx\wedge dy)(V,W)=V^xW^y-V^yW^x
+$$
+
+computes the signed coordinate area of the parallelogram spanned by two vectors. The symbol $\wedge$ is called the **wedge product**. For $V=(2,1)$ and $W=(1,3)$, the area is $2(3)-1(1)=5$. Swapping the vectors gives $-5$; parallel vectors give zero. This is the two-by-two determinant from linear algebra, now written as a rule for two inputs.
+
+A smoothly varying antisymmetric covariant tensor is called a **differential form**. A one-form assigns a covector smoothly to each point; a two-form has two antisymmetric vector inputs, as in this area rule. Chapter 21 develops how these objects are integrated over curves and surfaces.
+
+</details>
+
+For now, practice expanding an indexed expression into its ordinary sums, and checking that a change of basis leaves a completed measurement unchanged. These operations will let us compare moving observers in the next chapter. [David Tong's differential-geometry notes](https://davidtong.org/pdfs/teaching/general-relativity/gr2.pdf) provide a further formal treatment of vector and dual spaces.
 
 <a id="chapter-3"></a>
 
@@ -798,7 +860,9 @@ Einstein's original account starts with this operational treatment of clocks. [E
 
 ### 3.2 Deriving the Lorentz transformation
 
-Let frame $S'$ move at speed $v$ in the positive $x$ direction relative to $S$. Their origins coincide at $t=t'=0$. We restrict attention to $t,x$ and assume spatial homogeneity, time homogeneity, standard clock synchronization, and matching units. These assumptions make the transformation between inertial coordinates linear.
+Let frame $S'$ move at speed $v$ in the positive $x$ direction relative to $S$. Their origins meet at $t=t'=0$. Each frame uses its own synchronized clocks and the same units of length and time. We want formulas that turn one frame's labels for an event into the other's.
+
+We assume that the laws do not favor a particular position or starting time. These assumptions are called spatial and time **homogeneity**. With uniform relative motion and the stated synchronization, the relation between the two coordinate lists is linear. We can therefore find it by determining a few coefficients. This change of inertial frame is called a **Lorentz boost**.
 
 The moving origin obeys $x=vt$ and must have $x'=0$, so
 
@@ -830,7 +894,14 @@ $$
 
 We have not guessed that time must mix with space. The two light directions forced it.
 
-Reciprocity and isotropy imply that the inverse transformation has the same factor with $v$ replaced by $-v$. Substituting the transformations into their inverse must return $x$, which yields
+The moving frame sees the first frame receding at velocity $-v$. Neither frame is privileged, and reversing the spatial direction must not change the scale factor. These requirements are called **reciprocity** and spatial **isotropy**. The inverse relation therefore has the form $x=A(x'+vt')$. Substitute the expressions above:
+
+$$
+x=A^2\left[(x-vt)+v\left(t-\frac{vx}{c^2}\right)\right]
+=A^2\left(1-\frac{v^2}{c^2}\right)x.
+$$
+
+For the inverse to return every value of $x$, we need
 
 $$
 A^2\left(1-\frac{v^2}{c^2}\right)=1.
@@ -844,13 +915,15 @@ x'=\gamma(x-vt),\qquad
 t'=\gamma\left(t-\frac{vx}{c^2}\right).}
 $$
 
-For this standard boost, $y'=y$ and $z'=z$. The $vx/c^2$ term is the great conceptual disruption. Two events with $\Delta t=0$ but different $x$ generally have
+For this standard boost, $y'=y$ and $z'=z$. The time transformation has a measurable consequence. Two events with $\Delta t=0$ but different $x$ generally have
 
 $$
 \Delta t'=-\gamma\frac{v\Delta x}{c^2}\ne0.
 $$
 
-An observer's “now” is a slice through spacetime selected by their state of motion. It is not a layer of cosmic frosting already spread across the universe.
+For example, take $v=0.6c$, so $\gamma=1.25$. Two flashes separated by one **light-second**—the distance light travels in one second—along $x$ are simultaneous in $S$. The moving frame assigns them a time difference of $-0.75\,\mathrm s$: the flash at the larger $x$ coordinate happened earlier in its synchronized-clock system.
+
+This is **relativity of simultaneity**. It concerns the times assigned by synchronized clocks after accounting for signal travel, not merely the order in which someone sees the flashes.
 
 The everyday limit is sensible. If $v/c\ll1$, then $\gamma\approx1$ and $vx/c^2$ becomes negligible for ordinary distances and timing precision. We recover the Galilean approximation $x'\approx x-vt$, $t'\approx t$.
 
@@ -881,7 +954,7 @@ $$
 \end{aligned}
 $$
 
-The two mixed terms cancel. The transverse differences do not change in this boost. All inertial frames therefore assign the same interval, even when they disagree about the separate time and position differences. This agreement is what makes the interval useful.
+The expansion produces $+2v\Delta t\Delta x$ from the time square and $-2v\Delta t\Delta x$ from the space square; they cancel. The transverse differences do not change in this boost. All inertial frames therefore assign the same interval, even when they disagree about the separate time and position differences. This agreement is what makes the interval useful.
 
 For a concrete example, one frame assigns $\Delta t=5\,\mathrm s$ and $\Delta x=c(3\,\mathrm s)$, with no sideways separation. The spatial gap is three **light-seconds**: the distance light travels in three seconds. The interval is $(-25+9)=-16$ square light-seconds. In a frame moving at $v=0.6c$, the Lorentz formulas give $\Delta x'=0$ and $\Delta t'=4\,\mathrm s$. Its answer is also $-16$ square light-seconds. The next section explains why the four seconds have a direct clock interpretation.
 
@@ -905,9 +978,12 @@ $$
 
 The last expression uses Chapter 2's summation rule and the coordinates $x^0=ct$. The diagonal matrix packages the coefficients of the measuring rule; its other entries are zero. It is called the **Minkowski metric**. A metric is a rule for obtaining an interval from small coordinate displacements. Chapter 4 develops that rule on more general spaces. There the local formula cannot in general be turned into a finite separation by simply replacing every $d$ by $\Delta$.
 
+<details class="history-note" data-no-narration>
+<summary>Further calculation: rapidity and successive boosts</summary>
+
 To compose boosts conveniently, we can build two new functions from exponentials. For a dimensionless number $\chi$, define $\cosh\chi=(e^\chi+e^{-\chi})/2$ and $\sinh\chi=(e^\chi-e^{-\chi})/2$, then $\tanh\chi=\sinh\chi/\cosh\chi$. Squaring and subtracting gives $\cosh^2\chi-\sinh^2\chi=1$. This resembles the circular identity $\cos^2\theta+\sin^2\theta=1$, with the sign needed for an interval.
 
-Rapidity makes the rotation analogy mathematically exact in its appropriate sense. Define $\chi$ by
+The parameter $\chi$ is called **rapidity**. Choosing it so that $\tanh\chi=v/c$ gives
 
 $$
 \tanh\chi=\frac vc,\qquad
@@ -924,78 +1000,90 @@ $$
 \begin{pmatrix}ct\\x\end{pmatrix}.
 $$
 
-Collinear boost rapidities add. Velocities consequently combine as
+Multiplying two of these matrices and using the exponential definitions replaces $\chi$ by $\chi_1+\chi_2$. Thus rapidities add for boosts along the same line. Writing the result in terms of the two speeds gives
 
 $$
 v_{\rm combined}=\frac{v_1+v_2}{1+v_1v_2/c^2}.
 $$
 
-Two successive boosts of $0.8c$ give $1.6c/1.64\approx0.976c$, not $1.6c$. The speed limit is encoded in the geometry of composition.
+Two successive boosts of $0.8c$ give $1.6c/1.64\approx0.976c$, not $1.6c$. The combined speed remains below the speed of light.
+
+</details>
 
 ### 3.4 Adding up a clock’s elapsed time
 
-Along a timelike worldline, define
+Take a clock on a journey. During a sufficiently short part of the journey, use an inertial frame in which the clock is momentarily at rest. Its spatial displacement is zero in that frame, so the interval is $ds^2=-c^2d\tau^2$, where $d\tau$ is the time recorded by the clock.
+
+Other inertial frames agree on this interval. In a frame where the clock is moving, substitute $dx=v_xdt$, $dy=v_ydt$, and $dz=v_zdt$ into the interval formula:
+
+$$
+ds^2=-c^2dt^2+(v_x^2+v_y^2+v_z^2)dt^2.
+$$
+
+Writing $v^2=v_x^2+v_y^2+v_z^2$ for the ordinary speed squared, the clock's elapsed time is therefore
 
 $$
 d\tau=\frac{\sqrt{-ds^2}}c
-=dt\sqrt{1-\frac{\mathbf v^2}{c^2}}.
+=dt\sqrt{1-\frac{v^2}{c^2}}.
 $$
 
-The proper time $\tau$ is what an ideal clock carried along that worldline measures. “Ideal” means the clock measures this geometric quantity without appreciable changes from its construction, acceleration-induced damage, temperature, or other environmental effects.
+This is called **proper time**. An ideal clock is assumed to measure it even when the clock accelerates, provided its mechanism is not disturbed. Acceleration changes the journey; we do not add a separate acceleration term to this clock rule. This assumption is often called the **clock hypothesis**.
 
-For constant speed,
-
-$$
-\Delta\tau=\frac{\Delta t}{\gamma}.
-$$
-
-At $v=0.8c$, $\gamma=5/3$. Five years of inertial-frame coordinate time correspond to three years on the moving clock. Both numbers are legitimate measurements of specified quantities. There is no contradiction to be resolved by identifying which clock is secretly defective.
-
-For variable speed,
+For constant speed the square-root factor stays constant, giving
 
 $$
-\tau=\int_{t_A}^{t_B}\sqrt{1-\frac{\mathbf v(t)^2}{c^2}}\,dt.
+\Delta\tau=\Delta t\sqrt{1-v^2/c^2}=\frac{\Delta t}{\gamma}.
 $$
 
-This is a functional of the path. Two clocks can start together, follow different worldlines, reunite, and display different accumulated times. Their disagreement at reunion is an invariant local comparison.
+At $v=0.6c$, the factor is 0.8. A journey taking five years according to the frame's synchronized clocks takes four years on the traveling clock. This is the same calculation as the five-second, three-light-second example in §3.3, with a different unit of time.
 
-In flat spacetime, choose the inertial frame in which two timelike-separated reunion events occur at the same spatial position. The clock at rest between them accumulates $\Delta t$. Every other future-directed timelike path has an integrand at most one, so it accumulates no more. The inertial path maximizes proper time between those events.
+If the speed varies, add the contributions from each small part of the journey:
 
-That last sentence often causes a double take. A straight Euclidean path minimizes length. A straight timelike Minkowski path maximizes elapsed time. The minus sign is not decorative.
+$$
+\tau=\int_{t_A}^{t_B}\sqrt{1-\frac{v(t)^2}{c^2}}\,dt.
+$$
+
+The rule takes a whole path as input; such a rule is called a **functional**. Two clocks that start together and meet again can compare the accumulated results directly at their reunion.
+
+There is a useful consequence in flat spacetime. Choose the inertial frame in which the departure and reunion occur at the same position. A clock that stays there records $t_B-t_A$. Every other future-directed timelike path between those same events has a square-root factor no greater than one at each step. It therefore records no more time than the stationary clock.
+
+Thus the inertial path between these events gives the greatest elapsed time. The result follows from the clock formula; it differs from the shortest-distance rule for straight lines in ordinary spatial geometry.
 
 ### 3.5 Two clocks meet again
 
-One twin remains inertial. The other travels outward at $0.8c$ for five years of the first twin's time and returns at the same speed for another five years, idealizing the turnaround as brief. At reunion,
+Two clocks start together. One stays at rest in an inertial frame. The other travels outward at $0.6c$ for five years of that frame's time and returns at the same speed for another five years. We idealize the turnaround as brief. This is the experiment often described using twins, with their ages playing the role of the clock readings. At reunion,
 
 $$
 \tau_{\rm home}=10\ \text{years},
 \qquad
-\tau_{\rm traveler}=2\times5\sqrt{1-0.8^2}=6\ \text{years}.
+\tau_{\rm traveler}=2\times5\sqrt{1-0.6^2}=8\ \text{years}.
 $$
 
-The traveler does not remain in one inertial frame for the whole experiment, so the histories are not symmetric. But “acceleration makes clocks run slowly” is an unreliable explanation. In the ideal clock formula, elapsed time is obtained from the worldline's tangent, not from an extra direct acceleration term.
+The traveling clock must change velocity to return. The stay-at-home clock does not, so we cannot exchange their roles while keeping the same experiment. Still, the age difference is accumulated during the journeys: each five-year leg contributes four years to the traveling clock.
 
-The turnaround makes it possible for the traveler to switch between outward and inward inertial segments and reunite. One can make that turnaround brief without making the age difference disappear. Conversely, two differently accelerated clocks can be arranged to accumulate equal proper time. **Acceleration identifies an asymmetry in this experiment; the proper-time integral gives the answer.**
+A finite turnaround contributes its own elapsed time, found using the variable-speed integral. Making the turn brief makes that contribution small; it does not remove the difference accumulated on the long legs. Neither clock experiences a locally slow mechanism. Each records the proper time along its own path.
 
-Special relativity can handle accelerated observers perfectly well. What it lacks is general curved spacetime dynamics. “Acceleration requires general relativity” confuses a choice of observer with a property of spacetime.
+This calculation uses special relativity throughout. An accelerated observer can move in flat spacetime; introducing acceleration does not by itself require a gravitational field.
 
 ### 3.6 Four-velocity and four-momentum
 
-For a massive particle,
+To describe motion using one time measured by the moving particle, differentiate its four position coordinates with respect to proper time. The result is its **four-velocity**. Since $dt/d\tau=\gamma$, the chain rule gives
 
 $$
 u^\mu\equiv\frac{dx^\mu}{d\tau}
 =\gamma(c,\mathbf v).
 $$
 
-Its norm follows immediately:
+Use the Minkowski metric from §3.3 to pair the four-velocity with itself. The result is its **squared spacetime norm**:
 
 $$
 \eta_{\mu\nu}u^\mu u^\nu
 =\gamma^2(-c^2+\mathbf v^2)=-c^2.
 $$
 
-The spatial velocity can vary; the four-velocity's norm cannot. With constant rest mass $m$, define four-momentum
+The minus sign comes from the time component. This squared norm stays $-c^2$ even when the ordinary speed changes.
+
+The relativistic extension of momentum for a particle with constant rest mass $m$ is its **four-momentum**, $p^\mu=mu^\mu$. Its time component is energy divided by $c$, while its three spatial components are ordinary momentum:
 
 $$
 p^\mu=mu^\mu=\left(\frac Ec,\mathbf p\right),
@@ -1005,7 +1093,14 @@ E=\gamma mc^2,
 \mathbf p=\gamma m\mathbf v.
 $$
 
-Its invariant norm is
+We can shorten metric pairings by defining a lowered-index component:
+
+$$
+p_\mu=\eta_{\mu\nu}p^\nu,
+\qquad(p_0,p_1,p_2,p_3)=(-E/c,p_x,p_y,p_z).
+$$
+
+This operation is called **lowering an index**. In these coordinates it reverses the sign of the time component and leaves the spatial components unchanged. The same rule applies to $u_\mu$ or any other vector. Now its squared spacetime norm can be written
 
 $$
 p_\mu p^\mu=-m^2c^2,
@@ -1025,9 +1120,11 @@ $$
 
 Newtonian kinetic energy appears as the first correction to rest energy.
 
-For a photon, $m=0$ and $E=c|\mathbf p|$. A photon has no rest frame and no proper-time four-velocity. Its four-momentum still exists and is null. Dividing a photon's displacement by its proper time would divide by zero; that is not a profound alternative definition of motion.
+Light exchanges energy and momentum in packets called **photons**. A photon has zero rest mass, so the energy–momentum relation gives $E=c|\mathbf p|$. Its four-momentum has zero squared spacetime norm: it is null.
 
-> **Gotcha: system mass is not the sum of constituent rest masses.** Consider two photons, each of energy $E_\gamma$, traveling in opposite directions. Total momentum is zero and total energy is $2E_\gamma$, so the system has invariant mass $M=2E_\gamma/c^2$. Every constituent is massless. The system is not. Internal motion, radiation, and binding energy all matter when accounting for mass-energy.
+A photon has no rest frame. Along its lightlike path, $d\tau=0$, so we cannot define a four-velocity by dividing displacement by proper time. Its energy and momentum remain well-defined; the massive-particle formula $p^\mu=mu^\mu$ is not how we construct photon momentum.
+
+> **The mass of two light pulses.** To find a system’s invariant mass, first add its four-momenta and then use the energy–momentum relation for that total. Consider two photons, each of energy $E_\gamma$, traveling in opposite directions. Total momentum is zero and total energy is $2E_\gamma$, so the system has invariant mass $M=2E_\gamma/c^2$. The combined system has a rest frame even though neither photon does. This example shows why simply adding the individual rest masses would give the wrong result.
 
 ### 3.7 Energy is a measurement made by an observer
 
@@ -1037,7 +1134,7 @@ $$
 \boxed{E_{(U)}=-p_\mu U^\mu.}
 $$
 
-Check the units and sign in the observer's rest frame: $U^\mu=(c,0,0,0)$ and $p_0=-E/c$, so $-p_\mu U^\mu=E$. The formula is not an assertion that energy is invariant between observers. It says the energy measured by a **specified** observer is a scalar under coordinate changes. Change the observer $U$, and the scalar's value can change.
+We can establish this formula by checking it in the observer’s rest frame and then using invariance of the pairing under a change of coordinates. In that frame, $U^\mu=(c,0,0,0)$ and $p_0=-E/c$, so $-p_\mu U^\mu=E$. Both four-vectors describe a specified particle and a specified observer, so changing the coordinates leaves their pairing unchanged. Choosing a different observer changes $U$ and can change the measured energy. These are different operations, as in Chapter 2’s distinction between an object and its description.
 
 For a massive particle, define the relative Lorentz factor
 
@@ -1053,7 +1150,7 @@ p^\mu=\frac{E_{(U)}}{c^2}U^\mu+p_\perp^\mu,
 U_\mu p_\perp^\mu=0.
 $$
 
-The orthogonality condition defines the observer's instantaneous three-dimensional rest space. It does not require a global universal simultaneity surface.
+The symbol $\perp$ marks the part orthogonal to $U$. Subtracting the first term from $p$ and pairing with $U$ gives $-E_{(U)}+E_{(U)}=0$, which verifies the condition. In the observer's rest frame, it says $p_\perp^0=0$: the remaining components describe spatial momentum. This three-dimensional set of directions is the observer's **instantaneous rest space**.
 
 For a photon moving in the $+x$ direction, take $p^\mu=(E/c,E/c,0,0)$ and an observer chasing it with $U^\mu=\gamma(c,v,0,0)$. The energy measured by that observer is
 
@@ -1062,9 +1159,11 @@ E_{(U)}=\gamma E(1-v/c)
 =E\sqrt{\frac{1-v/c}{1+v/c}}.
 $$
 
-The photon is redshifted. Its local speed remains $c$. Chasing light changes the measured frequency, not the vacuum speed of light in the chasing observer's local inertial frame.
+At $v=0.6c$, the square root is $\sqrt{0.4/1.6}=1/2$: this observer measures half the original photon energy.
 
-This observer-projection viewpoint will later make the stress-energy tensor intelligible. “Energy density” is not just a number floating in spacetime; it means energy density measured by some local observer.
+To translate that energy change into a color or frequency change, we use a physical input about light: a photon has energy $E=h\nu$, where $\nu$ is frequency (oscillations per second) and $h$ is Planck's constant, with units of joule seconds. This is a quantum relation, not a result of the Lorentz algebra above. Since $h$ is the same, half the energy means half the frequency. A decrease in light's frequency is called a **redshift**. The observer still measures the light's speed as $c$. [Einstein Online: waves, motion, and frequency](https://www.einstein-online.info/en/spotlight/doppler/).
+
+Chapter 11 will extend this measuring procedure from one particle to energy and momentum distributed through a region.
 
 ### 3.8 Proper acceleration
 
@@ -1086,9 +1185,9 @@ $$
 \alpha=\sqrt{a_\mu a^\mu}
 $$
 
-is the **proper acceleration**, measured by an ideal accelerometer. There is no square-root sign crisis: a vector orthogonal to a timelike vector is spacelike or zero.
+is the **proper acceleration**, measured by an ideal accelerometer. In the instantaneous rest frame, $a^0=0$, so the quantity under the square root is the sum of the three spatial component squares. It is nonnegative.
 
-In curved spacetime, or even in noninertial coordinates on flat spacetime, $du^\mu/d\tau$ alone is not the correct vector acceleration. We will replace it by a covariant derivative. That replacement is exactly what will let us say, precisely rather than poetically, that a falling apple is unaccelerated while the floor beneath you is accelerating.
+The coordinate derivative used here works in inertial Cartesian coordinates. If the measuring axes vary from place to place, differentiating components alone also counts the change in the axes. Chapter 6 develops the correction. It will let us calculate an accelerometer reading in general coordinates, including the falling laboratories of Chapter 1.
 
 <a id="chapter-4"></a>
 

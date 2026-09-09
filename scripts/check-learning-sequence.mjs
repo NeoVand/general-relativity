@@ -60,8 +60,8 @@ assert.equal((.5*100)**2,2500);
 
 // Inspect the assembled chapter, including figures and labs that used to be
 // inserted ahead of the manuscript and escape the prerequisite checks.
-for(const [chapter,id,section] of [[0,'figure-local-prediction','0.1'],[1,'figure-free-fall-comparison','1.1'],[1,'scene-earth','1.10'],[2,'scene-covector','2.4'],[3,'scene-cone','3.3'],[10,'scene-tides','10.5'],[17,'scene-embedding','17.2'],[18,'scene-wave','18.4'],[19,'scene-expansion','19.1'],[20,'scene-slices','20.2']]){
- const d=doc(chapter),illustration=d.getElementById(id),siblings=[...d.querySelector('.prose').children];
+for(const [chapter,id,section] of [[0,'figure-local-prediction','0.1'],[1,'figure-free-fall-comparison','1.1'],[1,'scene-earth','1.10'],[2,'scene-covector','2.4'],[3,'scene-cone','3.3'],[5,'figure-rindler-worldlines','5.3'],[7,'figure-connection-cancellation','7.5'],[9,'ricci-weyl','9.3'],[10,'scene-tides','10.5'],[11,'figure-stress-energy','11.1'],[12,'figure-einstein-anatomy','12.1'],[13,'figure-action-variation','13.1'],[14,'figure-action-product-rule','14.7'],[15,'figure-killing-energy','15.4'],[17,'scene-embedding','17.2'],[18,'scene-wave','18.4'],[19,'scene-expansion','19.1'],[20,'scene-slices','20.2'],[21,'figure-cartan-comparison','21.5'],[22,'figure-focusing-caustic','22.5'],[23,'figure-effective-theory','23.2'],[24,'figure-calculation-map','24.1']]){
+ const d=doc(chapter),illustration=d.getElementById(id==='ricci-weyl'?'curvature-cloud-explorer':id),siblings=[...d.querySelector('.prose').children];
  const heading=siblings.find(el=>el.tagName==='H3'&&el.textContent.startsWith(section+' '));
  assert.ok(siblings.indexOf(illustration)>siblings.indexOf(heading),`${id} follows its preparation`);
  assert.ok(siblings.slice(siblings.indexOf(heading)+1,siblings.indexOf(illustration)).some(el=>el.tagName==='P'),`${id} follows explanatory prose`);
