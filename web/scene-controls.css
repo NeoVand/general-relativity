@@ -38,3 +38,14 @@
  .scene-measurement [data-embedding-ratio]{font-size:11px;max-width:100px}
 }
 @media(prefers-reduced-motion:reduce){.scene-experiment-bar *{transition:none}}
+
+/* Discrete settings use the same quiet segmented control as the scene views. */
+.experiment-choice{border:0;padding:0;margin:0;min-width:0}
+.experiment-choice legend{font:550 11px/1.55 Manrope,sans-serif;color:var(--ink);padding:0;margin-bottom:7px}
+.experiment-choice .scene-view-switch{width:fit-content;max-width:100%;flex-wrap:wrap}
+.scene-controls .experiment-choice label{position:relative;font:550 11px/1.5 Manrope,sans-serif;cursor:pointer}
+.experiment-choice input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.experiment-choice label>span{display:block;padding:7px 9px;border-radius:8px;min-height:32px;color:var(--muted)}
+.experiment-choice input:checked+span{color:var(--ink);background:var(--paper);box-shadow:0 1px 4px #00000009}
+.experiment-choice input:focus-visible+span{outline:2px solid var(--geometry);outline-offset:2px}
+.experiment-choice label:hover>span{color:var(--ink)}

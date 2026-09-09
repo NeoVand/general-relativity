@@ -1,0 +1,79 @@
+/* Reuse the Spacetime Lab shell, view switch, range tracks, and palette. */
+.relativity-lab{container-type:inline-size;scroll-margin-top:90px;min-width:0}
+.relativity-lab .scene-heading h2{font-size:clamp(1.8rem,3vw,2.4rem)}
+.relativity-lab .scene-heading>p{margin-bottom:0;font:400 13px/1.8 Manrope,sans-serif}
+.relativity-lab .scene-viewbar{padding-top:12px}
+.experiment-workbench{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:20px;padding:16px 28px 18px;align-items:center}
+.experiment-console{min-width:0}
+.experiment-console .scene-controls{max-width:none;padding:0;margin:0;display:grid;gap:14px}
+.experiment-console .scene-parameter{min-height:20px;gap:8px}
+.experiment-console .scene-parameter label{font-size:11px;max-width:none}
+.experiment-console .scene-parameter output{font-size:12px}
+.experiment-range{min-width:0}
+[data-lab-result]{min-width:0;background:radial-gradient(ellipse at center,color-mix(in srgb,var(--geometry) 5%,transparent),transparent 72%)}
+.experiment-picture{display:block;width:100%;height:auto}
+.experiment-picture text{font:500 13px Manrope,sans-serif}
+.experiment-quiet{fill:var(--muted)}.experiment-ink{fill:var(--ink)}
+.experiment-geometry{fill:var(--geometry)}.experiment-observer{fill:var(--observer)}
+.experiment-guide{fill:none;stroke:var(--line);stroke-dasharray:3 5;stroke-width:1}
+.experiment-axis,.experiment-leader{fill:none;stroke:var(--muted);stroke-width:1;opacity:.55}
+.star-surface{fill:none;stroke:var(--geometry);stroke-width:1.2;opacity:.6}.star-shell{fill:none;stroke:var(--geometry);stroke-width:.7;opacity:.16}
+.star-radius{fill:none;stroke:var(--geometry);stroke-width:1.5}
+.photon-wave{fill:none;stroke-width:2;stroke-linecap:round}.photon-wave-geometry{stroke:var(--geometry)}.photon-wave-observer{stroke:var(--observer)}
+.lab-readouts{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin:18px 0 0;padding-top:16px;border-top:1px solid var(--line)}
+.lab-readouts>div{min-width:0}.lab-readouts span{display:block;font:450 10px/1.5 Manrope,sans-serif;color:var(--muted)}
+.lab-readouts strong{display:block;margin-top:4px;font:500 16px/1.4 Manrope,sans-serif;letter-spacing:-.025em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.lab-chart{display:block;width:100%;height:auto;overflow:visible}.lab-chart text{font:13px Manrope,sans-serif;fill:var(--muted)}
+.lab-gridline{fill:none;stroke:var(--line);stroke-width:.7}.lab-series{fill:none;stroke-width:1.7;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.lab-series-0{stroke:var(--geometry);border-color:var(--geometry)}.lab-series-1{stroke:var(--curvature);stroke-dasharray:6 4;border-color:var(--curvature)}.lab-series-2{stroke:var(--matter);stroke-dasharray:2 4;border-color:var(--matter)}
+.lab-legend{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none!important;margin:0 0 8px!important;padding:0 14px!important}
+.lab-legend li{font:450 10px/1.65 Manrope,sans-serif;margin:0!important;display:flex;align-items:center;gap:6px}.lab-swatch{display:inline-block;width:18px;border-top-width:2px;border-top-style:solid}.lab-swatch.lab-series-1{border-top-style:dashed}.lab-swatch.lab-series-2{border-top-style:dotted}
+.lab-chart--compact{display:none}
+:is([data-relativity-lab=star],[data-relativity-lab=photon])[data-lab-view=scene] .lab-plot-view{display:none}
+[data-lab-view=plot] .lab-scene-view{display:none}
+.prose .experiment-hint{font:400 12px/1.8 Manrope,sans-serif;color:var(--muted);margin:0;padding:0 28px 22px}
+.relativity-lab :is(.lab-method,.lab-data){margin:0;padding:0 28px;background:none;border:0;border-radius:0}
+.relativity-lab :is(.lab-method,.lab-data)>summary{list-style:none;display:flex;align-items:center;gap:10px;cursor:pointer;font:500 12px/1.6 Manrope,sans-serif;color:var(--muted);padding:15px 0;border-top:1px solid var(--line)}
+.relativity-lab summary::-webkit-details-marker{display:none}
+.relativity-lab :is(.lab-method,.lab-data)>summary::after{content:'';width:5px;height:5px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);margin-left:3px}
+.relativity-lab details[open]>summary::after{transform:rotate(225deg)}
+.relativity-lab .lab-data{padding-bottom:10px}
+.experiment-detail{padding:2px 0 24px;font:400 13px/1.8 Manrope,sans-serif}
+.experiment-detail :is(p,li){font:400 13px/1.8 Manrope,sans-serif!important}.experiment-detail p{margin:0 0 16px!important}.experiment-detail ul{padding-left:20px!important;margin:16px 0!important}
+.lab-data .table-scroll{max-width:100%;overflow:auto}.lab-data table{font:450 11px/1.7 Manrope,sans-serif;font-variant-numeric:tabular-nums;width:100%}.lab-data td,.lab-data th{text-align:right;padding:7px;border-bottom:1px solid var(--line);white-space:nowrap}
+[data-lab-actions]{display:grid;gap:10px;margin-top:14px;font:450 12px/1.7 Manrope,sans-serif}.experiment-text-button{font:500 12px/1.6 Manrope,sans-serif;color:var(--transport);border:0;background:none;padding:8px 0;text-align:left;cursor:pointer}
+[data-lab-observation]{width:100%;min-height:84px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:12px;font:400 14px/1.6 Manrope,sans-serif;resize:vertical}
+[data-lab-actions] small{font-size:11px;color:var(--muted)}
+[data-lab-status]{font:500 12px/1.7 Manrope,sans-serif;padding:0 28px;color:var(--observer)}[data-lab-status]:empty{display:none}
+[data-lab-controls][hidden],[data-lab-actions][hidden],[data-lab-toolbar][hidden]{display:none}
+.relativity-lab :focus-visible{outline:2px solid var(--geometry);outline-offset:3px}
+@container(max-width:700px){
+ .experiment-workbench{grid-template-columns:1fr;gap:10px;padding:12px 20px 18px}
+ [data-lab-result]{max-width:470px;width:100%;justify-self:center}
+ .experiment-console .scene-controls{grid-template-columns:1fr 1fr;gap:14px 20px}
+ .experiment-console .scene-parameter{flex-wrap:wrap;gap:0 8px;align-items:baseline}
+ .experiment-console .scene-parameter label{font-size:11px;max-width:none}
+ .lab-readouts{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+ .lab-readouts strong{font-size:15px}
+ .lab-chart--wide{display:none}.lab-chart--compact{display:block}.lab-chart text{font-size:13px}
+ .experiment-picture text{font-size:16px}
+}
+@container(max-width:440px){
+ .lab-readouts{grid-template-columns:1fr 1fr;margin-top:12px;padding-top:12px;gap:10px 16px}
+ .lab-legend{font-size:11px;padding:0!important}.lab-legend li{font-size:11px}
+ .experiment-picture text{font-size:16px}.experiment-workbench{padding-inline:16px}
+ .scene-controls .experiment-choice label{font-size:11px}
+ .experiment-choice label>span{padding:6px}
+}
+@media(max-width:600px){.relativity-lab :is(.lab-method,.lab-data){padding-inline:20px}.prose .experiment-hint{padding-inline:20px}.relativity-lab .scene-heading h2{font-size:1.9rem}}
+@media print{[data-lab-controls],[data-lab-actions],[data-lab-toolbar]{display:none!important}.experiment-workbench{grid-template-columns:1fr}.relativity-lab{break-inside:auto}}
+
+.prose .experiment-control-note{font:400 10px/1.6 Manrope,sans-serif;margin:0;grid-column:1/-1;color:var(--muted)}
+
+.lab-sample-guide{stroke:var(--muted);stroke-dasharray:3 5;stroke-width:1;opacity:.45}.lab-sample{stroke:var(--paper);stroke-width:1.5}.lab-sample-0{fill:var(--geometry)}.lab-sample-1{fill:var(--curvature)}.lab-sample-2{fill:var(--matter)}
+@container(max-width:440px){
+ [data-relativity-lab=star] .experiment-choice .scene-view-switch{display:grid;grid-template-columns:1fr 1fr;width:100%;text-align:center}
+ [data-relativity-lab=evolution] .experiment-range{order:2}
+ [data-relativity-lab=evolution] .experiment-choice:has([name=parameter-step]){grid-column:1/-1;order:3}
+ [data-relativity-lab=evolution] .experiment-choice:has([name=parameter-view]){grid-column:1/-1;order:4}
+}

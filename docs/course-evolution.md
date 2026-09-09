@@ -102,3 +102,13 @@ Reader feedback revealed that the first new units bridge depended on metrics and
 - Excluded the convention reference from default narration while retaining its mathematics for explicit reference use. Added checks against silently dropping either the invitation or the reference.
 - Restated the scope of Newton’s model alongside the first gravitational potential.
 - Verified the build, local links, mathematics, generated lesson order, desktop/mobile entry behavior, and narration boundaries.
+
+### Bring the calculated labs back into the Spacetime Lab design
+
+Reader feedback identified a visual regression: native controls, oversized measurements, and results separated from the sliders. The star's normalized radial axis also concealed its changing size.
+
+- Reused the existing scene shell, gradient range tracks, segmented choices, and reset icon. Removed the “Calculate · Compare · Explain” banner, large prediction box, and permanently expanded notebook form.
+- Put controls beside the visualization on wide screens and directly beneath it on phones. Kept numerical measurements compact and nearby.
+- Added a density section with a fixed coordinate-radius scale and an optional profile view. The photon view compares frequencies over equal local-time windows; its diagram explicitly locates the two measurement events. These remain illustrations of the declared numerical models, not ray-traced images of stellar surfaces.
+- The distance plot keeps a common domain and marks the chosen source; the numerical-evolution plot retains its time and scale-factor axes. Expanded calculation and notebook sections have deliberate bottom padding.
+- Verified all controls at desktop and phone widths, keyboard slider operation, both themes, plot switches, CSV export, notebook restoration, no-JavaScript output, model calibrations, the site build and Svelte checks. Visual inspection is separate from these software assertions.

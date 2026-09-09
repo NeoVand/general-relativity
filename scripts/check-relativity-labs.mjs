@@ -13,17 +13,39 @@ try{
   for(const [id,record] of Object.entries(labRecords)){
    await page.goto(new URL(`chapter-${record.chapter}.html#lab-${id}`,base).href);
    const root=page.locator(`[data-relativity-lab="${id}"][data-lab-ready]`);await root.waitFor();
-   assert.equal(await root.locator('.lab-readouts strong').count(),4);assert.equal(await root.locator('.lab-chart:visible .lab-series').count(),id==='star'||id==='distances'?3:2);
-   for(const p of record.parameters){const control=root.locator(`[name="parameter-${p.id}"]`);if(p.options){await control.selectOption(String(p.options.at(-1)))}else await control.evaluate((input,value)=>{input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}))},p.max);}
+   assert.equal(await root.locator('.lab-readouts strong').count(),4);
+   if(id==='star'||id==='photon'){
+    assert(await root.locator('.experiment-picture').isVisible());
+    await root.locator('[data-lab-view-button="plot"]').click();
+   }
+   assert.equal(await root.locator('.lab-chart:visible .lab-series').count(),id==='star'||id==='distances'?3:2);
+   if(id==='star'||id==='photon')await root.locator('[data-lab-view-button="scene"]').click();
+   const range=root.locator('input[type="range"]').first();await range.focus();
+   const before=+await range.inputValue();await page.keyboard.press('ArrowRight');assert(+await range.inputValue()>before);
+   assert(await range.evaluate(el=>el.style.getPropertyValue('--range-fill')));
+   const plot=await root.locator('[data-lab-result]').boundingBox(),controls=await root.locator('[data-lab-controls]').boundingBox();
+   assert(Math.max(plot.y+plot.height,controls.y+controls.height)-Math.min(plot.y,controls.y)<640,`${id} plot and controls fit together at ${width}`);
+   const ranges=await root.locator('input[type="range"]').evaluateAll(nodes=>nodes.map(el=>({appearance:getComputedStyle(el).appearance,height:getComputedStyle(el).height})));
+   assert(ranges.every(r=>r.appearance==='none'&&r.height==='28px'),'Reuse Spacetime Lab range tracks');
+   for(const p of record.parameters){const control=root.locator(`[name="parameter-${p.id}"]`);if(p.options){await root.locator(`label:has(input[name="parameter-${p.id}"][value="${p.options.at(-1)}"])`).click()}else await control.evaluate((input,value)=>{input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}))},p.max);}
    assert.equal(await root.locator('[data-lab-status]').innerText(),'');
-   await root.locator('[data-lab-observation]').fill(note);
+   await root.locator('.lab-data>summary').click();await root.locator('[data-lab-observation]').fill(note);
    const context=JSON.parse(await root.getAttribute('data-scientific-context'));assert.equal(context.id,id);assert.equal(context.source.url,record.source.url);assert.equal(context.readouts.length,4);
    const saved=await page.evaluate(({id})=>JSON.parse(localStorage.getItem('gr-course-v1')).experiments[id],{id});assert.equal(saved.note,note);assert.deepEqual(saved.parameters,context.parameters);
    const download=page.waitForEvent('download');await root.locator('[data-lab-export]').click();const file=await download;
    const csv=fs.readFileSync(await file.path(),'utf8');assert(csv.startsWith('# {'));assert(csv.includes(record.source.url));assert(csv.split('\n').length>5);assert(!csv.includes('NaN'));
-   await root.locator('[data-lab-reset]').click();await root.locator('.lab-data>summary').click();assert(await root.locator('table').isVisible());await root.locator('.lab-data>summary').click();
+   assert(await root.locator('table').isVisible());await root.locator('.lab-data>summary').click();await root.locator('[data-lab-reset]').click();
    const bounds=await root.boundingBox();assert(bounds.x>=-1&&bounds.x+bounds.width<=width+1,`${id} fits ${width}`);
-   await root.screenshot({path:`qa/lab-${id}-${width}.png`,animations:'disabled',style:'.topbar,.study-launcher,.reading-progress,.skip-link{visibility:hidden!important}'});
+   await page.setViewportSize({width,height:Math.ceil(bounds.height)+320});
+   for(const theme of ['dark','light']){
+    await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
+    await root.screenshot({path:`qa/lab-${id}-${width}-${theme}.png`,animations:'disabled',style:'.topbar,.study-launcher,.reading-progress,.skip-link{visibility:hidden!important}'});
+   }
+   if(id==='star'||id==='photon'){
+    await root.locator('[data-lab-view-button="plot"]').click();
+    await root.screenshot({path:`qa/lab-${id}-${width}-plot.png`,animations:'disabled',style:'.topbar,.study-launcher,.reading-progress,.skip-link{visibility:hidden!important}'});
+   }
+   await page.setViewportSize({width,height:1000});
   }
   await page.goto(new URL('notebook.html',base).href);await page.locator('[data-notebook-experiments] a').first().waitFor();
   assert.equal(await page.locator('[data-notebook-experiments] a').count(),4);await page.locator('[data-journal]').fill('How do the assumptions change this result?');
