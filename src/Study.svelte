@@ -86,6 +86,9 @@
   const requested=sources.findIndex(s=>s.index>=Math.max(0,sourceStart));
   queue=excerpt?.segments|| (ranged&&sourceStart>=0?sources.filter(s=>s.index>=sourceStart&&s.index<=Math.max(sourceStart,end)):sources);
   if(!excerpt&&mode!=='one'){if(!ranged&&mode!=='chapter')queue=queue.slice(Math.max(0,requested));queue=withNarrationContext(queue);}
+  // A tutor may request just one proof equation. Keep the surrounding proof
+  // as explanatory context without adding those steps to the playback queue.
+  if(explicit)queue=queue.map(s=>s.supplement?visibleSegment(s):s);
   if(!queue.length){notice='There is no readable text in that range. Choose a visible lesson passage.';return false;}
   queuePage=page.id;queueCursor=0;onceOnly=mode==='one';readingMode=excerpt?'selection':onceOnly?'standalone':'flow';
   readingTitle=page.title;readingPage=page.id;readingCount=queue.length;
@@ -145,7 +148,8 @@
   const playhead=active?{page:queuePage,passage:queue[queueCursor]?.id,heading:readingHeading,status:playback,word:spokenWord,seconds:audio?.currentTime||0,spoken:liveTokens.map(w=>w.text).join('')}:null;
   const id=selection?.start||(hovered?.page===page.id?hovered.id:null)||(playhead?.page===page.id?playhead.passage:null)||currentPassage();
   const segment=visibleSegment(page.segments.find(s=>s.id===id));
-  return {course:courseContext(),page:page.id,title:page.title,selection:selection?.text||'',passage:segment?{id:segment.id,kind:segment.kind,heading:segment.heading,text:segment.text,latex:segment.latex}:null,playhead,nearby:focusContext({...page,segments:visibleSegments()},id),controls:[...document.querySelectorAll('#main input[type="range"]')].map(el=>({label:el.getAttribute('aria-label')||el.id,value:el.value}))};
+  const nearbySegments=segment?.supplement?readingNeighborhood(page.segments,id).map(resolveSegment):visibleSegments();
+  return {course:courseContext(),page:page.id,title:page.title,selection:selection?.text||'',passage:segment?{id:segment.id,kind:segment.kind,heading:segment.heading,text:segment.text,latex:segment.latex}:null,playhead,nearby:focusContext({...page,segments:nearbySegments},id),controls:[...document.querySelectorAll('#main input[type="range"]')].map(el=>({label:el.getAttribute('aria-label')||el.id,value:el.value}))};
  }
  async function runTool(name,args,signal){
   if(signal?.aborted)throw new DOMException('Cancelled','AbortError');

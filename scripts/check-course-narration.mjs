@@ -27,14 +27,26 @@ document.querySelector('[data-depth="intuition"]').hidden=true;document.querySel
 const derived=withNarrationContext(segments.filter(s=>isReadingVisible(s,document)));
 assert(derived.find(s=>s.id==='visual').before.includes('Build a map'));assert(!derived.find(s=>s.id==='visual').before.includes('intuitive introduction'));
 
+const proofSegments=[...segments,...Array.from({length:8},(_,i)=>({id:`proof-${i}`,index:segments.length+i,text:`Proof step ${i}`,hash:`proof-${i}`,noNarration:true,supplement:i<7?'proof-a':'proof-b'}))];
+const proofContext=readingNeighborhood(proofSegments,'proof-3',{visibleIds});
+assert.deepEqual(proofContext.map(s=>s.id),Array.from({length:7},(_,i)=>`proof-${i}`),'an optional proof retains three preceding and following steps');
+assert.equal(withNarrationContext(proofContext)[3].before,'Proof step 0\nProof step 1\nProof step 2');
+assert.deepEqual(readingNeighborhood(proofSegments,'solution').map(s=>s.id),['solution'],'proof grouping does not change exercise answer isolation');
+assert(readingNeighborhood(proofSegments,'visual',{visibleIds}).every(s=>!s.supplement),'optional proofs do not enter ordinary reading context');
+
 if(!process.argv.includes('--unit-only')){
  const catalog=JSON.parse(fs.readFileSync('site/reading-index.json','utf8'));
- for(const chapter of [4,16,17]){
-  const {document}=parseHTML(fs.readFileSync(`site/chapter-${chapter}.html`,'utf8'));
+ for(const chapter of catalog){
+  const {document}=parseHTML(fs.readFileSync(`site/${chapter.id}.html`,'utf8'));
   const data=JSON.parse(document.querySelector('#reading-data').textContent),indexed=catalog.find(p=>p.id===data.id);
-  for(const segment of data.segments){const node=document.getElementById(segment.id),listed=indexed.segments.find(s=>s.id===segment.id);assert.equal(listed.depth,segment.depth);assert.equal(listed.lesson,segment.lesson);assert.equal(!!listed.noNarration,!!node.closest('[data-no-narration]'));if(node.matches('.derivation-steps>li')){assert(!/^\d{2}/.test(segment.text));assert(!segment.text.includes('Why this step works'));}}
+  for(const segment of data.segments){const node=document.getElementById(segment.id),listed=indexed.segments.find(s=>s.id===segment.id);assert.equal(listed.depth,segment.depth);assert.equal(listed.lesson,segment.lesson);assert.equal(listed.supplement,segment.supplement);assert.equal(segment.supplement,node.closest('[data-reading-supplement]')?.dataset.readingSupplement);assert.equal(!!listed.noNarration,!!node.closest('[data-no-narration]'));if(node.matches('.derivation-steps>li')){assert(!/^\d{2}/.test(segment.text));assert(!segment.text.includes('Why this step works'));}}
   for(const section of data.outline){const first=data.segments[section.start];if(first.lesson&&section.level===4){assert.equal(data.segments[section.end].lesson,first.lesson,'a bridge playback range stops at the bridge');assert(data.segments.slice(section.start,section.end+1).every(s=>s.lesson===first.lesson));}}
   for(const segment of data.segments.filter(s=>s.kind==='visualization'&&s.lesson)){assert(!segment.context.includes('FIRST, PREDICT'));assert(!segment.context.includes('Work through the solution'));}
+  for(const segment of data.segments.filter(s=>s.supplement)){
+   const neighbors=readingNeighborhood(data.segments,segment.id),context=withNarrationContext(neighbors).find(s=>s.id===segment.id);
+   assert.equal(segment.context,context.context,'built and runtime proof context agree');
+   assert(neighbors.every(s=>s.supplement===segment.supplement));
+  }
  }
  const {document:notebook}=parseHTML(fs.readFileSync('site/notebook.html','utf8'));
  assert(!notebook.querySelector('.chapter-study-actions'),'the dynamically populated notebook must not offer stale built narration');

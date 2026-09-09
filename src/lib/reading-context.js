@@ -30,17 +30,18 @@ export function isReadingVisible(segment,document,{includeNoNarration=false}={})
 }
 
 // A request for a hidden depth is legitimate source retrieval, but its nearby
-// source must stay in that same panel. An explicitly requested exercise is
-// returned alone, so unrelated solutions do not become accidental context.
+// source must stay in that same panel. Optional proofs retain their neighboring
+// steps; an explicitly requested exercise stays alone to avoid revealing answers.
 export function readingNeighborhood(segments,id,{visibleIds}={}){
  const requested=segments.find(s=>s.id===id);if(!requested)return [];
  let candidates;
- if(visibleIds?.has(id))candidates=segments.filter(s=>visibleIds.has(s.id));
+ if(requested.supplement)candidates=segments.filter(s=>s.supplement===requested.supplement);
+ else if(visibleIds?.has(id))candidates=segments.filter(s=>visibleIds.has(s.id));
  else if(requested.noNarration)candidates=[requested];
  else if(requested.depth)candidates=segments.filter(s=>!s.noNarration&&s.lesson===requested.lesson&&s.depth===requested.depth);
  else candidates=segments.filter(s=>!s.noNarration&&(!s.depth||s.depth==='intuition'));
  const index=candidates.findIndex(s=>s.id===id);
- return candidates.slice(Math.max(0,index-1),index+3);
+ return requested.supplement?candidates.slice(Math.max(0,index-3),index+4):candidates.slice(Math.max(0,index-1),index+3);
 }
 
 export function explicitNarrationRange(segments,startId,endId=startId,{isVisible=()=>true}={}){

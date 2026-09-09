@@ -17,6 +17,11 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  const {document}=parseHTML(fs.readFileSync(`site/${file}`,'utf8'));
  const id=file.replace('.html','');
  const main=document.querySelector('main');
+ // Optional explanations need their own source neighborhood. Exercises stay
+ // ungrouped so explicitly retrieving a question cannot reveal its answer.
+ for(const el of main.querySelectorAll('details.history-note[data-no-narration]')){
+  el.dataset.readingSupplement=el.id||`supplement-${createHash('sha256').update(source(el.querySelector('summary'))).digest('hex').slice(0,12)}`;
+ }
  const experienceSelector='.visual-lesson,.geometry-experience,.curvature-experience';
  const candidates=[...main.querySelectorAll('h1,h2,h3,h4,p,li,summary,.equation,.equation-piece,figure,.scene-stage,.visual-lesson,.geometry-experience,.curvature-experience,table')].filter(el=>{
   if(el.closest('nav,.contents-group,.chapter-preparation,.chapter-meta,.scene-heading,.scene-fallback,.scene-controls,.lab-directory,.hero-equation-key,.color-key'))return false;
@@ -54,6 +59,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   const panel=el.closest('.lesson-panel');if(panel)entry.depth=panel.dataset.depth;
   if(lesson)entry.lesson=lesson.dataset.lesson;
   if(el.closest('[data-no-narration]'))entry.noNarration=true;
+  const supplement=el.closest('[data-reading-supplement]');if(supplement)entry.supplement=supplement.dataset.readingSupplement;
   // The visual narrator already explains its equation and model limitations.
   // Keep these exact sources available for explicit requests, but do not repeat
   // them immediately after the same scene during continuous chapter playback.
@@ -77,7 +83,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
    if(kind==='visualization'&&scene?.querySelector('.scene-actions'))scene.querySelector('.scene-actions').append(tools);else el.append(tools);
   }
  }
- segments.forEach((s,i)=>{const neighbors=segments.filter(t=>!t.noNarration&&(!t.depth||t.depth===(t.lesson===s.lesson?s.depth||'intuition':'intuition')));s.before=neighbors.filter(t=>t.index<i).slice(-3).map(t=>t.text).join('\n').slice(-3000);s.after=neighbors.filter(t=>t.index>i).slice(0,3).map(t=>t.text).join('\n').slice(0,3000);s.context=[s.before,'[NARRATION SLOT]',s.after].join('\n');s.hash=createHash('sha256').update(id+s.kind+s.heading+s.text+s.latex.join(' ')+s.context+(s.narration||'')).digest('hex').slice(0,16)});
+ segments.forEach((s,i)=>{const neighbors=segments.filter(t=>s.supplement?t.supplement===s.supplement:!t.noNarration&&(!t.depth||t.depth===(t.lesson===s.lesson?s.depth||'intuition':'intuition')));s.before=neighbors.filter(t=>t.index<i).slice(-3).map(t=>t.text).join('\n').slice(-3000);s.after=neighbors.filter(t=>t.index>i).slice(0,3).map(t=>t.text).join('\n').slice(0,3000);s.context=[s.before,'[NARRATION SLOT]',s.after].join('\n');s.hash=createHash('sha256').update(id+s.kind+s.heading+s.text+s.latex.join(' ')+s.context+(s.narration||'')).digest('hex').slice(0,16)});
  // An alternate diagram can depict a different worked example. Give its
  // narrator only its own source and the surrounding lesson, not the 3D note.
  for(const s of segments){if(!s.views?.diagram)continue;const v=s.views.diagram,scene=document.getElementById(s.id).closest('[data-scene]');const outside=segments.filter(t=>!scene.contains(document.getElementById(t.id)));v.before=outside.filter(t=>t.index<s.index).slice(-3).map(t=>t.text).join('\n').slice(-3000);v.after=outside.filter(t=>t.index>s.index).slice(0,3).map(t=>t.text).join('\n').slice(0,3000);v.context=[v.before,'[NARRATION SLOT]',v.after].join('\n');v.hash=createHash('sha256').update(id+'diagram'+s.heading+v.text+v.latex.join(' ')+v.context+(v.narration||'')).digest('hex').slice(0,16);}
@@ -87,7 +93,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  for(const section of outline){const first=segments[section.start];if(first.lesson&&section.level===4)section.end=segments.filter(s=>s.lesson===first.lesson).at(-1).index;if(!Number.isFinite(section.end))section.end=segments.length-1;section.endPassage=segments[section.end].id;section.summary=segments.slice(section.start+1,section.end+1).find(s=>s.kind==='text'&&!s.noNarration&&(!s.depth||s.depth==='intuition'))?.text.slice(0,230)||'';}
  const entry={id,title:document.title.replace(' · General Relativity',''),segments,outline};
  bookMap.push({id,title:entry.title,summary:document.querySelector('.chapter-deck')?.textContent||segments.find(s=>s.kind==='text')?.text.slice(0,220)||'',outline});
- catalog.push({id,title:entry.title,segments:segments.map(({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration})=>({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration}))});
+ catalog.push({id,title:entry.title,segments:segments.map(({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration,supplement})=>({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration,supplement}))});
  document.querySelectorAll('script[src]').forEach(s=>{if(!s.src.includes('katex'))s.remove()});
  const entryNames={reading:'app',scenes:'scenes',course:'course',visualLessons:'visual-lessons',geometryExperiences:'geometry-experiences',curvatureExperiences:'curvature-experiences'};
  const assets=Object.fromEntries(Object.entries(entryNames).map(([key,name])=>[key,fs.readdirSync('site').find(f=>new RegExp(`^${name}-[\\da-f]+\\.js$`).test(f))]));

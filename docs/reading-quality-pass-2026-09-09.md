@@ -108,6 +108,14 @@ Appendix units and definitions were checked, the front contents were synchronize
 
 This completes a first sentence-level pass through the manuscript, including the appendices. It does not complete every possible derivation: the full Kerr construction, global singularity proof, canonical constraint algebra, and quantum-field calculations still need dedicated treatments to meet the project's full self-contained ambition. Supplied results and additional assumptions are identified where they enter. Reader observation and exercises with actual beginners remain necessary to assess whether the pacing works.
 
+## AI explanations and optional proofs
+
+The narration index previously treated every passage excluded from continuous reading as an isolated source. That was appropriate for an exercise question but stripped an optional proof's equation of its setup and neighboring calculation steps. The tutor's focused-source lookup could even fall back to passages near the chapter opening.
+
+Optional explanations now have a shared source group in both the page data and the off-page search catalog. “Explain,” the equation's “Listen” button, and tutor-requested playback retain neighboring steps from that proof. Explicit playback still honors its requested range. Ordinary chapter listening still excludes these optional passages, and exercise questions retain their separate answer protection.
+
+Regression checks cover all 37 pages' source metadata and the actual equation buttons, keyboard activation, off-page retrieval, closed-proof retrieval without opening it, and explicit narration with mocked providers.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.

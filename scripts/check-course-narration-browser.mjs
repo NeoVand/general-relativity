@@ -67,6 +67,37 @@ try{
  const other=JSON.parse(fs.readFileSync('site/reading-index.json','utf8')).find(p=>p.id==='chapter-16'),offpage=other.segments.find(s=>s.depth==='formal');
  result=await askTool('read_passage',{page:other.id,passage:offpage.id});assert(result.passages.every(s=>s.lesson===offpage.lesson&&s.depth==='formal'&&s.visibility==='reference'));
  result=await askTool('play_section',{page:data.id,passage:practice.id,end:title.id});assert(result.error?.includes('end'));
+ // Optional proofs are available to the tutor without losing their setup or
+ // silently joining continuous playback. Test catalog retrieval, then the
+ // actual equation buttons (including keyboard activation) on the live page.
+ const proofPage=JSON.parse(fs.readFileSync('site/reading-index.json','utf8')).find(p=>p.id==='chapter-17');
+ const proof=proofPage.segments.find(s=>s.supplement&&s.kind==='equation'&&s.latex.some(t=>t.includes('R_{tr}=')));
+ assert(proof,'the spherical time-dependence calculation is indexed');
+ const proofIds=proofPage.segments.filter(s=>s.supplement===proof.supplement).map(s=>s.id);
+ result=await askTool('read_passage',{page:proofPage.id,passage:proof.id});
+ assert(result.passages.length>1&&result.passages.every(s=>proofIds.includes(s.id)&&s.visibility==='reference'));
+ assert(result.passages.some(s=>s.text.includes('areal radius')),'off-page retrieval includes the chart assumptions');
+ await close();await page.goto(new URL('chapter-17.html',base).href);await page.waitForFunction(()=>document.body.dataset.readingReady==='true');
+ const proofElement=page.locator(`[data-reading-supplement="${proof.supplement}"]`);
+ result=await askTool('read_passage',{page:proofPage.id,passage:proof.id});
+ assert(result.passages.every(s=>proofIds.includes(s.id)));
+ assert.equal(await proofElement.evaluate(el=>el.open),false,'source retrieval leaves the optional proof closed');
+ await askTool('play_section',{page:proofPage.id,passage:proof.id},{play:true});
+ assert.equal(await proofElement.evaluate(el=>el.open),true,'explicit narration reveals its optional proof');
+ assert(narratorRequests().at(-1).context.includes('areal radius'),'tutor-requested equation playback retains the proof setup');
+ assert((await page.locator('.player-title small').textContent()).includes('of 1 ·'));await stop();
+ await page.locator(`#${proof.id} [data-study-action="listen"]`).click();await ready();
+ assert(narratorRequests().at(-1).context.includes('areal radius'),'equation narration retains the proof setup');
+ assert((await page.locator('.player-title small').textContent()).includes('of 1 ·'));await stop();
+ const beforeExplain=requests.length,explain=page.locator(`#${proof.id} [data-study-action="explain"]`);
+ await explain.focus();await explain.press('Enter');await page.getByRole('button',{name:'Send question',exact:true}).waitFor();
+ const explanation=requests.slice(beforeExplain).find(r=>r.provider==='openai'&&r.body.tools);
+ assert(explanation,'the equation Explain button sends a tutor request');
+ const instructions=explanation.body.messages.find(m=>m.role==='system').content;
+ const focus=JSON.parse(instructions.split('CURRENT READER STATE AND EXACT NEARBY SOURCE:\n')[1].split('\nLISTENING HISTORY')[0]);
+ assert.equal(focus.passage.id,proof.id);
+ assert(focus.nearby.length>1&&focus.nearby.every(s=>proofIds.includes(s.id)),'Explain receives the same proof, not the chapter opening');
+ assert(focus.nearby.some(s=>s.text.includes('areal radius')));
  // Each integrated experiment is one listening unit. Its current parameters,
  // not its hidden reference diagram or every control label, inform the narrator.
  for(const [chapter,id,control] of [[4,'manifold-chart-experience','[data-gx-chart="b"]'],[8,'curvature-pair-explorer','[data-cx-phase="2"]'],[9,'curvature-cloud-explorer','[data-cx-mode="isotropic"]'],[16,'orbital-precession-experience','[data-gx-scale="1"]']]){
@@ -79,5 +110,5 @@ try{
   await model.locator('[data-study-action="listen"]').click();await ready();assert.equal(narratorRequests().at(-1).source,after,'The narrator receives the current mathematical model');await stop();
  }
  assert.deepEqual(errors,[]);
- console.log('Verified live source neighborhoods, hidden/off-page depth retrieval, narration context cache changes, bounded bridge playback, explicit exercise ranges, hidden-panel reveal, and chapter practice exclusion with mocked providers.');
+ console.log('Verified live and off-page source neighborhoods, optional-proof Listen/Explain context, narration cache changes, bounded bridge playback, explicit exercise ranges, hidden-panel reveal, and chapter practice exclusion with mocked providers.');
 }finally{await browser.close()}
