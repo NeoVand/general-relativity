@@ -99,7 +99,7 @@ function mount(el){const type=el.dataset.curvatureExperience;if(!curvatureDefaul
   const endDrag=()=>{if(drag){drag=null;updateCloud(true);}};el.addEventListener('pointerup',endDrag,{signal:abort.signal});el.addEventListener('pointercancel',endDrag,{signal:abort.signal});
   el.addEventListener('keydown',event=>{if(!event.target.matches('.cx-cloud-stage')||!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(event.key))return;event.preventDefault();if(event.key==='Home'){state.yaw=1.1;state.pitch=.34;}else{state.yaw+=event.key==='ArrowLeft'?.15:event.key==='ArrowRight'?-.15:0;state.pitch=clamp(state.pitch+(event.key==='ArrowUp'?.12:event.key==='ArrowDown'?-.12:0),-.7,.7);}updateCloud(true);},{signal:abort.signal});
  }
- const io=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)schedule();else stopFrame();},{threshold:.02});io.observe(el);
+ const io=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;if(visible)schedule();else stopFrame();},{threshold:.02});io.observe(el);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopFrame();else schedule();},{signal:abort.signal});reduced.addEventListener('change',()=>{if(reduced.matches&&state.playing){state.playing=false;stopFrame();updateCloud(true);}},{signal:abort.signal});
  instance.render=()=>{stopFrame();state.playing=false;render();};render();el.dataset.curvatureReady='true';
  return ()=>{disposed=true;stopFrame();abort.abort();io.disconnect();active.delete(el.id);delete el.dataset.curvatureReady;};

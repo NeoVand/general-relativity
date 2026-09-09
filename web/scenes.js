@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {earthFlow} from './earth-flow.js';
-import {covectorCrossings,coneNearSide,embeddingHeight,radialProperLength,waveStrain} from './scene-models.js';
+import {covectorCrossings,conePointVisible,embeddingHeight,radialProperLength,waveStrain} from './scene-models.js';
 import {OrbitControls} from './assets/three/OrbitControls.js';
 import {CSS2DRenderer,CSS2DObject} from './assets/three/CSS2DRenderer.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
@@ -65,26 +65,32 @@ function createLab(el){
    const rearMaterial=new THREE.LineDashedMaterial({transparent:true,opacity:sign===1?.34:.23,dashSize:.085,gapSize:.065,depthWrite:false});rearMaterial.userData.role='geometry';mats.push(rearMaterial);
    const rear=new THREE.LineSegments(new THREE.BufferGeometry(),rearMaterial);root.add(front,rear);strokeSets.push({sign,front,rear});
   }
-  let previousAngle=NaN;
+  const previousCamera=V(Infinity,Infinity,Infinity);
   beforeRender=()=>{
    const localCamera=root.worldToLocal(camera.getWorldPosition(V())),angle=Math.atan2(localCamera.z,localCamera.x);
-   if(Math.abs(angle-previousAngle)<1e-6)return;previousAngle=angle;
-   let nearCount=0,farCount=0;
+   if(localCamera.distanceToSquared(previousCamera)<1e-10)return;previousCamera.copy(localCamera);
+   let nearCount=0,farCount=0;const halves={};
    for(const {sign,front,rear} of strokeSets){
     const near=[],far=[];
-    const append=(a,b)=>{const midpoint=a.clone().add(b).multiplyScalar(.5),points=coneNearSide(midpoint.x,midpoint.z,localCamera.x,localCamera.z)?near:far;points.push(a,b);};
-    // Split the rim into short segments so near/far styling follows the camera,
-    // rather than encoding a permanent direction into the causal geometry.
+    const append=(a,b)=>{
+     const midpoint=a.clone().add(b).multiplyScalar(.5),radius=Math.hypot(midpoint.x,midpoint.z);
+     // A ring chord's midpoint is inside the cone. Project it back onto the
+     // surface before testing the sightline, to avoid false self-occlusion.
+     if(radius){const scale=Math.abs(midpoint.y)/radius;midpoint.x*=scale;midpoint.z*=scale;}
+     const points=conePointVisible(midpoint.toArray(),localCamera.toArray())?near:far;points.push(a,b);
+    };
+    // Split both the rim and generators: a sightline can become hidden
+    // partway down a generator when the camera looks through an open rim.
     for(let i=0;i<192;i++){const a=i*Math.PI/96,b=(i+1)*Math.PI/96;append(V(2.2*Math.cos(a),sign*2.2,2.2*Math.sin(a)),V(2.2*Math.cos(b),sign*2.2,2.2*Math.sin(b)));}
-    for(let j=0;j<12;j++){const a=j*Math.PI/6;append(V(),V(2.2*Math.cos(a),sign*2.2,2.2*Math.sin(a)));}
+    for(let j=0;j<12;j++){const a=j*Math.PI/6;for(let i=0;i<48;i++){const r=2.2*i/48,next=2.2*(i+1)/48;append(V(r*Math.cos(a),sign*r,r*Math.sin(a)),V(next*Math.cos(a),sign*next,next*Math.sin(a)));}}
     for(const [object,points] of [[front,near],[rear,far]]){object.geometry.dispose();object.geometry=new THREE.BufferGeometry().setFromPoints(points);object.computeLineDistances();}
-    nearCount+=near.length/2;farCount+=far.length/2;
+    nearCount+=near.length/2;farCount+=far.length/2;halves[sign===1?'upper':'lower']={visible:near.length/2,hidden:far.length/2};
    }
-   el.dataset.coneDepth=JSON.stringify({near:nearCount,far:farCount,angle});
+   el.dataset.coneDepth=JSON.stringify({near:nearCount,far:farCount,angle,camera:localCamera.toArray(),...halves});
   };
   grid(5,10);arrow(V(0,-2.55,0),V(0,2.75,0),'ink');label('ct',V(0,2.95,0));label('x',V(2.8,0,0));label('y',V(0,0,2.8));label('ds^2=0',V(-1.5,1.85,0),'geometry');dot(V(),'curvature',.07);
   const worldline=arrow(V(),V(1,2,0),'observer'),endpoint=dot(V(1,2,0),'observer',.055);const ulabel=label(String.raw`u^\mu`,V(1.2,2.35,0),'observer');
-  update=()=>{const b=+input.value/100,d=V(2*b,2,0);worldline.setDirection(d.clone().normalize());worldline.setLength(d.length(),.16,.08);endpoint.position.copy(d);ulabel.position.copy(d).add(V(.25,.28,0));output.innerHTML=window.katex.renderToString(`v/c=${b.toFixed(2)}`);el.dataset.measurement=b;el.dataset.narrationSource=`Light-cone experiment with two spatial dimensions shown. The observer speed is ${b.toFixed(2)} times the speed of light. The rose direction lies strictly inside the future light cone: it is timelike. The cone surface represents lightlike directions. Solid strokes are nearer the camera and dashed strokes are farther away; this depth cue changes when you orbit, not the causal classification.`;};
+  update=()=>{const b=+input.value/100,d=V(2*b,2,0);worldline.setDirection(d.clone().normalize());worldline.setLength(d.length(),.16,.08);endpoint.position.copy(d);ulabel.position.copy(d).add(V(.25,.28,0));output.innerHTML=window.katex.renderToString(`v/c=${b.toFixed(2)}`);el.dataset.measurement=b;el.dataset.narrationSource=`Light-cone experiment with two spatial dimensions shown. The observer speed is ${b.toFixed(2)} times the speed of light. The rose direction lies strictly inside the future light cone: it is timelike. The cone surface represents lightlike directions. Solid strokes are directly visible from the camera. Dashed strokes lie behind the cone surface along that sightline. Looking through the open rim can reveal the entire inside of a half-cone. This drawing cue changes when you orbit, not the causal classification.`;};
  }else if(kind==='sphere'){
   camera.position.set(4,3.4,4.5);controls.target.set(0,.3,0);
   root.add(new THREE.Mesh(new THREE.SphereGeometry(1.646,64,40),material('figure-tint',{roughness:.62,metalness:.04})));sphereGrid();
@@ -211,7 +217,9 @@ function createLab(el){
   for(const control of [amplitudeInput,frequencyInput])control.addEventListener('input',()=>{amplitude=+amplitudeInput.value/100;frequency=+frequencyInput.value/100;applyGeometry();updateReadout();render();},{signal:events.signal});
   document.addEventListener('visibilitychange',synchronize,{signal:events.signal});
   reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches)setPlaying(false);},{signal:events.signal});
-  const intersection=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;synchronize();},{threshold:.08});
+  // Resizing can batch an exit and re-entry in one delivery. The newest entry
+  // is the current visibility; using the first can leave Play stuck offscreen.
+  const intersection=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;synchronize();},{threshold:.08});
   const viewObserver=new MutationObserver(synchronize);viewObserver.observe(el,{attributes:true,attributeFilter:['data-active-view','data-ready']});
   update=()=>{phase=+input.value*Math.PI/100;applyGeometry();updateReadout();};
   update.onInput=()=>setPlaying(false);

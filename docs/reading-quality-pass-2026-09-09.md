@@ -116,6 +116,18 @@ Optional explanations now have a shared source group in both the page data and t
 
 Regression checks cover all 37 pages' source metadata and the actual equation buttons, keyboard activation, off-page retrieval, closed-proof retrieval without opening it, and explicit narration with mocked providers.
 
+## Follow-up: skipped math, disclosure spacing, and cone visibility
+
+The reader's screenshots exposed a gap in the rendering checks: a formula skipped by the parser never creates a KaTeX error. The flux calculation in §0.7 used single-dollar delimiters across several lines. It now uses display delimiters and two lines for phone widths. A second formula in the learning-path summary was escaped as plain text; that summary now uses the math renderer. Builds reject unmatched delimiters, and the page checks inspect reading text, including closed proofs, for leftover mathematical source.
+
+Removing panel borders had allowed paragraph margins to collapse outside their backgrounds. The animation panel also allowed its final disclosure margin to escape after its overflow setting changed. Expanded checkpoints and animation explanations now use internal padding, and the idea-to-keep panel has explicit, balanced edge spacing. Browser checks measure the actual content-to-background gaps across all checkpoint pages and inspect the animation footer in both themes at desktop and phone widths.
+
+The cone's old visibility rule used only horizontal camera position and always split strokes into two halves. It now tests whether the sightline intersects the finite double cone before reaching the stroke. Both rim arcs and generators are subdivided so a line can become visible partway along its length. Camera elevation and distance participate in the update. Independent ray tracing against a triangulated cone checks 432 sightlines, and browser tests rotate the actual camera upward to verify that the upper cone has no hidden strokes when viewed through its open rim. Dashed initial-shape references in the tidal-cloud lab have a different, explicit meaning and do not use this visibility rule.
+
+The broader scene check also reproduced a stalled wave animation after resizing. The browser delivered an exit and re-entry together; the animation took the first notification and retained an obsolete offscreen state. Single-surface observers in the wave, Earth, geometry, curvature, and visual-lesson runtimes now use the latest notification. The scene regression deliberately delivers coalesced notifications so this failure cannot depend on fortunate browser timing.
+
+Follow-up verification passed: all 37 pages' mathematical source checks; 74 page/viewport combinations with measured checkpoint spacing; 36 scene/theme/viewport combinations; the independent cone sightlines and elevated-camera interactions; geometry, curvature, and visual-lesson suites; Svelte checks; and prerequisite order. Screenshots of the repaired formula, panels, animation credit, and elevated cone are in `review-evidence/2026-09-09/rendering-polish/`.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.

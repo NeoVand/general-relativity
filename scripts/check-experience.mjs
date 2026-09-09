@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import * as THREE from 'three';
 import {scenes} from './scenes.mjs';
 import {rainRadius, FALL_TIME, ENTRY_HALF_SIZE, VIEW_RADIUS, INJECTION_INTERVAL, COHORTS, INITIAL_PHASE, cohortRadius, EARTH_GM, EARTH_RADIUS} from '../web/earth-flow.js';
 import {math,semanticTex} from './math-system.mjs';
-import {covectorCrossings,coneNearSide,embeddingHeight,radialProperLength,waveStrain,waveDisplacement} from '../web/scene-models.js';
+import {covectorCrossings,conePointVisible,embeddingHeight,radialProperLength,waveStrain,waveDisplacement} from '../web/scene-models.js';
 // Independent physical checks: induced geometry, quadrature, polarization symmetry,
 // and wave propagation constrain the model beyond its own displayed endpoints.
 for(const c of [.05,.25,.65]){
@@ -18,7 +19,26 @@ assert.ok(radialProperLength(.75,1,.65)>radialProperLength(.75,1,.25));
 assert.throws(()=>radialProperLength(.5,1,.65),RangeError);
 assert.deepEqual(covectorCrossings(.2),[]);assert.deepEqual(covectorCrossings(.5),[[1,2/3,1/3]]);
 for(const [x,y,z] of covectorCrossings(1)){assert.equal(y/x,2/3);assert.equal(z/x,1/3);assert.ok(Number.isInteger(x));}
-for(const a of [.2,1,2,3])assert.notEqual(coneNearSide(Math.cos(a),Math.sin(a),2,3),coneNearSide(Math.cos(a),Math.sin(a),-2,-3));
+for(const a of [.2,1,2,3]){
+ const point=[Math.cos(a),1,Math.sin(a)];
+ assert.equal(conePointVisible(point,[0,6,0]),true,'The whole upper cone is visible through its open rim');
+ assert.equal(conePointVisible(point,[0,-6,0]),false,'The lower cone obscures the upper wall from below');
+ assert.notEqual(conePointVisible(point,[6*Math.cos(a),0,6*Math.sin(a)]),conePointVisible(point,[-6*Math.cos(a),0,-6*Math.sin(a)]));
+}
+assert.equal(conePointVisible([-2.2,2.2,0],[6,4,0]),true,'A distant rim is visible when the sightline passes above the finite surface');
+// Independently intersect a triangulated surface, including both rims and
+// views from above/below; do not reproduce the analytic visibility equation.
+const coneMeshes=[-1,1].map(sign=>{
+ const geometry=new THREE.ConeGeometry(2.2,2.2,768,1,true);geometry.translate(0,-1.1,0);if(sign===1)geometry.rotateZ(Math.PI);
+ const mesh=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));mesh.updateMatrixWorld();return mesh;
+});
+for(const c of [[6,4,7],[0,7,0],[6,10,2],[-4,-7,5],[9,0,2],[-2,0,9]])for(const sign of [-1,1])for(const r of [.4,1.3,2.2])for(let i=0;i<12;i++){
+ const angle=(i+.19)*Math.PI/6,p=[r*Math.cos(angle),sign*r,r*Math.sin(angle)];
+ const origin=new THREE.Vector3(...c),toward=new THREE.Vector3(...p).sub(origin),distance=toward.length();
+ const ray=new THREE.Raycaster(origin,toward.normalize(),0,distance-.001);
+ assert.equal(conePointVisible(p,c),ray.intersectObjects(coneMeshes).length===0,`Cone sightline agrees with ray tracing: ${p} from ${c}`);
+}
+coneMeshes.forEach(mesh=>{mesh.geometry.dispose();mesh.material.dispose()});
 for(const h of [-.35,0,.25]){
  const ex=waveDisplacement(1,0,h,'cross'),ey=waveDisplacement(0,1,h,'cross');
  assert.ok(Math.abs(ex[0]+ey[1]-2)<1e-12,'The linear displacement perturbation is traceless');
@@ -33,6 +53,15 @@ for(const frequency of [.75,1.5,2.5]){
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader'],...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
 const page=await browser.newPage();const base=process.env.BOOK_URL||'http://localhost:4173/';
+// Browsers may coalesce exit/re-entry notifications during layout changes.
+// Make that valid delivery deterministic so a stale first-entry bug cannot
+// disappear merely because this run happened to use a different frame timing.
+await page.addInitScript(()=>{
+ const NativeObserver=window.IntersectionObserver;
+ window.IntersectionObserver=class extends NativeObserver{
+  constructor(callback,options){super((entries,observer)=>callback(entries.flatMap(entry=>entry.isIntersecting?[{target:entry.target,isIntersecting:false,intersectionRatio:0},entry]:[entry]),observer),options);}
+ };
+});
 const errors=[],checks=[],labelIssues=[];page.on('pageerror',e=>errors.push(e.message));fs.mkdirSync('qa',{recursive:true});
 async function assertRulerLabelClear(element){
  const overlap=await element.evaluate(e=>{const stage=e.querySelector('.scene-stage').getBoundingClientRect(),label=e.querySelector('.scene-label.math-observer').getBoundingClientRect();return JSON.parse(e.dataset.rulerScreen).some(([x,y])=>{x=stage.x+x*stage.width;y=stage.y+y*stage.height;return x>label.left-2&&x<label.right+2&&y>label.top-2&&y<label.bottom+2});});
@@ -198,6 +227,18 @@ try{
  const firstDepth=JSON.parse(await cone.getAttribute('data-cone-depth'));
  await cone.locator('.scene-stage').press('ArrowLeft');
  assert.notEqual(JSON.parse(await cone.getAttribute('data-cone-depth')).angle,firstDepth.angle);
+ for(const width of [1440,390])for(const theme of ['light','dark']){
+  await page.setViewportSize({width,height:900});await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
+  await cone.locator('[data-view=reset]').click();const canvas=cone.locator('canvas');await canvas.scrollIntoViewIfNeeded();
+  const before=JSON.parse(await cone.getAttribute('data-cone-depth')),box=await canvas.boundingBox();
+  await page.mouse.move(box.x+box.width*.7,box.y+box.height*.35);await page.mouse.down();
+  await page.mouse.move(box.x+box.width*.7,box.y+box.height*.54,{steps:12});await page.mouse.up();
+  const after=JSON.parse(await cone.getAttribute('data-cone-depth'));
+  assert.ok(after.camera[1]>before.camera[1],'Vertical pointer movement changes the elevation');
+  assert.equal(after.upper.hidden,0,'Looking down through the rim reveals the complete upper cone');
+  assert.ok(after.lower.hidden>0,'The opposite cone still has genuinely obscured strokes');
+  await canvas.screenshot({path:`qa/cone-elevated-${width}-${theme}.png`});
+ }
  // Check the actual falling-grid controls, reduced motion, and invisible-scene suspension.
  await page.goto(new URL('index.html',base).href);
  const earth=page.locator('[data-scene=earth]');

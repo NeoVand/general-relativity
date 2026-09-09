@@ -159,7 +159,7 @@ function mount(el) {
     update({user:true});animationState();
   },{signal:abort.signal});
   el.addEventListener('input',event=>{if(!event.target.matches('[data-gx-e]'))return;state.eccentricity=+event.target.value;state.cycles=.14;event.target.setAttribute('aria-valuetext',`Eccentricity ${state.eccentricity}`);update({user:true});},{signal:abort.signal});
-  const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;animationState();if(visible)spatial?.render();},{threshold:.05});observer.observe(el);
+  const observer=new IntersectionObserver(entries=>{visible=entries.at(-1).isIntersecting;animationState();if(visible)spatial?.render();},{threshold:.05});observer.observe(el);
   document.addEventListener('visibilitychange',animationState,{signal:abort.signal});
   reduced.addEventListener('change',()=>{if(reduced.matches){state.playing=false;update();animationState();}},{signal:abort.signal});
   // Explicit play is allowed under reduced motion. Nothing auto-starts.

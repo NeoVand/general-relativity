@@ -200,7 +200,7 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
     event.preventDefault(); playing=!playing; describe();
     if(playing)resume();else stopFrame();
   },{signal});
-  const visibilityObserver=new IntersectionObserver(entries => {visible=entries[0].isIntersecting; if(visible)resume();else stopFrame();},{threshold:.05});visibilityObserver.observe(stage);
+  const visibilityObserver=new IntersectionObserver(entries => {visible=entries.at(-1).isIntersecting; if(visible)resume();else stopFrame();},{threshold:.05});visibilityObserver.observe(stage);
   document.addEventListener('visibilitychange', () => {if(document.hidden)stopFrame();else resume();},{signal});
   reduced.addEventListener('change', () => {if(reduced.matches){playing=false;stopFrame();describe();}},{signal});
   renderer.domElement.addEventListener('webglcontextlost', stopFrame,{signal});
