@@ -1,100 +1,182 @@
+[![The interactive general relativity book, with its Earth-centered free-fall visualization](screen-recording.gif)](https://neovand.github.io/general-relativity/)
+
 # General Relativity, From the Inside Out
 
-**[Read the HTML book](https://neovand.github.io/general-relativity/)** ·
-[Learning paths](https://neovand.github.io/general-relativity/course-map.html) ·
-[Visual atlas](https://neovand.github.io/general-relativity/figure-atlas.html) ·
-[Editorial comparison](docs/reference-comparison.md)
+**An explorable textbook with interactive laboratories and an AI companion you can talk to.**
 
-A complete illustrated book that starts with basic calculus and linear algebra.
-Chapter 0 supplies the mechanics and multivariable-calculus bridge. The main
-sequence develops special relativity, tensors, geometry, Einstein's equation,
-the action, and observable predictions. Four optional deeper trails cover
-initial data, tetrads, focusing and thermodynamics, and effective field theory.
+Start with a moving cart and a clock. Work toward curved spacetime, black holes,
+and the expanding universe. Along the way, change an experiment, follow a
+derivation, or ask a question about the passage in front of you.
 
-The HTML edition contains 25 chapters (0–24), five appendices, 40 original SVG
-figures, 30 original solved exercises plus three new calculations, chapter
-checkpoints, thirteen worked bridges with conceptual and numerical checks,
-five integrated geometry and causality models, nine 3D explorations, and four documented public-domain
-historical images. Equations are rendered at build time as HTML and MathML;
-math fonts and all required assets are hosted with the book.
+**[Read the book →](https://neovand.github.io/general-relativity/)** ·
+[Choose a learning path](https://neovand.github.io/general-relativity/course-map.html) ·
+[Browse the visual atlas](https://neovand.github.io/general-relativity/figure-atlas.html)
 
-## Edit and build
+## Learn by changing something
 
-Requirements: Node.js 24 and Python 3.12 or later. No TeX installation is needed.
+The laboratories connect mathematical quantities to things you can manipulate
+and measure. Move a point, rotate a surface, change a flow, or compare two
+observers—and follow the corresponding changes in the diagram and readouts.
+
+| Explore | Try this |
+| --- | --- |
+| [Motion and energy](https://neovand.github.io/general-relativity/chapter-0.html#spring-energy-exchange) | Follow a cart and spring as energy moves between kinetic and potential forms. |
+| [Polar coordinates](https://neovand.github.io/general-relativity/chapter-4.html#polar-coordinates) | Locate the same point with two coordinate systems; see how an angular step becomes a physical distance. |
+| [Vector fields](https://neovand.github.io/general-relativity/chapter-6.html#vector-field-comparison) | Compare neighboring arrows and separate a change in the field from a change in the coordinate basis. |
+| [Parallel transport](https://neovand.github.io/general-relativity/chapter-7.html#parallel-transport-lab) | Carry an arrow around a plane, a rolled sheet, and a sphere. Compare its starting and returning directions. |
+| [Energy, momentum, and stress](https://neovand.github.io/general-relativity/chapter-11.html#particle-momentum-lab) | Measure particle crossings, discover pressure without bulk motion, and explore how fluid layers exchange momentum. |
+| [Stellar structure](https://neovand.github.io/general-relativity/chapter-17.html#lab-star) | Build a spherical model star outward from its center and investigate its mass and radius. |
+| [Cosmological distances](https://neovand.github.io/general-relativity/chapter-19.html#lab-distances) | Change the expansion parameters and compare what different distance measurements mean. |
+
+The reader also includes worked exercises, prerequisite links, checkpoints,
+light and dark themes, and a local field notebook. Save observations with
+experiment settings, export your notes, and return to a saved configuration.
+**Reading, laboratories, and the notebook work without API keys.**
+
+## Read, listen, and talk it through
+
+The study companion stays with you as you move between chapters. Its context
+includes the current passage, nearby explanations, and supported experiments’
+actual settings.
+
+- **Speech-to-speech (S2S) AI tutoring.** Have a live voice conversation through
+  OpenAI Realtime. Ask about the diagram you are exploring or the step you are
+  reading. The voice assistant can consult the text tutor for physics
+  explanations, find relevant passages, and navigate to and highlight them.
+- **Text-to-speech (TTS) narration.** ElevenLabs reads chapters and selected
+  passages with synchronized word highlighting and spoken captions. Equations
+  and figures have dedicated verbal explanations. Inspect or edit those
+  explanations, choose a voice, adjust playback speed, and replay cached audio.
+- **A shared listening experience.** Pause narration to ask a question, then
+  resume where you left off within the session. Chapter navigation preserves
+  the audio player and active voice conversation. A typed tutor is available too.
+
+### Connect your own accounts
+
+1. Open **Listen** or **Ask**, then **Connections**.
+2. Add your OpenAI key for tutoring and generated spoken explanations. Add an
+   ElevenLabs key and choose a narrator for TTS.
+3. Start listening, type a question, or start a voice conversation.
+
+Provider requests use your own accounts and their usage limits. Keys stay in
+tab-scoped browser storage by default; remembering them on the device is
+optional. Requests go directly to the providers, with no shared application
+key or project backend. AI-generated explanations can be inspected and revised;
+they are distinct from the authored book text.
+
+See the [study companion guide](docs/study-companion.md) for setup, key storage,
+narration behavior, and the voice-to-narrator handoff.
+
+## From foundations to advanced GR
+
+The HTML book contains **25 chapters and five appendices**. Its intended entry
+point is basic calculus and linear algebra, with preparation in mechanics and
+multivariable calculus developed along the way.
+
+The main sequence covers measurements and motion, special relativity, tensors,
+manifolds, connections, curvature, stress–energy, Einstein’s equation,
+Lagrangian and Hamiltonian mechanics, observational tests, black holes,
+gravitational waves, and cosmology. Further chapters explore initial data and
+numerical relativity, differential forms, focusing and thermodynamics, and
+gravity as an effective theory. The appendices provide exercises, reference
+material, a glossary, further reading, and index practice.
+
+You can follow the book in order or use the
+[core, geometry, and black-hole learning routes](https://neovand.github.io/general-relativity/course-map.html).
+
+**The project is under active development.** The aim is a self-contained route
+from the prerequisites to advanced GR. Some teaching gaps and visualizations
+remain, including the stationary-action redesign, exterior-calculus visuals,
+and a fuller treatment of Penrose diagrams. The
+[completion ledger](docs/implementation-progress.md) records what has shipped
+and what still needs work.
+
+## Run locally
+
+Use **Node.js 24** and **Python 3.12 or later**. The HTML edition needs no TeX
+installation and no API keys to build.
 
 ```sh
+git clone https://github.com/NeoVand/general-relativity.git
+cd general-relativity
 npm ci
 npm run build
-npm test
 npm run serve
 ```
 
-Open [the local reading edition](http://localhost:4173/). The output is `site/`,
-which is ignored by Git. All URL paths are relative so the site works under
-the repository's GitHub Pages subpath.
+Open **[localhost:4173](http://localhost:4173/)**. Generated files go into `site/`,
+which is excluded from Git. After changing the manuscript or reader code,
+`npm run build:reader` rebuilds against the existing figure assets. Use the full
+build when changing the generated figures, then refresh the browser.
 
-| File | Purpose |
+### How it is built
+
+The book is static HTML with a **Svelte 5 + Vite** reading companion.
+**Three.js** powers the spatial experiments; SVG and canvas support the other
+visuals. **KaTeX** renders book equations with MathML, and **MathJax** typesets
+mathematical labels in generated SVG figures. Fonts and reading assets are
+served with the book. The main text remains readable without JavaScript.
+
+| Location | Purpose |
 | --- | --- |
-| `book.md` | Canonical complete manuscript, including all new sections. |
-| `content/guides.json` | Chapter questions, prerequisite guidance, takeaways, and checkpoints. |
-| `content/course.mjs`, `content/*-lessons.mjs` | Learning routes, prerequisite graph, authored bridges and exercises. |
-| `web/course.js`, `web/visual-lessons.js` | Layered lessons, field notebook, local practice and visual models. |
-| `docs/course-architecture.md` | Educational design, verification, and explicit scope boundaries. |
-| `content/credits.md` | Published edition notes and image credits. |
-| `scripts/build-site.mjs` | Static HTML generation, equation rendering, navigation, and search index. |
-| `scripts/figures.py` | Reproducible SVG diagrams and placement manifest. |
-| `web/styles.css`, `web/app.js` | Reading layout, accessibility, and experiments. |
-| `assets/history/manifest.json` | Historical-image provenance, rights rationale, and hashes. |
-| `docs/reference-comparison.md` | Coverage comparison and editorial decisions. |
-| `docs/visual-review.md` | Diagram inventory, inspection process, and corrections. |
-| `.github/workflows/pages.yml` | Build, checks, and GitHub Pages deployment. |
+| [book.md](book.md) | Canonical manuscript. |
+| [content/](content/) | Chapter guides, learning routes, worked lessons, exercises, and figure math. |
+| [web/](web/) | Laboratory models, interactive scenes, reading styles, and browser behavior. |
+| [src/](src/) | Svelte reader, AI tutor, voice transport, narration, and local storage. |
+| [scripts/](scripts/) | Site generation, reproducible figures, and verification. |
+| [assets/](assets/) | Figures, fonts, imagery, and third-party notices. |
+| [docs/](docs/) | Architecture, scientific and visual reviews, and development plans. |
 
-## Browser and figure checks
+### Check your changes
 
-Keep the local server running, then run:
+With the local server running, these commands cover the main reader and voice
+integration checks:
 
 ```sh
+npm test
+npm run check
 npx playwright install chromium
 npm run test:browser
 npm run test:figures
-npm run test:experience
 npm run test:study
-npm run test:course
-npm run test:visual-lessons
 ```
 
-On macOS the checks use installed Google Chrome when available; elsewhere they
-use Playwright's Chromium. Reports and screenshots are written to ignored `qa/`.
-Checks cover every HTML page at desktop and mobile widths, equation errors,
-local links, image loading, search, chapter anchors, reading controls,
-interactive numerical examples, and all SVG label bounds and intersections.
-They support—but do not replace—human visual and mathematical review.
+Individual lab suites include `npm run test:mechanics`,
+`npm run test:parallel-transport`, `npm run test:particle-flow`, and
+`npm run test:fluid-shear`. Reports and screenshots are written to `qa/`.
+Voice tests mock the provider boundary; evaluating live speech quality requires
+connected provider accounts.
 
-## Publishing
+The [GitHub Actions workflow](.github/workflows/pages.yml) runs the full build
+and configured checks for pull requests and pushes to `main`. Successful
+`main` builds deploy to GitHub Pages. Checks include mathematical calibration,
+rendered equations, links, figure labels, responsive layouts, keyboard controls,
+saved-state recovery, and narration. Human scientific and teaching review
+remains essential.
 
-The repository uses **GitHub Actions** as its Pages source. A push to `main`
-builds the HTML, runs the checks, uploads the static artifact, and deploys it
-with the official GitHub Pages actions. Pull requests run the same build and
-checks without publishing. Visual inspection evidence is retained as a workflow
-artifact. The publish job has only Pages and OIDC permissions; build jobs have
-read-only repository access.
+## Help make the book better
 
-## Earlier print edition
+A useful issue can be as small as “this symbol appears before it is explained.”
+For a teaching problem, include the chapter, passage, and missing step. For a
+visual bug, include the lab, control settings, theme, and screen size.
+[Open an issue](https://github.com/NeoVand/general-relativity/issues) or propose
+a focused pull request.
 
-`book.tex`, `typesetting/`, `scripts/build.py`, `scripts/prepare.py`, and the
-PDF under `dist/` are retained as historical files. **They are not the current
-edition and have not been regenerated with these revisions.** The requested
-publication format and canonical reading experience are HTML.
+When adding a laboratory, develop its explanation alongside the visual. State
+the model, units, and assumptions; check the calculation independently; and
+inspect labels and controls in both themes and at narrow and wide widths.
+The [design system](docs/design-system.md) and
+[visual-development plan](docs/visual-development-plan-2026-09-09.md) describe
+the intended direction.
 
-## Listen and study with a tutor
+## Credits and edition notes
 
-The Svelte reader supports ElevenLabs chapter narration, GPT Realtime 2.1 voice conversations, and a GPT-5.6 Terra/Sol text tutor using your own API keys. Equations and figures receive separate spoken explanations, and the tutor can navigate to and highlight passages across chapters. Open Listen or Ask, then Connections. See [the companion guide](docs/study-companion.md) for setup, storage behavior, architecture, and verification.
+Parts of the voice and narration integration are adapted from Voicebook, with
+its [MIT license preserved](vendor/voicebook/LICENSE). See the
+[bundled software and font notices](assets/vendor-notices.md) and
+[edition credits](content/credits.md) for other dependencies, imagery, and
+visualization sources.
 
-## Learn, calculate, return
-
-The learning path page offers prerequisite-complete core, geometry, and black-hole
-routes. Thirteen bridges provide intuition, justified derivations, deeper
-mathematics, targeted feedback, and independent transfer calculations. Save an
-observation and its diagram settings in the field notebook, export it, and return
-to the exact lesson later. The core learning tools work without API keys. See
-[the course architecture](docs/course-architecture.md) for design and scope.
+The LaTeX sources and PDF under `dist/` belong to an earlier print edition.
+They have not been updated with the current revisions. **The HTML book is the
+current reading edition.**
