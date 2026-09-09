@@ -40,6 +40,8 @@ try{
  assert.equal(await page.locator('.welcome,.book-facts,main>.color-key,.site-footer').count(),0);
  assert.equal(await page.locator('.cover + #contents').count(),1);
  assert.equal(await page.locator('.equation-piece').count(),6);
+ assert.equal(await page.locator('.cover-equation').getAttribute('open'),null,'The cover does not require unfamiliar notation');
+ await page.locator('.cover-equation>summary').click();
  assert.equal(await page.locator('.chapter-card .chapter-visual svg').count(),25);
  for(const label of ['Ricci scalar','Ricci tensor','Metric tensor','Cosmological constant','Einstein constant','Stress–energy tensor'])assert.ok((await page.locator('.equation-pieces').innerText()).includes(label));
  await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-desktop.png'});
@@ -59,6 +61,7 @@ try{
  assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
  await page.setViewportSize({width:390,height:844});
  await go(new URL('index.html',base).href);
+ await page.locator('.cover-equation>summary').click();
  await page.locator('.cover-equation').screenshot({path:'qa/opening-equation-mobile.png'});
  await go(new URL('chapter-16.html#16-7-gps-calculate-the-competing-clock-effects',base).href);
  await page.waitForFunction(()=>Math.abs(document.getElementById('16-7-gps-calculate-the-competing-clock-effects').getBoundingClientRect().top-90)<15);

@@ -5,7 +5,7 @@
     "chapter": 0,
     "title": "A derivative predicts the next small step",
     "alt": "A parabola and its tangent at t=2. They meet with equal slope but differ away from the contact point.",
-    "caption": "The tangent captures the value and first derivative. Curvature enters at the next order; the same hierarchy will appear in a local expansion of the metric.",
+    "caption": "At two seconds the cart is 12 metres from the start and moving at 12 metres per second. The straight line predicts its next small displacement; the curve also includes its acceleration.",
     "width": 1000,
     "height": 480,
     "after": null
@@ -14,7 +14,7 @@
     "id": "free-fall-comparison",
     "number": 2,
     "chapter": 1,
-    "title": "One laboratory is not enough",
+    "title": "Comparing two free falls",
     "alt": "One worldline is compared with a pair of approaching free-fall worldlines, with time increasing upward.",
     "caption": "The paired experiment measures relative acceleration. Curved drawn paths are coordinate schematics; their appearance alone is not evidence of curvature.",
     "width": 1000,

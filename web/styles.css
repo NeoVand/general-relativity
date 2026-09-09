@@ -342,3 +342,39 @@ html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sid
 .symbol-card :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){#main .katex-html [class*="symbol-"]{transition:none}}
 @media(max-width:380px){.scene-viewbar{padding-inline:12px}.scene-view-switch button{padding-inline:6px}}
+
+/* A chapter opens with reading, with navigation kept in one compact row. */
+body[data-page^="chapter-"] .chapter-header{padding:32px 0 20px}
+body[data-page^="chapter-"] .breadcrumb{margin-bottom:22px}
+body[data-page^="chapter-"] .chapter-header h1{font-size:clamp(2.5rem,4vw,3.6rem);margin:14px 0 18px;max-width:24ch}
+body[data-page^="chapter-"] .chapter-deck{font-size:1.35rem;line-height:1.5;margin:0;max-width:58ch}
+body[data-page^="chapter-"] .chapter-meta{padding-top:16px}
+.chapter-tools{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;border-block:1px solid var(--line);padding:10px 0;margin:0 0 30px}
+.chapter-tools .course-compass{width:100%;margin:0;padding:0}
+.chapter-tools .chapter-bridges,.chapter-tools .chapter-preparation{margin:0;font:500 12px/1.6 Manrope,sans-serif}
+.chapter-tools details>summary{padding:5px 0}
+.chapter-tools details[open]{flex-basis:100%}
+.chapter-tools .return-to-lesson{width:100%;margin:0}
+.chapter-tools .chapter-guide{margin:12px 0 6px}
+.prose>p:first-child{margin-top:0}
+.prose>h3:first-child{margin-top:0;padding-top:0}
+.prose>h3{margin:2.25em 0 .85em;padding-top:0}
+.prose .spacetime-lab{font-family:Manrope,Arial,sans-serif;font-size:1rem;line-height:1.65}
+.prose .scene-heading h2{margin:12px 0 18px}
+.prose .scene-heading>p{font:400 13px/1.8 Manrope,Arial,sans-serif}
+.prose .scene-note{font:400 11px/1.85 Manrope,Arial,sans-serif;margin:0}
+.cover-equation{font-size:1.45rem;padding:18px 0}
+.cover-equation>summary{font:500 12px/1.6 Manrope,sans-serif;color:var(--muted);cursor:pointer;width:fit-content}
+.cover-equation[open]>summary{margin-bottom:28px}
+@media(max-width:600px){
+ body[data-page^="chapter-"] .chapter-header{padding-top:24px}
+ body[data-page^="chapter-"] .breadcrumb{margin-bottom:18px}
+ body[data-page^="chapter-"] .chapter-header h1{font-size:2.5rem}
+ body[data-page^="chapter-"] .chapter-deck{font-size:1.2rem}
+ .chapter-tools{gap:6px 18px;margin-bottom:24px}
+ .chapter-tools .course-compass{font-size:11px}
+ .prose .equation{padding:16px 12px;margin:24px 0}
+}
+
+.history-note{margin:24px 0}
+.history-note>summary{font:600 13px/1.7 Manrope,sans-serif;color:var(--geometry);cursor:pointer}

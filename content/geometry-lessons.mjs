@@ -9,7 +9,7 @@ const needham = {title:'Tristan Needham · Visual Differential Geometry and Form
 export const geometryLessons = [
   {
     id:'coordinates-change-measurements-do-not', chapter:2,
-    after:'2.4 The chain rule already knows tensor calculus',
+    after:'2.4 Changing coordinates with the chain rule',
     title:'Change the coordinates. Keep the measurement.',
     question:'If both the vector components and the measuring rule change, how can their answer stay the same?',
     intuition:m`A moving sensor follows one path through a scalar field. One map uses $(x,y)$; another uses $u=x$ and $v=y+x^2$. The second map bends its coordinate grid, but it cannot change the sensor reading. We will calculate the same rate of change twice. All coordinates, the path parameter $\lambda$, and the scalar reading in this example are dimensionless.`,

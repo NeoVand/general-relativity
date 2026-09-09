@@ -101,9 +101,9 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 
 ## Contents
 
-- [0. Before spacetime: the tools you already almost know](#chapter-0)
-- [1. The scandal: gravity changes the measuring equipment](#chapter-1)
-- [2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe](#chapter-2)
+- [0. Measurements and motion](#chapter-0)
+- [1. Gravity, free fall, and clocks](#chapter-1)
+- [2. Vectors, covectors, and tensors](#chapter-2)
 - [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
 - [4. Spacetime as a manifold: maps, rulers, and the geometry beneath them](#chapter-4)
 - [5. Free fall, the equivalence principle, and the worldline action](#chapter-5)
@@ -138,13 +138,11 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 
 <a id="chapter-0"></a>
 
-## 0. Before spacetime: the tools you already almost know
+## 0. Measurements and motion
 
-Watch a small cart move along a straight track. Mark its position with a ruler and record the time with a clock. That simple experiment gives us something physics needs before any grand theory: measurements we can compare, and a way to predict the next measurement.
+Watch a small cart move along a straight track. Mark its position with a ruler and record the time with a clock. From those readings, can we work out how fast it is moving—and predict where it will be a moment later?
 
-General relativity will eventually let us predict how clocks run near a star and how light travels past it. We will get there by building on operations you can already try: measuring a distance, finding a rate of change, and adding small contributions. This chapter supplies the mechanics and calculus we need. No previous physics course is assumed.
-
-If derivatives and matrices are familiar, use the five checks at the end to choose your refreshers. If the physical vocabulary is new, begin here. The first experiment about gravity is in Chapter 1.
+We will use this experiment to connect calculus with motion. Then we will add the ideas of force, energy, and flow that we need for gravity. If you have studied mechanics before, you can start with the five checks in §0.9.
 
 ### 0.1 A derivative is a local prediction
 
@@ -162,6 +160,8 @@ During successive seconds the cart travels 3, then 9, then 15 metres. It is spee
 $$
 x(t)=At^2,\qquad A=3\,\mathrm{m/s^2}.
 $$
+
+Four readings do not prove that this formula works at every time. We will use it as a model and see what it predicts.
 
 The coefficient $A$ has units too: multiplying metres per second squared by seconds squared gives metres. A **unit** specifies what we count, such as metres or seconds. The **dimension** describes the kind of quantity, such as length or time. Metres and centimetres are different units of the same dimension.
 
@@ -214,7 +214,7 @@ The brackets mean evaluate at the upper limit and subtract the value at the lowe
 
 The same addition works across a region of space. **Mass density**, written $\rho$, is mass per volume. A small piece of volume $dV$ contains approximately $\rho\,dV$ of mass. Adding all the pieces gives $M=\int\rho\,dV$. For a uniform density $2\,\mathrm{kg/m^3}$ in a rectangular box of volume $3\,\mathrm{m^3}$, the integral is simply $M=6\,\mathrm{kg}$.
 
-### 0.4 A differential equation needs a starting story
+### 0.4 A differential equation needs starting measurements
 
 Near Earth's surface, an ideal falling ball speeds up downward at nearly $g=9.8\,\mathrm{m/s^2}$. Ignore air resistance and restrict attention to heights small compared with Earth's radius. Choose upward as the positive $x$ direction. Its acceleration is then negative:
 
@@ -228,7 +228,9 @@ $$
 v(t)=v_0-gt,\qquad x(t)=x_0+v_0t-\frac12gt^2.
 $$
 
-The two constants have physical meanings: starting position $x_0$ and starting velocity $v_0$. The acceleration law alone does not say whether the ball was dropped, thrown up, or thrown down. Those choices give different motions that obey the same law. **A law plus starting measurements gives a prediction.**
+The two constants have physical meanings: starting position $x_0$ and starting velocity $v_0$. For a ball released from rest 20 metres above the ground, set $x_0=20\,\mathrm m$ and $v_0=0$. After one second, the formulas give $x=15.1\,\mathrm m$ and $v=-9.8\,\mathrm{m/s}$. The negative velocity means downward motion. The model describes the fall until the ball hits the ground.
+
+ The acceleration law alone does not say whether the ball was dropped, thrown up, or thrown down. Those choices give different motions that obey the same law. **A law plus starting measurements gives a prediction.**
 
 ### 0.5 The mechanics we will use
 
@@ -241,7 +243,23 @@ $$
 
 The force unit is the newton: $1\,\mathrm N=1\,\mathrm{kg\,m/s^2}$. These equations describe ordinary speeds well; Chapter 3 develops their relativistic replacements.
 
-**Energy** accounts for changes that can be exchanged between motion, stored energy, heat, and other forms. A moving particle has kinetic energy $K=mv^2/2$ in this approximation, where $v$ is its speed. Near Earth it has gravitational potential energy $U=mgh$, choosing the height $h=0$ as the zero of $U$. Throw a ball upward: kinetic energy decreases while potential energy increases. Ignoring air resistance, their sum remains constant. The energy unit is the joule, $1\,\mathrm J=1\,\mathrm{kg\,m^2/s^2}$.
+Push a cart with a constant force of 6 newtons while it moves 2 metres in the direction of the push. The force transfers $6\times2=12$ joules of energy to the cart. This transfer is called **work**. For a force along a straight track,
+
+$$
+W=\int_{x_A}^{x_B}F(x)\,dx.
+$$
+
+A force in the direction of motion does positive work; a force opposing the motion does negative work. One **joule** is one newton metre, so $1\,\mathrm J=1\,\mathrm{kg\,m^2/s^2}$.
+
+Where does this energy appear? For a cart of constant mass, use $F=ma$ and $v=dx/dt$:
+
+$$
+\frac{d}{dt}\left(\frac12mv^2\right)=mv\frac{dv}{dt}=Fv=\frac{dW}{dt}.
+$$
+
+Thus the work changes the quantity $K=mv^2/2$, called **kinetic energy**. If our cart starts at rest and no other force does work, it gains 12 joules of kinetic energy. For a mass of 6 kilograms, $mv^2/2=12\,\mathrm J$ gives $v=2\,\mathrm{m/s}$.
+
+A thrown ball gives us another way to store energy. As it rises, gravity does negative work and the ball loses kinetic energy. Near Earth's surface, we assign it **gravitational potential energy** $U=mgh$, where $h$ is its height above a chosen zero. A rise of $\Delta h$ increases $U$ by $mg\Delta h$, exactly the kinetic energy lost to gravity. Ignoring air resistance, $K+U$ stays constant. On the way down, the exchange reverses.
 
 More generally write $U=m\Phi$, where $\Phi$ is potential energy per unit mass. Outside a spherical body of mass $M$,
 
@@ -254,7 +272,7 @@ Here $r$ is distance from the center and $G_N$ is Newton's gravitational constan
 
 **Pressure** is force per area. A gas exerts pressure on a wall because collisions transfer momentum to it. The pressure unit is the pascal, $1\,\mathrm{Pa}=1\,\mathrm{N/m^2}$. Pressure will matter when we ask how fluids move and how they affect gravity. The worked example below first shows how pressure can transfer energy.
 
-### 0.6 Matrices measure pairs of arrows
+### 0.6 Measuring with matrices
 
 A map uses one metre per horizontal square and two metres per vertical square. An instruction to move two squares right and one square up has map components $v=(2,1)$, but its physical displacement is two metres right and two metres up. Pythagoras gives squared length $2^2+2^2=8$ square metres.
 
@@ -271,7 +289,9 @@ $$
 v^{\mathsf T}Mw=(2)(1)+4(1)(3)=14
 $$
 
-in square metres. This is a **bilinear form**: a rule linear in either arrow when the other is fixed. Its numbers need the map's scale to acquire physical meaning.
+in square metres. The same rule accepts two arrows as inputs. Double either input while holding the other fixed, and the result doubles; adding two arrows in one input adds their results. These two properties are what **linear in each input** means. A rule with this property is called a **bilinear form**.
+
+Squared length uses the same arrow in both inputs. Doubling that arrow doubles both inputs, so its squared length becomes four times as large. This is why a bilinear rule can describe lengths even though length squared is not linear in the arrow.
 
 An inverse matrix undoes a linear map. It is not obtained by taking the reciprocal of every entry. For example,
 
@@ -282,11 +302,20 @@ $$
 
 Multiply them to check that the diagonal entries become one and the other entries zero. The result is the identity matrix, which leaves every input unchanged.
 
-### 0.7 Flux and divergence, with a box before a theorem
+### 0.7 Flow through a box: flux and divergence
 
 Imagine water flowing through an imaginary box. Let the arrow $\mathbf J$ describe the mass crossing a unit area per unit time, in $\mathrm{kg/(m^2s)}$. This is a **flux density**. Only the part of the flow perpendicular to a face crosses that face. Multiply that component by the face area to obtain a mass flow rate.
 
-Subtract inflow through the left face from outflow through the right face. If $J^x$ denotes the $x$ component of the flux density, this difference is approximately $(\partial_xJ^x)\Delta x\Delta y\Delta z$. Here the superscript $x$ is a direction label, not a power. Do the same for the other two pairs of faces and divide by the volume:
+For a numerical example, suppose 10 kilograms per second enter a one-cubic-metre box and 12 kilograms per second leave it. The box loses 2 kilograms each second. Its average mass density therefore decreases at $2\,\mathrm{kg/(m^3s)}$.
+
+To describe a small box at any position, let its side lengths be $\Delta x,\Delta y,\Delta z$. Write $J^x$ for the flux-density component pointing along $x$; the superscript is a direction label, not a power. The left and right faces each have area $\Delta y\Delta z$, so their net outward flow is
+
+$
+[J^x(x+\Delta x)-J^x(x)]\,\Delta y\Delta z
+\simeq(\partial_xJ^x)\,\Delta x\Delta y\Delta z.
+$
+
+The approximation is the local derivative rule from §0.1. Repeat it for the other two pairs of faces, add the results, and divide by the box's volume. As the box shrinks, the result is
 
 $$
 \boldsymbol\nabla\cdot\mathbf J
@@ -301,9 +330,11 @@ $$
 
 Add this accounting over many little boxes. Flow across a shared face is outflow from one box and inflow to its neighbor, so it cancels. Only the outer boundary remains. That cancellation is the idea behind the **divergence theorem**: total divergence over a volume equals net flux through its boundary.
 
-### 0.8 Approximation is a skill, not an apology
+### 0.8 Estimating with a small parameter
 
-For a small dimensionless number $q$, Taylor expansion gives
+Suppose we need $\sqrt{1.04}$. It is close to $\sqrt1=1$. How much should we add? Let $f(q)=\sqrt{1+q}$. Its value at zero is 1 and its derivative there is $f'(0)=1/2$. The local prediction from §0.1 gives $f(q)\simeq1+q/2$, so $\sqrt{1.04}\simeq1.02$.
+
+The symbol $\simeq$ means approximately equal. Here $q=0.04$ is a dimensionless fractional change. The same method gives several useful estimates:
 
 $$
 \sqrt{1+q}\simeq1+\frac q2,\qquad
@@ -314,7 +345,7 @@ Each approximation discards terms beginning at order $q^2$. For $q=0.01$, those 
 
 Check dimensions before arithmetic. An acceleration must have length/time squared units on both sides of its equation. A distance and a time cannot be added directly. Different units of the same dimension, such as metres and centimetres, must first be expressed consistently. These checks often catch a mistake before a page of algebra does.
 
-### 0.9 Your first five-minute check
+### 0.9 Check your understanding
 
 Try these before revealing the answers. They test operations taught above.
 
@@ -348,14 +379,14 @@ Write $1.04=1+q$ with $q=0.04$. Then $\sqrt{1.04}\simeq1+0.04/2=1.02$. Squaring 
 
 </details>
 
-If a check was unfamiliar, revisit that section. Chapter 1 now starts with a scale and a falling cabin. Chapter 2 will develop vectors and changes of description. Chapter 3 will build the clock measurements of special relativity. Each step has its own job.
+Chapter 1 uses these ideas to ask a new question: what would a scale read if you and the scale were falling together?
 
 
 <a id="chapter-1"></a>
 
-## 1. The scandal: gravity changes the measuring equipment
+## 1. Gravity, free fall, and clocks
 
-### 1.1 What a theory of gravity must explain
+### 1.1 Why does a falling scale read zero?
 
 Stand on a spring scale. Its spring compresses because it supports you. The scale measures the force with which it pushes on your feet; its familiar kilogram display converts that force using Earth's usual surface gravity. Your mass and this supporting force are different quantities.
 
@@ -379,7 +410,7 @@ No. The scale tests whether it must support you. Comparing two freely falling te
 
 General relativity will describe these tidal effects using **spacetime curvature**. For now, that name points to an experiment we can state without knowing its mathematics. Chapters 8–10 build and measure the corresponding geometry. The small-region qualification is essential to the equivalence principle: a finite falling room does not remove tidal effects. [Einstein Online: the equivalence principle](https://www.einstein-online.info/en/spotlight/equivalence_principle/).
 
-### 1.2 The weak spot in the old division of labor
+### 1.2 Comparing clocks
 
 Ordinary mechanics treats rulers and clocks as a fixed background: we first agree on distances and times, then use forces to predict motion. Relativity asks us to examine the measuring procedures too.
 
@@ -391,7 +422,7 @@ A theory of gravity must therefore predict both falling motion and clock compari
 
 The point is already concrete: a path on a map does not tell the whole story. We must also ask what a clock carried along that path records.
 
-### 1.3 What the Einstein equation actually connects
+### 1.3 What Einstein’s equation must predict
 
 Earth's mass affects the motion of a nearby ball. The ball also contributes, by a much smaller amount, to the gravitational situation. A complete theory must describe this mutual influence.
 
@@ -401,7 +432,7 @@ There is an essential limit to the slogan “matter determines geometry.” An e
 
 Chapter 12 will state the equation precisely, after we have built its ingredients. For now, its job is to connect the behavior of matter with a consistent account of clocks, light, and falling bodies.
 
-### 1.4 Two questions that must not be merged
+### 1.4 Predicting motion and predicting gravity
 
 There are two different calculations ahead of us:
 
@@ -412,7 +443,7 @@ A **test object** is small enough that we can neglect its effect on the situatio
 
 We must also describe how matter behaves. Does a gas resist compression? Does it exchange heat? The gravitational equation alone does not answer those questions. We supply physical models for the matter and solve them together with gravity. A successful calculation states those assumptions and ends with a measurement we could compare with an experiment.
 
-### 1.5 Why the rubber sheet is both useful and dangerous
+### 1.5 What a rubber sheet can show
 
 You may have seen a heavy ball make a dip in a rubber sheet while smaller balls roll around it. The picture helps suggest that geometry can differ from a flat plane. It is a poor explanation of why gravity works.
 
@@ -422,40 +453,36 @@ Nor does the sheet's outside room belong to the theory. In Chapter 4 we will lea
 
 Keep the falling cabin, the two test balls, and the two clocks as our starting experiments. A useful picture should help us predict one of those measurements. A distorted grid by itself is not evidence of gravity.
 
-### 1.6 A little history, without the lightning-bolt mythology
+### 1.6 From free fall to a theory
 
-Einstein's route to general relativity was a prolonged attempt to reconcile physical constraints. Recovering Newtonian gravity, making sense of accelerated motion, and preserving an appropriate energy–momentum balance all mattered. Einstein and Marcel Grossmann developed a description using a geometric rule for distances and times in their 1913 *Entwurf* theory, but the final field equations came only after substantial revision. Historical work on Einstein's notebooks shows that candidate equations close to the successful theory had already appeared in his earlier calculations. [Janssen and Renn, *Untying the Knot*](https://www.mpiwg-berlin.mpg.de/Preprints/P264.PDF).
+A falling cabin suggests that some effects we attribute to gravity can disappear when we change how the laboratory moves. The two-ball experiment shows the limit: neighboring falls can still converge or separate. A theory has to account for both observations at once.
 
-This is an encouraging story for a learner. Failure to understand an equation's physical interpretation can be a deeper obstacle than failure to write down the equation. A symbol can be correct while the story you attach to it is wrong.
+It also has to recover the successful predictions of Newton's theory where we have already tested them. Free fall is a clue toward a new theory, but it does not uniquely determine its equations. Clock comparisons, light propagation, and planetary motion provide further tests. We will return to these tests after developing the mathematics.
 
-Einstein presented the final field equations on 25 November 1915, after several November communications refining his theory. The recognizable modern action formulation is associated with Einstein and Hilbert's work in this period. For the documented development and the distinction between a compact retrospective explanation and the actual path of discovery, see the historical analysis based on Einstein's calculations and correspondence. [Norton, *How Einstein Found His Field Equations: 1912–1915*](https://online.ucpress.edu/hsns/article/14/2/253/47626/How-Einstein-Found-His-Field-Equations-1912-1915).
+### 1.7 What comes next
 
-The surrounding mathematics was a collective inheritance: non-Euclidean and intrinsic geometry, tensor calculus, curvature, and eventually a clearer language of connections and parallel transport. Learning GR does not require reenacting the order in which these tools were historically discovered. We can use the completed toolkit and explain what problem each tool solves.
+Our next task is to describe the same motion using different axes without changing what is being predicted. Chapter 2 introduces vectors and the measuring rules called covectors. Chapter 3 then uses light signals to compare clocks in relative motion.
 
-Our teaching route begins with measurements, then builds the mathematics needed to compare them. We will state our physical assumptions, derive their consequences, and explain where the resulting theory has limits.
+These are the first steps toward a common account of clocks and free fall. The [learning path](course-map.html) shows where the later calculations fit.
 
-### 1.7 What “understanding the equation” will eventually mean
+### 1.8 Try the falling-cabin experiment
 
-Our destination is a calculation you can explain, not a formula you can recognize. The route has several concrete milestones:
+Imagine three cabins. One rests on Earth, one falls freely near Earth, and one is far from significant gravity with a rocket accelerating it upward. The rocket gives its cabin the same accelerometer reading as the cabin on Earth. Each cabin contains a person standing on a scale.
 
-- Change the numbers on a map while keeping the physical displacement unchanged: Chapter 2.
-- Calculate what a traveling clock records between two meetings: Chapter 3.
-- Turn small changes in position labels into measured lengths and times: Chapter 4.
-- Predict a free-fall path and the changing separation of neighboring paths: Chapters 5–10.
-- Relate those predictions to matter, then derive the governing equation from a stated physical principle: Chapters 11–15.
-- Compare clocks near a star, follow light toward a black hole, and model an expanding universe: Chapters 16–19.
+<details class="checkpoint"><summary>Which scales read zero? What can the readings tell us?</summary>
 
-Each milestone introduces the mathematics it needs. The later formula will compress relationships we have already learned to use.
+The freely falling cabin's scale reads zero. The ground and the rocket each push their cabin into the person's feet, so those scales give a nonzero reading. With the stated accelerations, they give the same reading for the same person.
 
-### 1.8 A promise and a discipline
+That scale reading alone cannot tell the person whether a planet is nearby. To investigate further, compare the motion of separated test objects or exchange signals with the outside. Near Earth, the two-ball experiment can reveal tidal effects even in the falling cabin.
 
-For each new idea, we will ask what it helps us measure, what each symbol means, and which assumptions make the calculation valid. Then we will change an example and make another prediction.
+</details>
 
-Keep those questions beside you. If you can follow a line of algebra but cannot say what its answer measures, return to the experiment. If a technical word appears before its explanation, that is a gap in the teaching to repair, not a test of your intelligence.
+### 1.9 How the theory developed
 
-The history that follows gives context. The next mathematical step is Chapter 2's distinction between an arrow and the numbers used to describe it.
+The experiments above organize our route through the subject. The historical route involved years of revisions and collaboration.
 
-### 1.9 The historical route was not a straight line
+<details class="history-note" data-no-narration>
+<summary>Read the illustrated history: Newton to Einstein and beyond</summary>
 
 The order in this book is designed for learning. Discovery followed a much less direct route. Keep these two stories separate: a clean derivation tells us how ideas fit together now; a historical account asks what the people involved actually knew then.
 
@@ -481,13 +508,13 @@ The order in this book is designed for learning. Discovery followed a much less 
 
 **After the field equation: interpretation remained hard.** Schwarzschild's spherical solution, expanding cosmological models, rotating black holes, gravitational radiation, and singularity theorems exposed consequences that were not obvious from the equation. Observations eventually made these subjects experimentally accessible. Chapter 18 follows one concrete landmark: the first direct gravitational-wave detection in 2015, reported in 2016. Chapter 19 explains what an expanding solution means before asking what data favor it.
 
-The historical lesson is useful while studying. Getting stuck on coordinate meaning or a missing factor is part of the subject. The right response is a controlled example and a consistency check—not the assumption that the whole theory should have been obvious.
+Einstein and Grossmann’s work, including the unsuccessful 1913 theory, is examined in [Janssen and Renn, *Untying the Knot*](https://www.mpiwg-berlin.mpg.de/Preprints/P264.PDF).
 
-<a id="chapter-2"></a>
+</details>
 
-### 1.10 A falling grid: give the picture its time dimension
+### 1.10 Watching neighboring objects fall
 
-The opening animation draws lines between imagined small laboratories falling toward Earth. The laboratories move; the lines let us compare their positions. A changing grid does not mean that Earth consumes space.
+The animation below draws lines between imagined small laboratories falling toward Earth. The laboratories move; the lines let us compare their positions. A changing grid does not mean that Earth consumes space.
 
 Compare neighbors. Along the same outward radial line, the inner laboratory falls faster and the radial gap grows. Side-by-side laboratories fall toward the same center and their sideways gap shrinks. The grid makes the tidal pattern from §1.1 visible. Its motion is accelerated for display and stops at Earth's surface.
 
@@ -508,9 +535,9 @@ The full relativistic model used by the animation has additional coordinate assu
 
 ---
 
-## 2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe
+## 2. Vectors, covectors, and tensors
 
-### 2.1 A vector is not its spreadsheet
+### 2.1 Vectors and their components
 
 Imagine a drone receiving the instruction “move three meters east and four meters north.” Rotate the map on its screen. The command's two displayed numbers change, but the intended displacement does not. If the drone changes its destination because you rotated a map, you have found a software bug, not a new law of mechanics.
 
@@ -542,7 +569,7 @@ The first component halves because the measuring stick doubled. Components and b
 
 There are also two different operations that diagrams sometimes blur. A **passive** transformation changes the description of the same vector. An **active** transformation changes the vector while keeping the descriptive machinery fixed. Rotating the map and rotating the drone's actual flight direction are different experiments, even if the corresponding matrix calculations resemble each other.
 
-### 2.2 Linear maps: the machine behind a matrix
+### 2.2 Linear maps and matrices
 
 A map $A$ is linear when
 
@@ -572,7 +599,7 @@ Thus $\delta^i{}_jV^j=V^i$. This is not merely notation for “make two letters 
 
 An important distinction will matter later. A two-index object can represent a linear map, a bilinear measurement, or something else depending on the positions and meanings of its indices. “It is a $4\times4$ matrix” does not specify which kind of geometric object it represents. A seating chart and a multiplication table can have the same dimensions without having interchangeable jobs.
 
-### 2.3 Covectors: questions you can ask a vector
+### 2.3 Covectors measure vectors
 
 A **covector** is a linear function that takes a vector and returns a number. Denote one by $\omega$:
 
@@ -612,7 +639,7 @@ This is why covectors carry lower indices. Their components change oppositely to
 
 > **A rate-of-change rule and an arrow have different jobs.** For a scalar function $f(x,y)$, the first-order change under a move $V$ is $df(V)=(\partial_xf)V^1+(\partial_yf)V^2$. This rule, called the **differential** $df$, is a covector. In ordinary Cartesian calculus we also collect the partial derivatives into a gradient arrow. Identifying that arrow with the covector uses the lengths and angles of the chosen axes; it is not supplied by the covector alone. Chapter 4 will construct this conversion for more general measuring rules.
 
-### 2.4 The chain rule already knows tensor calculus
+### 2.4 Changing coordinates with the chain rule
 
 Let $x^\mu$ and $x'^\alpha$ label the same events. An infinitesimal displacement transforms by the chain rule:
 
@@ -658,7 +685,7 @@ is independent of the coordinates. The symbol $dx^\mu$ has two closely related u
 
 The Jacobian can depend on position. This is harmless for a vector at one event, but it causes trouble when differentiating a vector field: a derivative can hit the Jacobian as well as the vector components. Chapter 6 will turn that apparently minor nuisance into the reason we need a connection.
 
-### 2.5 Tensors are multilinear relationships
+### 2.5 Tensors, products, and contractions
 
 A bilinear object $B$ takes two vectors and returns a scalar:
 
@@ -720,7 +747,7 @@ $$
 
 Their sum reconstructs $B_{\mu\nu}$. The factor $1/2$ ensures that symmetrizing an already symmetric tensor does not double it.
 
-### 2.6 Derivatives, approximations, and a brief glimpse of forms
+### 2.6 Approximations and oriented area
 
 For a smooth scalar,
 
@@ -749,7 +776,7 @@ You do not need to memorize an entire branch of mathematics before proceeding. C
 
 ## 3. Special relativity: learning what a clock is actually measuring
 
-### 3.1 Events, not photographs
+### 3.1 Events, clocks, and reference frames
 
 A particular flash is an **event**: something happening at one place and one time. To describe it, we need an address and a clock reading. A sequence of events along an object's motion is its **worldline**—its history, not a photograph at one instant.
 
@@ -769,7 +796,7 @@ The index $\mu$ runs over $0,1,2,3$, as introduced in Chapter 2. The symbol $c$ 
 
 Einstein's original account starts with this operational treatment of clocks. [Einstein's 1905 paper, in English translation](https://sites.pitt.edu/~jdnorton/teaching/Einstein_graduate/pdfs/Einstein_STR_1905_English.pdf).
 
-### 3.2 Deriving a Lorentz boost without pulling a rabbit from a matrix
+### 3.2 Deriving the Lorentz transformation
 
 Let frame $S'$ move at speed $v$ in the positive $x$ direction relative to $S$. Their origins coincide at $t=t'=0$. We restrict attention to $t,x$ and assume spatial homogeneity, time homogeneity, standard clock synchronization, and matching units. These assumptions make the transformation between inertial coordinates linear.
 
@@ -827,7 +854,7 @@ An observer's “now” is a slice through spacetime selected by their state of 
 
 The everyday limit is sensible. If $v/c\ll1$, then $\gamma\approx1$ and $vx/c^2$ becomes negligible for ordinary distances and timing precision. We recover the Galilean approximation $x'\approx x-vt$, $t'\approx t$.
 
-### 3.3 The interval: the quantity that refuses to change
+### 3.3 The spacetime interval
 
 Choose two events, A and B. Write $\Delta t=t_B-t_A$ for their time difference in one inertial frame, and similarly $\Delta x$, $\Delta y$, and $\Delta z$ for their position differences. Different moving frames generally assign different values to all of these differences. Is there a combination they agree on?
 
@@ -905,7 +932,7 @@ $$
 
 Two successive boosts of $0.8c$ give $1.6c/1.64\approx0.976c$, not $1.6c$. The speed limit is encoded in the geometry of composition.
 
-### 3.4 Proper time: your life is a line integral
+### 3.4 Adding up a clock’s elapsed time
 
 Along a timelike worldline, define
 
@@ -936,7 +963,7 @@ In flat spacetime, choose the inertial frame in which two timelike-separated reu
 
 That last sentence often causes a double take. A straight Euclidean path minimizes length. A straight timelike Minkowski path maximizes elapsed time. The minus sign is not decorative.
 
-### 3.5 The twins: acceleration explains the asymmetry, geometry computes the age
+### 3.5 Two clocks meet again
 
 One twin remains inertial. The other travels outward at $0.8c$ for five years of the first twin's time and returns at the same speed for another five years, idealizing the turnaround as brief. At reunion,
 
@@ -1039,7 +1066,7 @@ The photon is redshifted. Its local speed remains $c$. Chasing light changes the
 
 This observer-projection viewpoint will later make the stress-energy tensor intelligible. “Energy density” is not just a number floating in spacetime; it means energy density measured by some local observer.
 
-### 3.8 Proper acceleration: what an accelerometer knows
+### 3.8 Proper acceleration
 
 In inertial Minkowski coordinates, define four-acceleration
 

@@ -31,7 +31,7 @@ for(const lesson of lessons){
  assert.equal(root.querySelectorAll('.lesson-prerequisites').length,lesson.requires.length?1:0,'no empty Builds on list');
 }
 const first=doc(0).querySelector('.prose').cloneNode(true);
-first.querySelectorAll('.relocated-lesson').forEach(el=>el.remove());
+first.querySelectorAll('.relocated-lesson,style,script').forEach(el=>el.remove());
 assert.doesNotMatch(first.textContent,/\bmetric\b|spacetime interval|connection coefficient|Riemann|Lorentz|proper time/i,'Chapter 0 does not smuggle relativity vocabulary into the mathematics refresher');
 assert.match(first.textContent,/Watch a small cart/);
 assert.equal(first.querySelector('[data-lesson]').id,'measurements-and-units');
@@ -41,7 +41,9 @@ assert.match(guide.querySelector('.prose').textContent,/Begin with a ruler, a cl
 const conventions=guide.querySelector('details.course-conventions');
 assert.ok(conventions&&!conventions.hasAttribute('open')&&conventions.hasAttribute('data-no-narration'),'the returning-reader reference is closed and excluded from default narration');
 assert.ok(conventions.querySelectorAll('.katex').length>10,'the reference still contains its equations');
-const gravity=doc(1).querySelector('.prose').textContent;
+const gravityCopy=doc(1).querySelector('.prose').cloneNode(true);
+gravityCopy.querySelectorAll('style,script').forEach(el=>el.remove());
+const gravity=gravityCopy.textContent;
 assert.doesNotMatch(gravity,/\bmetric\b|connection coefficients|Ricci|Weyl|g_\{\\mu/,'motivation does not require later tensor machinery');
 const interval=doc(3).getElementById('3-3-the-interval-the-quantity-that-refuses-to-change');
 let intervalText='';for(let el=interval.nextElementSibling;el&&el.tagName!=='H3';el=el.nextElementSibling)intervalText+=el.textContent;
@@ -56,6 +58,16 @@ assert.ok(Math.abs(3*(2.1**2-2**2)-1.23)<1e-12);
 assert.equal(2*(30/100),.6);
 assert.equal((.5*100)**2,2500);
 
+// Inspect the assembled chapter, including figures and labs that used to be
+// inserted ahead of the manuscript and escape the prerequisite checks.
+for(const [chapter,id,section] of [[0,'figure-local-prediction','0.1'],[1,'figure-free-fall-comparison','1.1'],[1,'scene-earth','1.10'],[2,'scene-covector','2.4'],[3,'scene-cone','3.3'],[10,'scene-tides','10.5'],[17,'scene-embedding','17.2'],[18,'scene-wave','18.4'],[19,'scene-expansion','19.1'],[20,'scene-slices','20.2']]){
+ const d=doc(chapter),illustration=d.getElementById(id),siblings=[...d.querySelector('.prose').children];
+ const heading=siblings.find(el=>el.tagName==='H3'&&el.textContent.startsWith(section+' '));
+ assert.ok(siblings.indexOf(illustration)>siblings.indexOf(heading),`${id} follows its preparation`);
+ assert.ok(siblings.slice(siblings.indexOf(heading)+1,siblings.indexOf(illustration)).some(el=>el.tagName==='P'),`${id} follows explanatory prose`);
+ assert.equal(d.querySelector('article>.spacetime-lab,article>.diagram'),null,'no unintroduced illustration before the chapter');
+}
+
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
 const base=process.env.BOOK_URL||'http://localhost:4173/';fs.mkdirSync('qa',{recursive:true});
@@ -65,6 +77,7 @@ try{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(new URL('chapter-0.html',base).href);
   await page.locator('[data-lesson="measurements-and-units"][data-enhanced]').waitFor();
+  assert.ok(await page.locator('.prose>p').first().evaluate(el=>el.getBoundingClientRect().top<innerHeight*.8),'the first explanation is on the opening screen');
   assert.equal(await page.locator('.relocated-lesson').isVisible(),false);
   const table=page.locator('.prose .table-wrap').first();assert(await table.evaluate(el=>el.scrollWidth<=el.clientWidth+1),'both measurement columns fit without sideways scrolling');
   for(const name of ['intuition','derive','formal']){

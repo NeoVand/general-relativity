@@ -36,7 +36,7 @@ export const foundationLessons=[
  variants:[number('rescaled-angle',s`Define $q=2\theta$. At $r=3\,\mathrm m$, what coefficient multiplies $dq^2$ in $dl^2$?`,2.25,s`$\mathrm{m^2}$`,s`Use $d\theta=dq/2$.`,s`$g_{qq}=r^2/4=9/4\,\mathrm{m^2}$. The factor is squared.`)],sources:[gr],takeaway:'A component means nothing until you know the coordinate units and the measurement it participates in.'
 },
 {
- id:'initial-data-and-oscillations',chapter:0,after:'0.4 A differential equation needs a starting story',title:'A law needs a starting state',question:'What is missing when someone hands you an equation of motion?',provides:['ode-initial-data'],
+ id:'initial-data-and-oscillations',chapter:0,after:'0.4 A differential equation needs starting measurements',title:'A law needs a starting state',question:'What is missing when someone hands you an equation of motion?',provides:['ode-initial-data'],
  intuition:s`A rule for change is not one particular history. Two identical swings obey the same equation but start at different positions and speeds. A solution must pass two tests: it must obey the differential equation everywhere in its domain, and it must match the stated initial measurements.`,
  steps:[
  step('Solve proportional growth',s`For $dy/dt=ky$, the exponential $y(t)=Ae^{kt}$ works because differentiating it multiplies it by $k$. Initial data $y(0)=y_0$ fix $A=y_0$. Positive $k$ means growth, negative $k$ decay. The product $kt$ must be dimensionless.`,s`y(t)=y_0e^{kt}.`, 'Differentiate the proposed solution and then check the starting value.'),
@@ -61,7 +61,7 @@ export const foundationLessons=[
  variants:[number('pressure-work',s`An insulated gas expands quasistatically by $0.03\,\mathrm{m^3}$ against constant pressure $200\,\mathrm{Pa}$. Find its internal-energy change.`,-6,s`$\mathrm J$`,s`Use $\Delta E=-p\Delta V$.`,s`$\Delta E=-200(0.03)=-6\,\mathrm J$.`)],sources:[gr,thermal],takeaway:'Conservation laws become useful when the system, force law, and direction of energy transfer are explicit.'
 },
 {
- id:'hyperbolas-and-rapidity',chapter:3,after:'3.3 The interval: the quantity that refuses to change',title:'Build a boost from exponentials',question:'Can we combine two changes of moving observer by adding a single parameter?',provides:['hyperbolic-functions'],
+ id:'hyperbolas-and-rapidity',chapter:3,after:'3.3 The spacetime interval',title:'Build a boost from exponentials',question:'Can we combine two changes of moving observer by adding a single parameter?',provides:['hyperbolic-functions'],
  intuition:s`Circular functions parameterize $x^2+y^2=1$. A boost preserves a difference of squares, so its natural curve is a hyperbola. We can construct the needed functions from exponentials rather than memorize another family of mysterious names.`,
  steps:[
  step('Define the functions',s`For a dimensionless real number $\eta$, define $\cosh\eta=(e^\eta+e^{-\eta})/2$ and $\sinh\eta=(e^\eta-e^{-\eta})/2$. Squaring and subtracting cancels the growing and decaying terms.`,s`\cosh^2\eta-\sinh^2\eta=1.`, 'The identity is an algebraic consequence of the definitions.'),

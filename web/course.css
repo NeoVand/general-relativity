@@ -38,3 +38,9 @@
 .relocated-lesson:target{display:block;padding:1.25rem;border:1px solid var(--border);border-radius:1rem;scroll-margin-top:6rem}
 /* The first experiment has two short columns; both fit on a phone. */
 body[data-page="chapter-0"] .prose table{min-width:0;table-layout:fixed}
+
+/* Worked examples stay connected to the section that prepares them. */
+.guided-lesson{border-top:1px solid var(--line);margin:36px 0 44px;padding-top:22px}
+.prose>.guided-lesson+h3{margin-top:1.6em}
+.lesson-depths button{min-height:44px;font-size:12px;padding:9px 13px}
+@media(max-width:650px){.guided-lesson{margin:30px 0 36px}.lesson-depths button{font-size:11px;padding:9px 12px}}

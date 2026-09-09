@@ -7,7 +7,7 @@ export function lessonHTML(l,render,reference=''){
  const inline=s=>r(s).replace(/^<p>|<\/p>\n?$/g,'');
  const id=l.id;
  return `<section class="guided-lesson" id="${id}" data-lesson="${id}" data-sequential="${l.placement==='section-start'}" aria-labelledby="${id}-title">
- <div class="lesson-topline"><span class="eyebrow">${l.placement==='section-start'?'PREPARATION FOR THIS SECTION':'A WORKED BRIDGE'}</span><button disabled class="lesson-save" data-save-lesson="${id}" aria-label="Save ${esc(l.title)} to field notebook" title="Save to field notebook">${icon('Bookmark01Icon')}</button></div>
+ <div class="lesson-topline"><span class="eyebrow">${l.placement==='section-start'?'PREPARATION FOR THIS SECTION':'WORKED EXAMPLE'}</span><button disabled class="lesson-save" data-save-lesson="${id}" aria-label="Save ${esc(l.title)} to field notebook" title="Save to field notebook">${icon('Bookmark01Icon')}</button></div>
  <h4 id="${id}-title" class="lesson-title">${esc(l.title)}</h4><p class="lesson-question">${inline(l.question)}</p>
  ${l.requires.length?`<div class="lesson-prerequisites" data-no-narration><span>Builds on</span>${l.requires.map(p=>`<a data-prerequisite href="${esc(p.href)}">${esc(p.label)} ${icon('ArrowUpRight01Icon')}</a>`).join('')}</div>`:''}
  <div class="lesson-depths" hidden role="tablist" aria-label="Explore ${esc(l.title)}">${[['intuition','See the idea'],['derive','Work it out'],['formal','Go deeper']].map(([key,label],i)=>`<button type="button" role="tab" id="${id}-tab-${key}" data-depth="${key}" aria-controls="${id}-${key}" aria-selected="${!i}" tabindex="${i?-1:0}">${label}</button>`).join('')}</div>
@@ -22,7 +22,7 @@ export function lessonHTML(l,render,reference=''){
 export function compassHTML(chapter,guides){
  if(chapter===undefined)return '';
  const n=+chapter,list=lessons.filter(l=>l.chapter===n);
- return `<div class="course-compass" data-no-narration><a href="course-map.html">${icon('Route01Icon')} Learning path</a><span data-route-next></span><a href="notebook.html">${icon('Notebook01Icon')} Field notebook</a></div><div class="return-to-lesson" hidden data-no-narration></div>${list.length?`<details class="chapter-bridges" data-no-narration><summary>${list.length} worked ${list.length===1?'bridge':'bridges'} in this chapter</summary><div>${list.map(l=>`<a href="#${l.id}">${esc(l.title)} ${icon('ArrowRight01Icon')}</a>`).join('')}</div></details>`:''}`;
+ return `<div class="course-compass" data-no-narration><a href="course-map.html">${icon('Route01Icon')} Learning path</a><span data-route-next></span><a href="notebook.html">${icon('Notebook01Icon')} Field notebook</a></div><div class="return-to-lesson" hidden data-no-narration></div>${list.length?`<details class="chapter-bridges" data-no-narration><summary>${list.length} worked ${list.length===1?'example':'examples'} in this chapter</summary><div>${list.map(l=>`<a href="#${l.id}">${esc(l.title)} ${icon('ArrowRight01Icon')}</a>`).join('')}</div></details>`:''}`;
 }
 export function preparationHTML(chapter,render){
  const required=requirementsFor(chapter);

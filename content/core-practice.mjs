@@ -6,7 +6,7 @@ const ref=(label,chapter,anchor)=>({label,href:`chapter-${chapter}.html#${anchor
 const problem=(id,prompt,answer,hint,solution,unit='',tolerance=.001)=>({id,version:1,prompt,answer,hint,solution,unit,tolerance});
 export const corePractice=[
 {
- id:'weightlessness-and-tides',chapter:1,after:'1.10 A falling grid: give the picture its time dimension',title:'Release two pebbles, not just one',question:'What can a falling laboratory detect without looking outside?',
+ id:'weightlessness-and-tides',chapter:1,after:'1.10 Watching neighboring objects fall',title:'Release two pebbles, not just one',question:'What can a falling laboratory detect without looking outside?',
  intuition:s`An ideal accelerometer attached to a freely falling test particle reads zero. That does not say what neighboring freely falling particles do. A pair of pebbles can drift apart even while both accelerometers read zero. Their changing separation is the experiment that survives moving into a falling frame.`,
  steps:[
  step('Compare the two accelerations',s`In a Newtonian one-dimensional approximation let $z$ measure upward position and let acceleration vary as $g(z)=-g_0+\kappa z$. Here $g_0$ is a constant acceleration and $\kappa$ is its change per unit height, in $\mathrm{s^{-2}}$. If two freely falling particles have positions z and $z+\xi$, subtract their equations of motion.`,s`\ddot\xi=g(z+\xi)-g(z)=\kappa\xi.`, 'The shared acceleration cancels; its spatial variation remains.'),

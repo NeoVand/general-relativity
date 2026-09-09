@@ -218,5 +218,11 @@
   "pair entry 56": "m_{56}",
   "pair entry 66": "m_{66}",
   "6 + 15 = 21": "6+15=21",
-  "21 − 1 = 20": "21-1=20"
+  "21 − 1 = 20": "21-1=20",
+  "time t (seconds)": "\\text{time }t\\text{ (seconds)}",
+  "position x (metres)": "\\text{position }x\\text{ (metres)}",
+  "Position: 12 m. Velocity: 12 m/s.": "\\text{Position: }12\\,\\mathrm m\\text{. Velocity: }12\\,\\mathrm{m/s}.",
+  "Δx ≈ (12 m/s) Δt": "\\Delta x\\approx(12\\,\\mathrm{m/s})\\,\\Delta t",
+  "Curve: x = (3 m/s²) t²": "\\text{Curve: }x=(3\\,\\mathrm{m/s^2})t^2",
+  "Line: x = (12 m/s) t − 12 m": "\\text{Line: }x=(12\\,\\mathrm{m/s})t-12\\,\\mathrm m"
 }

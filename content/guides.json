@@ -1,25 +1,25 @@
 {
   "0": {
-    "title": "Before spacetime",
-    "deck": "The tools you already almost know: derivatives, matrices, motion, and the habit of checking units.",
-    "question": "What do I need before I can understand gravity?",
+    "title": "Measurements and motion",
+    "deck": "Use a ruler and a clock to describe a moving cart. Then build the mechanics we need for gravity.",
+    "question": "How can a few measurements help us predict motion?",
     "payoff": "Read a partial derivative, interpret a differential equation, and explain force, energy, and flux.",
-    "takeaway": "The new notation packages familiar operations. Translate each expression into a small measurement or calculation.",
+    "takeaway": "Position tells us where an object is. Velocity predicts its next small change in position; acceleration tells us how that velocity changes.",
     "check": "Why does an equation for acceleration need two initial data?",
     "answer": "Integrating twice introduces two constants: the starting position and velocity. Different throws obey the same acceleration law."
   },
   "1": {
-    "title": "Gravity changes the measuring equipment",
-    "deck": "Start with a falling laboratory, a stubborn floor, and the experiment that distinguishes them.",
-    "question": "What remains of gravity when you fall freely?",
-    "payoff": "Distinguish what an accelerometer reads from changing coordinate positions.",
+    "title": "Gravity, free fall, and clocks",
+    "deck": "Stand on a scale. Now imagine falling with it. What would its reading tell you?",
+    "question": "Why does a scale read zero in free fall?",
+    "payoff": "Explain weightlessness and distinguish an accelerometer reading from acceleration relative to the ground.",
     "takeaway": "One falling laboratory can hide local force-like effects. Comparing neighboring falling laboratories reveals tides.",
     "check": "Can zero accelerometer readings establish that spacetime is flat?",
     "answer": "No. Each free-falling observer can read zero while their separation accelerates. That relative acceleration can reveal curvature."
   },
   "2": {
     "title": "Vectors, covectors, and tensors",
-    "deck": "An arrow is not its coordinates. Learn the language by changing the labels while keeping the answer.",
+    "deck": "Describe a displacement, change the axes, and work out which numbers must change with them.",
     "question": "How can components change while the physical object stays the same?",
     "payoff": "Transform a vector and a covector and check that their pairing is unchanged.",
     "takeaway": "A tensor describes a multilinear relationship. Components are its values in chosen bases, and transform to preserve that relationship.",
@@ -28,7 +28,7 @@
   },
   "3": {
     "title": "What a clock actually measures",
-    "deck": "Build special relativity as geometry, then let two clocks take different routes to the same reunion.",
+    "deck": "Use light signals to compare moving clocks, then calculate what each clock records.",
     "question": "Why do two reunited clocks record different elapsed times?",
     "payoff": "Calculate proper time and distinguish timelike, null, and spacelike separation.",
     "takeaway": "Proper time belongs to an entire worldline. Everyone agrees on a given clock’s reading, even when they assign different coordinates.",
