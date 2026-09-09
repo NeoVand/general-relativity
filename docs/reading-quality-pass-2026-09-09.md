@@ -30,8 +30,16 @@ All 14 previously unassigned opening figures now have explicit section placement
 
 The units lesson's unrelated ODE reference is replaced by the [BIPM SI Brochure](https://www.bipm.org/en/publications/si-brochure), checked against its current official page. The frequency discussion links [Einstein Online's Doppler explanation](https://www.einstein-online.info/en/spotlight/doppler/).
 
+## Chapters 4 and 5
+
+Chapter 4 starts with latitude and longitude, explains the jobs of charts and transition maps, and gives the formal topology conditions as an expandable reference. It separates point labels from tangent vectors using a translation before discussing nonlinear changes. The spherical volume calculation now defines its angles and derives all three local spatial length factors.
+
+Chapter 5 calculates the accelerating chart's differentials, clock rates, and proper accelerations rather than just displaying the results. It states the general Euler–Lagrange rule before using it for null rays and Newton's limit. The massless auxiliary-field calculation is an expandable extension with its constraint and parameter change worked out. The affine-parameter exercise now uses relabeled clock readings instead of an ambiguously accelerating pen, and uses the already derived component expression for acceleration instead of premature covariant-derivative notation.
+
+Opening the AI study companion had a separate title-size override that made the chapter heading larger. Its heading now gets smaller as the available reading width shrinks; desktop screenshots confirm the first paragraph remains visible.
+
 ## Verification
 
-Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. Screenshot evidence accompanies this note.
+Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 4.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 6.

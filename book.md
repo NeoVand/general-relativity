@@ -1195,27 +1195,27 @@ The coordinate derivative used here works in inertial Cartesian coordinates. If 
 
 ### 4.1 A manifold is a place where local coordinates work
 
-The surface of Earth can be mapped in neighborhoods, even though no single ordinary flat map represents the entire surface smoothly and one-to-one without exclusions or identification rules. A **smooth manifold** formalizes that pattern: near every point, there are $n$ real coordinates, and overlapping coordinate descriptions are related by smooth invertible transformations.
+Imagine finding a place on Earth using latitude and longitude. Two numbers locate a point on the surface, even though we draw the globe in three-dimensional space. The point needs two independent coordinates because we can move along the surface in two independent directions.
 
-A coordinate **chart** is a map
+The labels have limits. At the north pole, all longitudes meet. A small map centered on that pole can instead use two directions across the map. The place is ordinary; our first set of labels was unsuitable there.
 
-$$
-x:U\subset M\longrightarrow x(U)\subset\mathbb R^n
-$$
+A **manifold** is a space that can be described this way: each point has a surrounding region with an ordinary coordinate list. The number of entries is its **dimension**. A sphere's surface is two-dimensional; spacetime is four-dimensional, with one time coordinate and three space coordinates. We use a collection of overlapping maps when one set of coordinates cannot cover everything.
 
-from an open region of the manifold to an open region of ordinary coordinate space. It is one-to-one and onto that coordinate region, and both it and its inverse are continuous. This last condition matters: nearby points must correspond to nearby coordinate values, and nearby coordinate values must bring us back to nearby points.
-
-Here is the small piece of topology behind that sentence. An **open set** contains a neighborhood around each of its points. On a surface, those neighborhoods are measured within the surface; they need not contain a three-dimensional ball. A map is **continuous** if the preimage of every open set is open. The preimage of a region means all starting points sent into that region. This definition makes precise the idea that a map has no jumps, even before we have chosen a distance formula. It does not yet require a derivative: $f(x)=|x|$ is continuous but has a corner at zero.
-
-An **atlas** is a collection of charts covering the manifold. If charts $x$ and $y$ overlap, the **transition map**
+A **coordinate chart** is the rule assigning a coordinate list to each point in one such region. It must work both ways: each point has one list, and each list in the chart's range identifies one point. Nearby points must have nearby lists, and vice versa. Symbolically,
 
 $$
-y\circ x^{-1}:x(U\cap V)\longrightarrow y(U\cap V)
+x:U\subset M\longrightarrow x(U)\subset\mathbb R^n.
 $$
 
-takes one coordinate list to the other for the very same point. The inverse $x^{-1}$ first finds the point; $y$ then reads its other labels. A smooth atlas requires these transitions and their inverses to have continuous derivatives of every order on their domains. Thus ordinary multivariable calculus gives consistent answers across chart boundaries. Here, as throughout the book, **smooth** means this all-orders condition. Particular physical problems can work with weaker differentiability, but must say how much they require.
+Here $M$ is the manifold, $U$ is the region covered by this chart, and $x(U)$ is its set of coordinate lists. The notation $\mathbb R^n$ means lists of $n$ real numbers. In this formula $x$ names the whole chart, rather than just one horizontal coordinate.
 
-The usual manifold definition also requires **Hausdorff separation**—distinct points have disjoint neighborhoods—and **second countability**—a countable family of open sets can generate all open sets by unions. These conditions exclude some misleading local-coordinate examples. Our sphere and spacetime examples satisfy them; we will not need their general existence theorems for the calculations below.
+An **atlas** is a collection of charts covering the space. Where two charts overlap, we can translate between their labels. Starting with one list, use the first chart's inverse to find the point, then the second chart to label it:
+
+$$
+y\circ x^{-1}:x(U\cap V)\longrightarrow y(U\cap V).
+$$
+
+The symbol $\cap$ means the common region of the two patches; $\circ$ means composition, applying the right-hand map first. This translation is a **transition map**. On a **smooth manifold**, the transition maps and their inverses can be differentiated repeatedly, with continuous derivatives of every order. That is what lets us use calculus consistently on overlapping maps.
 
 **A complete two-chart example.** Describe the unit sphere temporarily by $X^2+Y^2+Z^2=1$ in ordinary three-dimensional space. Capital letters are only a convenient construction aid. The surface itself has two independent coordinates. Let $N=(0,0,1)$ and $S=(0,0,-1)$ be its poles.
 
@@ -1246,38 +1246,51 @@ $$
 \qquad (u,v)\ne(0,0).
 $$
 
-The excluded origin represents $S$, which is outside the second chart. It is not a defect in a transition that its formula fails outside its domain. Applying the same formula to $(p,q)$ returns $(u,v)$, so the transition has a smooth inverse everywhere on the overlap. Its Jacobian has determinant
+The excluded origin represents $S$, which is outside the second chart. The transition applies only where both charts cover the point. Applying the same formula to $(p,q)$ returns $(u,v)$, so the transition has a smooth inverse everywhere on the overlap. Its Jacobian has determinant
 
 $$
 \det\frac{\partial(p,q)}{\partial(u,v)}
 =-\frac{1}{(u^2+v^2)^2}\ne0.
 $$
 
-The minus sign reverses the orientation of these coordinate lists; the nonzero value says no infinitesimal direction has been collapsed. Two overlapping charts therefore cover the whole sphere, even though neither chart does so alone. We have constructed an atlas, not yet supplied an intrinsic metric or calculated curvature.
+The minus sign reverses the orientation of these coordinate lists; the nonzero value says no infinitesimal direction has been collapsed. Two overlapping charts therefore cover the whole sphere, even though neither chart does so alone. These coordinate lists locate points. To calculate distances between them, we still need a measuring rule.
 
 As a numerical check, the first coordinates $(u,v)=(2,1)$ locate $(X,Y,Z)=(2/3,1/3,2/3)$ and give second coordinates $(p,q)=(2/5,1/5)$. Those are two addresses for one point. Chapter 2's Jacobian rule tells us how a tangent's components change between them; §4.3 will make the tangent itself precise.
 
-The manifold specifies which events exist and how their neighborhoods fit together. It does **not** yet specify distances, angles, light cones, clocks, or gravitational dynamics. Those require further structure.
+A small globe and a globe twice its size can use the same latitude and longitude labels. The distance between two given labels doubles. This separates the two ingredients we need: the manifold and its charts locate points; a metric supplies the measuring rule.
 
-A rubber glove and a steel glove can have the same underlying organization of points while having different physical distances between them. Think of the manifold as the arrangement and the metric as the measuring instructions. The analogy is limited: a spacetime metric is Lorentzian and includes causal structure, not merely elastic stretching of spatial material.
+We used an outside picture to construct the sphere's charts, but the final coordinate translations work without it. In the same way, describing four-dimensional spacetime does not require an additional physical space surrounding it.
 
-There is no requirement that four-dimensional spacetime be embedded in some physical five-dimensional room. Intrinsic geometry works without an external vantage point. If you ask “what is spacetime curved into?”, the theory is entitled to answer: that extra place is not needed to formulate the question we actually measure.
+<details class="history-note" data-no-narration>
+<summary>The precise topological conditions</summary>
 
-### 4.2 Coordinate singularities are not automatically broken physics
+Charts cover **open regions**: around each point there is a smaller patch still inside the region. Openness on a surface is measured within the surface; a patch need not contain a three-dimensional ball.
 
-On the Euclidean plane,
+A chart and its inverse must be **continuous**. The general definition says that the preimage of every open set is open. A preimage consists of all starting points mapped into the chosen set. This defines continuity before any particular distance formula is chosen. Continuity alone does not imply differentiability: the function $f(x)=|x|$ is continuous but has a corner at zero.
+
+The usual manifold definition includes two further conditions. **Hausdorff separation** means that two distinct points have disjoint surrounding neighborhoods. On a sphere, sufficiently small separate disks around any two distinct points illustrate this condition. **Second countability** means that a countable collection of basic open regions suffices to build all open regions by unions. In the plane, rectangles with rational-number corners form such a collection. These conditions exclude spaces with pathological global behavior even when their small patches resemble ordinary coordinate space.
+
+The sphere and spacetime models used here satisfy these conditions. The calculations below use their charts and smooth transitions; no further topology theorem is needed to follow them.
+
+</details>
+
+### 4.2 Where coordinates fail
+
+On an ordinary flat plane, **polar coordinates** describe a point by its distance $r$ from the origin and the angle $\theta$ from the positive $x$ axis. We measure the angle in radians: arc length divided by radius, so a full turn is $2\pi$. Their relation to Cartesian coordinates is
 
 $$
 x=r\cos\theta,\qquad y=r\sin\theta.
 $$
 
-At $r=0$, every value of $\theta$ labels the same point. Polar coordinates fail there. The plane does not acquire a physical puncture just because our coordinate system loses its manners.
+At $r=0$, every value of $\theta$ labels the same point. Polar coordinates fail there. A Cartesian map still describes the origin normally.
 
 Likewise, longitude fails to distinguish directions at a sphere's poles. One can use another chart near a pole. The original labels were inadequate; the geometry is regular.
 
-This distinction becomes consequential around black holes. A metric component blowing up or vanishing might indicate a chart boundary, a poor coordinate choice, or a physical singularity. The component alone does not decide. We must inspect quantities and structures that survive coordinate changes, and sometimes the extendibility of the spacetime itself.
+We will meet the same distinction at a black-hole horizon in Chapter 17. A coordinate expression can become infinite while a different chart describes the same location regularly. To establish a physical problem, we need more than the behavior of one set of labels.
 
-Another subtlety: an event's coordinate tuple $x^\mu$ is generally **not** a vector. Under a nonlinear coordinate change, coordinates transform nonlinearly. Tangent vectors transform with the Jacobian. In flat affine coordinates, differences of position tuples happen to behave as vectors, which can conceal the distinction.
+A coordinate list is also different from a vector. Consider the simple relabeling $x'=x+10$. A point formerly labeled 2 is now labeled 12. But a displacement of 3 coordinate units is still a displacement of 3 units: the added 10 cancels when we subtract the endpoints. The point labels and displacement components follow different rules.
+
+For nonlinear changes, even subtracting two widely separated coordinate lists does not generally produce a vector. Tangent vectors use the local Jacobian rule from Chapter 2. We now make their local meaning precise.
 
 ### 4.3 Tangent vectors live at events
 
@@ -1287,14 +1300,14 @@ $$
 V^\mu=\left.\frac{dx^\mu}{d\lambda}\right|_p.
 $$
 
-A geometrically clean definition asks what this tangent does to any smooth scalar field $f$:
+We can identify this tangent by the rate of change it produces in a scalar field $f$ along the curve:
 
 $$
 V[f]=\left.\frac{d}{d\lambda}f(x(\lambda))\right|_p
 =V^\mu\partial_\mu f\big|_p.
 $$
 
-The vector is a directional derivative operator. This is not an abstraction designed to remove the arrow from physics. It tells you exactly how to detect the arrow: put scalar fields in its way and measure their directional changes.
+For example, take $f(x,y)=x+2y$ and a tangent with components $(3,4)$. Then $V[f]=3+2(4)=11$, the same vector–covector pairing we calculated in Chapter 2. Here we are viewing the vector as an instruction to differentiate a function in a specified direction. The brackets in $V[f]$ mean applying that instruction to $f$.
 
 The operator satisfies linearity and the product rule,
 
@@ -1314,15 +1327,15 @@ $$
 
 Its dual basis is $dx^\mu|_p$, with $dx^\mu(e_\nu)=\delta^\mu{}_{\nu}$.
 
-Now the problem that motivates the next part of the book becomes unavoidable. A vector at $p$ belongs to $T_pM$; a vector at a neighboring event $q$ belongs to $T_qM$. They are elements of different vector spaces. Subtracting them requires a rule for comparing those spaces.
+There is an additional question when we compare two different points. A vector at $p$ belongs to $T_pM$; a vector at a neighboring event $q$ belongs to $T_qM$. They are elements of different vector spaces. Subtracting them requires a rule for comparing those spaces.
 
-On a flat Cartesian grid, an obvious translation rule is already operating in the background. On a general manifold there is no preferred rule supplied by the manifold alone. A **connection** will provide the missing comparison procedure. It is geometry's answer to “before we compare these measurements, are the instruments aligned?”
+On a flat Cartesian grid, an obvious translation rule is already operating in the background. On a general manifold there is no preferred rule supplied by the manifold alone. A **connection** will provide the missing comparison procedure. We will construct and use that rule in Chapters 6 and 7.
 
 ### 4.4 The metric is a local measuring operation
 
 In Chapter 3, the Minkowski metric turned a small displacement into an interval. Now allow the measuring rule to vary from place to place. We also give it two vector inputs, because this lets us describe their relation as well as each vector separately.
 
-The ordinary dot product is a familiar example: $V\cdot V$ gives squared length, while $V\cdot W$ tells us how much of one arrow lies along the other. Its useful algebraic identity is
+The ordinary dot product is a familiar example: $V\cdot V$ gives squared length and $V\cdot W=|V||W|\cos\theta$ relates two lengths to the angle between the arrows. If $W$ has unit length, the latter measures the component of $V$ along $W$. Expanding the square of $V+W$ gives
 
 $$
 2V\cdot W=|V+W|^2-|V|^2-|W|^2.
@@ -1352,7 +1365,7 @@ $$
 
 encodes the local geometry. For a timelike worldline, $d\tau=\sqrt{-ds^2}/c$. For a spacelike curve, its length is obtained from $\int\sqrt{ds^2}$. Defining a finite spatial distance between distant observers requires a specified spacelike slice or measurement protocol; the metric does not hand everyone the same universal “distance right now.”
 
-The metric also defines the light cone by $g(V,V)=0$. Thus it is simultaneously a ruler, a clock specification, and a causal organizer. “Gravity changes distances” describes only part of its job.
+The metric also defines the light cone by $g(V,V)=0$. The metric therefore tells us about clock readings and possible light signals as well as spatial lengths.
 
 In four dimensions, a symmetric $4\times4$ metric has $4(4+1)/2=10$ independent components. Those are ten functions in a coordinate description, **not ten independent propagating gravitational modes**. Coordinate freedom and the structure of the field equations will substantially change that counting.
 
@@ -1434,7 +1447,7 @@ $$
 g(V,V)=V_iV^i=3\cdot1+5\cdot2=13.
 $$
 
-The corresponding ordinary Cartesian vector is $3\hat{\mathbf x}+2\hat{\mathbf y}$, whose Euclidean norm squared is indeed $9+4=13$. Raising and lowering has translated between two different kinds of object while preserving a precise relationship; it has not preserved every numerical component.
+The corresponding ordinary Cartesian vector is $3\hat{\mathbf x}+2\hat{\mathbf y}$, whose Euclidean norm squared is indeed $9+4=13$. The components changed from $(1,2)$ to $(3,5)$ because the lowered object is a measuring rule. Applying it to the original vector gives the squared length in either description.
 
 In inertial spacetime coordinates,
 
@@ -1456,7 +1469,7 @@ $$
 
 The differential was available before the metric. The gradient vector was not. In Lorentzian geometry it is also unsafe to carry over every Euclidean slogan about a gradient “pointing uphill most steeply,” because the unit-vector set and norm structure are different.
 
-### 4.7 Determinants tell integration how much room there is
+### 4.7 Measuring volume with a determinant
 
 On a plane, a narrow polar cell has physical area approximately $dr\times r\,d\theta$, so
 
@@ -1464,13 +1477,13 @@ $$
 dA=r\,dr\,d\theta=\sqrt{\det g_{ij}}\,dr\,d\theta.
 $$
 
-In general, the metric determinant measures the squared volume scaling of the coordinate basis. Let
+For a small coordinate cell in more dimensions, the same idea applies. A matrix that converts coordinate components to components in a laboratory basis with metric matrix $\eta$ changes cell volumes by the absolute value of its determinant. The metric contains this conversion twice, once for each vector input, so its determinant contains the square of the volume factor. Let
 
 $$
 g\equiv\det(g_{\mu\nu}).
 $$
 
-With Lorentzian signature $(-,+,+,+)$, $g<0$ in every regular coordinate chart. The invariant spacetime volume measure is
+With Lorentzian signature $(-,+,+,+)$, $g<0$ in every regular coordinate chart. Write $d^4x=dx^0dx^1dx^2dx^3$ for the product of the four small coordinate widths. This notation is not a fourth power of one coordinate. The invariant spacetime volume measure is
 
 $$
 \boxed{dV_4=\sqrt{-g}\,d^4x.}
@@ -1492,7 +1505,14 @@ $$
 
 An oriented volume **form** additionally tracks the sign of orientation using a wedge product. The positive integration measure above uses absolute Jacobians. These are compatible viewpoints, but changing orientation is where their notation must be handled carefully. A formal treatment is available in [Tong's discussion of the metric volume form](https://davidtong.org/pdfs/teaching/general-relativity/gr3.pdf).
 
-For flat spacetime in spherical spatial coordinates $(x^0,r,\theta,\phi)=(ct,r,\theta,\phi)$,
+For a concrete four-dimensional example, keep $x^0=ct$ and describe space with spherical coordinates. The radius $r$ measures distance from the origin, $\theta$ measures angle down from the north axis, and $\phi$ measures angle around that axis:
+
+$$
+x=r\sin\theta\cos\phi,\qquad
+y=r\sin\theta\sin\phi,\qquad z=r\cos\theta.
+$$
+
+Away from the origin and poles, the three coordinate directions are perpendicular. A radial step has length $dr$. A small change in $\theta$ has length $r\,d\theta$. A circle at fixed $r,\theta$ has radius $r\sin\theta$, so a small change in $\phi$ has length $r\sin\theta\,d\phi$. Squaring and adding these lengths, and including the time term, gives
 
 $$
 ds^2=-(dx^0)^2+dr^2+r^2d\theta^2+r^2\sin^2\theta\,d\phi^2,
@@ -1506,13 +1526,13 @@ g=-r^4\sin^2\theta,
 dV_4=c\,dt\,r^2\sin\theta\,dr\,d\theta\,d\phi.
 $$
 
-The familiar spherical Jacobian was the metric determinant in civilian clothes. The vanishing determinant at $r=0$ or at a polar axis signals failure of this chart there; it does not mean the regular Minkowski metric becomes physically degenerate.
+The factor $r^2\sin\theta$ converts the two angular widths and the radial width into physical spatial volume. The factor $c\,dt$ supplies the fourth, time-directed width. The vanishing determinant at $r=0$ or at a polar axis signals failure of this chart there; it does not mean the regular Minkowski metric becomes physically degenerate.
 
-### 4.8 Intrinsic curvature, extrinsic bending, and laboratory frames
+### 4.8 Curvature, bending, and local frames
 
-A sheet can be rolled into a cylinder without stretching it. Distances and angles measured within a sufficiently small patch are unchanged, so its intrinsic curvature is zero. Its embedding in three-dimensional space is visibly bent. A sphere cannot be produced from a flat sheet without stretching or cutting, and its intrinsic geometry differs from a plane's.
+A sheet can be rolled into a cylinder without stretching it. Distances and angles measured within a sufficiently small patch are unchanged, so its intrinsic curvature is zero. Its embedding in three-dimensional space is visibly bent. A flat sheet cannot smoothly cover a patch of a sphere while preserving all its lengths. The sphere’s intrinsic geometry differs from a plane’s.
 
-Intrinsic curvature concerns measurements available to inhabitants of the geometry. Extrinsic curvature concerns how a chosen submanifold sits inside a larger geometry. Both ideas occur in relativity: spacetime has intrinsic curvature, and a spatial slice can have extrinsic curvature within spacetime. They are different objects answering different questions.
+Intrinsic curvature concerns measurements available to inhabitants of the geometry. Extrinsic curvature concerns how a chosen surface or other lower-dimensional space sits inside a larger geometry. Such an embedded space is called a **submanifold**. Both ideas occur in relativity: spacetime has intrinsic curvature, and a spatial slice can have extrinsic curvature within spacetime. They are different objects answering different questions.
 
 Coordinate basis vectors need not be unit length or orthogonal. A physical laboratory instead likes an **orthonormal frame** $e_{\hat a}$ satisfying
 
@@ -1522,7 +1542,7 @@ $$
 
 Hats here label laboratory directions. For an observer of four-velocity $U$, choose $e_{\hat0}=U/c$. The other three frame vectors specify their instantaneous spatial axes.
 
-On the polar plane, an orthonormal frame is
+On the polar plane, $g_{rr}=1$ and $g_{\theta\theta}=r^2$. Thus $\partial_r$ already has unit length, while $\partial_\theta$ has length $r$. Divide the latter by $r$ to obtain an orthonormal frame:
 
 $$
 e_{\hat r}=\partial_r,
@@ -1548,7 +1568,7 @@ This is stronger than merely choosing an orthonormal basis at the point, but it 
 
 ## 5. Free fall, the equivalence principle, and the worldline action
 
-### 5.1 Ask the accelerometer, not the window
+### 5.1 Coordinate acceleration and accelerometer readings
 
 Standing on the ground, you assign yourself constant spatial coordinates. A dropped ball's coordinates accelerate downward. Everyday language calls you unaccelerated and the ball accelerated.
 
@@ -1558,9 +1578,9 @@ GR organizes its local inertial physics around that second distinction. **Free f
 
 This does not make Newton's description useless or make gravity imaginary. It distinguishes a coordinate acceleration from a physical acceleration measured along a worldline. Later, tidal effects will reveal gravitational structure even when every individual accelerometer reads zero.
 
-### 5.2 What the equivalence principle says—and what it does not buy you
+### 5.2 The equivalence principle
 
-In Newtonian notation, allow an inertial mass $m_{\rm I}$ and a passive gravitational mass $m_{\rm G}$:
+Newton’s equation can distinguish two roles for mass. **Inertial mass** $m_{\rm I}$ determines how much acceleration a force produces. **Passive gravitational mass** $m_{\rm G}$ determines the force exerted on the body by a given gravitational potential. Write
 
 $$
 m_{\rm I}\frac{d^2\mathbf x}{dt^2}=-m_{\rm G}\boldsymbol\nabla\Phi.
@@ -1570,17 +1590,19 @@ Universality of free fall says the ratio $m_{\rm G}/m_{\rm I}$ is independent of
 
 The **Einstein equivalence principle** extends the idea to local nongravitational physics: freely falling laboratories obey special relativity locally, and local nongravitational experiments do not acquire different laws merely from the laboratory's velocity or location. The **strong equivalence principle** extends the scope to gravitational experiments and self-gravitating bodies. The distinctions and their experimental roles are carefully organized in [Clifford Will's review of tests of gravitation](https://arxiv.org/abs/1403.7377).
 
-Three qualifications make these statements stronger intellectually rather than weaker rhetorically.
+To apply these principles, keep track of the size of the laboratory and the kind of body being modeled.
 
 First, *local* matters. In freely falling coordinates the metric can be Minkowskian and its first derivatives zero at an event. Curvature can still produce measurable effects across a finite laboratory or after a finite time. Making the laboratory smaller suppresses such effects; it does not declare curvature nonexistent.
 
-Second, ideal test-body motion neglects the body's own gravitational backreaction and finite-size structure. Spinning extended bodies, bodies with multipole moments, and objects subject to self-force corrections require more elaborate motion laws. The approximation of a freely falling test particle has a domain of validity.
+Second, the test-particle model neglects the body’s effect on the surrounding gravity and treats its size as negligible. Rotation, an uneven mass distribution, or an appreciable gravitational influence of the body itself can require additional terms in its motion law. Here we are deriving the simpler limit in which those effects can be neglected.
 
 Third, the equivalence principle does not uniquely imply Einstein's field equation. Multiple theories can use a metric, respect the local free-fall picture, and supply different dynamics for that metric. We have learned how the local measuring system behaves; we have not yet derived what creates the gravitational field.
 
-### 5.3 An accelerating laboratory can have a varying metric in flat spacetime
+### 5.3 An accelerating laboratory in flat spacetime
 
-This worked example prevents a persistent misconception: gravitational-looking clock rates do not by themselves establish curvature.
+Can clocks held at different positions run at different rates even in flat spacetime? An accelerating array of clocks gives a concrete example. We will construct its coordinates from the inertial coordinates we already know.
+
+We will use $\sinh\chi=(e^\chi-e^{-\chi})/2$ and $\cosh\chi=(e^\chi+e^{-\chi})/2$, introduced in §3.3. Differentiating these definitions gives $d(\sinh\chi)/d\chi=\cosh\chi$ and $d(\cosh\chi)/d\chi=\sinh\chi$. Their identity $\cosh^2\chi-\sinh^2\chi=1$ will simplify the interval.
 
 Start in flat spacetime with inertial coordinates $(T,X,Y,Z)$. Introduce an accelerating chart $(t,X,Y,z)$ through
 
@@ -1594,7 +1616,15 @@ $$
 
 with $a>0$ and $z>-c^2/a$. These are Rindler coordinates on a region of Minkowski spacetime. We are explicitly using $t$, rather than $ct$, as the time coordinate in this chart.
 
-Differentiate these equations and substitute into $-c^2dT^2+dZ^2+dX^2+dY^2$. The mixed $dt\,dz$ terms cancel, and $\cosh^2-\sinh^2=1$ leaves
+To differentiate these expressions, abbreviate $L=c^2/a+z$ and $\chi=at/c$. Then $dL=dz$ and $d\chi=(a/c)dt$, giving
+
+$$
+d(cT)=\sinh\chi\,dz+\frac{aL}{c}\cosh\chi\,dt,
+\qquad
+dZ=\cosh\chi\,dz+\frac{aL}{c}\sinh\chi\,dt.
+$$
+
+In $-[d(cT)]^2+dZ^2$, the two mixed terms cancel. The $dz^2$ coefficient becomes $\cosh^2\chi-\sinh^2\chi=1$ and the $dt^2$ coefficient becomes $-a^2L^2/c^2$. Restoring $L$ and adding the unchanged sideways terms gives
 
 $$
 ds^2=-\left(1+\frac{az}{c^2}\right)^2c^2dt^2
@@ -1609,19 +1639,25 @@ $$
 
 Stationary clocks at different heights in this accelerating chart accumulate different proper times per coordinate time. Yet spacetime is exactly flat: we constructed the metric by changing coordinates in Minkowski space.
 
-The observer at $z=0$ has constant proper acceleration $a$. Differentiating the other fixed-$z$ hyperbolic worldlines gives proper acceleration
+We can also calculate each clock's accelerometer reading. At fixed $z$, keep using $L=c^2/a+z$ and $\chi=at/c$. The clock rule above gives $d\chi/d\tau=c/L$. Differentiating the inertial coordinates with respect to proper time gives the four-velocity components $u^0=d(cT)/d\tau$ and $u^Z=dZ/d\tau$,
+
+$$
+u^0=c\cosh\chi,\qquad u^Z=c\sinh\chi.
+$$
+
+Differentiate once more. The two four-acceleration components are $(c^2/L)\sinh\chi$ and $(c^2/L)\cosh\chi$. Their squared spacetime norm is $(c^2/L)^2$, because $\cosh^2\chi-\sinh^2\chi=1$. Taking its positive square root gives the proper acceleration
 
 $$
 \alpha(z)=\frac{a}{1+az/c^2}.
 $$
 
-An extended array that maintains these fixed separations does not have identical proper acceleration at every height. Relativity puts restrictions on the notion of an accelerating rigid elevator.
+At $z=0$ the result is $a$, explaining the constant used in the coordinate transformation. Higher clocks have smaller proper acceleration. An array that maintains fixed separations therefore needs different accelerometer readings at different heights. Relativity puts restrictions on the notion of an accelerating rigid elevator.
 
-This example is also a warning against identifying “nonconstant metric,” “clock-rate difference,” and “spacetime curvature.” They are not equivalent statements. One must calculate curvature or measure tidal geometry. For a complementary derivation of these accelerating coordinates, see [Tong's treatment of the equivalence principle and Rindler motion](https://davidtong.org/pdfs/teaching/general-relativity/gr1.pdf).
+The metric varies with $z$ and the clock rates differ, but the spacetime is flat: we constructed the whole example by relabeling Minkowski coordinates. A clock-rate difference alone therefore does not establish curvature. For a complementary derivation of these accelerating coordinates, see [Tong's treatment of the equivalence principle and Rindler motion](https://davidtong.org/pdfs/teaching/general-relativity/gr1.pdf).
 
-### 5.4 Why a worldline action is the right next move
+### 5.4 An action for free fall
 
-In Newtonian mechanics, a free particle moves along a straight line at constant speed. In spacetime, the invariant version is that its worldline has stationary proper time between fixed endpoint events.
+In flat spacetime, Chapter 3 showed that an inertial clock records the greatest proper time between fixed departure and reunion events. We now seek a motion law that uses the same local clock measurements when the metric varies from place to place.
 
 An **action** assigns a number to an entire candidate history by integrating a chosen expression along it. We postulate that the actual free-particle history makes its first-order change vanish when the endpoints are fixed. For a massive test particle described only by its position, the standard model uses
 
@@ -1631,9 +1667,9 @@ $$
 
 The action has units of energy times time. When we write $S=\int L\,dt$, the integrand $L$ is called the **Lagrangian**. In flat spacetime, this particle model gives $L=-mc^2\sqrt{1-v^2/c^2}$. Chapter 0’s square-root expansion gives $-mc^2+mv^2/2$ at low speed. The constant term has the same integral for every path between fixed endpoint times, leaving the familiar positive kinetic-energy term. The fixed overall factor does not affect the free trajectory for $m\ne0$.
 
-Why this form? Proper time is a scalar quantity attached to the path, and the integral is unchanged if we relabel points along that path. With no additional internal structure or higher-derivative couplings, it is the simplest local relativistic free-particle action. This is a physical modeling choice with extraordinary success, not a logical proof that every conceivable body in every conceivable gravitational theory must have this exact action.
+Why this form? Proper time is a scalar quantity attached to the path, and the integral is unchanged if we relabel points along that path. With no additional internal structure or higher-derivative couplings, it is the simplest local relativistic free-particle action. We are adopting this model for structureless test particles. Bodies whose internal motion or gravitational influence matters can need additional terms.
 
-“Stationary” means the first-order change in the action vanishes under sufficiently small endpoint-preserving deformations of the path. It does not mean the particle tries every route, predicts the future, and selects the best review score. A stationary-action statement is a compact way to encode local differential equations.
+“Stationary” means that the first-order action change vanishes for every sufficiently small change of the path that leaves its endpoints fixed. The comparison is a calculation we perform; the particle does not need to explore alternative paths. The next section translates this condition into a differential equation at each point of its motion.
 
 A timelike **geodesic** is the free-fall path described by this model; the next section derives its equation. Sufficiently short segments locally maximize proper time. A long geodesic need not give the greatest elapsed time among every possible connecting path. Chapter 22 studies how families of such paths focus and why global maximizing claims need extra conditions.
 
@@ -1692,7 +1728,14 @@ $$
 -\frac{1}{2\ell}\partial_\rho g_{\mu\nu}\dot x^\mu\dot x^\nu=0.
 $$
 
-That is already the Euler–Lagrange equation in expanded form. Multiply by $\ell$ and apply the product rule:
+This is an example of the **Euler–Lagrange equation**. For a general integrand $L(x,\dot x,\lambda)$, the same integration by parts gives
+
+$$
+\frac{d}{d\lambda}\frac{\partial L}{\partial\dot x^\rho}
+-\frac{\partial L}{\partial x^\rho}=0.
+$$
+
+The partial derivatives treat position and tangent as separate inputs of $L$. Our calculation used $L=\ell$. To put that result into a motion equation, multiply by $\ell$ and expand the ordinary derivative:
 
 $$
 g_{\rho\nu}\ddot x^\nu
@@ -1740,9 +1783,9 @@ This is the timelike geodesic equation. It contains an ordinary coordinate accel
 
 Notice what disappeared: the test particle's mass. That is the universality of free fall appearing in the variational description.
 
-### 5.6 Affine parameters: the route and the speed of the pen
+### 5.6 Affine parameters
 
-A curve is a route through spacetime. A parameter determines how quickly your mathematical pen moves along that route. These are not the same information.
+The same curve can be labeled in different ways. Numbering its points by a parameter $\lambda$ determines how quickly the coordinate functions change with $\lambda$, even when the geometric route stays fixed.
 
 The geodesic equation with zero right-hand side chooses an **affine parameter**. For a timelike geodesic, proper time is affine, and so is
 
@@ -1750,13 +1793,13 @@ $$
 \lambda=A\tau+B
 $$
 
-for constants $A\ne0$ and $B$. An increasing parameter uses $A>0$. A general nonlinear relabeling introduces a term parallel to the tangent, as the preceding derivation showed. Such a term changes the rate at which the pen traverses the curve; it does not by itself bend the route away from a geodesic.
+for constants $A\ne0$ and $B$. An increasing parameter uses $A>0$. A general nonlinear relabeling introduces a term parallel to the tangent, as the preceding derivation showed. Such a term changes the parameter’s rate along the curve while leaving the geodesic route unchanged.
 
 One-dimensional flat-space example: the straight line $x(s)=s$ has $d^2x/ds^2=0$. Relabel it using $s=e^\lambda$. Now $x(\lambda)=e^\lambda$ and $d^2x/d\lambda^2=dx/d\lambda\ne0$. The line did not become geometrically curved. Its parameter became nonaffine.
 
-The same issue occurs if coordinate time $t$ is used to parameterize a relativistic geodesic. In a general spacetime it need not be affine, so one must transform the equation correctly rather than replace every $\tau$ by $t$ and hope. These parameter subtleties and the null case are discussed in [Sean Carroll's notes, in the geodesics section](https://arxiv.org/pdf/gr-qc/9712019).
+The same issue occurs if coordinate time $t$ is used to parameterize a relativistic geodesic. In a general spacetime it need not be affine, so one must transform the equation correctly including the extra term when $t$ is nonaffine. These parameter subtleties and the null case are discussed in [Sean Carroll's notes, in the geodesics section](https://arxiv.org/pdf/gr-qc/9712019).
 
-### 5.7 Null curves: zero clock time does not mean zero geometry
+### 5.7 Following light with a null geodesic
 
 For a light ray, $ds^2=0$ and $d\tau=0$. Proper time cannot parameterize the path. We therefore use an affine parameter $\lambda$ and write
 
@@ -1773,7 +1816,7 @@ $$
 +\Gamma^\mu{}_{\alpha\beta}k^\alpha k^\beta=0.
 $$
 
-This governs vacuum light rays in the geometric-optics approximation to Maxwell theory. A wave of finite wavelength has more structure than one infinitely thin ray, and light in material media requires a different propagation analysis.
+We use this law for vacuum light when its wavelength is much smaller than the distances over which the geometry changes appreciably. In this **geometric-optics approximation**, a narrow wave packet follows a ray. Wave effects at longer wavelengths and propagation through matter require further analysis.
 
 For a null geodesic, changing the affine scale changes $k^\mu$ without changing the route. The ray's geometry alone therefore does not fix a photon's energy. To identify the tangent with a physically normalized wave-vector or momentum, supply frequency or energy data from an observer.
 
@@ -1783,26 +1826,38 @@ $$
 I_2=\frac12\int g_{\mu\nu}\dot x^\mu\dot x^\nu\,d\lambda.
 $$
 
-Varying over unrestricted nearby paths with fixed endpoints gives the affine geodesic equation. Nullness is then selected by a null initial tangent and is preserved along the resulting geodesic. **Do not restrict the entire family of varied curves to have identically zero integrand first** and then expect varying zero to provide dynamics.
+Here the partial derivatives of the integrand are $\partial L/\partial\dot x^\rho=g_{\rho\nu}\dot x^\nu$ and $\partial L/\partial x^\rho=\tfrac12\partial_\rho g_{\mu\nu}\dot x^\mu\dot x^\nu$. Substituting them into the Euler–Lagrange equation gives the affine geodesic equation from §5.5. Choose an initial tangent with $g_{\mu\nu}k^\mu k^\nu=0$; the motion equation preserves this value. Indeed, differentiating $g_{\mu\nu}k^\mu k^\nu$ and substituting the displayed Christoffel formula makes its derivative zero. **Do not restrict the entire family of varied curves to have identically zero integrand first** and then expect varying zero to provide dynamics.
 
-A more systematic massless action introduces an auxiliary one-dimensional field $e(\lambda)$:
+<details class="history-note" data-no-narration>
+<summary>Further calculation: imposing the null condition with a multiplier</summary>
+
+We can impose the null condition within the variation itself. Introduce a positive function $e(\lambda)$ and vary it as well as the path. It is an **auxiliary field**: an extra quantity used to impose a condition, rather than a new moving particle. Consider
 
 $$
 I_0=\frac12\int e^{-1}g_{\mu\nu}\dot x^\mu\dot x^\nu\,d\lambda.
 $$
 
-Varying $e$ imposes the null condition. Varying $x$ gives
+The integrand contains $e$ but no derivative of $e$, so its equation is simply
+
+$$
+\frac{\partial L}{\partial e}
+=-\frac{1}{2e^2}g_{\mu\nu}\dot x^\mu\dot x^\nu=0.
+$$
+
+This imposes nullness. Varying the path with the same Euler–Lagrange procedure gives
 
 $$
 \ddot x^\mu+\Gamma^\mu{}_{\alpha\beta}\dot x^\alpha\dot x^\beta
 =\frac{\dot e}{e}\dot x^\mu.
 $$
 
-A reparameterization can make $e$ constant, producing an affine parameter. This small example previews a broad modern theme: an auxiliary field can enforce a constraint without introducing an extra physical propagating degree of freedom.
+To see how the parameter can absorb $e$, set $d\sigma/d\lambda=e(\lambda)/e_0$ for a positive constant $e_0$. The action in the new parameter has the same form with $e$ replaced by $e_0$. Its derivative term vanishes, leaving an affine geodesic equation. The auxiliary function has enforced nullness while allowing us to choose a convenient parameter.
 
-Finally, there is no “photon's perspective” in the sense of a valid inertial rest frame. The vanishing proper time of a null curve is a statement about Lorentzian geometry, not a license to assign consciousness or an ordinary clock to a frame traveling at $c$.
+</details>
 
-### 5.8 Check that the action remembers Newton
+The parameter still is not time on a clock traveling with light. As in Chapter 3, a photon has no inertial rest frame; its energy is specified by a physical observer’s measurement.
+
+### 5.8 Recovering Newton’s law of motion
 
 Chapter 12 will relate the weak gravitational field to the Newtonian potential. Preview its slowly varying, weak-field result in a suitable nearly Cartesian chart:
 
@@ -1827,7 +1882,7 @@ S_{\rm particle}
 \simeq\int dt\left[-mc^2+\frac12mv^2-m\Phi\right].
 $$
 
-For fixed endpoint times, the constant rest-energy term does not affect the path variation. The remaining Lagrangian is exactly the Newtonian expression $L=K-U$. Its Euler–Lagrange equation is
+For fixed endpoint times, the constant rest-energy term does not affect the path variation. The remaining Lagrangian is $L=mv^2/2-m\Phi=K-U$. For each Cartesian component, $\partial L/\partial v^i=mv^i$ and $\partial L/\partial x^i=-m\partial_i\Phi$. Substitution into the Euler–Lagrange equation gives
 
 $$
 m\frac{d^2\mathbf x}{dt^2}=-m\boldsymbol\nabla\Phi.
@@ -1837,7 +1892,7 @@ The relativistic action has combined what Newton separated into kinetic and pote
 
 One should also resist the slogan “objects fall toward slower time” as a universal replacement for GR. It can convey part of slow motion in a static weak field. It does not contain spatial curvature, frame dragging, null propagation in full generality, or the behavior of time-dependent geometries.
 
-### 5.9 Tides: the gravity a falling laboratory cannot remove
+### 5.9 Relative acceleration and tides
 
 Take two nearby freely falling particles in Newtonian gravity, separated by $\xi^i$. Their individual accelerations are approximately $a^i=-\delta^{ij}\partial_j\Phi$. Subtract their equations and Taylor-expand the acceleration of the second particle about the first:
 
