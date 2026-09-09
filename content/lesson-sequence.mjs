@@ -17,7 +17,7 @@ const entries=[
  ['carry-a-direction-without-turning-it','section-end','Define holonomy before the sphere transport experiment.'],
  ['measure-curvature-with-a-string','section-end','Derive sphere curvature before the independent circumference measurement.'],
  ['contract-curvature-by-hand','section-end','Define contractions and Ricci before asking for a vacuum counterexample.'],
- ['what-a-tidal-instrument-measures','section-end','Define the carried instrument frame and deviation measurement before interpreting its trace.'],
+ ['what-a-tidal-instrument-measures','section-end','Derive the instrument-frame equation and spherical Newtonian tides before the calibration exercise.'],
  ['fields-carry-energy','section-start','Supply the string and electromagnetic energy vocabulary used by the field examples.'],
  ['poisson-from-a-flux','section-start','Explain Poisson normalization before using it to calibrate Einstein’s equation.'],
  ['variations-and-boundary-data','section-end','Define a variation before adding endpoint and constrained examples.'],

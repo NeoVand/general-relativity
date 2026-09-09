@@ -2489,9 +2489,13 @@ We have nonzero Christoffel symbols, changing basis components, and coordinate a
 
 <a id="chapter-8"></a>
 
-## 8. Curvature: what remains after the coordinate excuses run out
+## 8. Curvature and transport around a loop
 
-### 8.1 Two differentiations enter; their order matters
+On the flat plane, carrying a vector around a circle returned it unchanged. We will now repeat that comparison on a sphere. Follow the local rule for keeping an arrow parallel, bring it back to its starting point, and compare the two directions there. A mismatch measures something that changing coordinate labels cannot remove.
+
+To calculate this effect for a small loop, we need to compare derivatives taken in two different orders.
+
+### 8.1 Comparing two orders of differentiation
 
 For an ordinary smooth scalar in ordinary coordinates, mixed partial derivatives commute:
 
@@ -2549,11 +2553,11 @@ R\sim\partial\Gamma+\Gamma\Gamma
 \sim g^{-1}\partial^2g+g^{-2}(\partial g)^2,
 $$
 
-where the schematic final expression suppresses index contractions. The nonlinear term is not decorative. In polar coordinates it is precisely what will cancel the apparent curvature from the derivative term.
+where the schematic final expression suppresses index contractions. On the flat polar plane, the derivative and product terms will cancel. Keeping both is necessary to recover zero curvature.
 
-### 8.2 Curvature as a machine with three vector inputs
+### 8.2 Curvature takes three vector inputs
 
-A coordinate-free version makes the structure cleaner:
+We can express the same operation using vector fields $X,Y,Z$ rather than coordinate directions:
 
 $$
 R(X,Y)Z
@@ -2562,7 +2566,7 @@ $$
 
 Why subtract the Lie-bracket term? If $X$ and $Y$ themselves do not commute, their flows reach slightly different points when taken in opposite orders. We must remove that displacement effect before interpreting the remaining mismatch as curvature. In a coordinate basis the bracket vanishes, giving the component formula above.
 
-You can picture $R$ as a machine. Feed it two directions defining a tiny parallelogram and a vector to carry around that parallelogram. It returns the infinitesimal change associated with the loop. The machine is linear in each of its three inputs at the point.
+The inputs have different jobs. $X$ and $Y$ specify the two directions of comparison, while $Z$ is the vector being compared. The output $R(X,Y)Z$ is a vector, and it depends linearly on each input at the point. The sign relating it to an actual transport loop depends on the order in which we walk the loop, as we now specify.
 
 For a covector the curvature acts with the opposite sign:
 
@@ -2573,7 +2577,7 @@ $$
 
 For a tensor, one curvature term acts on each index, with the same upper-plus/lower-minus pattern as covariant differentiation. The scalar pairing is again the consistency check.
 
-### 8.3 Holonomy: geometry remembers your route
+### 8.3 Parallel transport around a loop
 
 Transport a vector around a small coordinate parallelogram. Let $a^\mu$ and $b^\mu$ be the small side displacements, and traverse the sides in the order $+a,+b,-a,-b$. With our curvature convention and the transport equation $dV=-\Gamma_\mu V\,dx^\mu$, the returned vector satisfies
 
@@ -2587,13 +2591,78 @@ where all side lengths scale with a small parameter $\ell$. Reverse the loop and
 
 The net transformation obtained around a closed loop is called **holonomy**. Because the initial and final vectors live in the same tangent space, their mismatch is a genuine comparison. There is no need to argue about how to compare vectors at different endpoints.
 
-A sphere provides a delightful demonstration. Follow a geodesic triangle from the equator to the north pole, down to another point on the equator, then back along the equator. Parallel transport can return a vector rotated relative to its starting direction. For a simple spherical geodesic triangle on a sphere of radius $a$, the signed rotation equals its oriented area divided by $a^2$, modulo $2\pi$ and with a chosen orientation convention. Its angular excess—the sum of its interior angles minus $\pi$—gives the corresponding area ratio. A final arrow cannot distinguish angles separated by a full turn, so an unrestricted area ratio should not be called the smallest rotation magnitude. An octant has three right angles and produces an unambiguous rotation magnitude $\pi/2$.
+For a concrete loop, start on the equator, follow a meridian to the north pole, descend along a meridian a quarter-turn farther east, and return along the equator. These three great-circle arcs form a triangle with three right angles. A **great circle** is the intersection of the sphere with a plane through its center; its arcs are geodesics of the sphere.
 
-This is not an argument that vectors are secretly mechanical arrows sliding through ambient three-dimensional space. Parallel transport on an embedded sphere can be visualized by requiring no tangential turning; the normal part of the ambient change is allowed. The intrinsic definition is the connection equation. No embedding is required.
+Carry an arrow initially pointing north along the first arc. Keep it continuous at each corner, without rotating it to follow the next side. The worked example below calculates all three legs. On returning, the arrow points east: a right-angle change at the very same point. The loop encloses one eighth of the sphere, with area $\pi a^2/2$ for sphere radius $a$.
 
-A local/global caution: zero curvature makes sufficiently small contractible loops have trivial holonomy. A flat connection on a space with nontrivial topology can still have nontrivial holonomy around noncontractible loops. Local geometry and global topology are different chapters in the universe's accounting system.
+In the calculation we draw the sphere in three dimensions. The vector must remain tangent to it. Its ordinary three-dimensional derivative can point normally to the surface; parallel transport requires that derivative to have no tangential part. This is a convenient way to implement the intrinsic comparison rule on this particular surface. The rule itself was already defined without an embedding.
 
-### 8.4 The polar-plane verdict
+<details class="history-note" data-no-narration>
+<summary>Further calculation: why spherical area determines the transport angle</summary>
+
+Use the spherical angles from §4.7: $\theta$ measures angle down from the north pole and $\phi$ measures angle around the axis. In fixed Cartesian components the two unit tangent vectors are
+
+$$
+\begin{aligned}
+\hat e_\theta&=(\cos\theta\cos\phi,\cos\theta\sin\phi,-\sin\theta),\\
+\hat e_\phi&=(-\sin\phi,\cos\phi,0).
+\end{aligned}
+$$
+
+Differentiate these expressions and retain only the tangent part, calling that change $D$. In the $\theta$ direction the change of $\hat e_\theta$ is entirely normal, while $\hat e_\phi$ is constant. In the $\phi$ direction, projecting onto the two unit tangents gives
+
+$$
+D\hat e_\theta=\cos\theta\,d\phi\,\hat e_\phi,
+\qquad D\hat e_\phi=-\cos\theta\,d\phi\,\hat e_\theta.
+$$
+
+For a unit arrow $V=\cos\psi\,\hat e_\theta+\sin\psi\,\hat e_\phi$, the product rule then gives $DV=0$ precisely when $d\psi=-\cos\theta\,d\phi$.
+
+Walk a small coordinate rectangle in the positive order: increasing $\theta$, increasing $\phi$, decreasing $\theta$, decreasing $\phi$. The two meridian sides have $d\phi=0$. The other two give
+
+$$
+\Delta\psi=[\cos\theta-\cos(\theta+\Delta\theta)]\Delta\phi
+\simeq\sin\theta\,\Delta\theta\,\Delta\phi.
+$$
+
+Tile a region with these rectangles and add their contributions. Shared interior edges cancel, leaving its boundary integral. The sphere's area element is $dA=a^2\sin\theta\,d\theta\,d\phi$, so
+
+$$
+\Delta\psi=-\oint\cos\theta\,d\phi
+=\frac{\text{oriented area}}{a^2}.
+$$
+
+This expression applies directly to a loop bounding a region inside the chosen frame patch. Changing patches lets us describe other loops, with the final rotation defined modulo $2\pi$. The octant example in §8.3 independently verifies a rotation magnitude $\pi/2$ for area $\pi a^2/2$.
+
+For a positively oriented geodesic triangle, the path's tangent turns by $\pi-\alpha_i$ at a corner with interior angle $\alpha_i$, while the transported arrow stays continuous. Comparing after the three corners gives a rotation equivalent to $-\sum_i(\pi-\alpha_i)$, or $\alpha_1+\alpha_2+\alpha_3-\pi$ modulo a full turn. This **angular excess** is therefore related to the triangle's area. For an ordinary convex spherical triangle, choosing the area between zero and $2\pi a^2$ gives the familiar equality $\text{area}=a^2(\alpha_1+\alpha_2+\alpha_3-\pi)$.
+
+</details>
+
+**Local and global comparisons.** A loop is *contractible* if it can be shrunk continuously to a point while staying in the region under discussion. A flat connection has no net transport change around such a loop. A loop surrounding an excluded point may behave differently, even when the geometry is flat everywhere along it.
+
+<details class="history-note" data-no-narration>
+<summary>Further example: a flat cone with its tip removed</summary>
+
+Cut a wedge of angle $0<\delta<2\pi$ from a flat sheet and join its edges into a cone. Away from the tip, the sheet has the same local lengths as before. If we exclude the tip, a loop around it cannot shrink to a point without leaving the surface.
+
+Use distance $r$ from the tip along the sheet and angle $\phi$ with period $2\pi$. Put $\alpha=1-\delta/(2\pi)$. A full circle has circumference $2\pi\alpha r$, giving the metric
+
+$$
+ds^2=dr^2+\alpha^2r^2d\phi^2.
+$$
+
+The calculation from Chapter 7 now gives $\Gamma^r{}_{\phi\phi}=-\alpha^2r$ and $\Gamma^\phi{}_{r\phi}=1/r$. Along a circle, write $W=\alpha rV^\phi$ for the angular component in a unit basis. Parallel transport becomes
+
+$$
+\frac{dV^r}{d\phi}=\alpha W,\qquad
+\frac{dW}{d\phi}=-\alpha V^r.
+$$
+
+These are the sine-and-cosine equations for component rotation by $-\alpha\phi$. After a full circuit, the rotation is $-2\pi\alpha=\delta-2\pi$, equivalent to $\delta$ for the final arrow. The missing wedge can therefore be detected by a loop, although every small patch away from the tip is flat.
+
+</details>
+
+### 8.4 The curvature of the polar plane
 
 Using the polar connection from Chapter 7, calculate
 
@@ -2611,9 +2680,9 @@ $$
 
 In two dimensions the Riemann symmetries leave only one independent curvature component, so this establishes that the plane is flat wherever the polar chart is valid. The apparent singularity at $r=0$ is a failure of the chart; Cartesian coordinates cover the origin smoothly.
 
-Omitting the $\Gamma\Gamma$ terms would have declared the dinner plate curved. The nonlinear terms have just saved lunch.
+The derivative term was $-1$; the connection-product term was $+1$. Their cancellation agrees with the Cartesian calculation, where every connection coefficient and curvature component is zero.
 
-### 8.5 Symmetries that turn 256 entries into 20
+### 8.5 Counting independent curvature components
 
 Lower the first index with the metric:
 
@@ -2634,21 +2703,49 @@ R_{\rho\sigma\mu\nu}
 \end{aligned}
 $$
 
-The second symmetry follows immediately from exchanging the differentiation order. The first reflects metric compatibility: an infinitesimal parallel-transport transformation preserves inner products, so its generator is antisymmetric after lowering the output index. The cyclic identity, often called the algebraic or first Bianchi identity, depends on the torsion-free condition. At a point where $\Gamma=0$, its terms cancel directly using the symmetry of the lower connection indices. Together these properties imply the pair-exchange symmetry.
+The second symmetry follows directly from reversing the derivative order. To check the others without a long expansion, we can choose coordinates with $\Gamma=0$ at the point under study. Here is why those coordinates exist locally. Put the old coordinate origin at that point and set
 
-In four dimensions an antisymmetric pair has six possibilities. Treating each index pair as one label, the pair symmetries make curvature a symmetric $6\times6$ array: 21 components. The algebraic Bianchi identity removes one independent component, leaving 20.
+$$
+x'^\rho=x^\rho+\frac12\Gamma^\rho{}_{\mu\nu}(0)x^\mu x^\nu.
+$$
 
-Twenty is a count of algebraically independent curvature components at an event. It is **not** a count of propagating gravitational degrees of freedom. Field equations, constraints, and coordinate freedom enter that separate question; vacuum GR in four dimensions has two local gravitational wave polarizations.
+The Jacobian is the identity at the origin. The inverse map has second derivatives $-\Gamma^\rho{}_{\mu\nu}(0)$ there, which cancel the old coefficients in the transformation law from §7.4. The invertible Jacobian makes this a valid chart sufficiently near the origin. Metric compatibility then gives $\partial g=0$ at the point as well.
 
-### 8.6 A sphere computed from its own measurements
+At that point the curvature reduces to second derivatives of the metric:
 
-Now take the round two-sphere of radius $a$, with intrinsic line element
+$$
+\begin{aligned}
+R_{\rho\sigma\mu\nu}=\frac12\big(&
+\partial_\mu\partial_\sigma g_{\rho\nu}
+-\partial_\mu\partial_\rho g_{\sigma\nu}\\
+&-\partial_\nu\partial_\sigma g_{\rho\mu}
++\partial_\nu\partial_\rho g_{\sigma\mu}\big).
+\end{aligned}
+$$
+
+Exchanging $\rho,\sigma$ reverses the sign. Exchanging the two index pairs preserves it, using $g_{ab}=g_{ba}$ and commuting partial derivatives. Adding the three cyclic terms makes each second derivative cancel against its opposite. This last relation is called the **algebraic Bianchi identity**. All are tensor equations, so a check in this convenient chart establishes them in every chart at the same point.
+
+In four dimensions, an antisymmetric pair has six choices: $01,02,03,12,13,23$. Reversing a pair changes only a sign; repeating an index gives zero. Treat each pair as one label. Pair exchange makes curvature a symmetric $6\times6$ array, with six diagonal entries and $6\times5/2=15$ entries above the diagonal: 21 in total.
+
+For four distinct indices, the algebraic Bianchi identity supplies one independent relation,
+
+$$
+R_{0123}+R_{0231}+R_{0312}=0.
+$$
+
+Its other versions follow by relabeling and the pair symmetries; versions with repeated indices already follow from those symmetries. Thus 20 independent components remain. In two dimensions there is only one pair, $12$, and one independent curvature entry. This justifies the single-component flatness check in §8.4.
+
+Twenty counts independent curvature values at one event. It does not tell us how many independent wave patterns can propagate. Answering that requires the field equations; Chapter 18 derives the two independent polarizations of a gravitational wave, meaning its two independent transverse stretching patterns.
+
+### 8.6 Calculating curvature on a sphere
+
+Now take a sphere of fixed radius $a$. As in §4.7, $\theta$ is the angle down from the north pole and $\phi$ is the angle around the axis. A meridian step has length $a\,d\theta$ and a latitude step has length $a\sin\theta\,d\phi$, giving
 
 $$
 ds^2=a^2d\theta^2+a^2\sin^2\theta\,d\phi^2.
 $$
 
-The nonzero connection coefficients are
+Insert $g_{\theta\theta}=a^2$, $g_{\phi\phi}=a^2\sin^2\theta$, and $\partial_\theta g_{\phi\phi}=2a^2\sin\theta\cos\theta$ into the Christoffel formula. The nonzero coefficients are
 
 $$
 \Gamma^\theta{}_{\phi\phi}=-\sin\theta\cos\theta,
@@ -2657,7 +2754,7 @@ $$
 =\Gamma^\phi{}_{\phi\theta}=\cot\theta.
 $$
 
-The calculation resembles the plane's polar calculation, but the circumference scale is $a\sin\theta$, not a linear radial distance. That nonlinear relation is where real curvature enters.
+Here $\cot\theta=\cos\theta/\sin\theta$. We work away from the poles, where this angular chart is valid. The circumference scale is $a\sin\theta$, instead of the plane’s linear factor $r$; the two terms in the curvature calculation will no longer cancel.
 
 Compute one component:
 
@@ -2677,7 +2774,7 @@ $$
 R_{\theta\phi\theta\phi}=a^2\sin^2\theta.
 $$
 
-This component has units of length squared because all its slots refer to angular coordinate vectors. In a unit orthonormal basis the corresponding component is $1/a^2$. The invariant Gaussian curvature is
+This component has units of length squared because all its slots refer to angular coordinate vectors. In a unit orthonormal basis the corresponding component is $1/a^2$. In two dimensions, we can express the one independent curvature entry per unit area. This scalar is the **Gaussian curvature**:
 
 $$
 K=\frac{R_{\theta\phi\theta\phi}}
@@ -2685,7 +2782,7 @@ K=\frac{R_{\theta\phi\theta\phi}}
 =\frac1{a^2}.
 $$
 
-We can summarize some of this curvature by contracting indices, using the operation from Chapter 2. Define the **Ricci tensor** by $R_{ab}=R^c{}_{acb}$ and the **Ricci scalar** by $R=g^{ab}R_{ab}$. Here each index runs over $\theta,\phi$. On this sphere these contractions give
+We can summarize some of this curvature by contracting indices, using the operation from Chapter 2. Define the **Ricci tensor** by $R_{ab}=R^c{}_{acb}$ and the **Ricci scalar** by $R=g^{ab}R_{ab}$. Here each index runs over $\theta,\phi$. For example, $R_{\theta\theta}=g^{\phi\phi}R_{\phi\theta\phi\theta}=(a^2\sin^2\theta)^{-1}(a^2\sin^2\theta)=1$. The complete result is
 
 $$
 R_{\theta\theta}=1,
@@ -2706,11 +2803,13 @@ It is shorter than the Euclidean prediction. Curvature can be discovered with in
 
 A cylinder illustrates the opposite lesson. A sheet can be rolled into a cylinder without locally stretching it. Its embedding looks bent, but its intrinsic metric is locally flat. **Extrinsic bending** describes the relation to an ambient space; **intrinsic curvature** describes the metric geometry experienced by inhabitants. Spacetime curvature does not demand an invisible higher-dimensional room into which spacetime bends.
 
+
+
 <a id="chapter-9"></a>
 
 ## 9. Ricci, Weyl, and Einstein: different questions asked of curvature
 
-### 9.1 A contraction is a deliberate loss of information
+### 9.1 What a curvature trace leaves out
 
 The Riemann tensor is richly directional. Einstein's equation uses a particular contraction of it, the Ricci tensor:
 
@@ -2726,7 +2825,7 @@ $$
 \boxed{R=g^{\mu\nu}R_{\mu\nu}.}
 $$
 
-A trace combines directional information into an aggregate. Consider a matrix with eigenvalues $2,-1,-1$. Its trace vanishes, but the matrix is very much present: it stretches one direction and compresses two others. A vanishing Ricci scalar is even less informative than a vanishing Ricci tensor, and a vanishing Ricci tensor is less informative than a vanishing Riemann tensor.
+A trace adds selected entries. Consider $A=\operatorname{diag}(2,-1,-1)$. Its trace is $2-1-1=0$, but $A(1,0,0)=(2,0,0)$, so the linear map is not zero. On the other two axes it reverses arrows without shortening them. If such a matrix instead represents an acceleration law, its signs describe the directions of acceleration; that is a separate physical interpretation. A vanishing Ricci scalar is even less informative than a vanishing Ricci tensor, and a vanishing Ricci tensor is less informative than a vanishing Riemann tensor.
 
 The hierarchy is
 
@@ -2740,7 +2839,7 @@ with neither reverse implication valid in general four-dimensional spacetime.
 
 This is crucial for understanding gravity in empty space. For $\Lambda=0$, the vacuum Einstein equation gives $R_{\mu\nu}=0$. A black hole exterior can still have large tidal curvature, and gravitational waves can still propagate through vacuum. Ricci-flat does not mean Riemann-flat.
 
-### 9.2 Ricci curvature as a directional average of tidal effects
+### 9.2 Ricci curvature and an initially stationary cloud
 
 Choose a freely falling observer with unit orthonormal frame and $e_{\hat0}=u/c$. The spatial tidal matrix is
 
@@ -2764,7 +2863,7 @@ $$
 
 Thus Ricci curvature evaluated on the observer's time direction measures the sum of the three principal tidal effects. One direction can stretch while another compresses; the trace tells you the aggregate.
 
-To turn that into a volume statement, release an infinitesimal ball of freely falling particles initially at rest relative to one another in the observer's frame. If its initial volume is $\mathcal V_0$, then initially
+To turn that into a volume statement, release an infinitesimal ball of freely falling particles initially at rest relative to one another in the observer's frame. Let $\lambda_i$ be the three eigenvalues of $\mathcal E$. An initial edge length $L_i$ has zero initial rate and acceleration $-c^2\lambda_iL_i$, so its short-time length is $L_i[1-\tfrac12c^2\lambda_i(\Delta\tau)^2]+O((\Delta\tau)^3)$. Multiply the three lengths. The leading fractional volume change contains their sum, $c^2\sum_i\lambda_i=R_{\mu\nu}u^\mu u^\nu$. Thus initially
 
 $$
 \frac{\ddot{\mathcal V}}{\mathcal V}
@@ -2781,9 +2880,9 @@ $$
 
 Why the trace? At first, each principal edge changes by its own small fractional amount. Multiplying the three edge lengths, the leading fractional volume change is the sum of those changes. Products of the small changes enter at higher order.
 
-The initial conditions matter. A cloud already expanding, shearing, or rotating has additional contributions to its volume evolution. The Raychaudhuri equation later gives the exact infinitesimal bookkeeping. “Ricci controls volume” refers to a precisely defined curvature contribution, not a claim that every cloud's volume is determined by Ricci alone.
+This result uses zero initial relative velocity. A cloud already expanding, changing shape, or rotating can have additional contributions to its volume change. Chapter 22 derives the more general volume-evolution law, called the Raychaudhuri equation.
 
-### 9.3 Extracting the trace-free remainder: the Weyl tensor
+### 9.3 Separating Ricci and Weyl curvature
 
 In four dimensions the Riemann tensor can be decomposed as
 
@@ -2839,9 +2938,48 @@ Two qualifications prevent this useful slogan from becoming misleading:
 
 When $R_{\mu\nu}=0$, the whole Riemann tensor equals Weyl. This is the curvature of vacuum tidal fields and vacuum gravitational waves. If $\Lambda\ne0$, vacuum instead has $R_{\mu\nu}=\Lambda g_{\mu\nu}$, and the Ricci part need not vanish.
 
-There is also a useful conformal interpretation. Under $g_{\mu\nu}\mapsto\Omega^2g_{\mu\nu}$ with smooth positive $\Omega$, the mixed-index Weyl tensor $C^\rho{}_{\sigma\mu\nu}$ is unchanged. The all-lowered tensor acquires the metric's factor $\Omega^2$. In four dimensions, vanishing Weyl curvature throughout a suitable neighborhood characterizes local conformal flatness. This is stronger than a statement at one isolated event. For further treatment of the Weyl decomposition and conformal geometry, see [David Tong's general relativity notes](https://davidtong.org/pdfs/teaching/general-relativity/gr.pdf).
+<details class="history-note" data-no-narration>
+<summary>Further calculation: rescaling the metric and the Weyl tensor</summary>
 
-### 9.4 Bianchi identities: why the curvature components cannot vary independently
+A **conformal rescaling** multiplies the metric by a smooth positive function squared: $\widetilde g_{ab}=\Omega^2g_{ab}$. Local lengths and proper times acquire the factor $\Omega$. Null directions remain null because multiplying zero by $\Omega^2$ still gives zero.
+
+Put $f=\ln\Omega$, taking $\Omega$ dimensionless. Substituting $\widetilde g$ into the Christoffel formula and differentiating the product gives
+
+$$
+\widetilde\Gamma^a{}_{bc}-\Gamma^a{}_{bc}
+=\delta^a_b\partial_cf+\delta^a_c\partial_bf
+-g_{bc}g^{ad}\partial_df.
+$$
+
+Define the symmetric tensor
+
+$$
+B_{ab}=\nabla_a\partial_bf-\partial_af\,\partial_bf
++\frac12g_{ab}g^{cd}\partial_cf\,\partial_df.
+$$
+
+Using the connection difference in the curvature formula, the new first derivatives give the Hessian terms in $B$ and the connection products give its squared-gradient terms. Collecting them yields
+
+$$
+\begin{aligned}
+\widetilde R_{abcd}=\Omega^2\big(&R_{abcd}
++g_{ad}B_{bc}+g_{bc}B_{ad}\\
+&-g_{ac}B_{bd}-g_{bd}B_{ac}\big).
+\end{aligned}
+$$
+
+Every added term has exactly the metric-times-symmetric-tensor form removed by the Ricci subtraction. For a direct check in $n$ dimensions, contracting the added four-term combination gives $-(n-2)B_{bd}-g_{bd}B^a{}_a$. The same trace removal that fixed the decomposition coefficients therefore leaves
+
+$$
+\widetilde C_{abcd}=\Omega^2 C_{abcd},\qquad
+\widetilde C^a{}_{bcd}=C^a{}_{bcd}.
+$$
+
+The inverse metric used to raise the first index supplies $\Omega^{-2}$. Thus the mixed-index Weyl tensor is unchanged. In particular, a metric of the form $g_{ab}=\Omega^2\eta_{ab}$ has zero Weyl curvature. Such a metric is called **conformally flat** in that coordinate region. For further conformal geometry, see [Tong's curvature notes](https://davidtong.org/pdfs/teaching/general-relativity/gr3.pdf).
+
+</details>
+
+### 9.4 The differential Bianchi identity
 
 A metric can vary from point to point, but the resulting curvature is not an arbitrary tensor field with 20 freely assignable functions. Because it comes from a connection, it obeys a differential identity:
 
@@ -2857,13 +2995,19 @@ This is the **differential or second Bianchi identity**. It is an identity of Le
 
 Here is a local proof that shows why it exists. At an arbitrary point choose normal coordinates so that $\Gamma=0$ there. At that point $\nabla R=\partial R$. Differentiating $R=\partial\Gamma-\partial\Gamma+\Gamma\Gamma-\Gamma\Gamma$ gives second derivatives of $\Gamma$; the derivatives of its quadratic products contain an undifferentiated $\Gamma$ and vanish at the point. Add the three cyclic terms. Every second derivative appears twice with opposite sign, so commutation of ordinary mixed partial derivatives makes the sum zero.
 
-The expression is tensorial, so if it vanishes in normal coordinates it vanishes in every chart at that point. The point was arbitrary, so the identity holds throughout the smooth region. Choosing clever coordinates is a proof technique, not a restriction on the geometry.
+The expression is tensorial, so if it vanishes in normal coordinates it vanishes in every chart at that point. The point was arbitrary, so the identity holds throughout the smooth region. The convenient chart simplified the calculation without restricting the metric.
 
-Geometrically, the identity says the infinitesimal loop rotations surrounding a tiny three-dimensional box fit together consistently. Algebraically, it is related to the Jacobi identity for covariant-derivative commutators. Curvature is the failure of pairwise commutation, but those failures themselves must satisfy a consistency relation.
+The related algebraic consistency rule is the **Jacobi identity**. For operators $A,B,C$ and commutator $[A,B]=AB-BA$,
 
-### 9.5 Contracting Bianchi until Einstein's tensor appears
+$$
+[A,[B,C]]+[B,[C,A]]+[C,[A,B]]=0.
+$$
 
-Contracting the differential identity once gives
+To verify it, expand each bracket. For example, the first contributes $ABC-ACB-BCA+CBA$; each of these ordered products appears with the opposite sign in one of the other two brackets. Thus failures of pairwise commutation cannot be assigned independently. The direct normal-coordinate calculation above establishes the corresponding differential identity for curvature.
+
+### 9.5 A divergence-free curvature tensor
+
+Set the differentiation index $\lambda$ equal to the upper curvature index $\rho$ and sum in the identity above. The second term contains $R^\rho{}_{\sigma\nu\rho}=-R_{\sigma\nu}$, while the third contains $R^\rho{}_{\sigma\rho\mu}=R_{\sigma\mu}$. Moving those two terms to the right gives
 
 $$
 \nabla_\rho R^\rho{}_{\sigma\mu\nu}
@@ -2903,13 +3047,13 @@ $$
 \end{aligned}
 $$
 
-The coefficient $1/2$ is now motivated by a geometric consistency requirement. It is not an arbitrary decoration between Ricci and the metric.
+The coefficient $1/2$ is exactly what cancels the Ricci divergence. The remaining derivative of the metric is zero by compatibility.
 
 **Divergence-free does not mean covariantly constant.** The identity is $\nabla^\mu G_{\mu\nu}=0$, involving a contraction. It does not say $\nabla_\lambda G_{\mu\nu}=0$ for every choice of indices. A fluid can have zero net outflow from each small region while still varying across the room; similarly, divergence-free geometry can vary.
 
 The result prepares the field equation. A consistent geometric left side can be matched to a covariantly conserved stress-energy tensor on the right. A constant multiple of $g_{\mu\nu}$ is also divergence-free, allowing the cosmological term $\Lambda g_{\mu\nu}$. Geometry alone has not yet fixed the physical coupling, matter content, or the theory's full action. Those are the next stage.
 
-### 9.6 A dimensional gotcha with a lesson
+### 9.6 Why dimension matters
 
 For the two-sphere we found $R_{ab}=a^{-2}g_{ab}$ and $R=2/a^2$. Consequently,
 
@@ -2917,7 +3061,13 @@ $$
 G_{ab}=R_{ab}-\frac12Rg_{ab}=0
 $$
 
-for that intrinsically curved surface. In fact, the Einstein tensor vanishes identically for every two-dimensional metric.
+for that intrinsically curved surface. The cancellation holds for every two-dimensional metric. There is only one independent curvature entry, so the tensor has the form
+
+$$
+R_{abcd}=K(g_{ac}g_{bd}-g_{ad}g_{bc}).
+$$
+
+Contracting gives $R_{ab}=Kg_{ab}$ and $R=2K$, hence $G_{ab}=Kg_{ab}-Kg_{ab}=0$, whether or not $K$ vanishes.
 
 This is not a counterexample to the usefulness of Einstein's equation in four dimensions. It shows that a tensor's information content depends on dimension. In two dimensions all intrinsic curvature is summarized by one scalar, and the Einstein combination cancels it. In three dimensions Weyl vanishes identically and Ricci determines the full Riemann tensor. Four dimensions are the first in which a nonzero Weyl tensor carries local curvature information independent of Ricci.
 
@@ -2925,13 +3075,13 @@ This is not a counterexample to the usefulness of Einstein's equation in four di
 
 ## 10. Tides: how to measure curvature without seeing spacetime from outside
 
-### 10.1 One falling astronaut is not enough
+### 10.1 Accelerometers and tidal measurements
 
 An ideal accelerometer carried by a freely falling point particle reads zero. This is true in Minkowski space and beside a black hole, provided the particle follows a geodesic and is treated as an ideal test body.
 
 Release a **collection** of particles, however, and their separations can accelerate. Near a gravitating body, one part of the collection may be pulled into a different geodesic than another. A sufficiently extended astronaut cannot follow every nearby geodesic simultaneously while maintaining an unchanged shape. Internal stresses arise because the body resists that relative motion.
 
-A single accelerometer measures proper acceleration, the departure of its worldline from geodesic motion. A gravity gradiometer compares nearby free motions and measures tidal curvature. Confusing those two instruments is the source of a remarkable amount of popular-relativity confusion.
+An accelerometer measures proper acceleration: how its own motion departs from free fall. A **gravity gradiometer** compares nearby freely falling bodies to measure the spatial variation of their motion. A single laboratory can contain several test masses and make this comparison internally.
 
 The governing equation is geodesic deviation, also called the Jacobi equation. We will derive it using only concepts already assembled.
 
@@ -2943,7 +3093,7 @@ $$
 x^\mu=x^\mu(\tau,s),
 $$
 
-where $\tau$ is proper time along each geodesic and $s$ labels neighboring geodesics. Work in a region where the family defines a smooth local congruence. Define
+where $\tau$ is proper time along each geodesic and $s$ labels neighboring geodesics. Picture a smooth strip of paths: one direction runs along a particle’s history, and the other runs across the strip to a neighboring particle. Restrict attention to a patch where these two labels are independent and the strip has no crossings. Define
 
 $$
 u^\mu=\frac{\partial x^\mu}{\partial\tau},
@@ -2975,7 +3125,7 @@ $$
 
 These assumptions have different jobs: normalization makes $\tau$ a physical clock reading; affine geodesic motion removes a tangential reparameterization term from the acceleration equation.
 
-### 10.3 Deriving geodesic deviation, with every cancellation visible
+### 10.3 Deriving geodesic deviation
 
 The covariant relative acceleration is
 
@@ -3046,7 +3196,7 @@ The matrix $c^2R_{\hat i\hat0\hat j\hat0}$ has units of inverse time squared. It
 
 This matrix is an observer-dependent projection of the invariant Riemann tensor. Another observer with a different four-velocity can obtain a different tidal matrix. That does not make the effect a coordinate illusion: they are physically different observers performing different local experiments. A complete reconstruction of curvature requires enough independent relative-motion measurements, not merely one three-dimensional tidal matrix.
 
-### 10.5 The Newtonian limit checks both the meaning and the sign
+### 10.5 Recovering Newtonian tides
 
 Let $\Phi$ be a weak, slowly varying Newtonian potential. For this calculation use $x^0=ct$ and retain leading weak-field terms:
 
@@ -3080,7 +3230,7 @@ $$
 }
 $$
 
-This is precisely Newtonian relative acceleration. If a nearby particle is at $\mathbf x+\boldsymbol\xi$, subtract its acceleration from the reference equation by Taylor expanding:
+This is precisely Newtonian relative acceleration. If a nearby particle is at $\mathbf x+\boldsymbol\xi$, subtract the reference particle’s acceleration from the nearby particle’s acceleration and Taylor-expand:
 
 $$
 a^i(\mathbf x+\boldsymbol\xi)-a^i(\mathbf x)
@@ -3091,7 +3241,7 @@ $$
 
 The common acceleration disappears. Only the spatial gradient of acceleration remains. This is the mathematical content of the elevator argument: free fall removes a shared gravitational acceleration locally; it does not remove differences in gravitational acceleration across a finite laboratory.
 
-For a point mass outside its source,
+For a point mass, let $r=\sqrt{x_ix_i}$ and $n_i=x_i/r$ be the components of the radial unit vector. Differentiation gives $\partial_jr=n_j$ and $\partial_jn_i=(\delta_{ij}-n_in_j)/r$. Outside the source, $\Phi=-G_NM/r$ has gradient $\partial_i\Phi=G_NM n_i/r^2$. Differentiate once more:
 
 $$
 \Phi=-\frac{G_NM}{r},
@@ -3113,9 +3263,9 @@ $$
 
 A falling cloud stretches radially and squeezes sideways. The eigenvalues of the acceleration map add to zero outside the source. This is the Newtonian shadow of vacuum Ricci-flatness, while the nonzero trace-free tidal field is the shadow of Weyl curvature.
 
-The eigenvalue ratio $2:-1:-1$ is worth keeping. It is the geometric reason that the phrase “spaghettification” has more physics in it than its culinary dignity suggests.
+The ratio $2:-1:-1$ compares radial stretching acceleration with the two transverse squeezing accelerations for equal initial separations. This pattern explains how strong tides can lengthen a falling body while narrowing it.
 
-### 10.6 What normal coordinates can erase—and what they cannot
+### 10.6 Normal coordinates and the size of a laboratory
 
 At any regular event $p$, choose Riemann normal coordinates with an orthonormal basis at the origin. Then
 
@@ -3127,7 +3277,7 @@ g_{\mu\nu}(p)=\eta_{\mu\nu},
 \Gamma^\rho{}_{\mu\nu}(p)=0.
 $$
 
-The connection transformation law explains why this is possible: second derivatives of the coordinate transformation can cancel the connection coefficients at the chosen event. The geometric construction is to label nearby events by the initial tangent vectors of geodesics launched from $p$, using the exponential map. It works in a sufficiently small normal neighborhood, before the geodesic-labeling construction becomes ambiguous.
+Section 8.5 showed how a quadratic coordinate change cancels the connection at one event. Riemann normal coordinates have a further geometric definition. Choose an initial tangent $X$ at $p$, follow the geodesic with that tangent from affine parameter 0 to 1, and assign its endpoint the coordinate list $X^\mu$. This endpoint rule is called the **exponential map**, written $\exp_p(X)$. It is a smooth invertible map sufficiently near $X=0$, where its derivative is the identity. The resulting **normal neighborhood** is a region small enough that these geodesic labels remain unique.
 
 But the derivatives of $\Gamma$ generally survive. The metric expansion is
 
@@ -3139,6 +3289,37 @@ g_{\mu\nu}(X)
 +O(|X|^3).
 }
 $$
+
+<details class="history-note" data-no-narration>
+<summary>Further calculation: the factor one third in the normal-coordinate metric</summary>
+
+Radial geodesics have $X^\mu(\lambda)=\lambda v^\mu$, so their equation requires $\Gamma^\rho{}_{\mu\nu}(X)X^\mu X^\nu=0$. Write $C^\rho{}_{\mu\nu\alpha}=\partial_\alpha\Gamma^\rho{}_{\mu\nu}(0)$. Torsion-free symmetry and the cubic term of the radial condition give
+
+$$
+C^\rho{}_{\mu\nu\alpha}=C^\rho{}_{\nu\mu\alpha},
+\qquad C^\rho{}_{\mu\nu\alpha}
++C^\rho{}_{\nu\alpha\mu}+C^\rho{}_{\alpha\mu\nu}=0.
+$$
+
+At the origin, curvature is $R^\rho{}_{\sigma\mu\nu}=C^\rho{}_{\nu\sigma\mu}-C^\rho{}_{\mu\sigma\nu}$. Solving these linear relations gives
+
+$$
+C^\rho{}_{\mu\nu\alpha}
+=-\frac13\left(R^\rho{}_{\mu\nu\alpha}
++R^\rho{}_{\nu\mu\alpha}\right).
+$$
+
+Substitution checks the symmetry and cyclic relation directly. Differentiate metric compatibility once, using $\partial g=\Gamma=0$ at the origin, and substitute this value of $C$:
+
+$$
+\partial_\alpha\partial_\beta g_{\mu\nu}(0)
+=-\frac13\left(R_{\mu\alpha\nu\beta}
++R_{\mu\beta\nu\alpha}\right).
+$$
+
+Taylor's formula multiplies this by $X^\alpha X^\beta/2$. The two curvature terms contribute equally after relabeling the summed indices, producing the displayed coefficient $-1/3$.
+
+</details>
 
 The metric is Minkowskian through first order in displacement, while curvature enters at second order. This is the precise limitation of a local inertial frame. Making the connection vanish at one point does not make all second derivatives of the metric vanish there, and does not make the surrounding neighborhood flat.
 
@@ -3158,9 +3339,9 @@ At the reference worldline, the time coordinate is the observer's clock and the 
 
 If the laboratory accelerates, its comoving nonrotating coordinates acquire acceleration terms already at first order in distance. A rocket can keep itself fixed in its own coordinates, but it cannot make its accelerometer reading disappear by relabeling events.
 
-The size of an approximately inertial laboratory is controlled by quantities such as $|R_{\hat a\hat b\hat c\hat d}|L^2\ll1$, together with sufficiently small curvature-variation effects across the region. A nominal curvature radius alone is not enough if the curvature changes rapidly. “Local” is a controlled approximation, not a magic word granting permission to neglect every inconvenient term.
+The size of an approximately inertial laboratory is controlled by quantities such as $|R_{\hat a\hat b\hat c\hat d}|L^2\ll1$, together with sufficiently small curvature-variation effects across the region. A nominal curvature radius alone is not enough if the curvature changes rapidly. The length and time scales of a measurement must therefore be compared with both the curvature and its variation.
 
-### 10.7 Scalar invariants are powerful, but spacetime has a loophole
+### 10.7 Curvature scalars and their limits
 
 Coordinates can become singular while geometry remains regular. To distinguish a coordinate problem from a physical curvature problem, form scalars such as
 
@@ -3180,9 +3361,12 @@ $$
 
 It stays finite at $r=2G_NM/c^2$ and diverges as $r\to0$. This helps show why the standard Schwarzschild-coordinate problem at the horizon is removable, while the central curvature divergence is not. Establishing smooth extension through a horizon still requires regular coordinates; finiteness of one scalar by itself is not an extension theorem.
 
-Now the deeper gotcha: **even all polynomial scalar curvature invariants can vanish while the Riemann tensor is nonzero**. Lorentzian contractions are not positive sums of squares. A nonzero null vector already demonstrates the basic logic: its norm can be zero without the vector being zero.
+A limitation of these scalar tests is that **even all polynomial scalar curvature invariants can vanish while the Riemann tensor is nonzero**. Lorentzian contractions are not positive sums of squares. A nonzero null vector already demonstrates the basic logic: its norm can be zero without the vector being zero.
 
-Here is an exact four-dimensional example. Let $U,V$ be null coordinates and take
+<details class="history-note" data-no-narration>
+<summary>Further example: a curved wave spacetime with zero scalar contractions</summary>
+
+Start with flat coordinates $U=(ct-z)/\sqrt2$, $V=(ct+z)/\sqrt2$, both with length units. Then $-c^2dt^2+dz^2=-2\,dU\,dV$. To construct a wave geometry, add a position-dependent term:
 
 $$
 ds^2=-2\,dU\,dV+dx^2+dy^2+H(U,x,y)\,dU^2,
@@ -3194,7 +3378,22 @@ $$
 H=A(U)(x^2-y^2)+2B(U)xy.
 $$
 
-Its curvature includes
+The profiles $A(U)$ and $B(U)$ have units of inverse length squared, so $H$ is dimensionless. The inverse of the $U,V$ metric block is
+
+$$
+\begin{pmatrix}H&-1\\-1&0\end{pmatrix}^{-1}
+=\begin{pmatrix}0&-1\\-1&-H\end{pmatrix}.
+$$
+
+Thus $g^{UU}=0$ throughout the wave geometry, while $g^{VV}$ need not vanish. The nonzero Christoffel coefficients are, apart from their lower-index symmetry,
+
+$$
+\Gamma^V{}_{UU}=-\frac12\partial_UH,
+\qquad\Gamma^V{}_{Ui}=-\frac12\partial_iH,
+\qquad\Gamma^i{}_{UU}=-\frac12\partial_iH.
+$$
+
+There are no coefficients with upper $U$, and $H$ is independent of $V$. In the curvature formula, $R^V{}_{iUj}=-\partial_j\Gamma^V{}_{Ui}=\tfrac12\partial_i\partial_jH$; the other terms vanish. Lowering the first index supplies $g_{UV}=-1$, giving
 
 $$
 R_{UiUj}=-\frac12\partial_i\partial_jH,
@@ -3211,11 +3410,13 @@ and the other Ricci components vanish: this is a vacuum plane gravitational wave
 
 Why does $\mathcal K$ vanish too? Every nonzero curvature component has lower $U$ indices, but the inverse metric has $g^{UU}=0$. Raising a $U$ slot pairs it with a $V$ slot, and there are no corresponding nonzero curvature components containing $V$. The full contraction therefore vanishes even though the tidal tensor does not. These plane waves belong to the class of geometries with vanishing scalar polynomial invariants; the broader classification is given by [Pravda, Pravdova, Coley, and Milson](https://arxiv.org/abs/gr-qc/0209024).
 
-A vanishing scalar is a statement about that scalar. It is not a permission slip to replace the tensor by zero. For difficult spacetime classification or singularity questions, curvature components in physically or geometrically specified frames, covariant derivatives, geodesic behavior, and extension properties may all matter.
+</details>
 
-### 10.8 The chain of ideas you now own
+A vanishing scalar contraction does not establish that the full tensor vanishes. For difficult spacetime classification or singularity questions, curvature components in physically or geometrically specified frames, covariant derivatives, geodesic behavior, and extension properties may all matter.
 
-You can now move through the geometric core without treating any symbol as a ceremonial object:
+### 10.8 From the metric to curvature
+
+The calculations in these chapters distinguish several kinds of measurement:
 
 | Object | What it lets you ask | What it does not imply by itself |
 |---|---|---|
@@ -3229,9 +3430,9 @@ You can now move through the geometric core without treating any symbol as a cer
 
 The next step is physical rather than merely geometrical: identify the tensor that describes matter's energy, momentum, and stresses, then find the dynamical equation and action that relate it to the geometry you have just learned to measure.
 
-### 10.9 How much curvature is outside your window?
+### 10.9 Measuring tides near Earth
 
-An enormous-looking number of indices can hide a very small measurable effect. Outside a spherical Earth, the radial relative acceleration of two nearby freely falling particles separated by $\ell$ is approximately
+The tidal equation lets us estimate an experiment near Earth’s surface. Outside a spherical Earth, the radial relative acceleration of two nearby freely falling particles separated by $\ell$ is approximately
 
 $$
 \Delta a_r\simeq \frac{2G_NM_\oplus}{R_\oplus^3}\ell.
@@ -3246,19 +3447,19 @@ $$
 \simeq3.43\times10^{-23}\,\mathrm{m^{-2}}.
 $$
 
-The associated scale $\mathcal R_{\rm tidal}^{-1/2}\simeq1.71\times10^{11}\,\mathrm m$ is about 1.14 astronomical units. This is a scale constructed from one component, not a literal circle into which four-dimensional spacetime bends. Notice the units: restoring $c^2$ gives a relative acceleration **per unit separation**, and multiplying by $\ell$ gives the acceleration difference. Curvature by itself does not determine the weight of one supported object.
+The associated scale $\mathcal R_{\rm tidal}^{-1/2}\simeq1.71\times10^{11}\,\mathrm m$ is about 1.14 astronomical units. One astronomical unit is approximately $1.496\times10^{11}\,\mathrm m$, the scale of the Earth–Sun distance. This is a scale constructed from one component, not a literal circle into which four-dimensional spacetime bends. Notice the units: restoring $c^2$ gives a relative acceleration **per unit separation**, and multiplying by $\ell$ gives the acceleration difference. Curvature by itself does not determine the weight of one supported object.
 
 This symbol names a component magnitude, with units of inverse length squared. The Kretschmann scalar retains the symbol $\mathcal K$ and has units of inverse length to the fourth power. In Schwarzschild spacetime, $\mathcal K=12\mathcal R_{\rm tidal}^2$ for this radial component; the length $\mathcal K^{-1/4}$ differs from $\mathcal R_{\rm tidal}^{-1/2}$ by the factor $12^{-1/4}$.
 
 Here is a second useful conversion. Earth's geometrized mass is $G_NM_\oplus/c^2\simeq4.44\,\mathrm{mm}$, and its Schwarzschild radius is twice that, about $8.87\,\mathrm{mm}$. These are compactness scales. Earth is not a black hole: its actual radius is hundreds of millions of times larger.
 
-### 10.10 Why twenty curvature numbers survive local flattening
+### 10.10 Counting curvature through coordinate freedom
 
 Chapter 8 counted curvature components using tensor symmetries. There is a second useful perspective: compare the metric's Taylor coefficients with the coordinate freedom that can change them. This is a count that supports the normal-coordinate construction, not a substitute for its existence proof.
 
 At an event, a symmetric four-by-four metric has ten independent entries. A linear coordinate transformation has sixteen coefficients. Once it puts the metric into Minkowski form, six continuous freedoms remain: three spatial rotations and three boosts. The first derivatives of the metric then have $4\times10=40$ entries. The quadratic part of a coordinate transformation also has $4\times10=40$ coefficients, symmetric in its two lower coordinate labels; normal coordinates use this freedom to eliminate those first derivatives.
 
-At the next order, the second derivatives have $10\times10=100$ entries. The cubic coordinate change has four choices of output component and twenty symmetric triples of input labels, giving $4\times20=80$ coefficients. The twenty triples are counted by combinations with repetition: $\binom{4+3-1}{3}=20$. The remaining $100-80=20$ independent combinations are precisely the curvature information that cannot be eliminated at the event.
+At the next order, the second derivatives have $10\times10=100$ entries. The cubic coordinate change has four choices of output component and twenty symmetric triples of input labels, giving $4\times20=80$ coefficients. We can count the unordered triples directly: four have all labels equal; $4\times3=12$ have a repeated label and a different third label; four have three distinct labels. The total is $4+12+4=20$. The remaining $100-80=20$ independent combinations are precisely the curvature information that cannot be eliminated at the event.
 
 This count explains the hierarchy: the metric's values supply local measuring units, its first derivatives can be simplified away at one event, and curvature survives in the quadratic spatial variation. It does not say that there are twenty propagating gravitational polarizations. Chapter 20 counts dynamical initial data and reaches a different answer to a different question.
 

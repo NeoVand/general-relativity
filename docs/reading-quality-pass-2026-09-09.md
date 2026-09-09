@@ -46,8 +46,20 @@ Chapter 7 adds the actual basis-change product rule for the connection transform
 
 The geometry models and controls passed 20 viewport/theme combinations, with independent checks of basis cancellation and transport. All 37 lessons again passed 680 interactions, including persistence and prerequisite round trips. Desktop and mobile reading-position restoration passed.
 
+## Chapters 8 through 10
+
+This pass found errors as well as difficult phrasing. The zero-trace matrix example incorrectly described negative unit eigenvalues as compression; it now distinguishes reversing a vector from accelerating a separation. The geodesic-variation setup incorrectly called its two-parameter strip a full congruence. The plane-wave example called both coordinate functions null even though its inverse metric has a generally nonzero VV entry. Both descriptions are corrected.
+
+The tidal calibration exercise appeared before the spherical-field calculation it used. It now follows §10.5, with an explicit prerequisite link that the sequencing check can verify.
+
+The transport chapter begins with the actual loop experiment. It explains contractible loops with a calculated cone example, derives the sphere's area-to-rotation relation, and supplies the coordinate construction and metric-derivative expression used to prove curvature symmetries. The Ricci chapter works through the initially stationary cloud's edge lengths before its volume formula. Expandable calculations cover conformal rescaling, the normal-coordinate coefficient, and the nonzero curvature of the wave example. Newtonian tides now include the radial-unit-vector derivative, and the curvature count explains its combinatorics.
+
+Independent numerical differentiation of the metrics checks the added conformal and wave calculations. The test now inverts full metric matrices and raises all four curvature indices, which is essential for the non-diagonal wave metric. It verifies nonzero tidal entries together with zero Ricci and scalar contractions. Existing FLRW and curvature-table checks still pass.
+
+All 37 lessons passed their 680 browser interactions after these changes. The integrated curvature experiences, 74 page/viewport checks, reading-position restoration, and narration-context checks also passed.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 8.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 11.
