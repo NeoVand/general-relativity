@@ -12,6 +12,7 @@ import {relativityLabHTML} from './relativity-labs.mjs';
 import {mechanicsExperienceHTML} from './mechanics-experience.mjs';
 import {polarExperienceHTML,vectorFieldExperienceHTML} from './geometry-foundations.mjs';
 import {parallelTransportHTML} from './parallel-transport-experience.mjs';
+import {flowOrderHTML} from './flow-order-experience.mjs';
 import {lessonHTML,compassHTML,courseMapHTML,preparationHTML,notebookHTML,publicCourseData} from './course-content.mjs';
 import {geometryExperienceHTML} from './geometry-experiences.mjs';
 import {curvatureExperienceHTML} from './curvature-experiences.mjs';
@@ -165,6 +166,7 @@ for(let i=0;i<pages.length;i++){
  html=html.replace('<div data-foundation-insert="polar"></div>',()=>polarExperienceHTML());
  html=html.replace('<div data-foundation-insert="vector-field"></div>',()=>vectorFieldExperienceHTML());
  html=html.replace('<div data-foundation-insert="transport"></div>',()=>parallelTransportHTML());
+ html=html.replace('<div data-foundation-insert="flow-order"></div>',()=>flowOrderHTML());
  if(p.chapter==='8')html=html.replace('<section class="guided-lesson" id="carry-a-direction-without-turning-it"','<span id="scene-sphere"></span><section class="guided-lesson" id="carry-a-direction-without-turning-it"');
  if(p.chapter==='4')html=html.replace('<section class="guided-lesson" id="two-maps-one-sphere"',geometryExperienceHTML('manifold')+'<section class="guided-lesson" id="two-maps-one-sphere"');
  // A picture follows the explanation of its quantities, including on first load.

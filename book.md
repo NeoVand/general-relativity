@@ -2220,6 +2220,60 @@ $$
 
 The volume factor accounts for the contracted index $\mu$; the final connection term accounts for the remaining index $\nu$. We will need both terms when differentiating the stress-energy tensor in Chapter 11.
 
+### 6.6 When the order of two flows matters
+
+A vector field can tell a point how to move: at every instant, follow the arrow at the point’s current location. The resulting motion is called the field’s **flow**. A velocity field uses time as its parameter; a mathematical flow can use another curve parameter.
+
+Consider two instructions on a flat plane. The field $X$ moves a point horizontally at unit rate. The field $Y$ moves it vertically at rate $x$, so its arrows get longer farther to the right. Follow each instruction for a small parameter step $h$. The coordinates $x,y$ and the parameter $h$ are dimensionless in this example.
+
+Starting from $(1,0)$, does X followed by Y reach the same place as Y followed by X? The **Lie bracket**—pronounced “lee”—measures the leading difference between these orders. First watch the two routes.
+
+<div data-foundation-insert="flow-order"></div>
+
+For X then Y, the horizontal step first changes $x$ to $1+h$. The vertical flow is now stronger, and its step raises $y$ by $h(1+h)$. For Y then X, the vertical step happens while $x$ is still one, so it raises $y$ only by $h$. The endpoints are
+
+$$
+A=(1+h,h+h^2),\qquad B=(1+h,h).
+$$
+
+Their difference is $(0,h^2)$. A smaller step makes the gap smaller, but dividing the gap by $h^2$ always gives the same upward vector $(0,1)$. This remaining vector is $[X,Y]$ for these fields.
+
+Why does the square of the step appear? The first move changes where the second instruction is sampled. Over a small X step, the component $Y^i$ changes by $hX^j\partial_jY^i$ to first order. Following that changed field for another step $h$ contributes $h^2X^j\partial_jY^i$. Reversing the order gives $h^2Y^j\partial_jX^i$ instead. The other second-order terms occur in both routes and cancel. Thus, for smooth fields, the leading endpoint difference is $h^2[X,Y]$, where
+
+$$
+\boxed{[X,Y]^i=X^j\partial_jY^i-Y^j\partial_jX^i.}
+$$
+
+The $i$ index labels the component of the resulting vector; $j$ is summed over the coordinate directions. In our example, $X=(1,0)$ and $Y=(0,x)$. Only $\partial_xY^y=1$ contributes, so $[X,Y]=(0,1)=\partial_y$.
+
+We can also recognize this vector by its action on a scalar function. Recall from §4.3 that $X[f]$ means the directional derivative of $f$ along $X$. The ordinary product rule gives
+
+$$
+X[Y[f]]-Y[X[f]]
+=\left(X^j\partial_jY^i-Y^j\partial_jX^i\right)\partial_i f
+=[X,Y][f].
+$$
+
+The mixed second derivatives of the smooth function $f$ cancel. In this operator language, the bracket is a **commutator**: one composition minus the reversed composition. A bracket of zero means the flows agree through this leading comparison; constant coordinate directions such as $\partial_x$ and $\partial_y$ have zero bracket.
+
+The plane in the experiment has remained flat throughout. The endpoint gap comes from position-dependent instructions. In §7.2, subtracting this effect will be essential to defining torsion without confusing it with the behavior of the chosen vector fields.
+
+<details class="history-note" data-no-narration>
+<summary>Check the distinction in a polar frame</summary>
+
+On a regular polar patch with $r>0$, the coordinate fields $\partial_r$ and $\partial_\theta$ commute. Their components in their own coordinate basis are constant. The unit angular direction is instead $\hat e_\theta=r^{-1}\partial_\theta$, while $\hat e_r=\partial_r$. Its factor $1/r$ changes with position:
+
+$$
+[\hat e_r,\hat e_\theta]
+=[\partial_r,r^{-1}\partial_\theta]
+=-r^{-2}\partial_\theta
+=-\frac1r\hat e_\theta.
+$$
+
+The nonzero bracket belongs to this choice of unit frame on an ordinary flat plane. It does not indicate curvature or torsion. This is why a formula stated for a coordinate basis cannot always be copied unchanged into a moving unit frame.
+
+</details>
+
 <a id="chapter-7"></a>
 
 ## 7. The connection: how neighboring laboratories compare directions
@@ -2300,7 +2354,7 @@ $$
 
 Torsion-free therefore means symmetry of the lower two connection indices **in a coordinate basis**. For a frame whose basis fields have a nonzero bracket, that bracket must still be subtracted. Symmetry of the connection coefficients alone would then be a different condition.
 
-The flat-plane example above already has $[\partial_x,x\partial_y]=\partial_y$. Its ordinary Euclidean connection nevertheless has zero torsion: $\nabla_{\partial_x}(x\partial_y)=\partial_y$ and $\nabla_{x\partial_y}\partial_x=0$, so the bracket cancels their difference. A nonzero bracket of chosen fields therefore does not imply torsion. We choose zero torsion in ordinary GR; other gravity theories can make a different choice.
+The flat-plane example in [§6.6](chapter-6.html#6-6-when-the-order-of-two-flows-matters) already has $[\partial_x,x\partial_y]=\partial_y$. Its ordinary Euclidean connection nevertheless has zero torsion: $\nabla_{\partial_x}(x\partial_y)=\partial_y$ and $\nabla_{x\partial_y}\partial_x=0$, so the bracket cancels their difference. A nonzero bracket of chosen fields therefore does not imply torsion. We choose zero torsion in ordinary GR; other gravity theories can make a different choice.
 
 ### 7.3 Deriving the Christoffel symbols
 

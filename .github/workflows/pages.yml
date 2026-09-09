@@ -72,6 +72,8 @@ jobs:
         run: npm run test:visual-lessons
       - name: Check polar coordinates and vector fields
         run: npm run test:geometry-foundations
+      - name: Check flow order and Lie bracket preparation
+        run: npm run test:flow-order
       - name: Check continuous transport and surface holonomy
         run: npm run test:parallel-transport
       - name: Check manifold charts and orbital precession
