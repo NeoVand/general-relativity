@@ -19,13 +19,17 @@ You should also be able to recognize several seductive mistakes before they reco
 
 Read with a pencil and occasionally stop before the next displayed equation. Predict its indices, its dimensions, or its sign. Understanding is much easier to counterfeit while reading than while predicting.
 
-Begin with Chapter 0 if mechanics or multivariable calculus is unfamiliar. Chapters 20–23 are optional deeper trails; their extra concepts are introduced in place. There are three routes:
+Begin with Chapter 0 if mechanics or multivariable calculus is unfamiliar. Use its five checks to decide which refreshers you need. The recommended course runs through Chapters 0–19 and finishes with Chapter 24. Chapters 20–23 are optional deeper trails; their introductions explain the physical questions and identify additional mathematical or quantum input. Chapter 24 is the main course's synthesis, not an optional prerequisite for those trails.
 
 | Route | Read | What it builds |
 |---|---|---|
-| The full expedition | Chapters 0–24, then the exercises | A continuous foundation from special relativity to modern GR |
-| The equation expedition | Chapters 2–15, then 24 | The mathematical and physical meaning of every term and the full action derivation |
-| The physical expedition | Chapters 1, 3–5, 8–12, 16–19 | Clocks, tides, matter, black holes, waves, and cosmology; return for the intermediate machinery |
+| The main course | Chapters 0–19, then 24; add 20–23 when their questions interest you | A connected foundation, applications, and a final metric-to-measurement calculation |
+| The equation route | Chapter 0's checks, then Chapters 1–15 and 24 | The meaning of every term and the action derivation; Chapter 1 supplies the motivation |
+| The applications route | Chapters 0–12, then 15–19 and 24; return to 13–14 for the full action derivation | Clocks, tides, matter, black holes, waves, and cosmology with their tensor and curvature prerequisites intact |
+
+For the applications route, the opening action argument in §15.2 may be read as a preview; §15.4's symmetry and conserved-current calculation is the immediate tool for later applications. A shorter tour through Chapters 1, 3–5, and 16–19 can give you the physical questions, but it skips mathematical dependencies. Treat that as a preview, not as a promise that every displayed calculation will already be within reach.
+
+Do some exercises while the corresponding ideas are fresh rather than saving all of Appendix A for the end. After Chapter 2, try A.1; after Chapter 4, A.2; after Chapter 7, A.4 and A.6; after Chapter 10, A.9. Each problem asks you to use an operation, which is a stronger check than recognizing its finished formula.
 
 **Analogies are scaffolding.** A good analogy reveals a relationship. It does not provide a license to import every feature of the familiar object. When we use a rubber sheet, an accountant, a map, a neighboring laboratory, or a rotating compass, we will say where the comparison breaks.
 
@@ -1023,7 +1027,59 @@ $$
 x:U\subset M\longrightarrow x(U)\subset\mathbb R^n
 $$
 
-from an open region of the manifold to an open region of ordinary coordinate space. An **atlas** is a collection of compatible charts covering the manifold. Smoothness of their transition maps lets us differentiate fields without a change of chart creating fictitious discontinuities. The standard definition also includes technical separation and countability conditions that exclude pathological spaces; the local-chart picture is the ingredient we need for calculations.
+from an open region of the manifold to an open region of ordinary coordinate space. It is one-to-one and onto that coordinate region, and both it and its inverse are continuous. This last condition matters: nearby points must correspond to nearby coordinate values, and nearby coordinate values must bring us back to nearby points.
+
+Here is the small piece of topology behind that sentence. An **open set** contains a neighborhood around each of its points. On a surface, those neighborhoods are measured within the surface; they need not contain a three-dimensional ball. A map is **continuous** if the preimage of every open set is open. The preimage of a region means all starting points sent into that region. This definition makes precise the idea that a map has no jumps, even before we have chosen a distance formula. It does not yet require a derivative: $f(x)=|x|$ is continuous but has a corner at zero.
+
+An **atlas** is a collection of charts covering the manifold. If charts $x$ and $y$ overlap, the **transition map**
+
+$$
+y\circ x^{-1}:x(U\cap V)\longrightarrow y(U\cap V)
+$$
+
+takes one coordinate list to the other for the very same point. The inverse $x^{-1}$ first finds the point; $y$ then reads its other labels. A smooth atlas requires these transitions and their inverses to have continuous derivatives of every order on their domains. Thus ordinary multivariable calculus gives consistent answers across chart boundaries. Here, as throughout the book, **smooth** means this all-orders condition. Particular physical problems can work with weaker differentiability, but must say how much they require.
+
+The usual manifold definition also requires **Hausdorff separation**—distinct points have disjoint neighborhoods—and **second countability**—a countable family of open sets can generate all open sets by unions. These conditions exclude some misleading local-coordinate examples. Our sphere and spacetime examples satisfy them; we will not need their general existence theorems for the calculations below.
+
+**A complete two-chart example.** Describe the unit sphere temporarily by $X^2+Y^2+Z^2=1$ in ordinary three-dimensional space. Capital letters are only a convenient construction aid. The surface itself has two independent coordinates. Let $N=(0,0,1)$ and $S=(0,0,-1)$ be its poles.
+
+On the sphere with $N$ removed, use the chart
+
+$$
+(u,v)=\left(\frac{X}{1-Z},\frac{Y}{1-Z}\right).
+$$
+
+Every finite pair $(u,v)$ corresponds to exactly one point of that patch. To see this without trusting a picture, put $s=u^2+v^2$ and write the inverse:
+
+$$
+(X,Y,Z)=\left(\frac{2u}{1+s},\frac{2v}{1+s},\frac{s-1}{1+s}\right).
+$$
+
+The squared components sum to one, and substituting them back into the chart returns $u$ and $v$. The denominator $1+s$ never vanishes. The north pole is approached only as the coordinate radius becomes unbounded; the south pole is the perfectly ordinary coordinate pair $(0,0)$.
+
+The second chart removes $S$ instead:
+
+$$
+(p,q)=\left(\frac{X}{1+Z},\frac{Y}{1+Z}\right).
+$$
+
+It covers the missing north pole, where $(p,q)=(0,0)$. On the overlap, substitute the first chart's inverse into the second chart. Since $1+Z=2s/(1+s)$, the transition is
+
+$$
+(p,q)=\left(\frac{u}{u^2+v^2},\frac{v}{u^2+v^2}\right),
+\qquad (u,v)\ne(0,0).
+$$
+
+The excluded origin represents $S$, which is outside the second chart. It is not a defect in a transition that its formula fails outside its domain. Applying the same formula to $(p,q)$ returns $(u,v)$, so the transition has a smooth inverse everywhere on the overlap. Its Jacobian has determinant
+
+$$
+\det\frac{\partial(p,q)}{\partial(u,v)}
+=-\frac{1}{(u^2+v^2)^2}\ne0.
+$$
+
+The minus sign reverses the orientation of these coordinate lists; the nonzero value says no infinitesimal direction has been collapsed. Two overlapping charts therefore cover the whole sphere, even though neither chart does so alone. We have constructed an atlas, not yet supplied an intrinsic metric or calculated curvature.
+
+As a numerical check, the first coordinates $(u,v)=(2,1)$ locate $(X,Y,Z)=(2/3,1/3,2/3)$ and give second coordinates $(p,q)=(2/5,1/5)$. Those are two addresses for one point. Chapter 2's Jacobian rule tells us how a tangent's components change between them; §4.3 will make the tangent itself precise.
 
 The manifold specifies which events exist and how their neighborhoods fit together. It does **not** yet specify distances, angles, light cones, clocks, or gravitational dynamics. Those require further structure.
 
@@ -4156,7 +4212,63 @@ These are places where the most memorable slogans are often one assumption short
 
 ### 15.1 Diffeomorphisms: moving the mathematical description coherently
 
-A diffeomorphism is a smooth invertible map of the manifold with a smooth inverse. Infinitesimally it is generated by a vector field $\xi^\mu$. Its action on a tensor is described by a Lie derivative.
+A **smooth map** $F:M\to N$ takes points of one manifold to points of another. “Smooth” means that its coordinate expression has continuous derivatives of every order in overlapping charts. Section 4.1's transition rules ensure this property does not depend on which compatible charts we choose. A **diffeomorphism** is a smooth map with a smooth inverse. It preserves the smooth structure; it need not preserve a chosen metric's distances. A diffeomorphism that does preserve the metric is an **isometry**.
+
+Before using a map on an entire field, work out what it does to one arrow. A curve $x^\mu(\lambda)$ has tangent $V^\mu$ at a point $p$. Its image curve has coordinates $y^a(\lambda)=F^a(x(\lambda))$. The chain rule gives
+
+$$
+(F_*V)^a\big|_{F(p)}
+=\left.\frac{\partial F^a}{\partial x^\mu}\right|_p V^\mu\big|_p.
+$$
+
+This is the **pushforward**: apply the map to the curve, then take its tangent. The Jacobian carries the tangent from $T_pM$ to $T_{F(p)}N$. An arbitrary smooth map can squash a direction to zero; a diffeomorphism cannot, because its inverse Jacobian undoes the operation. The formula resembles a coordinate transformation, but the interpretation can differ: a chart transition relabels the same point, whereas a map of the manifold may send a point elsewhere.
+
+A covector is a measuring question, so it travels in the opposite direction. If $\omega$ measures vectors at $F(p)$, define a question at $p$ by first pushing a vector forward and then asking $\omega$:
+
+$$
+(F^*\omega)_p(V)=\omega_{F(p)}(F_*V),
+\qquad
+(F^*\omega)_\mu(p)
+=\omega_a(F(p))\frac{\partial F^a}{\partial x^\mu}\bigg|_p.
+$$
+
+This is the **pullback**. It brings a measuring rule back to the starting point. The star placement keeps track of the direction: $F_*$ carries tangents forward, while $F^*$ brings covectors back. These constructions use the smooth map and the chain rule; no metric or parallel-transport connection is required.
+
+For a scalar field, pullback is just composition, $F^*f=f\circ F$. For a metric it applies the same measuring procedure to both vector inputs:
+
+$$
+(F^*g)_p(V,W)=g_{F(p)}(F_*V,F_*W).
+$$
+
+Now make the map into a continuous motion. A **flow** $F_s$ follows the integral curves of a vector field $\xi$: each starting point moves with coordinate velocity $\xi^\mu$. For a sufficiently small parameter interval, the motion can be reversed, so these maps are local diffeomorphisms. At first order,
+
+$$
+F_s^\mu(x)=x^\mu+s\,\xi^\mu(x)+O(s^2),
+\qquad F_0(x)=x.
+$$
+
+To compare a field before and after that motion, pull it back to the same starting points before subtracting. Its **Lie derivative** is the first-order change:
+
+$$
+\mathcal L_\xi f
+=\left.\frac{d}{ds}F_s^*f\right|_{s=0},
+\qquad
+\mathcal L_\xi g
+=\left.\frac{d}{ds}F_s^*g\right|_{s=0}.
+$$
+
+For a one-dimensional check, take $F_s(x)=e^sx$ and $f(x)=x^2$. Then $F_s^*f=e^{2s}x^2$, so $\mathcal L_\xi f=2x^2$, with $\xi=x\,\partial_x$. For the ordinary line metric $g=dx\otimes dx$, the map multiplies each vector input by $e^s$, hence $F_s^*g=e^{2s}g$ and $\mathcal L_\xi g=2g$. Dilation is a diffeomorphism but not an isometry of that fixed metric. This example contains the whole comparison rule without any curved-spacetime algebra.
+
+For a general metric, differentiating its pullback gives three terms: one for moving to a new field value, and one for changing each vector input:
+
+$$
+(\mathcal L_\xi g)_{\mu\nu}
+=\xi^\rho\partial_\rho g_{\mu\nu}
++g_{\rho\nu}\partial_\mu\xi^\rho
++g_{\mu\rho}\partial_\nu\xi^\rho.
+$$
+
+Using the metric-compatible, torsion-free connection combines them into the compact expression below. The Lie derivative is not the covariant derivative $\nabla_\xi$: the latter uses the connection's parallel-comparison rule, while the former compares through the specified flow. The distinction will matter again when Chapter 20 describes moving spatial coordinates.
 
 For the metric,
 

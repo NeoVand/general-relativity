@@ -11,6 +11,7 @@
  import {wordAt,captionTokens,sourceHighlighter} from './lib/speech.js';
  import {loadHistory,recordListening,historyContext,compactHistory} from './lib/study-memory.js';
  import {answerHTML} from './lib/format.js';
+ import {readingSelection,selectionPosition} from './lib/selection.js';
  let {page,navigate}=$props();
  let settings=$state(loadSettings());
  let open=$state(false),tab=$state('listen'),error=$state(''),notice=$state('');
@@ -23,22 +24,36 @@
  let audio,callAudio,channel,microphone,playController,prepareController,chatController,callController;
  let run=0,callGeneration=0,chatGeneration=0,activeURL,queue=[],queuePage='',queueCursor=0,onceOnly=false,stopWait=()=>{},currentScriptSegment;
  let seenCalls=new SvelteSet();
- const selection=$derived(selected?.page===page.id?selected:null);
+ let selectionPinned=false;
+ const selection=$derived(selected?.page===page.id&&selected?.element?.isConnected?selected:null);
  const active=$derived(playback!=='idle');
  const calling=$derived(callState!=='idle');
  const busy=$derived(playback==='preparing');
+ function visibleSegment(segment){
+  if(!segment)return segment;
+  const view=document.getElementById(segment.id)?.closest('[data-scene]')?.dataset.activeView;
+  const variant=segment.views?.[view];
+  return variant?{...segment,...variant,sourceHash:segment.hash,view}:segment;
+ }
+ function visibleSegments(){return page.segments.filter(segment=>{
+  const element=document.getElementById(segment.id);
+  return !(element?.closest('.scene-equation,.scene-note,.scene-explanation')&&element.closest('[data-scene]')?.dataset.activeView==='diagram');
+ }).map(visibleSegment)}
  function sizeComposer(node){
   question;
   node.style.height='auto';
   node.style.height=`${Math.min(node.scrollHeight,160)}px`;
  }
  function fail(e){if(e?.name!=='AbortError')error=e?.message||'Something went wrong. Please retry.'}
- function reveal(nextTab){open=true;tab=nextTab;error='';notice='';tick().then(()=>document.querySelector('#study-panel')?.focus());}
+ function pinSelection(){if(selection){selectionPinned=true;selected={...selection,anchor:null};getSelection()?.removeAllRanges()}}
+ function clearSelection(){selected=null;selectionPinned=false}
+ function closeStudy(){open=false;clearSelection()}
+ function reveal(nextTab){pinSelection();open=true;tab=nextTab;error='';notice='';tick().then(()=>document.querySelector('#study-panel')?.focus());}
  function persist(){notice=saveSettings($state.snapshot(settings))?'Connections saved.':'This browser cannot save connections; they remain available until you leave.';error='';}
  function forget(){stop();endCall();chatController?.abort();prepareController?.abort();forgetSettings();settings={...defaults};notice='API keys removed.';error='';}
  async function loadVoices(){loadingVoices=true;error='';try{voiceList=await voices(settings);if(voiceList.length&&!voiceList.some(v=>v.voice_id===settings.voiceId)){settings.voiceId=voiceList[0].voice_id;settings.voiceName=voiceList[0].name}}catch(e){fail(e)}finally{loadingVoices=false}}
  function requireKeys(narration=false){if(!settings.openaiKey||(narration&&!settings.elevenKey)){reveal('settings');notice=narration?'Add both API keys to listen with spoken mathematical explanations.':'Add an OpenAI API key to ask the tutor.';return false}return true}
- function remember(completed=false){const segment=queue[queueCursor];if(!segment||!packet)return;recordListening(history,queuePage,segment,{word:Math.max(0,spokenWord),seconds:audio?.currentTime||0,completed,excerpt:liveTokens.map(w=>w.text).join('')});}
+ function remember(completed=false){const segment=queue[queueCursor];if(!segment||!packet)return;recordListening(history,queuePage,segment.sourceHash?{...segment,hash:segment.sourceHash}:segment,{word:Math.max(0,spokenWord),seconds:audio?.currentTime||0,completed:completed&&!segment.partial,excerpt:liveTokens.map(w=>w.text).join('')});}
  function clearWords(){cancelAnimationFrame(wordFrame);wordHighlighter?.clear();wordHighlighter=null;wordElement=null;}
  function handToNarrator(){
   if(!calling)return;narratorOwnsAudio=true;callAudio.muted=true;
@@ -48,24 +63,28 @@
  async function talkAboutReading(){pause();reveal('ask');if(!calling){await startCall();return}narratorOwnsAudio=false;callAudio.muted=false;muted=false;microphone?.getAudioTracks().forEach(t=>t.enabled=true);callState='listening';await syncVoiceContext();}
  function stop(){remember();run++;playController?.abort();stopWait();stopWait=()=>{};audio?.pause();clearWords();if(audio){audio.removeAttribute('src');audio.load()}if(activeURL)URL.revokeObjectURL(activeURL);activeURL=null;packet=null;playback='idle';progress=0;liveTokens=[];spokenWord=-1;document.querySelectorAll('.narration-active').forEach(n=>n.classList.remove('narration-active'));}
  function pause(){if(playback==='idle')return;playback='paused';audio?.pause();remember();}
- async function resume(){handToNarrator();if(playback==='error'){startQueue();return}if(!active){await listen('current');return}playback=audio?.src?'playing':'preparing';if(audio?.src)try{await audio.play()}catch{playback='paused';error='Press play once more to allow audio in this browser.'}}
+ async function resume(){handToNarrator();if(playback==='error'){startQueue();return}if(!active){await listen('current');return}playback=audio?.src?'playing':'preparing';const token=run;if(audio?.src)try{await audio.play()}catch{if(token===run){playback='paused';error='Press play once more to allow audio in this browser.'}}}
  function toggle(){if(playback==='paused'||playback==='error')resume();else pause();}
  async function listen(mode='chapter',id,endId,{fromTool=false}={}){
+  const excerpt=mode==='selection'?selection:null;
+  if(excerpt)pinSelection();
   if(!requireKeys(true))return false;
   if(!fromTool){cancelAnswer();voiceTurn++;voiceTurnController?.abort();}
   stop();handToNarrator();
-  const requested=page.segments.findIndex(s=>s.id===(id||(mode==='selection'?selection?.start:currentPassage())));
+  const sources=visibleSegments();
+  const sourceStart=page.segments.findIndex(s=>s.id===(id||(mode==='selection'?selection?.start:currentPassage())));
+  const requested=sources.findIndex(s=>s.index>=Math.max(0,sourceStart));
   const end=page.segments.findIndex(s=>s.id===(endId||selection?.end));
   const ranged=mode==='selection'||mode==='range';
-  queue=ranged&&requested>=0?page.segments.slice(requested,Math.max(requested,end)+1):page.segments;
-  queuePage=page.id;queueCursor=mode==='chapter'||ranged?0:Math.max(0,requested);onceOnly=mode==='one';readingMode=onceOnly?'standalone':'flow';
+  queue=excerpt?.segments|| (ranged&&sourceStart>=0?sources.filter(s=>s.index>=sourceStart&&s.index<=Math.max(sourceStart,end)):sources);
+  queuePage=page.id;queueCursor=mode==='chapter'||ranged?0:Math.max(0,requested);onceOnly=mode==='one';readingMode=excerpt?'selection':onceOnly?'standalone':'flow';
   readingTitle=page.title;readingPage=page.id;readingCount=queue.length;
   open=true;tab='listen';startQueue();return true;
  }
  function updateWords(){
   if(!packet||!audio)return;
   const element=page.id===queuePage?document.getElementById(queue[queueCursor]?.id):null;
-  if(element!==wordElement){wordHighlighter?.clear();wordElement=element;wordHighlighter=sourceHighlighter(element,packet.words,queue[queueCursor]?.kind);wordHighlighter.show(spokenWord);}
+  if(element!==wordElement){wordHighlighter?.clear();wordElement=element;wordHighlighter=sourceHighlighter(element,packet.words,queue[queueCursor]?.kind,queue[queueCursor]?.selectionRange);wordHighlighter.show(spokenWord);}
   const next=wordAt(packet.words,audio.currentTime);
   if(next!==spokenWord){spokenWord=next;liveTokens=captionTokens(packet.text,packet.words,next);wordHighlighter?.show(next);}
   progress=Number.isFinite(audio.duration)&&audio.duration>0?audio.currentTime/audio.duration:0;
@@ -75,13 +94,13 @@
  async function playBlob(clip,token){
   if(token!==run)return;
   clearWords();packet=clip;spokenWord=-1;liveTokens=captionTokens(clip.text,clip.words,0);
-  wordElement=page.id===queuePage?document.getElementById(queue[queueCursor].id):null;wordHighlighter=sourceHighlighter(wordElement,clip.words,queue[queueCursor].kind);
+  wordElement=page.id===queuePage?document.getElementById(queue[queueCursor].id):null;wordHighlighter=sourceHighlighter(wordElement,clip.words,queue[queueCursor].kind,queue[queueCursor].selectionRange);
   if(activeURL)URL.revokeObjectURL(activeURL);activeURL=URL.createObjectURL(clip.blob);audio.src=activeURL;audio.playbackRate=rate;updateWords();
   if(!clip.words.length)notice='This audio has no word timing from ElevenLabs; synchronized highlighting is unavailable.';
   await new Promise((resolve,reject)=>{
    const finish=()=>{audio.onended=null;audio.onerror=null;stopWait=()=>{};resolve()};stopWait=finish;
    audio.onended=finish;audio.onerror=()=>{audio.onended=null;audio.onerror=null;stopWait=()=>{};reject(Error('The audio could not play. Please retry this passage.'))};
-   if(playback!=='paused'){playback='playing';audio.play().catch(()=>{playback='paused';error='Press play to allow audio in this browser.'})}
+   if(playback!=='paused'){playback='playing';audio.play().catch(()=>{if(token===run){playback='paused';error='Press play to allow audio in this browser.'}})}
   });
  }
  async function startQueue(){
@@ -95,7 +114,7 @@
     if(playback!=='paused')playback='preparing';progress=0;audio.removeAttribute('src');audio.load();clearWords();packet=null;
     const ready=ahead?await ahead:await prepare(segment);if(ready.error)throw ready.error;if(token!==run)return;script=ready.text;
     ahead=!onceOnly&&queueCursor+1<queue.length?prepare(queue[queueCursor+1]).catch(error=>({error})):null;
-    const hidden=document.querySelector(`.narration-script[data-for="${CSS.escape(segment.id)}"]`);if(page.id===queuePage&&hidden)hidden.textContent=script;
+    const hidden=document.querySelector(`.narration-script[data-for="${CSS.escape(segment.id)}"]`);if(page.id===queuePage&&hidden&&!segment.partial)hidden.textContent=script;
     if(page.id===queuePage){document.querySelectorAll('.narration-active,.assistant-focus').forEach(n=>n.classList.remove('narration-active','assistant-focus'));const el=document.getElementById(segment.id);el?.classList.add('narration-active');if(follow&&el){let p=el.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}el.scrollIntoView({behavior:'instant',block:'center'})}}
     for(const [partIndex,part] of ready.parts.entries()){const clip=partIndex===0?ready.first:await narrationAudio(voiceSettings,part,signal);if(token!==run)return;await playBlob(clip,token);if(token!==run)return;}
     remember(true);if(onceOnly)break;
@@ -108,14 +127,14 @@
  async function saveScript(){if(!currentScriptSegment)return;await saveCache(scriptKey(settings,currentScriptSegment,readingMode),script);notice='Your spoken explanation is saved on this device. Replay to hear it.';}
  async function prepareChapter(){
   if(!requireKeys())return;preparing=true;prepared=0;prepareController=new AbortController();error='';
-  const segments=page.segments.filter(needsExplanation);prepareCount=segments.length;
+  const segments=visibleSegments().filter(needsExplanation);prepareCount=segments.length;
   try{for(const s of segments){const text=await narrationText(settings,s,prepareController.signal);const hidden=document.querySelector(`.narration-script[data-for="${CSS.escape(s.id)}"]`);if(hidden)hidden.textContent=text;prepared++;}notice='Spoken explanations are ready for this chapter.'}catch(e){fail(e)}finally{preparing=false}
  }
  function readerFocus(){
   const playhead=active?{page:queuePage,passage:queue[queueCursor]?.id,heading:readingHeading,status:playback,word:spokenWord,seconds:audio?.currentTime||0,spoken:liveTokens.map(w=>w.text).join('')}:null;
   const id=selection?.start||(hovered?.page===page.id?hovered.id:null)||(playhead?.page===page.id?playhead.passage:null)||currentPassage();
-  const segment=page.segments.find(s=>s.id===id);
-  return {page:page.id,title:page.title,selection:selection?.text||'',passage:segment?{id:segment.id,kind:segment.kind,heading:segment.heading,text:segment.text,latex:segment.latex}:null,playhead,nearby:focusContext(page,id),controls:[...document.querySelectorAll('#main input[type="range"]')].map(el=>({label:el.getAttribute('aria-label')||el.id,value:el.value}))};
+  const segment=visibleSegment(page.segments.find(s=>s.id===id));
+  return {page:page.id,title:page.title,selection:selection?.text||'',passage:segment?{id:segment.id,kind:segment.kind,heading:segment.heading,text:segment.text,latex:segment.latex}:null,playhead,nearby:focusContext({...page,segments:visibleSegments()},id),controls:[...document.querySelectorAll('#main input[type="range"]')].map(el=>({label:el.getAttribute('aria-label')||el.id,value:el.value}))};
  }
  async function runTool(name,args,signal){
   if(signal?.aborted)throw new DOMException('Cancelled','AbortError');
@@ -147,8 +166,8 @@
    await navigate(`${target.id}.html#${encodeURIComponent(args.passage)}`,{signal});await tick();if(signal?.aborted)throw new DOMException('Cancelled','AbortError');
    await listen('range',args.passage,end,{fromTool:true});return {playback:'started',provider:'ElevenLabs',page:target.id,passage:args.passage,end,note:'Narration is preparing/playing. Stay silent; do not read or confirm over the narrator.'};
   }
-  if(name==='show_passage'){await navigate(`${target.id}.html#${encodeURIComponent(args.passage)}`,{highlight:true,signal});if(signal?.aborted)throw new DOMException('Cancelled','AbortError');await tick();showPassage(args.passage);return {shown:true,page:target.id,passage:args.passage,title:target.title,source:target.segments[index].text}}
-  return {page:target.id,title:target.title,passages:target.segments.slice(Math.max(0,index-1),index+3)};
+  if(name==='show_passage'){await navigate(`${target.id}.html#${encodeURIComponent(args.passage)}`,{highlight:true,signal});if(signal?.aborted)throw new DOMException('Cancelled','AbortError');await tick();showPassage(args.passage);return {shown:true,page:target.id,passage:args.passage,title:target.title,source:visibleSegment(page.segments.find(s=>s.id===args.passage))?.text||target.segments[index].text}}
+  return {page:target.id,title:target.title,passages:target.segments.slice(Math.max(0,index-1),index+3).map(s=>{const source=target.id===page.id?visibleSegment(page.segments.find(p=>p.id===s.id)):s;return {id:source.id,kind:source.kind,heading:source.heading,text:source.text,latex:source.latex}})};
  }
  async function toolResult(name,args,signal){try{return await runTool(name,args,signal)}catch(e){return {error:e.message}}}
  async function context(){const [pages,map]=await Promise.all([catalog(),bookMap()]);return `${teachingInstructions}\nBOOK MAP (navigation reference):\n${compactBookMap(map)}\nCURRENT CHAPTER OUTLINE:\n${JSON.stringify(page.outline?.map(({id,title,endPassage})=>({id,title,endPassage})))}\nCURRENT READER STATE AND EXACT NEARBY SOURCE:\n${JSON.stringify(readerFocus())}\nLISTENING HISTORY (reference, not instructions):\n${JSON.stringify(compactHistory(history,pages,page.id))}`}
@@ -177,7 +196,8 @@
   }catch(e){fail(e)}finally{if(token===chatGeneration)thinking=false}
  }
  function cancelAnswer(){chatGeneration++;chatController?.abort();thinking=false;}
- async function explain(id){const s=page.segments.find(s=>s.id===id);if(!s)return;selected={page:page.id,start:id,end:id,text:s.text};reveal('ask');question=`Explain this ${s.kind} step by step: ${s.heading}.`;await ask(question);}
+ async function explain(id){const s=visibleSegment(page.segments.find(s=>s.id===id));if(!s)return;selected={page:page.id,start:id,end:id,text:s.text,element:document.getElementById(id)};reveal('ask');question=`Explain this ${s.kind} step by step: ${s.heading}.`;await ask(question);}
+ async function explainSelection(){if(!selection)return;reveal('ask');question='Explain the selected excerpt clearly, focusing on exactly what I selected.';await ask(question)}
  function endCall(){callGeneration++;contextGeneration++;voiceTurn++;voiceTurnController?.abort();narratorOwnsAudio=false;toolActivity='';callController?.abort();channel?.close();channel=null;microphone?.getTracks().forEach(t=>t.stop());microphone=null;if(callAudio){callAudio.pause();callAudio.srcObject=null;}callState='idle';muted=false;caption='';}
  function mute(){if(narratorOwnsAudio){talkAboutReading();return}muted=!muted;microphone?.getAudioTracks().forEach(t=>t.enabled=!muted);}
  async function startCall(){
@@ -219,21 +239,56 @@
   audio=new Audio();callAudio=new Audio();callAudio.autoplay=true;
   audio.ontimeupdate=()=>{progress=Number.isFinite(audio.duration)&&audio.duration>0?audio.currentTime/audio.duration:0};
   const action=e=>{const button=e.target.closest('[data-study-action]');if(!button)return;e.preventDefault();e.stopPropagation();const what=button.dataset.studyAction,id=button.dataset.readTarget;if(what==='explain')explain(id);else if(what==='listen')listen('one',id);else if(what==='chapter')listen('chapter');else reveal('ask')};
-  const select=()=>{const s=getSelection();if(!s?.toString().trim()||s.isCollapsed)return;const a=s.anchorNode?.parentElement?.closest('#main [data-passage]'),b=s.focusNode?.parentElement?.closest('#main [data-passage]');if(!a||!b)return;const start=Number(a.dataset.passage)<=Number(b.dataset.passage)?a:b,end=start===a?b:a;selected={page:page.id,start:start.id,end:end.id,text:s.toString().slice(0,6000)};};
-  const point=e=>{const el=e.target.closest('#main [data-passage]');if(el&&e.pointerType!=='touch')hovered={page:page.id,id:el.id};};
+  let selectionFrame=0,selecting=false,touchSelection=false;
+  const select=()=>{
+   cancelAnimationFrame(selectionFrame);selectionFrame=0;
+   if(selecting||selectionPinned)return;
+   if(document.activeElement?.matches('input,textarea,select,[contenteditable="true"]')){clearSelection();return}
+   const native=getSelection();
+   if(!native||native.isCollapsed||!native.rangeCount){clearSelection();return}
+   const range=native.getRangeAt(0),excerpt=readingSelection(page,range);
+   const anchor=excerpt&&selectionPosition(range,{touch:touchSelection});
+   if(anchor&&!selection?.anchor)document.dispatchEvent(new CustomEvent('gr:context-open',{detail:{kind:'selection'}}));
+   selected=anchor?{...excerpt,anchor}:null;
+  };
+  const scheduleSelection=()=>{cancelAnimationFrame(selectionFrame);selectionFrame=requestAnimationFrame(select)};
+  const point=e=>{
+   if(e.target.closest('.selection-study')){if(e.pointerType==='mouse')e.preventDefault();return}
+   if(!e.target.closest('.study-panel'))clearSelection();
+   selecting=!!e.target.closest('#main')&&!e.target.closest('button,input,textarea,select,.math-symbol-button');touchSelection=e.pointerType==='touch';
+   const el=e.target.closest('#main [data-passage]');if(el&&e.pointerType!=='touch')hovered={page:page.id,id:el.id};
+  };
+  const release=e=>{const wasSelecting=selecting;selecting=false;if(wasSelecting&&!e.target.closest('.selection-study,.study-panel'))scheduleSelection()};
+  const dismiss=()=>{cancelAnimationFrame(selectionFrame);if(!selectionPinned)clearSelection()};
+  const contextOpen=e=>{if(e.detail?.kind==='symbol')dismiss()};
   const save=()=>remember();
-  const key=e=>{if(e.key==='Escape'&&open){open=false;document.querySelector('.study-launcher button')?.focus()}};
-  document.addEventListener('pointerdown',point);window.addEventListener('pagehide',save);document.addEventListener('click',action);document.addEventListener('pointerup',select);document.addEventListener('keyup',select);document.addEventListener('keydown',key);
-  return ()=>{stop();endCall();cancelAnswer();prepareController?.abort();document.removeEventListener('pointerdown',point);window.removeEventListener('pagehide',save);document.removeEventListener('click',action);document.removeEventListener('pointerup',select);document.removeEventListener('keyup',select);document.removeEventListener('keydown',key)};
+  const key=e=>{
+   if(e.key==='Escape'){
+    if(selection){e.preventDefault();clearSelection();getSelection()?.removeAllRanges()}
+    if(open){closeStudy();document.querySelector('.study-launcher button')?.focus()}
+   }
+  };
+  document.addEventListener('pointerdown',point,true);document.addEventListener('pointerup',release);document.addEventListener('pointercancel',release);
+  document.addEventListener('selectionchange',scheduleSelection);document.addEventListener('scroll',dismiss,true);window.addEventListener('resize',dismiss);
+  window.visualViewport?.addEventListener('resize',dismiss);window.visualViewport?.addEventListener('scroll',dismiss);
+  document.addEventListener('gr:context-open',contextOpen);window.addEventListener('pagehide',save);document.addEventListener('click',action);document.addEventListener('keydown',key);
+  return ()=>{stop();endCall();cancelAnswer();prepareController?.abort();cancelAnimationFrame(selectionFrame);
+   document.removeEventListener('pointerdown',point,true);document.removeEventListener('pointerup',release);document.removeEventListener('pointercancel',release);
+   document.removeEventListener('selectionchange',scheduleSelection);document.removeEventListener('scroll',dismiss,true);window.removeEventListener('resize',dismiss);
+   window.visualViewport?.removeEventListener('resize',dismiss);window.visualViewport?.removeEventListener('scroll',dismiss);
+   document.removeEventListener('gr:context-open',contextOpen);window.removeEventListener('pagehide',save);document.removeEventListener('click',action);document.removeEventListener('keydown',key)};
  });
 </script>
 
 <div class="study-launcher" aria-label="Study tools">
- <button onclick={()=>reveal('listen')} aria-expanded={open&&tab==='listen'} aria-controls="study-panel"><Icon name="headphones"/><span>Listen</span></button>
- <button onclick={()=>{if(active)pause();reveal('ask')}} aria-expanded={open&&tab==='ask'} aria-controls="study-panel"><Icon name="chat"/><span>Ask</span>{#if calling}<span class="live-dot"></span>{/if}</button>
+ <button aria-label="Listen" title="Listen to the book" onclick={()=>reveal('listen')} aria-expanded={open&&tab==='listen'} aria-controls="study-panel"><Icon name="headphones"/><span class="study-launcher-label">Listen</span></button>
+ <button aria-label="Ask" title="Ask the tutor" onclick={()=>{if(active)pause();reveal('ask')}} aria-expanded={open&&tab==='ask'} aria-controls="study-panel"><Icon name="chat"/><span class="study-launcher-label">Ask</span>{#if calling}<span class="live-dot"></span>{/if}</button>
 </div>
-{#if selection&&!open}
- <div class="selection-study"><span>Selected passage</span><button onclick={()=>listen('selection')}>Listen</button><button onclick={()=>explain(selection.start)}>Explain</button><button aria-label="Clear selected passage" onclick={()=>selected=null}><Icon name="close" size={16}/></button></div>
+{#if selection?.anchor&&!open}
+ <div class="selection-study" role="group" aria-label="Selected text actions" data-placement={selection.anchor.placement} style:left={`${selection.anchor.left}px`} style:top={`${selection.anchor.top}px`}>
+  <button aria-label="Listen to selected text" title="Listen to selection" onclick={()=>listen('selection')}><Icon name="headphones" size={18}/></button>
+  <button aria-label="Explain selected text" title="Explain selection" onclick={explainSelection}><Icon name="chat" size={18}/></button>
+ </div>
 {/if}
 {#if active}
  <div class="listening-dock">
@@ -250,7 +305,7 @@
 {/if}
 {#if open}
  <section class="study-panel" id="study-panel" aria-label="Study companion" tabindex="-1">
-  <header class="study-heading"><div><span class="study-eyebrow">GENERAL RELATIVITY</span><h2>Study companion</h2></div><button class="study-icon" onclick={()=>open=false} aria-label="Close study panel"><Icon name="close"/></button></header>
+  <header class="study-heading"><div><span class="study-eyebrow">GENERAL RELATIVITY</span><h2>Study companion</h2></div><button class="study-icon" onclick={closeStudy} aria-label="Close study panel"><Icon name="close"/></button></header>
   <div class="study-tabs" role="tablist" aria-label="Study mode">
    <button role="tab" aria-selected={tab==='listen'} onclick={()=>tab='listen'} id="listen-tab" aria-controls="listen-content"><Icon name="headphones" size={17}/>Listen</button>
    <button role="tab" aria-selected={tab==='ask'} onclick={()=>tab='ask'} id="ask-tab" aria-controls="ask-content"><Icon name="chat" size={17}/>Ask</button>
@@ -279,7 +334,7 @@
     <span class="study-eyebrow">{page.id.startsWith('chapter-')?page.id.replace('-',' '):'READING'}</span><h3>{page.title}</h3>
     <p class="study-intro">Listen to the ideas, including what the equations and pictures mean.</p>
     <button class="study-primary" onclick={()=>listen('chapter')}><Icon name="play"/>Listen to this chapter</button>
-    <div class="study-actions"><button onclick={()=>listen('current')}>Start where I’m reading</button>{#if selection}<button onclick={()=>listen('selection')}>Read selected passages</button>{/if}</div>
+    <div class="study-actions"><button onclick={()=>listen('current')}>Start where I’m reading</button>{#if selection}<button onclick={()=>listen('selection')}>Read selected text</button>{/if}</div>
     <div class="reading-preferences"><label>Speed<select bind:value={rate} onchange={()=>{if(audio)audio.playbackRate=rate}}>{#each [.75,1,1.15,1.3,1.5,1.75,2] as speed (speed)}<option value={speed}>{speed}×</option>{/each}</select></label><label class="study-check"><input type="checkbox" bind:checked={follow}/>Follow the reading</label></div>
     {#if active}<div class="reading-now"><span class="study-eyebrow">{playback==='preparing'?'PREPARING':playback==='paused'?'PAUSED':'NOW READING'}</span><p>{readingHeading}</p>{#if liveTokens.length}<p class="panel-spoken-words" aria-label="Spoken words">{#each liveTokens as word (word.index)}<span class:spoken-current={word.index===spokenWord}>{word.text}</span>{/each}</p>{/if}<div class="study-actions"><button onclick={()=>{navigate(`${readingPage}.html#${queue[readingIndex]?.id}`).then(()=>showPassage(queue[readingIndex].id)).catch(fail)}}>Show passage</button><button onclick={()=>skip(0)}>Replay passage</button></div></div>{/if}
     {#if script}<button class="script-toggle" onclick={()=>scriptOpen=!scriptOpen} aria-expanded={scriptOpen}>{scriptOpen?'Hide':'Show'} spoken explanation</button>{#if scriptOpen}<p class="field-note">Last reading: {readingTitle}</p><label>Spoken explanation<textarea class="spoken-script" bind:value={script} rows="7"></textarea></label><div class="study-actions"><button onclick={saveScript}>Save wording</button><button onclick={regenerate}>Regenerate</button></div><p class="field-note">Generated explanations can make mistakes. Compare with the source equation; edit the wording if needed.</p>{/if}{/if}
@@ -296,7 +351,7 @@
      {#if thinking}<p class="thinking" role="status">Following the idea… <button onclick={cancelAnswer}>Stop</button></p>{/if}
     </div>
     <form class="question-form" onsubmit={e=>{e.preventDefault();ask()}}>
-     {#if selection}<div class="composer-selection"><Icon name="book" size={15}/><span>Selected passage</span><button type="button" aria-label="Clear question context" title="Clear selected passage" onclick={()=>selected=null}><Icon name="close" size={14}/></button></div>{/if}
+     {#if selection}<div class="composer-selection"><Icon name="book" size={15}/><span>Selected passage</span><button type="button" aria-label="Clear question context" title="Clear selected passage" onclick={clearSelection}><Icon name="close" size={14}/></button></div>{/if}
      <label class="sr-only" for="tutor-question">Ask a question</label>
      <textarea id="tutor-question" {@attach sizeComposer} bind:value={question} placeholder="Ask anything about this chapter" rows="1" onkeydown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();ask()}}}></textarea>
      <div class="composer-toolbar">

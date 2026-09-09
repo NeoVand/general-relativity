@@ -71,13 +71,20 @@ try{
  await page.locator('#speed').fill('0');await page.locator('#speed').dispatchEvent('input');
  assert.match(await page.locator('#clock-result').innerText(),/10\.00 years/);
  await go(new URL('chapter-18.html',base).href);
- await page.locator('#wave-phase').fill('50');await page.locator('#wave-phase').dispatchEvent('input');
- assert.ok(Number(await page.locator('.wave-dot').first().getAttribute('cx'))>330);
+ assert.equal(await page.locator('#wave-phase,#wave-ring').count(),0,'The wave lesson has one coordinated visual stage');
+ assert.equal(await page.locator('#scene-wave .scene-diagram').count(),1);
  for(const width of [1440,390])for(const theme of ['light','dark']){
   await page.setViewportSize({width,height:844});
   await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
+  await page.waitForFunction(()=>getComputedStyle(document.querySelector('.search-field')).borderTopColor==='rgba(0, 0, 0, 0)');
+  const chrome=await page.evaluate(()=>{const field=getComputedStyle(document.querySelector('.search-field')),header=document.querySelector('.topbar');return {height:header.getBoundingClientRect().height,border:field.borderTopColor,background:field.backgroundColor,blur:getComputedStyle(header).backdropFilter}});
+  assert.equal(chrome.height,width<800?48:56,'The header leaves room for reading');
+  assert.equal(chrome.border,'rgba(0, 0, 0, 0)','Idle search has no visible border');
+  assert.equal(chrome.background,'rgba(0, 0, 0, 0)','Idle search has no filled container');
+  assert.ok(chrome.blur.includes('blur'),'Content remains visible through the header');
   await page.locator('#search-button').click();await page.locator('#search-input').fill('GPS');
   await page.waitForFunction(()=>document.querySelectorAll('#search-results a').length>0);
+  await page.locator('.book-search').evaluate(async e=>{await Promise.all(e.getAnimations({subtree:true}).map(a=>a.finished));});
   assert.ok((await page.locator('#search-results').innerText()).includes('Clocks, light, and Mercury'));
   assert.equal(await page.locator('dialog[open]').count(),0,'Search must not open a modal');
   const dimensions=await page.evaluate(()=>{const field=document.querySelector('.search-field').getBoundingClientRect(),popover=document.querySelector('#search-popover').getBoundingClientRect(),header=document.querySelector('.topbar').getBoundingClientRect(),sidebar=document.querySelector('.sidebar').getBoundingClientRect();return {widthDifference:Math.abs(field.width-popover.width),headerLeft:header.left,headerWidth:header.width,sidebarTop:sidebar.top,headerBottom:header.bottom}});assert.ok(dimensions.widthDifference<1,'Search suggestions match the field width');assert.equal(dimensions.headerLeft,0);assert.equal(dimensions.headerWidth,width);assert.ok(Math.abs(dimensions.sidebarTop-dimensions.headerBottom)<1,'Sidebar begins below the complete header');
@@ -112,5 +119,5 @@ try{
  await go(new URL('chapter-0.html',base).href);await page.locator('.checkpoint summary').first().click();assert.equal(await page.locator('.checkpoint').first().getAttribute('open'),'');
  assert.deepEqual(errors,[]);
  fs.writeFileSync('qa/browser-report.json',JSON.stringify({checks,interactionChecks:'passed',errors},null,2));
- console.log(`Browser checks passed: ${checks.length} page/viewport combinations, links to sections, images, search, controls, checkpoints, and all three experiments.`);
+ console.log(`Browser checks passed: ${checks.length} page/viewport combinations, links to sections, images, compact header, search, controls, checkpoints, clock and GPS experiments.`);
 }finally{await browser.close()}

@@ -24,7 +24,12 @@
 .question-form .composer-send{background:var(--ink);color:var(--paper);width:35px;height:35px}.question-form .composer-send:hover:not(:disabled){opacity:.8}.study-content .question-form .composer-send:disabled{background:color-mix(in srgb,var(--ink) 10%,transparent);color:color-mix(in srgb,var(--ink) 35%,transparent);opacity:1;cursor:default}
 .composer-selection{display:flex;align-items:center;gap:7px;align-self:flex-start;max-width:100%;border-radius:9px;background:color-mix(in srgb,var(--geometry) 9%,transparent);color:var(--geometry);padding:5px 7px 5px 9px;font-size:11px}.question-form .composer-selection button{background:transparent;color:inherit;width:22px;height:22px;margin-left:5px}
 .thinking{font-size:12px;color:var(--muted)}.thinking button{font:inherit;border:0;background:none;color:var(--geometry);cursor:pointer}
-.selection-study{position:fixed;left:50%;transform:translateX(-50%);bottom:95px;display:flex;gap:14px;padding:9px 13px;align-items:center;border-radius:12px;font-size:11px}.selection-study>span{color:var(--muted)}.selection-study button{color:var(--geometry);padding:2px}
+/* A transient tool beside the selected line; never a second bottom dock. */
+.selection-study{position:fixed;display:flex;gap:2px;padding:4px;align-items:center;border-radius:13px;width:88px;height:42px;box-sizing:border-box;z-index:65;box-shadow:0 5px 22px #00000012,0 1px 3px #0000000a;user-select:none;animation:selection-appear .12s ease-out}
+.selection-study button{width:38px;height:32px;flex-shrink:0;color:var(--muted);padding:7px;border-radius:9px}
+.selection-study button:hover,.selection-study button:focus-visible{background:color-mix(in srgb,var(--geometry) 10%,transparent);color:var(--geometry)}
+.selection-study button:focus-visible{outline:2px solid var(--geometry);outline-offset:1px}
+@keyframes selection-appear{from{opacity:0;translate:0 3px}to{opacity:1;translate:0 0}}
 [data-passage]{scroll-margin-block:0}.assistant-focus{background:color-mix(in srgb,var(--geometry) 7%,transparent)!important;border-radius:8px;transition:background .2s}.narration-active:is(.equation,figure,.scene-stage){outline:1px solid color-mix(in srgb,var(--geometry) 38%,transparent);outline-offset:5px}.passage-tools{display:flex;justify-content:flex-end;gap:3px;padding:5px 0 0;position:relative;z-index:5;line-height:1}.passage-tools button{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--muted);padding:7px;cursor:pointer;transition:background .15s,color .15s}.passage-tools button .hugeicon{width:17px;height:17px;stroke-width:1.6}.passage-tools button:hover,.passage-tools button:focus-visible{background:color-mix(in srgb,var(--geometry) 9%,transparent);color:var(--geometry)}.scene-stage>.passage-tools{position:absolute;right:12px;bottom:10px}
 /* Action overlays do not participate in equation/table sizing or alignment. */
 .equation,.table-wrap{position:relative}
@@ -33,8 +38,8 @@
 .chapter-study-actions{display:flex;gap:15px;margin-top:14px}.chapter-study-actions button{border:0;background:none;color:var(--geometry);font:500 12px Manrope,sans-serif;cursor:pointer;padding:0}.narration-script[hidden]{display:none!important}
 .study-panel button:focus-visible,.study-launcher button:focus-visible,.listening-bar button:focus-visible,.passage-tools button:focus-visible{outline:2px solid var(--geometry);outline-offset:3px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(min-width:1400px){body:has(.study-panel) .section-rail{opacity:.18;pointer-events:none}}
-@media(max-width:800px){.study-launcher{right:14px;bottom:14px}.study-panel{right:14px;bottom:77px;max-height:calc(100dvh - 165px);width:min(410px,calc(100vw - 28px))}.study-heading{padding:19px 20px 14px}.study-content{padding:13px 20px 20px}.study-heading h2{font-size:30px}.study-launcher button{padding:8px 12px}.listening-bar{left:14px;right:auto;transform:none;bottom:74px;max-width:calc(100vw - 28px);width:calc(100vw - 28px);box-sizing:border-box}.study-panel:has(~ *){bottom:140px}body:has(.listening-bar) .study-panel{bottom:137px;max-height:calc(100dvh - 225px)}.selection-study{bottom:78px;white-space:nowrap;gap:9px}.chat-transcript{max-height:35dvh}.study-chat{min-height:260px}.study-eyebrow{font-size:8px}}
-@media(prefers-reduced-motion:reduce){.assistant-focus,.narration-active,.audio-progress{transition:none}}
+@media(max-width:800px){.study-launcher{right:14px;bottom:14px}.study-panel{right:14px;bottom:77px;max-height:calc(100dvh - 165px);width:min(410px,calc(100vw - 28px))}.study-heading{padding:19px 20px 14px}.study-content{padding:13px 20px 20px}.study-heading h2{font-size:30px}.study-launcher button{padding:8px 12px}.listening-bar{left:14px;right:auto;transform:none;bottom:74px;max-width:calc(100vw - 28px);width:calc(100vw - 28px);box-sizing:border-box}.study-panel:has(~ *){bottom:140px}body:has(.listening-bar) .study-panel{bottom:137px;max-height:calc(100dvh - 225px)}.chat-transcript{max-height:35dvh}.study-chat{min-height:260px}.study-eyebrow{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.selection-study{animation:none}.assistant-focus,.narration-active,.audio-progress{transition:none}}
 @media print{.study-panel,.study-launcher,.listening-bar,.passage-tools,.selection-study,.chapter-study-actions{display:none!important}}
 @media(min-width:1280px){body:has(.study-panel) .page{margin-right:440px}body:has(.study-panel) .reading-layout{display:block;padding-left:32px;padding-right:32px}body:has(.study-panel) .section-rail{display:none}body:has(.study-panel) .top-title{display:none}body:has(.study-panel) .chapter-header h1{font-size:clamp(3rem,4.4vw,4.8rem)}}
 
@@ -52,3 +57,11 @@ body:has(.study-panel) .listening-dock{left:24px;transform:none;width:min(520px,
 .reading-now .panel-spoken-words{font:18px/1.7 Newsreader,serif;max-height:7em;overflow-y:auto;margin:12px 0;scrollbar-width:thin}
 
 body:has(#listen-content) .listening-caption{display:none}
+
+/* Phone study tools stay available without a wide pill covering the page. */
+@media(max-width:600px){
+ .study-launcher{padding:4px;gap:2px;border-radius:26px}
+ .study-launcher button{position:relative;width:40px;height:40px;padding:9px;gap:0;border-radius:50%}
+ .study-launcher-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+ .study-launcher .live-dot{position:absolute;right:7px;top:6px;width:5px;height:5px}
+}

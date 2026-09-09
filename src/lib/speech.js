@@ -30,11 +30,16 @@ export function matchWords(spoken,visible){
  for(let i=a.length-1;i>=0;i--)for(let j=b.length-1;j>=0;j--)rows[i][j]=a[i]===b[j]?1+rows[i+1][j+1]:Math.max(rows[i+1][j],rows[i][j+1]);
  const map=new Map();let i=0,j=0;while(i<a.length&&j<b.length){if(a[i]===b[j]){map.set(i,j);i++;j++;}else if(rows[i+1][j]>=rows[i][j+1])i++;else j++;}return map;
 }
-export function sourceHighlighter(element,spoken,kind){
+export function sourceHighlighter(element,spoken,kind,selectionRange){
  const clear=()=>globalThis.CSS?.highlights?.delete('spoken-word');
  if(!element||!['text','heading'].includes(kind)||!globalThis.Highlight||!CSS.highlights)return {show:clear,clear};
  const visible=[];const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest('.katex,svg,button,.heading-link,[hidden],.passage-tools')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
- let node;while((node=walker.nextNode()))for(const w of wordsFor(node.textContent))visible.push({...w,node});
+ let node;while((node=walker.nextNode())){
+  if(selectionRange&&!selectionRange.intersectsNode(node))continue;
+  const start=selectionRange?.startContainer===node?selectionRange.startOffset:0;
+  const end=selectionRange?.endContainer===node?selectionRange.endOffset:node.textContent.length;
+  for(const w of wordsFor(node.textContent.slice(start,end)))visible.push({...w,start:w.start+start,end:w.end+start,node});
+ }
  const map=matchWords(spoken,visible);
  return {clear,show(index){clear();const word=visible[map.get(index)];if(!word)return;const range=new Range();range.setStart(word.node,word.start);range.setEnd(word.node,word.end);CSS.highlights.set('spoken-word',new Highlight(range));}};
 }

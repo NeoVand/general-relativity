@@ -52,8 +52,8 @@ await page.addInitScript(()=>{
 });
 try{
  const home=parseHTML(fs.readFileSync('site/index.html','utf8')).document;
- for(const chapter of [11,12])assert.ok(home.querySelector(`.chapter-card[href="chapter-${chapter}.html"] .math-geometry`));
- assert.ok(home.querySelector('.chapter-card[href="chapter-13.html"] .math-curvature'));
+ for(const chapter of [6,10])assert.ok(home.querySelector(`.chapter-card[href="chapter-${chapter}.html"] .math-geometry`));
+ for(const chapter of [11,12,13,15])assert.ok(home.querySelector(`.chapter-card[href="chapter-${chapter}.html"] .math-curvature`));
  // Every displayed equation, figure and visualization has a narration anchor.
  for(const name of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   const {document}=parseHTML(fs.readFileSync('site/'+name,'utf8'));

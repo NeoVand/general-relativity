@@ -2,10 +2,36 @@ import katex from 'katex';
 
 // Color mathematical objects, never characters inside prose, command names,
 // units or operator names. Indices retain their usual neutral ink.
-export function semanticTex(tex, context='') {
+export function semanticTex(tex, context='', inspect=false) {
  const scalarCurvature=/^(8|9|10|12|13|14|15|21|22|23)$/.test(String(context));
  const protectedCommands=new Set(['begin','end','mathbb','mathcal','mathfrak','mathrm','mathsf','mathtt','text','textrm','textsf','texttt','operatorname','color','htmlClass','class','href','url']);
  function groupEnd(i){let depth=0;for(let j=i;j<tex.length;j++){if(tex[j]==='{')depth++;if(tex[j]==='}'&&!--depth)return j+1;}return tex.length;}
+ // Inspection is stricter than color: a power is not an index, and a familiar
+ // letter is not enough to identify the physical object being discussed.
+ function indexPartsAt(start){
+  const parts=[];let at=start;
+  while(at<tex.length){
+   while(/\s/.test(tex[at]||'x'))at++;
+   if(tex.slice(at,at+2)==='{}'){at+=2;continue}
+   const kind=tex[at];if(kind!=='_'&&kind!=='^')break;at++;
+   while(/\s/.test(tex[at]||'x'))at++;
+   let value;
+   if(tex[at]==='{'){const next=groupEnd(at);value=tex.slice(at+1,next-1);at=next}
+   else{value=tex.slice(at).match(/^\\[a-zA-Z]+|^./s)?.[0]||'';at+=value.length}
+   parts.push({kind,value});
+  }
+  return parts;
+ }
+ function indexCount(parts){
+  let total=0;
+  for(const {value} of parts){
+   if(/\\(?:text|mathrm|rm|operatorname)\b/.test(value))continue;
+   const tokens=value.replace(/\\(?:hat|bar)\b/g,'').replace(/[{}\s]/g,'').match(/\\[a-zA-Z]+|./g)||[];
+   if(tokens.some(t=>!(/^[a-zA-Z0-9]$/.test(t)||/^\\(?:mu|nu|rho|sigma|alpha|beta|gamma|delta|lambda|theta|varphi|phi|chi|eta|tau)$/.test(t))))return null;
+   total+=tokens.length;
+  }
+  return total;
+ }
  let result='';
  for(let i=0;i<tex.length;){
   const m=tex.slice(i).match(/^\\[a-zA-Z]+|^\\.|^./s);const token=m[0];let end=i+token.length;
@@ -30,12 +56,51 @@ export function semanticTex(tex, context='') {
   if(token==='R'&&(tensorIndex||scalarCurvature)||token==='C'&&weylIndices||token==='G'&&tensorIndex&&!/^\s*_\s*(?:N|\{N\})/.test(tex.slice(end))||token==='\\Omega'&&curvatureForm)role='curvature';
   if(token==='T'&&tensorIndex||token==='\\rho'&&/^(0|11|12|15|16|18|19|22|23)$/.test(String(context)))role='matter';
   if(token==='\\tau'||token==='u'&&indexed)role='observer';
-  result+=role?`{\\htmlClass{math-${role}}{${token}}}`:token;i=end;
+  let key=null;
+  if(inspect){
+   const parts=indexPartsAt(end),count=indexCount(parts),chapter=String(context);
+   const powerOnly=parts.length===1&&parts[0].kind==='^'&&/^\d+$/.test(parts[0].value.trim());
+   const tail=tex.slice(end),before=tex.slice(0,i);
+   if(role==='geometry'){
+    if(token==='g'){
+     if((indexed&&!powerOnly&&count===2)||/^\s*(?:\\left\s*)?\([^)]*,/.test(tail))key='metric';
+     else if(!indexed&&(/\\sqrt\s*\{?\s*[-|]?\s*$/.test(before)||/^\s*=\s*\\det\b/.test(tail)))key='metric-determinant';
+    }else if(token==='\\eta'&&count===2)key='minkowski';
+    else if(token==='a')key='scale-factor';
+    else if(token==='h'&&count===2)key='perturbation';
+    else if(token==='\\gamma'&&count===2)key='spatial-metric';
+   }
+   if(role==='transport'){
+    if(token==='\\Gamma'&&count===3&&!powerOnly)key='connection';
+    else if(token==='\\nabla'&&indexed&&!powerOnly&&!/\\(?:boldsymbol|mathbf)\s*\{?\s*$/.test(before))key='covariant-derivative';
+    else if(token==='\\omega'&&count===2)key='spin-connection';
+   }
+   if(role==='curvature'){
+    if(token==='R'){
+     if(!powerOnly&&count===4)key='riemann';
+     else if(!powerOnly&&count===2)key='ricci';
+     else if(!indexed&&!/^\s*(?:\\left\s*)?\(/.test(tail)&&scalarCurvature)key='scalar-curvature';
+     else if(!indexed&&/^\s*(?:\\left\s*)?\([^)]*,/.test(tail)&&/^(8|10)$/.test(chapter))key='riemann';
+    }else if(token==='G'&&count===2)key='einstein';
+    else if(token==='C'&&count===4)key='weyl';
+    else if(token==='\\Omega'&&count===2)key='curvature-form';
+   }
+   if(role==='matter')key=token==='T'&&count===2&&/^(11|12|13|14|15|16|17|18|19|20|22|23|24)$/.test(chapter)?'stress-energy':token==='\\rho'?'density':null;
+   if(role==='observer'){
+    if(token==='\\tau'&&!parts.some(p=>/(?:^|[^a-z])E(?:$|[^a-z])/i.test(p.value)))key='proper-time';
+    if(token==='u'&&count===1&&!powerOnly&&/^(3|4|5|9|10|11|12|15|17|19|22|24)$/.test(chapter))key='four-velocity';
+   }
+   if(token==='\\Lambda'&&!indexed&&/^(1|12|15|19)$/.test(chapter))key='cosmological-constant';
+  }
+  const classes=[role&&`math-${role}`,key&&`symbol-${key}`].filter(Boolean).join(' ');
+  result+=classes?`{\\htmlClass{${classes}}{${token}}}`:token;i=end;
  }
  return result;
 }
 export function math(tex, display=false, context='') {
- return katex.renderToString(semanticTex(tex,context),{displayMode:display,throwOnError:true,strict:'ignore',output:'htmlAndMathml',trust:c=>c.command==='\\htmlClass'});
+ const html=katex.renderToString(semanticTex(tex,context,true),{displayMode:display,throwOnError:true,strict:'ignore',output:'htmlAndMathml',trust:c=>c.command==='\\htmlClass'});
+ // Keep color/inspection metadata out of copied LaTeX and spoken source.
+ return html.replace(/(<annotation encoding="application\/x-tex">)[\s\S]*?(<\/annotation>)/,(_,a,b)=>a+tex.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))+b);
 }
 export function inline(text,context=''){
  const equations=[];

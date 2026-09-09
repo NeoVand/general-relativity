@@ -1,4 +1,6 @@
+import {initSymbolInspector} from './symbols.js';
 export function initReading(){
+const offSymbols=initSymbolInspector();
 const listeners=[];
 const listen=(el,...args)=>{el.addEventListener(...args);listeners.push(()=>el.removeEventListener(...args))};
 const $=s=>document.querySelector(s);
@@ -182,8 +184,6 @@ function updateClock(){const b=Number($('#speed').value),tau=10*Math.sqrt(1-b*b)
 if($('#speed')){$('#speed').addEventListener('input',updateClock);updateClock()}
 function updateGPS(){const h=Number($('#altitude').value),R=6371000,r=R+h*1000,GM=3.986004418e14,c=299792458;const gr=GM/c**2*(1/R-1/r)*86400*1e6,sr=-GM/(2*r*c*c)*86400*1e6;const format=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(2)+' μs/day';outputMath($('#altitude-value'),h.toLocaleString('en-US').replace(',','{,}')+String.raw`\;\mathrm{km}`);for(const [id,n] of [['gps-gr',gr],['gps-sr',sr],['gps-net',gr+sr]])outputMath($('#'+id),(n>=0?'+':'-')+Math.abs(n).toFixed(2)+String.raw`\;\mathrm{\mu s/day}`);$('#gps-reading').textContent=`At this altitude the orbiting clock ${gr+sr>=0?'gains':'loses'} ${Math.abs(gr+sr).toFixed(2)} microseconds per day relative to the surface clock.`}
 if($('#altitude')){$('#altitude').addEventListener('input',updateGPS);updateGPS()}
-function updateWave(){const phase=Number($('#wave-phase').value)/100*Math.PI,h=.35*Math.sin(phase);outputMath($('#phase-value'),(phase/Math.PI).toFixed(2)+String.raw`\pi`);document.querySelectorAll('.wave-dot').forEach(dot=>{const a=Number(dot.dataset.angle);dot.setAttribute('cx',240+90*Math.cos(a)*(1+h/2));dot.setAttribute('cy',130+90*Math.sin(a)*(1-h/2))})}
-if($('#wave-phase')){$('#wave-phase').addEventListener('input',updateWave);updateWave()}
 // Native, keyboard-accessible figure inspection keeps the surrounding page quiet.
 const figureDialog=$('#figure-dialog');
 document.querySelectorAll('[data-figure]').forEach(button=>button.addEventListener('click',()=>{
@@ -201,5 +201,5 @@ function readingProgress(){if(frame)return;frame=requestAnimationFrame(()=>{cons
 listen(window,'scroll',readingProgress,{passive:true});listen(window,'resize',readingProgress);readingProgress();
 
 document.body.dataset.readingReady='true';
-return ()=>{delete document.body.dataset.readingReady;listeners.forEach(off=>off());hidePreview();observer.disconnect();cancelAnimationFrame(frame)};
+return ()=>{offSymbols();delete document.body.dataset.readingReady;listeners.forEach(off=>off());hidePreview();observer.disconnect();cancelAnimationFrame(frame)};
 }

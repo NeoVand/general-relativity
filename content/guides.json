@@ -40,7 +40,7 @@
     "answer": "No. Each ideal clock records its own proper time normally. The difference appears when comparing the accumulated times along different paths."
   },
   "4": {
-    "title": "Maps, rulers, and the metric",
+    "title": "Manifolds, maps, and metrics",
     "deck": "Coordinates locate events. The metric tells us how to measure the separations between them.",
     "question": "Why can a position-dependent metric describe a perfectly flat plane?",
     "needs": "Changes of variables, symmetric matrices, and Chapter 3’s interval.",
@@ -170,7 +170,7 @@
     "answer": "The higher potential makes its clock gain time relative to the surface; orbital motion makes it lose time. At GPS altitude the first contribution is larger."
   },
   "17": {
-    "title": "When escape becomes impossible",
+    "title": "Black holes: horizons and orbits",
     "deck": "Separate a broken coordinate chart from a physical singularity—and a horizon from a photon orbit.",
     "question": "What is special about a black-hole horizon?",
     "needs": "Null cones, geodesics, and the vacuum equation.",
@@ -190,7 +190,7 @@
     "answer": "No. Spherical motion has no time-varying mass quadrupole. An isolated system’s leading tensor radiation begins at quadrupole order."
   },
   "19": {
-    "title": "A universe that expands",
+    "title": "Cosmology: an expanding universe",
     "deck": "Give symmetry the hardest part of the algebra, then ask what matter does to expansion.",
     "question": "What controls the expansion and acceleration of the universe?",
     "needs": "Perfect-fluid stress-energy and time-dependent metrics.",
@@ -200,7 +200,7 @@
     "answer": "No, holding energy density and the cosmological constant fixed. Positive pressure adds to gravitational deceleration; sufficiently negative pressure can reverse the sign."
   },
   "20": {
-    "title": "Make spacetime evolve",
+    "title": "Initial data and numerical relativity",
     "deck": "Choose a slice, supply consistent initial data, and separate coordinate choices from physical predictions.",
     "question": "What must be specified before Einstein’s equation can predict a future?",
     "needs": "The metric and differential equations. Lapse, shift, and extrinsic curvature are introduced here.",
@@ -210,7 +210,7 @@
     "answer": "Four physical phase-space functions: two configurations and their two conjugate momenta per spatial point. That corresponds to two propagating metric degrees of freedom."
   },
   "21": {
-    "title": "A laboratory at every point",
+    "title": "Tetrads and differential forms",
     "deck": "Use local orthonormal frames and differential forms to make geometry calculations shorter.",
     "question": "Can we calculate curvature with fewer indices?",
     "needs": "Linear algebra, the metric, and connections. Wedge products are built here.",
@@ -220,7 +220,7 @@
     "answer": "Both are nonzero, but only the sphere’s curvature two-form survives. For the plane $d(-d\\theta)=0$; on the sphere $d(-\\cos\\theta\\,d\\varphi)$ is nonzero."
   },
   "22": {
-    "title": "Focusing, horizons, and heat",
+    "title": "Singularities and black-hole thermodynamics",
     "deck": "Follow a cloud of geodesics toward the point where geometry meets thermodynamics.",
     "question": "How can a statement about converging paths lead to black-hole entropy?",
     "needs": "Geodesic deviation and traces. Quantum inputs are marked explicitly rather than assumed.",
@@ -230,7 +230,7 @@
     "answer": "Even converging straight paths in flat spacetime form a caustic. Singularity theorems need additional global hypotheses to infer geodesic incompleteness."
   },
   "23": {
-    "title": "A low-energy masterpiece",
+    "title": "Effective theory and quantum frontiers",
     "deck": "Understand how a theory can remain predictive while leaving its microscopic completion open.",
     "question": "How can GR be incomplete and still be an excellent theory?",
     "needs": "The action and controlled approximations. This chapter introduces the effective-theory viewpoint.",
@@ -240,7 +240,7 @@
     "answer": "No. As an effective theory it makes controlled predictions at a specified order below its cutoff, with a finite set of parameters at that order."
   },
   "24": {
-    "title": "Put the whole machine together",
+    "title": "Synthesis: from a metric to a measurement",
     "deck": "One final calculation connects coordinates, connection, curvature, clocks, and physical interpretation.",
     "question": "Can I reconstruct the theory without memorizing a wall of equations?",
     "needs": "The main route through Chapters 1–19; deeper trails add perspective.",

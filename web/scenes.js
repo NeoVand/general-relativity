@@ -4,11 +4,35 @@ import {OrbitControls} from './assets/three/OrbitControls.js';
 import {CSS2DRenderer,CSS2DObject} from './assets/three/CSS2DRenderer.js';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 const instances=[];
+const labelsMargin=38;
+function setView(el,view){
+ const diagram=el.querySelector('.scene-diagram');if(view==='diagram'&&!diagram)return;
+ el.dataset.activeView=view;
+ if(diagram){diagram.hidden=view!=='diagram';diagram.inert=view!=='diagram';}
+ el.querySelectorAll('[data-scene-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.sceneMode===view)));
+ const stage=el.querySelector('.scene-stage');
+ if(diagram){
+  stage.dataset.interactiveLabel||=stage.getAttribute('aria-label')||'Interactive geometry';
+  if(view==='diagram'){
+   const caption=diagram.querySelector('figcaption strong')?.textContent?.replace(/\.$/,'')||'Explanatory diagram';
+   stage.setAttribute('aria-label',`${caption}. Static diagram.`);stage.removeAttribute('tabindex');
+  }else{
+   stage.setAttribute('aria-label',stage.dataset.interactiveLabel);
+   if(el.dataset.ready==='true')stage.tabIndex=0;
+  }
+ }
+ stage.querySelectorAll('canvas,.scene-labels').forEach(node=>{node.hidden=view==='diagram';node.inert=view==='diagram';});
+}
+function fallback(el,message){
+ el.dataset.ready='fallback';el.querySelector('.scene-fallback span').textContent=message;
+ if(el.querySelector('.scene-diagram'))setView(el,'diagram');
+ el.querySelectorAll('[data-scene-mode=\"3d\"]').forEach(button=>{button.disabled=true;button.title='3D is unavailable in this browser';});
+}
 function createLab(el){
  if(el.dataset.ready)return;el.dataset.ready='loading';
  const stage=el.querySelector('.scene-stage'),kind=el.dataset.scene,input=el.querySelector('input'),output=el.querySelector('output');
  let renderer;
- try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'low-power'});}catch{el.dataset.ready='fallback';stage.querySelector('.scene-fallback span').textContent='3D is unavailable in this browser. The complete vector explanation is shown here.';return;}
+ try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'low-power'});}catch{fallback(el,'3D is unavailable in this browser. The diagram remains available.');return;}
  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.outputColorSpace=THREE.SRGBColorSpace;stage.append(renderer.domElement);
  renderer.domElement.setAttribute('aria-label','Rotatable three-dimensional geometry');renderer.domElement.setAttribute('role','presentation');
  const labelRenderer=new CSS2DRenderer();labelRenderer.domElement.className='scene-labels';stage.append(labelRenderer.domElement);
@@ -35,8 +59,8 @@ function createLab(el){
   for(const sign of [-1,1]){const g=new THREE.ConeGeometry(2.2,2.2,80,1,true);g.translate(0,-1.1,0);if(sign===1)g.rotateZ(Math.PI);const mesh=new THREE.Mesh(g,material('geometry',{transparent:true,opacity:.14,depthWrite:false}));root.add(mesh);
    for(let j=0;j<16;j++){const a=j*Math.PI/8;line([V(),V(2.2*Math.cos(a),sign*2.2,2.2*Math.sin(a))],'geometry',.35);}line(Array.from({length:101},(_,i)=>V(2.2*Math.cos(i*Math.PI/50),sign*2.2,2.2*Math.sin(i*Math.PI/50))),'geometry',.8);}
   grid(5,10);arrow(V(0,-2.55,0),V(0,2.75,0),'ink');label('ct',V(0,2.95,0));label('x',V(2.8,0,0));label('y',V(0,0,2.8));label('ds^2=0',V(-1.5,1.85,0),'geometry');dot(V(),'curvature',.07);
-  const worldline=arrow(V(),V(1,2,0),'observer');label(String.raw`u^\mu`,V(1.2,2.35,0),'observer');
-  update=()=>{const b=+input.value/100,d=V(2*b,2,0);worldline.setDirection(d.clone().normalize());worldline.setLength(d.length(),.16,.08);output.innerHTML=window.katex.renderToString(`v/c=${b.toFixed(2)}`);el.dataset.measurement=b;};
+  const worldline=arrow(V(),V(1,2,0),'observer');const ulabel=label(String.raw`u^\mu`,V(1.2,2.35,0),'observer');
+  update=()=>{const b=+input.value/100,d=V(2*b,2,0);worldline.setDirection(d.clone().normalize());worldline.setLength(d.length(),.16,.08);ulabel.position.copy(d).add(V(.25,.28,0));output.innerHTML=window.katex.renderToString(`v/c=${b.toFixed(2)}`);el.dataset.measurement=b;};
  }else if(kind==='sphere'){
   camera.position.set(4,3.4,4.5);controls.target.set(0,.3,0);
   root.add(new THREE.Mesh(new THREE.SphereGeometry(1.646,64,40),material('figure-tint',{roughness:.62,metalness:.04})));sphereGrid();
@@ -59,7 +83,7 @@ function createLab(el){
   const marker=dot(point(2.4,.5),'observer',.09);label('r=r_s',V(0,-2.45,1),'curvature');const rlabel=label('r',point(2.4,.5).add(V(0,.35,0)),'observer');
   update=()=>{const r=+input.value/100;marker.position.copy(point(r,.5));rlabel.position.copy(point(r,.5).add(V(0,.35,0)));output.innerHTML=window.katex.renderToString(`r/r_s=${r.toFixed(2)}`);el.dataset.measurement=2*Math.sqrt(r-1);};
  }else if(kind==='tides'){
-  camera.position.set(4,3,5);grid(4,8,-1.65);const cloud=new THREE.Group();root.add(cloud);sphereGrid(1.2,cloud);
+  camera.position.set(4,3,5);const cloud=new THREE.Group();root.add(cloud);sphereGrid(1.2,cloud);
   const geometry=new THREE.SphereGeometry(.033,10,8),particles=new THREE.InstancedMesh(geometry,material('observer'),240);const dummy=new THREE.Object3D();
   for(let i=0;i<240;i++){const y=1-2*(i+.5)/240,a=i*Math.PI*(3-Math.sqrt(5));dummy.position.set(1.2*Math.sqrt(1-y*y)*Math.cos(a),1.2*y,1.2*Math.sqrt(1-y*y)*Math.sin(a));dummy.updateMatrix();particles.setMatrixAt(i,dummy.matrix);}cloud.add(particles);
   arrow(V(-2,0,0),V(2.1,0,0),'curvature');label('+2GM/r^3',V(2.15,.4,0),'curvature');label('-GM/r^3',V(0,1.75,0),'curvature');label('-GM/r^3',V(0,0,1.9),'curvature');
@@ -72,30 +96,68 @@ function createLab(el){
  }else if(kind==='expansion'){
   camera.position.set(5,3.5,6);const lattice=new THREE.Group();root.add(lattice);
   for(let i=-1;i<=1;i++)for(let j=-1;j<=1;j++){line([V(-1.5,i*1.5,j*1.5),V(1.5,i*1.5,j*1.5)],'geometry',.6,lattice);line([V(i*1.5,-1.5,j*1.5),V(i*1.5,1.5,j*1.5)],'geometry',.6,lattice);line([V(i*1.5,j*1.5,-1.5),V(i*1.5,j*1.5,1.5)],'geometry',.6,lattice);for(let k=-1;k<=1;k++)dot(V(i*1.5,j*1.5,k*1.5),'matter',.065,lattice);}
-  label(String.raw`\Delta\chi`,V(0,-1.7,1.3),'geometry');update=()=>{const a=+input.value/100;lattice.scale.setScalar(a);output.innerHTML=window.katex.renderToString(`a=${a.toFixed(2)}`);el.dataset.measurement=a;};
+  const separation=label(String.raw`\ell=a\,\Delta\chi`,V(0,-1.7,1.3),'geometry');update=()=>{const a=+input.value/100;lattice.scale.setScalar(a);separation.position.set(0,-1.7*a,1.6*a);output.innerHTML=window.katex.renderToString(`a=${a.toFixed(2)}`);el.dataset.measurement=a;};
  }else if(kind==='slices'){
   camera.position.set(5,3.5,6);const top=new THREE.Group();root.add(top);
   for(const [y,parent] of [[-1,root],[1,top]]){const plane=new THREE.Mesh(new THREE.PlaneGeometry(3.6,3.6),material('geometry',{transparent:true,opacity:.09,depthWrite:false}));plane.rotation.x=-Math.PI/2;plane.position.y=y;parent.add(plane);grid(3.6,8,y,'geometry',parent);}
-  arrow(V(0,-1,0),V(0,1,0),'observer');label('Nn',V(-.4,.1,0),'observer');label(String.raw`\Sigma_t`,V(-1.9,-1,1.2),'geometry');label(String.raw`\Sigma_{t+dt}`,V(-1.9,1,1.2),'geometry');
+  arrow(V(0,-1,0),V(0,1,0),'observer');label('Nn',V(-.4,.1,0),'observer');label(String.raw`\Sigma_t`,V(-1.9,-1,1.2),'geometry');const upperLabel=label(String.raw`\Sigma_{t+dt}`,V(-1.9,1,1.2),'geometry');
   const shift=arrow(V(0,1,0),V(.8,1,0),'transport'),step=arrow(V(0,-1,0),V(.8,1,0),'ink');const beta=label(String.raw`\beta`,V(.4,1.3,0),'transport');
-  update=()=>{const b=+input.value/100*1.2;top.position.x=b;shift.visible=Math.abs(b)>.001;shift.setDirection(V(Math.sign(b)||1,0,0));shift.setLength(Math.max(.001,Math.abs(b)),Math.min(.15,Math.abs(b)*.3),.06);const dir=V(b,2,0);step.setDirection(dir.clone().normalize());step.setLength(dir.length(),.15,.075);beta.position.x=b/2;output.innerHTML=window.katex.renderToString(String.raw`\beta^x=${b.toFixed(2)}`);el.dataset.measurement=b;};
+  update=()=>{const b=+input.value/100*1.2;top.position.x=b;upperLabel.position.x=-1.9+b;shift.visible=Math.abs(b)>.001;shift.setDirection(V(Math.sign(b)||1,0,0));shift.setLength(Math.max(.001,Math.abs(b)),Math.min(.15,Math.abs(b)*.3),.06);const dir=V(b,2,0);step.setDirection(dir.clone().normalize());step.setLength(dir.length(),.15,.075);beta.position.x=b/2;output.innerHTML=window.katex.renderToString(String.raw`\beta^x=${b.toFixed(2)}`);el.dataset.measurement=b;};
  }else if(kind==='covector'){
   camera.position.set(6,4.5,6);controls.target.set(1,.4,0);root.position.set(-1,0,-.5);
   for(let x=0;x<=3;x++){const plane=new THREE.Mesh(new THREE.PlaneGeometry(3,3),material('geometry',{transparent:true,opacity:.1,depthWrite:false}));plane.rotation.y=Math.PI/2;plane.position.set(x,.8,.5);root.add(plane);line([V(x,-.7,-1),V(x,2.3,-1),V(x,2.3,2),V(x,-.7,2),V(x,-.7,-1)],'geometry',.55);label(String(x),V(x,-.95,1.55),'geometry');}
-  const vec=arrow(V(),V(3,2,1),'transport');label('v',V(3.2,2.2,1),'transport');update=()=>{const t=+input.value/100;vec.setLength(Math.max(.01,t*Math.sqrt(14)),Math.min(.18,t*.2),.08);output.innerHTML=window.katex.renderToString(`x=${(3*t).toFixed(2)}`);el.dataset.measurement=3*t;};
+  const vec=arrow(V(),V(3,2,1),'transport'),vlabel=label('v',V(3.2,2.2,1),'transport');update=()=>{const t=+input.value/100;vec.setLength(Math.max(.01,t*Math.sqrt(14)),Math.min(.18,t*.2),.08);vlabel.position.set(3*t+.25,2*t+.25,t);output.innerHTML=window.katex.renderToString(`x=${(3*t).toFixed(2)}`);el.dataset.measurement=3*t;};
+ }
+ // Reserve the full parameter envelope once: changing a value never crops the
+ // model or makes the camera jump. CSS2D label anchors participate in the bounds.
+ const bounds=new THREE.Box3(),framePoints=[];
+ function captureBounds(){
+  root.updateMatrixWorld(true);bounds.union(new THREE.Box3().setFromObject(root));
+  root.traverse(o=>{
+   if(o.isCSS2DObject){const p=o.getWorldPosition(V());bounds.expandByPoint(p);framePoints.push(p);}
+   const positions=o.geometry?.getAttribute('position');
+   if(positions&&!o.isInstancedMesh){for(let i=0;i<positions.count;i++)framePoints.push(V().fromBufferAttribute(positions,i).applyMatrix4(o.matrixWorld));}
+  });
+ }
+ if(kind!=='earth'){
+  const value=input.value;
+  for(const t of [0,.125,.25,.375,.5,.625,.75,.875,1]){input.value=+input.min+t*(input.max-input.min);update();captureBounds();}
+  bounds.expandByScalar(.06);
+  input.value=value;update();
+  const center=bounds.getCenter(V()),offset=center.clone().sub(controls.target);
+  controls.target.copy(center);camera.position.add(offset);
  }
  controls.update();const initial={position:camera.position.clone(),target:controls.target.clone()};
  function render(){renderer.render(scene,camera);labelRenderer.render(scene,camera);}
  function theme(){const styles=getComputedStyle(el);for(const name of ['geometry','curvature','transport','matter','observer','line','ink','figure-tint'])palette[name]=styles.getPropertyValue('--'+name).trim();for(const m of mats)m.color.set(palette[m.userData.role]||palette.ink);render();}
- function resize(){const {width,height}=stage.getBoundingClientRect();camera.aspect=width/height;camera.zoom=kind==='earth'?.88*Math.min(1,camera.aspect):Math.min(1,camera.aspect/(kind==='embedding'?1.55:1.2));camera.updateProjectionMatrix();renderer.setSize(width,height);labelRenderer.setSize(width,height);render();}
- input?.addEventListener('input',()=>{update();render()});controls.addEventListener('change',render);
- el.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.view==='reset'){camera.position.copy(initial.position);controls.target.copy(initial.target);}else{const delta=camera.position.clone().sub(controls.target);delta.applyAxisAngle(V(0,1,0),b.dataset.view==='left'?.25:-.25);camera.position.copy(controls.target).add(delta);}controls.update();render();}));
- renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();el.dataset.ready='fallback';stage.querySelector('.scene-fallback span').textContent='3D rendering paused. Reload to restore it, or use the vector explanation.';});
- const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);update();theme();resize();el.dataset.ready='true';instances.push({el,render,theme,dispose(){update.dispose?.();resizeObserver.disconnect();controls.dispose();scene.traverse(o=>{o.geometry?.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];materials.filter(Boolean).forEach(m=>{Object.values(m).forEach(v=>{if(v?.isTexture)v.dispose()});m.dispose()})});renderer.dispose();renderer.forceContextLoss();}});
+ function fit(width,height){
+  camera.zoom=1;camera.updateProjectionMatrix();camera.updateMatrixWorld(true);
+  if(kind==='earth'){camera.zoom=.88*Math.min(1,camera.aspect);return;}
+  let x=0,y=0;
+  for(const point of framePoints){const p=point.clone().project(camera);x=Math.max(x,Math.abs(p.x));y=Math.max(y,Math.abs(p.y));}
+  const horizontalMargin=Math.max(labelsMargin,...[...stage.querySelectorAll('.scene-label')].map(node=>node.offsetWidth/2+12));
+  camera.zoom=Math.min((1-2*horizontalMargin/width)/x,(1-2*labelsMargin/height)/y,1.35);
+ }
+ function resize(){const {width,height}=stage.getBoundingClientRect();if(!width||!height||el.dataset.activeView==='diagram')return;camera.aspect=width/height;fit(width,height);camera.updateProjectionMatrix();renderer.setSize(width,height);labelRenderer.setSize(width,height);render();}
+ function parameter(){update();input.style.setProperty('--range-fill',`${100*(+input.value-input.min)/(input.max-input.min)}%`);input.setAttribute('aria-valuetext',output.querySelector('annotation')?.textContent||output.textContent);render();}
+ input?.addEventListener('input',parameter);controls.addEventListener('change',render);
+ el.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.view==='reset'){camera.position.copy(initial.position);controls.target.copy(initial.target);controls.update();resize();}else{const delta=camera.position.clone().sub(controls.target);delta.applyAxisAngle(V(0,1,0),b.dataset.view==='left'?.25:-.25);camera.position.copy(controls.target).add(delta);controls.update();render();}}));
+ if(kind!=='earth'){
+  stage.tabIndex=0;stage.dataset.interactiveLabel=`${el.querySelector('h2')?.textContent||'Interactive geometry'}. Drag to rotate, use arrow keys to orbit, or Home to reset the view.`;stage.setAttribute('aria-label',stage.dataset.interactiveLabel);
+  stage.addEventListener('keydown',event=>{if(event.target!==stage||el.dataset.activeView==='diagram')return;const view={ArrowLeft:'left',ArrowRight:'right',Home:'reset'}[event.key];if(view){event.preventDefault();el.querySelector(`[data-view=${view}]`).click();}});
+ }
+ renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();if(el.isConnected)fallback(el,'3D rendering paused. The diagram remains available.');});
+
+ const resizeObserver=new ResizeObserver(resize);resizeObserver.observe(stage);update();if(input)parameter();theme();resize();el.dataset.ready='true';setView(el,el.dataset.activeView||'3d');instances.push({el,render,theme,dispose(){update.dispose?.();resizeObserver.disconnect();controls.dispose();scene.traverse(o=>{o.geometry?.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];materials.filter(Boolean).forEach(m=>{Object.values(m).forEach(v=>{if(v?.isTexture)v.dispose()});m.dispose()})});renderer.dispose();renderer.forceContextLoss();}});
 }
 export function initScenes(){
-const lazy=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){lazy.unobserve(e.target);try{createLab(e.target)}catch(error){e.target.dataset.ready='fallback';e.target.querySelector('.scene-fallback span').textContent='The interactive view could not initialize. The vector explanation remains available.';console.error(error);}}},{rootMargin:'200px'});
+const abort=new AbortController();
+document.querySelectorAll('[data-scene]').forEach(el=>{
+ el.querySelectorAll('[data-scene-mode]').forEach(button=>button.addEventListener('click',()=>setView(el,button.dataset.sceneMode),{signal:abort.signal}));
+ setView(el,el.dataset.activeView||'3d');
+});
+const lazy=new IntersectionObserver(entries=>{for(const e of entries)if(e.isIntersecting){lazy.unobserve(e.target);try{createLab(e.target)}catch(error){fallback(e.target,'The interactive view could not initialize. The diagram remains available.');console.error(error);}}},{rootMargin:'200px'});
 document.querySelectorAll('[data-scene]').forEach(el=>lazy.observe(el));
 const themeObserver=new MutationObserver(()=>instances.forEach(i=>i.theme()));themeObserver.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
-return ()=>{lazy.disconnect();themeObserver.disconnect();instances.splice(0).forEach(i=>i.dispose())};
+return ()=>{abort.abort();lazy.disconnect();themeObserver.disconnect();instances.splice(0).forEach(i=>i.dispose())};
 }

@@ -17,7 +17,8 @@ assert.notEqual(scriptKey({model:'a'},segment,'flow'),scriptKey({model:'a'},segm
 assert.ok(instruction.includes('keep its wording'));assert.ok(instruction.includes('Do not repeat them'));
 const index=JSON.parse(fs.readFileSync('site/reading-index.json'));const map=JSON.parse(fs.readFileSync('site/book-map.json'));
 for(const p of map){const source=index.find(t=>t.id===p.id);for(const section of p.outline){assert.equal(source.segments[section.start].id,section.id);assert.equal(source.segments[section.end].id,section.endPassage);assert.ok(section.end>=section.start);}}
-const figure=index.find(p=>p.id==='chapter-2').segments.find(s=>s.kind==='figure');assert.equal(figure.text.match(/The covector dx returns/g).length,1);
+const stage=index.find(p=>p.id==='chapter-2').segments.find(s=>s.id==='scene-covector-stage');
+const figure=stage.views.diagram;assert.equal(figure.text.match(/The covector dx returns/g).length,1);assert.notEqual(stage.hash,figure.hash,'Diagram and 3D narration never share a cache key');
 // Every source passage is addressable directly through the outline, not search.
 for(const p of map)for(const s of index.find(t=>t.id===p.id).segments)assert.ok(p.outline.some(o=>o.start<=s.index&&o.end>=s.index));
 console.log('Verified timestamp tokenization, math/prose matching, listening history invalidation, narration deduplication and all section targets.');

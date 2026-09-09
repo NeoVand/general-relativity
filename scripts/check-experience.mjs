@@ -34,9 +34,13 @@ try{
    else if(s.id==='expansion')assert.equal(+data.measurement,1.5);
    else if(s.id==='wave')assert.ok(Math.abs(+data.phase-2*Math.PI)<1e-12);
    else if(s.id==='slices')assert.equal(+data.measurement,1.2);
+   if(s.id!=='earth'){
+    const cropped=await el.evaluate(e=>{const b=e.querySelector('.scene-stage').getBoundingClientRect();return [...e.querySelectorAll('.scene-label')].filter(n=>{const r=n.getBoundingClientRect();return r.left<b.left||r.top<b.top||r.right>b.right||r.bottom>b.bottom}).map(n=>n.textContent);});
+    assert.deepEqual(cropped,[],`${s.id}: labels must fit at the control maximum`);
+   }
    // Inspect a representative intermediate state as well as the endpoint.
    if(s.id!=='earth'){await range.fill(String(s.id==='sphere'?180:s.value));await range.dispatchEvent('input');}
-   if(s.id!=='earth'){await el.locator('[data-view=left]').click();await el.locator('[data-view=reset]').click();}
+   if(s.id!=='earth'){await el.locator('.scene-stage').press('ArrowLeft');await el.locator('.scene-stage').press('Home');}
    const result=await el.evaluate(e=>{
     const stage=e.querySelector('.scene-stage'),rect=stage.getBoundingClientRect();
     const labels=[...e.querySelectorAll('.scene-label')].map(n=>{const r=n.getBoundingClientRect();return {text:n.textContent,x:r.left-rect.left,y:r.top-rect.top,w:r.width,h:r.height}});
@@ -48,6 +52,24 @@ try{
    assert.equal(result.theme,theme);assert.ok(result.canvas);assert.ok(result.scroll<=width+1);
    assert.ok(result.equationOverflow<=1,`${s.id}: lab equation must fit the reading width`);
    if(result.clipped.length||result.overlaps.length)labelIssues.push({scene:s.id,width,theme,...result});
+   if(s.id!=='earth'){
+    assert.equal(await el.locator('.scene-actions>.passage-tools').count(),1,'Listening and explaining share the scene toolbar');
+    assert.equal(await el.locator('.scene-stage>.passage-tools').count(),0,'No floating actions across the drawing');
+    const diagram=el.locator('.scene-diagram');
+    assert.equal(await diagram.count(),1,`${s.id}: companion diagram must belong to the same illustration`);
+    assert.equal(await diagram.isVisible(),false);
+    await el.locator('[data-scene-mode=diagram]').click();
+    assert.equal(await diagram.isVisible(),true);
+    assert.equal(await el.locator('canvas').isVisible(),false);
+    assert.equal(await el.locator('.scene-controls').isVisible(),false);
+    assert.equal(await el.locator('.scene-stage').getAttribute('tabindex'),null,'A static diagram does not add a keyboard stop');
+    assert.ok((await el.locator('.scene-stage').getAttribute('aria-label')).includes('Static diagram'),'The accessible description follows the selected view');
+    assert.equal(await el.locator('.scene-diagram [data-passage]').count(),0,'The alternate diagram must not repeat the narration');
+    await el.screenshot({path:`qa/lab-${s.id}-diagram-${width}-${theme}.png`});
+    await el.locator('[data-scene-mode="3d"]').click();
+    assert.equal(await el.locator('canvas').isVisible(),true);
+    assert.ok(await range.evaluate(input=>input.getAttribute('aria-valuetext')),'Slider should expose its formatted value');
+   }
    checks.push({scene:s.id,width,theme});
    await el.screenshot({path:`qa/lab-${s.id}-${width}-${theme}.png`});
   }
@@ -96,6 +118,12 @@ try{
  await fallbackPage.goto(new URL('index.html',base).href);
  await fallbackPage.waitForFunction(()=>document.querySelector('[data-scene=earth]').dataset.ready==='fallback');
  assert.ok(await fallbackPage.locator('[data-scene=earth] .scene-fallback svg').isVisible());
+ await fallbackPage.goto(new URL('chapter-2.html#scene-covector',base).href);
+ await fallbackPage.locator('#scene-covector').scrollIntoViewIfNeeded();
+ await fallbackPage.waitForFunction(()=>document.querySelector('#scene-covector').dataset.ready==='fallback');
+ assert.ok(await fallbackPage.locator('#scene-covector .scene-diagram').isVisible(),'WebGL failure selects the readable companion diagram');
+ assert.equal(await fallbackPage.locator('#scene-covector [data-scene-mode="3d"]').isDisabled(),true);
+ assert.equal(await fallbackPage.locator('#scene-covector .scene-controls').isVisible(),false);
  await fallbackContext.close();
  // Recycling continuity: every retained surface at the phase boundary has an
  // identical successor. Only a hidden outer surface and an absorbed inner one change.
@@ -123,6 +151,11 @@ try{
   assert.ok(Math.abs(physicalV+shift)<.001,'PG shift cancels rain velocity, giving ds²=-c²dt²');
  }
  assert.ok(Math.abs(Math.sqrt(2*EARTH_GM/EARTH_RADIUS)-11186)<2);
+ // A canonical figure link must reveal its now-paired diagram before scrolling.
+ await page.goto(new URL('chapter-2.html#figure-vector-covector',base).href);
+ await page.waitForFunction(()=>document.querySelector('#scene-covector')?.dataset.activeView==='diagram');
+ assert.ok(await page.locator('#figure-vector-covector').isVisible());
+ assert.equal(await page.locator('#scene-covector .scene-controls').isVisible(),false);
  // Atlas filters, theme-aware SVG, and figure dialog ID isolation.
  await page.goto(new URL('figure-atlas.html',base).href);await page.locator('[data-filter=foundations]').click();assert.equal(await page.locator('.atlas-item:visible').count(),10);
  const figure=page.locator('.atlas-item:visible').first();await figure.locator('[data-figure]').click();await page.locator('#figure-dialog').waitFor({state:'visible'});

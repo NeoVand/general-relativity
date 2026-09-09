@@ -32,7 +32,7 @@ try{
  assert.equal(await page.locator('.sidebar').evaluate(e=>e.inert),false);
  await group('part-1').locator('button').first().hover();
  await page.waitForFunction(()=>!document.querySelector('.nav-preview').hidden);
- assert.match(await page.locator('.nav-preview').innerText(),/Curvature/);
+ assert.match(await page.locator('.nav-preview').innerText(),/Differential geometry/);
  assert.equal(await page.locator('.nav-preview a,.nav-preview button').count(),0);
  await page.screenshot({path:'qa/navigation-rail-preview.png',animations:'disabled'});
  await page.keyboard.press('Escape');
@@ -54,9 +54,17 @@ try{
  assert.equal(await page.locator('.nav-section-toggle').getAttribute('aria-expanded'),'true','Section disclosure survives navigation');
  await page.locator('.nav-section-toggle').click();
  // A chapter in another part reveals its parent, even if it was closed earlier.
+ await group('part-2').locator('button').first().click();
+ await group('part-2').locator('button').first().click();
  await go('chapter-11.html');
- assert.equal(await group('part-1').locator('button').first().getAttribute('aria-expanded'),'true');
- assert.equal(await group('part-1').locator('.nav-chapter-row a[aria-current]').getAttribute('href'),'chapter-11.html');
+ assert.equal(await group('part-2').locator('button').first().getAttribute('aria-expanded'),'true');
+ assert.equal(await group('part-2').locator('.nav-chapter-row a[aria-current]').getAttribute('href'),'chapter-11.html');
+ const curriculum=[[0,5],[6,10],[11,15],[16,19],[20,23],[24,24]];
+ assert.equal(await page.locator('[data-nav-group^="part-"]').count(),curriculum.length);
+ for(const [i,[first,last]] of curriculum.entries()){
+  assert.deepEqual(await group(`part-${i}`).locator('.nav-chapter-row>a').evaluateAll(links=>links.map(a=>a.getAttribute('href'))),Array.from({length:last-first+1},(_,n)=>`chapter-${first+n}.html`));
+ }
+ assert.doesNotMatch(await group('part-5').innerText(),/optional/i,'Synthesis is part of the main course');
  for(const theme of ['light','dark']){
   await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
   for(const w of [1440,1024,801,800,390,320]){

@@ -14,6 +14,7 @@
   const offReading=readingModule.initReading(),offScenes=sceneModule.initScenes();
   cleanup=()=>{offScenes();offReading()};
  }
+ function revealLocation(el){const diagram=el?.closest('.scene-diagram');if(diagram)diagram.closest('[data-scene]')?.querySelector('[data-scene-mode="diagram"]')?.click();return el;}
  async function navigate(target,{pop=false,highlight=false,signal}={}){
   const url=new URL(target,base);
   if(url.origin!==base.origin||!url.pathname.startsWith(base.pathname))throw Error('Only book pages can be opened.');
@@ -33,12 +34,12 @@
   if(token!==routeToken||signal?.aborted)return;
   navigationError='';
   if(!pop)history.pushState({},'',url);
-  if(url.hash){const el=document.getElementById(decodeURIComponent(url.hash.slice(1)));if(el){let p=el.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}el.scrollIntoView({block:highlight?'center':'start'});}}
+  if(url.hash){const el=revealLocation(document.getElementById(decodeURIComponent(url.hash.slice(1))));if(el){let p=el.parentElement;while(p){if(p.tagName==='DETAILS')p.open=true;p=p.parentElement;}el.scrollIntoView({block:highlight?'center':'start'});}}
   else window.scrollTo(0,0);
  }
  onMount(()=>{
   let alive=true;
-  activate().then(async()=>{await document.fonts.ready;if(alive&&routeToken===0&&location.hash)document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView({block:'start'});}).catch(()=>{if(alive)navigationError='The interactive reader could not start. Reload to try again.'});
+  activate().then(async()=>{await document.fonts.ready;if(alive&&routeToken===0&&location.hash)revealLocation(document.getElementById(decodeURIComponent(location.hash.slice(1))))?.scrollIntoView({block:'start'});}).catch(()=>{if(alive)navigationError='The interactive reader could not start. Reload to try again.'});
   const click=e=>{
    const link=e.target.closest('a[href]');
    if(!link||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||link.target||link.hasAttribute('download'))return;
