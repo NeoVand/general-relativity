@@ -424,7 +424,7 @@ Keep the falling cabin, the two test balls, and the two clocks as our starting e
 
 ### 1.6 A little history, without the lightning-bolt mythology
 
-Einstein's route to general relativity was a prolonged attempt to reconcile physical constraints. Recovering Newtonian gravity, making sense of accelerated motion, and preserving an appropriate energy–momentum balance all mattered. Einstein and Marcel Grossmann developed a metric approach in their 1913 *Entwurf* theory, but the final field equations came only after substantial revision. Historical work on Einstein's notebooks shows that candidate equations close to the successful theory had already appeared in his earlier calculations. [Janssen and Renn, *Untying the Knot*](https://www.mpiwg-berlin.mpg.de/Preprints/P264.PDF).
+Einstein's route to general relativity was a prolonged attempt to reconcile physical constraints. Recovering Newtonian gravity, making sense of accelerated motion, and preserving an appropriate energy–momentum balance all mattered. Einstein and Marcel Grossmann developed a description using a geometric rule for distances and times in their 1913 *Entwurf* theory, but the final field equations came only after substantial revision. Historical work on Einstein's notebooks shows that candidate equations close to the successful theory had already appeared in his earlier calculations. [Janssen and Renn, *Untying the Knot*](https://www.mpiwg-berlin.mpg.de/Preprints/P264.PDF).
 
 This is an encouraging story for a learner. Failure to understand an equation's physical interpretation can be a deeper obstacle than failure to write down the equation. A symbol can be correct while the story you attach to it is wrong.
 
@@ -1448,7 +1448,7 @@ Three qualifications make these statements stronger intellectually rather than w
 
 First, *local* matters. In freely falling coordinates the metric can be Minkowskian and its first derivatives zero at an event. Curvature can still produce measurable effects across a finite laboratory or after a finite time. Making the laboratory smaller suppresses such effects; it does not declare curvature nonexistent.
 
-Second, ideal test-body motion neglects the body's own gravitational backreaction and finite-size structure. Spinning extended bodies, bodies with multipole moments, and objects subject to self-force corrections require more elaborate motion laws. The geodesic approximation has a domain of validity.
+Second, ideal test-body motion neglects the body's own gravitational backreaction and finite-size structure. Spinning extended bodies, bodies with multipole moments, and objects subject to self-force corrections require more elaborate motion laws. The approximation of a freely falling test particle has a domain of validity.
 
 Third, the equivalence principle does not uniquely imply Einstein's field equation. Multiple theories can use a metric, respect the local free-fall picture, and supply different dynamics for that metric. We have learned how the local measuring system behaves; we have not yet derived what creates the gravitational field.
 
@@ -1503,7 +1503,7 @@ $$
 \boxed{S_{\rm particle}=-mc^2\int d\tau.}
 $$
 
-The action has units of energy times time. In flat spacetime, the integrand per unit coordinate time is $-mc^2\sqrt{1-v^2/c^2}$. Chapter 0’s square-root expansion gives $-mc^2+mv^2/2$ at low speed. The constant term has the same integral for every path between fixed endpoint times, leaving the familiar positive kinetic-energy term. The fixed overall factor does not affect the free trajectory for $m\ne0$.
+The action has units of energy times time. When we write $S=\int L\,dt$, the integrand $L$ is called the **Lagrangian**. In flat spacetime, this particle model gives $L=-mc^2\sqrt{1-v^2/c^2}$. Chapter 0’s square-root expansion gives $-mc^2+mv^2/2$ at low speed. The constant term has the same integral for every path between fixed endpoint times, leaving the familiar positive kinetic-energy term. The fixed overall factor does not affect the free trajectory for $m\ne0$.
 
 Why this form? Proper time is a scalar quantity attached to the path, and the integral is unchanged if we relabel points along that path. With no additional internal structure or higher-derivative couplings, it is the simplest local relativistic free-particle action. This is a physical modeling choice with extraordinary success, not a logical proof that every conceivable body in every conceivable gravitational theory must have this exact action.
 
@@ -2416,7 +2416,7 @@ K=\frac{R_{\theta\phi\theta\phi}}
 =\frac1{a^2}.
 $$
 
-The Ricci tensor and scalar, whose general definitions we discuss next, are
+We can summarize some of this curvature by contracting indices, using the operation from Chapter 2. Define the **Ricci tensor** by $R_{ab}=R^c{}_{acb}$ and the **Ricci scalar** by $R=g^{ab}R_{ab}$. Here each index runs over $\theta,\phi$. On this sphere these contractions give
 
 $$
 R_{\theta\theta}=1,

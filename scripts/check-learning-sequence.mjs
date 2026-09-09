@@ -42,7 +42,7 @@ const conventions=guide.querySelector('details.course-conventions');
 assert.ok(conventions&&!conventions.hasAttribute('open')&&conventions.hasAttribute('data-no-narration'),'the returning-reader reference is closed and excluded from default narration');
 assert.ok(conventions.querySelectorAll('.katex').length>10,'the reference still contains its equations');
 const gravity=doc(1).querySelector('.prose').textContent;
-assert.doesNotMatch(gravity,/connection coefficients|Ricci|Weyl|g_\{\\mu/,'motivation does not require later tensor machinery');
+assert.doesNotMatch(gravity,/\bmetric\b|connection coefficients|Ricci|Weyl|g_\{\\mu/,'motivation does not require later tensor machinery');
 const interval=doc(3).getElementById('3-3-the-interval-the-quantity-that-refuses-to-change');
 let intervalText='';for(let el=interval.nextElementSibling;el&&el.tagName!=='H3';el=el.nextElementSibling)intervalText+=el.textContent;
 assert.ok(intervalText.indexOf('Choose two events')<intervalText.indexOf('spacetime interval'));
