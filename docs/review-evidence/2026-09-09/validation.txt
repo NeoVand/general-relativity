@@ -1,0 +1,187 @@
+GR COURSE REVIEW — VALIDATION RECORD
+Date: 2026-09-09
+Revision: ad6a533535f1b7c2209272ae48258359e910bfc5
+No source fixes were made. AI provider responses were mocked.
+
+===== build.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 build:reader
+> node scripts/build-site.mjs && node scripts/build-reading.mjs && vite build && node scripts/attach-reader.mjs
+
+Built 31 reading pages, 40 figures, 761 displayed equations; no math errors.
+Prepared semantic reading passages for 37 pages.
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 6236 modules transformed.
+rendering chunks...
+computing gzip size...
+site/.vite/manifest.json         0.18 kB │ gzip:   0.13 kB
+site/reader/main-BKwdps3g.css   16.34 kB │ gzip:   3.91 kB
+site/reader/main-D-Ccrc_z.js   529.19 kB │ gzip: 183.27 kB
+
+✓ built in 288ms
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+===== static-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test
+> node scripts/check-site.mjs
+
+Verified 37 HTML pages, 3072 local links/assets, 40 figure placements, and numerical calibrations.
+
+===== svelte-check.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 check
+> svelte-check --fail-on-warnings
+
+Loading svelte-check in workspace: /Users/neo/repos/general-relativity
+Getting Svelte diagnostics...
+
+svelte-check found 0 errors and 0 warnings
+
+===== course-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:course
+> node scripts/check-course.mjs
+
+Verified 13 published lessons, 3 prerequisite-complete routes, 260 learning interactions, keyboard/deep-link behavior, route-aware page turns, and notebook persistence/export/import at desktop and mobile widths.
+
+===== study-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:study
+> node scripts/check-study-core.mjs && node scripts/check-course-narration.mjs && node scripts/check-course-narration-browser.mjs && node scripts/check-study.mjs && node scripts/check-selection.mjs
+
+Verified timestamp tokenization, math/prose matching, listening history invalidation, narration deduplication and all section targets.
+Verified semantic block boundaries, coherent visible/depth-specific source, context cache invalidation, editorial narration, bounded bridge ranges, and metadata.
+Verified live source neighborhoods, hidden/off-page depth retrieval, narration context cache changes, bounded bridge playback, explicit exercise ranges, hidden-panel reveal, and chapter practice exclusion with mocked providers.
+Verified narration coverage, BYOK storage, model selection, spoken rewriting, audio playback/cache, tutor tools, persistent navigation, Realtime lifecycle, and 12 visual states.
+Verified selection placement, native collapse/outside/scroll/Escape dismissal, exact tutor and narration excerpts, repeated-word highlight, six responsive theme states, and separate diagram/3D narration sources.
+
+===== browser-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:browser
+> node scripts/check-browser.mjs && node scripts/check-navigation.mjs && node scripts/check-symbols.mjs
+
+Browser checks passed: 74 page/viewport combinations, links to sections, images, compact header, search, controls, checkpoints, clock and GPS experiments.
+Sidebar checks passed: anchored morph, single nav tree, previews, saved disclosure, section tracking, keyboard, mobile dismissal, 12 visual states, and reduced motion.
+Symbol checks passed: 32 classification cases, source preservation, 20 lesson anchors, desktop/mobile placement, equation geometry, dismissal and keyboard access.
+
+===== figures-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:figures
+> node scripts/check-figures.mjs && node scripts/check-responsive-figures.mjs
+
+Checked all 40 SVGs in both themes: labels clear of clipping, other labels, strokes, and overpainted fills.
+Verified 36 responsive figure/theme/width compositions, readable math, enlargement, and reversible reflow.
+
+===== experience-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:experience
+> node scripts/check-experience.mjs
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at /Users/neo/repos/general-relativity/scripts/check-experience.mjs:154:13 {
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
+
+===== experience-recheck.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:experience
+> node scripts/check-experience.mjs
+
+Checked 36 3D scene/theme/viewport combinations, model endpoints, keyboard controls, semantic math, and atlas inspection.
+
+===== experience-diagnostic.log =====
+Checked 36 3D scene/theme/viewport combinations, model endpoints, keyboard controls, semantic math, and atlas inspection.
+
+===== visual-lessons-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:visual-lessons
+> node scripts/check-visual-lessons.mjs
+
+Visual lesson geometry: charts, metric limits, changing bases, transport, and null directions verified.
+Visual lessons: 20 responsive/theme combinations, control states, narration, storage, and no-WebGL fallback passed.
+
+===== geometry-experiences-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:geometry-experiences
+> node scripts/check-geometry-experiences.mjs
+
+Geometry experiments: full-rank charts, overlap, tangent derivatives, Kepler area law and leading Mercury precession verified.
+Geometry experiences: 8 viewport/theme combinations, controls, mathematical readouts, animation, offscreen pause and SVG fallbacks passed.
+
+===== curvature-experiences-tests.log =====
+
+> general-relativity-from-the-inside-out@2.0.0 test:curvature-experiences
+> node scripts/check-curvature-experiences.mjs --integrated
+
+Verified all 256 curvature symmetries and Bianchi components; exact Jacobi equations, initial volume acceleration, finite volume change, 3D projection, and SSR LaTeX.
+Verified built chapters 8 and 9 in desktop/mobile and both themes: no overflow, readable LaTeX, current-state source, preserved narration tools and optional references.
+Verified both experiences across six width/theme combinations; controls, signed entries, state-aware narration, motion/pause, offscreen suspension, reduced motion, orbit, restoration, and cleanup.
+
+
+===== Authored answer position audit (zero-based) =====
+[
+  {
+    "id": "coordinates-change-measurements-do-not",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "two-maps-one-sphere",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "a-metric-converts-labels-into-lengths",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "differentiate-the-arrow-not-its-address",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "carry-a-direction-without-turning-it",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "measure-curvature-with-a-string",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "orbit-conservation",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "phase-drift",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "waves-and-retarded-time",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "horizon-directions",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "kruskal-and-causal-maps",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "oriented-stokes",
+    "correctOptionIndex": 0
+  },
+  {
+    "id": "temperature-and-quantum-input",
+    "correctOptionIndex": 0
+  }
+]

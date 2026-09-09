@@ -1,0 +1,32 @@
+{
+  "noJavaScript": {
+    "text": "A WORKED BRIDGE\nAt a horizon, ask which directions lead into the future\n\nCan a future-directed light ray point outward and still lose areal radius?\n\nBuilds on\nNull curves\nThe Schwarzschild solution\nCoordinate failure versus curvature\nSee the idea\nWork it out\nGo deeper\n\nAt an event, a light cone gives the possible directions of light and the allowed directions of massive travelers. In this radial diagram, left and right measure areal radius \n𝑟\nr: a symmetry sphere has area \n4\n𝜋\n𝑟\n2\n4πr\n2\n. Upward means increasing plot time. The horizon is \n𝑟\n=\n𝑟\n𝑠\n=\n2\n𝐺\n𝑁\n𝑀\n/\n𝑐\n2\nr=r\ns\n\t​\n\n=2G\nN\n\t​\n\nM/c\n2\n. Compare an event outside, on, and inside it; the directions are computed from the metric, not drawn to resemble a funnel.\n\nThe interactive model is loading. The worked calculation above also explains this example.\n\nOpen the reference diagram\nTest the idea\n\nThe horizon is a boundary of causal escape, not a place where local light slows down.",
+    "panels": [
+      {
+        "id": "horizon-directions-intuition",
+        "hidden": false,
+        "display": "block"
+      },
+      {
+        "id": "horizon-directions-derive",
+        "hidden": true,
+        "display": "none"
+      },
+      {
+        "id": "horizon-directions-formal",
+        "hidden": true,
+        "display": "none"
+      }
+    ],
+    "loading": "The interactive model is loading. The worked calculation above also explains this example."
+  },
+  "symbolMisclassification": {
+    "occurrences": 7,
+    "tex": "\\tau_{\\rm plot}=cv/r_s-\\rho",
+    "card": "Proper time\n𝜏\nτ\nTIME RECORDED BY A CLOCK\n\nProper time is the elapsed time recorded by an ideal clock along its timelike worldline. Different journeys between shared events can accumulate different readings.\n\nRead the explanation →"
+  },
+  "backNavigation": {
+    "before": 3200,
+    "after": 75
+  }
+}
