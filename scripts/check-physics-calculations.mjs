@@ -95,6 +95,37 @@ for(const spatial of [[0,0,0],temporal,[.5,.6,.7]]){
  }
 }
 const flrw=power=>point=>{const g=matrix();g[0][0]=-1;for(let i=1;i<4;i++)g[i][i]=point[0]**(2*power);return g};
+// Test the time-dependent spherical ansatz before imposing vacuum. This
+// independently checks the off-diagonal equation used in the staticity proof.
+for(const point of [[.3,2,.8,.1],[.7,3,1.2,.4]]){
+ const metric=([t,r,theta])=>{
+  const g=matrix(),alpha=.03*t*r,beta=.04*t*t+.02*r;
+  g[0][0]=-Math.exp(2*alpha);g[1][1]=Math.exp(2*beta);
+  g[2][2]=r*r;g[3][3]=r*r*Math.sin(theta)**2;return g;
+ };
+ near(curvature(metric,point).ricci[0][1],2*.08*point[0]/point[1],2e-6);
+}
+// Kerr is supplied as an exact solution. Differentiate its full metric,
+// including the factor of two in the time-angle cross term, to check vacuum.
+// Zero spin also checks the Schwarzschild curvature contraction at a horizon-
+// exterior point; the ingoing chart below checks that invariant at the horizon.
+for(const spin of [0,.4,.8]){
+ const metric=([t,r,theta])=>{
+  const m=1,a=spin,S=r*r+a*a*Math.cos(theta)**2,D=r*r-2*m*r+a*a,g=matrix();
+  g[0][0]=-(1-2*m*r/S);g[0][3]=g[3][0]=-2*m*a*r*Math.sin(theta)**2/S;
+  g[1][1]=S/D;g[2][2]=S;
+  g[3][3]=(r*r+a*a+2*m*a*a*r*Math.sin(theta)**2/S)*Math.sin(theta)**2;return g;
+ };
+ const result=curvature(metric,[.1,5,.9,.2]);
+ result.ricci.flat().forEach(value=>near(value,0,3e-6));
+ if(spin===0)near(result.kretschmann,48/5**6,1e-7);
+}
+for(const r of [1,2,3]){
+ const metric=([v,r,theta])=>{const g=matrix();g[0][0]=-(1-2/r);g[0][1]=g[1][0]=1;g[2][2]=r*r;g[3][3]=r*r*Math.sin(theta)**2;return g};
+ const result=curvature(metric,[.1,r,.9,.2]);
+ result.ricci.flat().forEach(value=>near(value,0,3e-6));
+ near(result.kretschmann,48/r**6,2e-5);
+}
 for(const t of [1,2,3]){
  const dust=curvature(flrw(2/3),[t,0,0,0]);near(dust.scalar,4/(3*t*t));near(dust.kretschmann,80/(27*t**4));near(dust.G00,4/(3*t*t));near(dust.G11,0);
  const radiation=curvature(flrw(.5),[t,0,0,0]);near(radiation.scalar,0);near(radiation.G11/radiation.G00,1/3);near(radiation.kretschmann,3/(2*t**4));

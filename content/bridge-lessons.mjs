@@ -13,7 +13,7 @@ const thermalTime = {title:'Marc Kamionkowski · Finite-temperature field theory
 export const bridgeLessons = [
  {
   id:'orbit-conservation',chapter:16,
-  after:'16.6 Mercury: a resonant correction that slowly rotates an ellipse',
+  after:'16.6 Mercury and the rotation of an orbit',
   title:'Why an orbit keeps its angular momentum',
   question:'What stays fixed while a planet changes both its speed and its direction?',
   intuition:s`A force directed toward the origin can speed up or slow down a planet without twisting its motion about that origin. We will make “twisting” precise using a two-by-two determinant. Start with Newtonian motion in a plane: $(x(t),y(t))$, with $t$ in seconds and distances in metres.`,
@@ -32,7 +32,7 @@ export const bridgeLessons = [
  },
  {
   id:'phase-drift',chapter:16,
-  after:'16.6 Mercury: a resonant correction that slowly rotates an ellipse',
+  after:'16.6 Mercury and the rotation of an orbit',
   title:'A tiny frequency change can rotate an entire orbit',
   question:'Why does a small correction grow into a measurable shift after many cycles?',
   intuition:s`A sine wave returns to its starting value after its phase advances by $2\pi$. If radial motion completes its cycle at an angle slightly different from $2\pi$, the next closest approach points in a different direction. We need an oscillation measured against **orbital angle**, not clock time.`,

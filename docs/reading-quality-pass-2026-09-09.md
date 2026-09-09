@@ -74,8 +74,16 @@ The symmetry chapter derives the metric Lie derivative's connection form and the
 
 All 37 lessons passed 680 browser interactions after this batch. Narration-context and hidden-panel retrieval checks passed with mocked providers.
 
+## Chapters 16 and 17
+
+The experiments chapter now derives the weak-bending ray equation from the travel-time functional, evaluates the light-delay antiderivative, defines the ellipse's eccentricity and semimajor axis, and converts Mercury's per-orbit shift into a per-century value. The redshift calculation uses the same physical energy convention as Chapter 15. Small time and angle units are defined alongside the numerical examples. The gyroscope discussion calculates its orbital average and explicitly identifies the leading rotating-field result it uses as an input.
+
+The black-hole chapter adds the spherical time-independence calculation, connects the Schwarzschild invariant to the earlier curvature table, and expands the conversion from radial energy to the orbit equation. It defines escape to null infinity before using that global horizon definition. Kerr is identified as a supplied exact solution, not a completed derivation. Independent numerical differentiation checks its vacuum Ricci tensor, the spherical time-dependent Ricci component, and Schwarzschild's invariant outside, on, and inside the horizon in regular coordinates.
+
+The assembled book passed 74 page/viewport checks, including section links, readable tables, clock and GPS controls, and the compact reader header.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 16.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 18.

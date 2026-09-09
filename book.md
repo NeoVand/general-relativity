@@ -5233,11 +5233,11 @@ For a cosmological constant, the energy density $\epsilon_\Lambda=\rho_\Lambda c
 
 ## 16. Turning geometry into experiments: clocks, light, and Mercury
 
-The Einstein equation has now acquired a meaning, a derivation, and a respectable collection of indices. An experimentalist is entitled to ask: what does it make an actual instrument do?
+Two clocks start together. One stays on Earth; the other goes into orbit. When we compare their readings, how much time has each recorded? The field equation enters this question by determining the metric; the metric then determines the time accumulated along each clock’s path.
 
 There is a repeatable answer. First solve, or approximate, the field equation for a metric. Then specify the worldlines of the source, detector, and light signals. Finally calculate quantities those observers can measure: elapsed proper time, frequency, angle, or separation. A coordinate component is an ingredient in that calculation; it is not automatically an observable.
 
-### 16.1 Two gravitational potentials, because clocks and rulers both participate
+### 16.1 How the metric changes clocks and rulers
 
 For a weak, approximately static field with negligible rotation, choose Cartesian spatial coordinates and write
 
@@ -5248,7 +5248,7 @@ $$
 
 Here $x^0=ct$, and $|\Phi|/c^2,|\Psi|/c^2\ll1$. Both potentials have units of velocity squared. The first alters the relation between coordinate time and clock time. The second alters the relation between coordinate distances and ruler lengths. We have omitted vector perturbations associated with mass currents, gravitational waves, and higher-order terms.
 
-For an isolated, slowly moving, weakly gravitating source in GR, with negligible anisotropic stress and appropriate boundary conditions,
+For an isolated, slowly moving, weakly gravitating source in GR, with pressure and directional stresses negligible compared with its rest-energy density and with the potentials vanishing far away,
 
 $$
 \Phi=\Psi=-\frac{G_NM}{r}
@@ -5256,7 +5256,7 @@ $$
 
 outside a spherical body. In more general matter systems the equality needs justification; it is not part of the definition of a gravitational potential.
 
-Imagine a game whose level editor has separate sliders for clock rates and spatial distances. Slow projectiles mainly reveal the clock slider. Light reveals both. The analogy is a way of organizing the metric, not a claim that nature contains two independently adjustable substances. Einstein's equation couples these coefficients.
+Section 12.5 derived this equality by keeping the temporal and spatial perturbations separate in the field equation. Here they are written as $\Phi=c^2\varphi$ and $\Psi=c^2\psi$, restoring velocity-squared units. We will use the same metric to calculate slow motion, clock readings, and light propagation.
 
 For a slowly moving freely falling object, the leading spatial geodesic equation is
 
@@ -5273,7 +5273,7 @@ $$
 
 Consequently $d^2\mathbf x/dt^2=-\boldsymbol\nabla\Phi$: Newton emerges because the metric's clock coefficient has the appropriate gradient. Terms involving spatial velocities enter at higher order for this slow particle. They cannot be discarded for light.
 
-Notice the deliberate phrase **coordinate acceleration**. The falling object's accelerometer reads zero. Its covariant four-acceleration $a^\mu=u^\nu\nabla_\nu u^\mu$ vanishes. A person standing on the floor has approximately zero coordinate acceleration in this chart but nonzero proper acceleration: the floor prevents a geodesic. Your bathroom scale is measuring the interruption of free fall.
+This is a **coordinate acceleration**, measured using the positions and time labels of the chosen chart. The falling object's accelerometer reads zero. Its covariant four-acceleration $a^\mu=u^\nu\nabla_\nu u^\mu$ vanishes. A person standing on the floor has approximately zero coordinate acceleration in this chart but nonzero proper acceleration: the floor prevents a geodesic. A scale measures the supporting force that prevents this free fall.
 
 ### 16.2 What a clock actually accumulates
 
@@ -5300,11 +5300,11 @@ $$
 \simeq1.09\times10^{-16}.
 $$
 
-Over one day this is approximately $9.4$ picoseconds. Small? Yes. Conceptually optional? No. The universe does not round intermediate calculations to human convenience.
+Multiply the fractional rate difference by $86{,}400$ seconds to get the difference after a day: about $9.4$ picoseconds, where one picosecond is $10^{-12}$ seconds. The higher clock gains time.
 
 This effect alone does not establish nonzero curvature. Accelerated observers in flat spacetime can also have systematically different clock rates. Curvature concerns the obstruction to removing gravitational effects throughout an extended region, especially tidal effects. It is stronger information than one pair of differently ticking clocks.
 
-### 16.3 Gravitational redshift, derived with an honest definition of energy
+### 16.3 Gravitational redshift and observer energy
 
 In a stationary region, let $K^\mu$ be the timelike Killing field describing time-translation symmetry. Normalize it so that in an asymptotically flat static chart $K=\partial/\partial x^0$. Define its positive norm factor
 
@@ -5318,7 +5318,7 @@ $$
 u^\mu=\frac{cK^\mu}{N}.
 $$
 
-The normalization is not decoration: it ensures $u_\mu u^\mu=-c^2$.
+Dividing by $N$ makes the norm of $K/N$ equal to $-1$; multiplying by $c$ then gives the required $u_\mu u^\mu=-c^2$.
 
 Let $p^\mu$ be a photon's four-momentum, transported along its null geodesic. The Killing equation is $\nabla_{(\mu}K_{\nu)}=0$. Therefore
 
@@ -5330,16 +5330,16 @@ $$
 The term differentiating $p_\mu$ vanished by the geodesic equation. The remaining contraction vanishes because $p^\alpha p^\mu$ is symmetric while the relevant part of $\nabla_\alpha K_\mu$ is antisymmetric. Thus
 
 $$
-\mathcal E_K=-p_\mu K^\mu
+E_K=-c\,p_\mu K^\mu
 $$
 
 is conserved along the light ray. But the energy measured by a particular observer is
 
 $$
-E_{\rm local}=-p_\mu u^\mu=\frac{c\mathcal E_K}{N}.
+E_{\rm local}=-p_\mu u^\mu=\frac{E_K}{N}.
 $$
 
-One photon, one conserved symmetry charge, different local energies. This is not a bookkeeping failure. Energy includes a specification of the observer.
+This is the energy convention used in Section 15.4: $p^0=E/c$, so the factor $c$ gives $E_K$ energy units. Observers at different values of $N$ measure different local energies even though the photon has the same conserved $E_K$ along its ray.
 
 Since photon energy is proportional to measured frequency,
 
@@ -5355,9 +5355,9 @@ z\equiv\frac{\nu_{\rm em}}{\nu_{\rm rec}}-1
 \simeq\frac{\Phi_{\rm rec}-\Phi_{\rm em}}{c^2}.
 $$
 
-Light received higher in the potential is redshifted. The familiar story that a photon “spends energy climbing” gives the right sign, but the Killing derivation explains precisely what stays conserved and what changes. In a general time-dependent geometry, the required timelike Killing symmetry may not exist at all.
+Light received higher in the potential has a lower measured frequency: it is **redshifted**. The conserved quantity is the symmetry energy $E_K$; the changing quantity is $E_{\rm local}=E_K/N$. In a time-dependent geometry without this timelike symmetry, the conserved quantity used in this derivation need not exist.
 
-### 16.4 Bending light: finding the famous factor of two
+### 16.4 Deriving the bending of light
 
 For a null trajectory, $ds^2=0$. Let $d\ell^2=\delta_{ij}dx^i dx^j$ denote Euclidean coordinate path length. Then
 
@@ -5370,7 +5370,16 @@ $$
 
 In this static chart, the light path makes the travel-time functional $\int n\,d\ell$ stationary. This is the same mathematics as ray optics in an inhomogeneous refractive medium. No material ether has appeared: $n$ is a coordinate description of null geometry, and every local freely falling observer still measures light speed $c$.
 
-Take an unperturbed ray traveling along $z$, passing a mass at transverse distance $b$. To first order, the change in its transverse direction is
+To calculate the path, let the mass sit at the origin and describe the ray in the $xz$ plane by $x(z)$. A prime here means $d/dz$, and $d\ell=\sqrt{1+x'^2}\,dz$. Apply the Euler–Lagrange equation from Chapter 13 to $L=n(x,z)\sqrt{1+x'^2}$:
+
+$$
+\frac{d}{dz}\left(\frac{n x'}{\sqrt{1+x'^2}}\right)
+=\partial_xn\sqrt{1+x'^2}.
+$$
+
+For weak bending, $n-1$ and the small slope $x'$ are both first-order quantities. Drop products of small quantities to obtain $x''\simeq\partial_xn$. The slope is the small angle the ray makes with its original direction, so integrating this equation gives its angle change.
+
+The unperturbed ray has $x=b$, where $b$ is its **impact parameter**: its perpendicular distance from the mass if it continued straight. In vector form, $\boldsymbol\nabla_\perp$ means derivatives in the two directions perpendicular to the unperturbed ray. Thus
 
 $$
 \Delta\boldsymbol\theta
@@ -5403,11 +5412,11 @@ $$
 \boxed{|\Delta\theta|_{\rm GR}=\frac{4G_NM}{bc^2}.}
 $$
 
-At the solar limb this is about $1.75$ arcseconds. Keeping only the clock potential would produce half this value.
+For a ray grazing the Sun, set $b$ equal to the solar radius. The angle is about $1.75$ arcseconds; one arcsecond is $1/3600$ of a degree. Setting $\Psi=0$ while retaining the same $\Phi$ would halve the result.
 
-A careful gotcha: the split into “half from time curvature, half from space curvature” belongs to this convenient weak-field coordinate description. It is not an invariant decomposition of four-dimensional curvature into two independently observable substances. The total observable deflection is the robust result.
+The two contributions in this calculation belong to the chosen weak-field coordinates. Changing coordinates can change how we divide them between temporal and spatial metric terms. The predicted angle measured by the specified observer is independent of that division.
 
-### 16.5 Shapiro delay: the other consequence of the same optical geometry
+### 16.5 The extra travel time of a light signal
 
 The effective index also produces an additional travel time. Along a nearly straight path,
 
@@ -5415,7 +5424,13 @@ $$
 \Delta t=-\frac{1}{c^3}\int(\Phi+\Psi)\,d\ell.
 $$
 
-For a point mass in GR, a ray passing with impact parameter $b$ and endpoints at longitudinal coordinates $-z_1$ and $z_2$ has
+For a point mass, $\Phi+\Psi=-2G_NM/\sqrt{b^2+z^2}$ along the unperturbed ray. Its endpoints are at $z=-z_1$ and $z=z_2$, with $z_1,z_2>0$. The integral we need is
+
+$$
+\int\frac{dz}{\sqrt{b^2+z^2}}=\operatorname{arsinh}(z/b)+C.
+$$
+
+The **inverse hyperbolic sine** is $\operatorname{arsinh}q=\ln(q+\sqrt{1+q^2})$. Differentiating this logarithm gives $1/\sqrt{1+q^2}$ and verifies the antiderivative. It is an odd function, so evaluating the lower endpoint adds a second positive contribution:
 
 $$
 \Delta t\simeq\frac{2G_NM}{c^3}
@@ -5423,7 +5438,7 @@ $$
 +\operatorname{arsinh}\frac{z_2}{b}\right].
 $$
 
-For endpoints far from closest approach, $z_1,z_2\gg b$, use $\operatorname{arsinh}q\simeq\ln(2q)$:
+For $q\gg1$, $\sqrt{1+q^2}\simeq q$, so the logarithm becomes $\operatorname{arsinh}q\simeq\ln(2q)$. When both endpoints are far from closest approach, $z_1,z_2\gg b$, this gives
 
 $$
 \Delta t\simeq\frac{2G_NM}{c^3}
@@ -5432,24 +5447,33 @@ $$
 
 This is a leading one-way coordinate delay relative to the corresponding flat path; $r_1,r_2$ are approximately the endpoint distances from the mass. An actual radar experiment models the return trip and converts the result into the tracking station's proper time. Gravitational lensing more generally also involves different geometric path lengths. The observational model must keep both contributions.
 
-The solar coefficient $2G_NM_\odot/c^3$ is about $9.85$ microseconds. A logarithm of order ten turns a geometrically small correction into a readily meaningful timing signal.
+The solar coefficient $2G_NM_\odot/c^3$ is about $9.85$ microseconds. For endpoints at about one astronomical unit on opposite sides of the Sun and a grazing ray, the logarithm is about 12.1. The one-way delay is then about $119$ microseconds in this approximation.
 
-### 16.6 Mercury: a resonant correction that slowly rotates an ellipse
+### 16.6 Mercury and the rotation of an orbit
 
-Chapter 17 derives the Schwarzschild metric. For a massive test particle in that geometry, define the conserved specific angular momentum $\ell=r^2d\phi/d\tau$ and let $u=1/r$. The exact equatorial orbit equation is
+The preparation above derived the Newtonian orbit equation. We now use its relativistic extension; Section 17.5 derives that extension from the Schwarzschild metric. For a massive test particle in that geometry, define the conserved specific angular momentum $\ell=r^2d\phi/d\tau$ and let $u=1/r$. The exact equatorial orbit equation is
 
 $$
 \boxed{\frac{d^2u}{d\phi^2}+u
 =\frac{G_NM}{\ell^2}+\frac{3G_NM}{c^2}u^2.}
 $$
 
-Here $u$ is reciprocal radius, not four-velocity. The first term gives the Newtonian ellipse. The second is the relativistic correction. The same letter is common in both contexts, so the definitions matter more than the typography.
+Here $u$ denotes reciprocal radius. The first term gives the Newtonian orbit equation already derived in the preparation; the term proportional to $u^2$ is the relativistic addition.
 
 Set $p_{\rm orb}=\ell^2/(G_NM)$ and $m=G_NM/c^2$. The unperturbed orbit is
 
 $$
 u_0=\frac{1}{p_{\rm orb}}(1+e\cos\phi).
 $$
+
+The dimensionless number $e$ is the **eccentricity**, describing the orbit’s shape. A circle has $e=0$; a bound ellipse has $0<e<1$. Choose $\phi=0$ at closest approach, called **perihelion** for an orbit around the Sun. Then
+
+$$
+r_{\min}=\frac{p_{\rm orb}}{1+e},\qquad
+r_{\max}=\frac{p_{\rm orb}}{1-e}.
+$$
+
+The **semimajor axis** $a_{\rm orb}$ is half the ellipse’s longest diameter, so $a_{\rm orb}=(r_{\min}+r_{\max})/2=p_{\rm orb}/(1-e^2)$. This gives the geometric meaning of the parameters we will use in the measured precession.
 
 Insert $u_0$ into the small correction $3mu^2$. Its term proportional to $\cos\phi$ is $6me\cos\phi/p_{\rm orb}^2$. This drives the same angular frequency as the homogeneous operator $d^2/d\phi^2+1$. The resulting resonant particular solution is
 
@@ -5474,11 +5498,9 @@ $$
 {a_{\rm orb}(1-e^2)c^2}}
 $$
 
-per orbit, where $p_{\rm orb}=a_{\rm orb}(1-e^2)$ at the needed Newtonian order. For Mercury, using $a_{\rm orb}\simeq5.79\times10^{10}\,\mathrm m$ and $e\simeq0.206$, this gives about $0.104$ arcseconds per orbit, or $43$ arcseconds per century.
+per orbit, where $p_{\rm orb}=a_{\rm orb}(1-e^2)$ at the needed Newtonian order. For Mercury, using $a_{\rm orb}\simeq5.79\times10^{10}\,\mathrm m$ and $e\simeq0.206$, this gives about $0.104$ arcseconds per orbit. Mercury completes a revolution in about $87.97$ days, giving approximately $100(365.25)/87.97\simeq415$ orbits per century. Multiplying gives about $43$ arcseconds per century.
 
 This is the relativistic contribution under the approximation of an isolated spherical Sun. Planetary perturbations, solar structure, and reference-frame modeling also affect the observed perihelion. The success lies in calculating the appropriate additional contribution, not declaring that every observed orbital change is relativistic.
-
-**The lesson of these experiments:** Newtonian motion, clock comparison, light bending, and radar delay interrogate related but different pieces of the geometry. Agreement across them is more informative than agreement with one attractive number.
 
 ### 16.7 GPS: calculate the competing clock effects
 
@@ -5533,22 +5555,22 @@ $$
 \int_0^T\frac{v(t)^2}{2}dt=\frac{g^2T^3}{24}.
 $$
 
-Thus $\Delta\tau=g^2T^3/(24c^2)>0$. With $g=9.81\,\mathrm{m/s^2}$ and $T=1\,\mathrm s$, the gain is approximately $4.46\times10^{-17}\,\mathrm s$, or 44.6 attoseconds. The height gain is twice the speed loss. In this short-path regime, the timelike free-fall path locally maximizes proper time between the endpoints. This does not make every geodesic a global maximum over arbitrary long journeys.
+Thus $\Delta\tau=g^2T^3/(24c^2)>0$. With $g=9.81\,\mathrm{m/s^2}$ and $T=1\,\mathrm s$, the gain is approximately $4.46\times10^{-17}\,\mathrm s$, or 44.6 attoseconds, where one attosecond is $10^{-18}$ seconds. The height gain is twice the speed loss. In this short-path regime, the timelike free-fall path locally maximizes proper time between the endpoints. This does not make every geodesic a global maximum over arbitrary long journeys.
 
 ### 16.9 Gyroscopes and a compact experimental map
 
 A gyroscope supplies a direction that can be transported. Around a gravitating body, its orientation need not stay fixed relative to distant reference directions. Even a nonrotating source produces geodetic precession. A rotating source adds frame dragging. These are different contributions, not two names for the same effect.
 
-For a weak, slowly rotating source with angular momentum $\mathbf J$, the leading frame-dragging precession is
+The leading frame-dragging result below comes from parallel-transporting the spin in a weak rotating metric. We will identify that metric’s new time-angle component in Section 17.7; here we use the resulting rate to interpret the experiment. For source angular momentum $\mathbf J$,
 
 $$
 \boldsymbol\Omega_{\rm LT}=\frac{G_N}{c^2r^3}
 \left[3(\mathbf J\cdot\hat{\mathbf r})\hat{\mathbf r}-\mathbf J\right].
 $$
 
-Here $\hat{\mathbf r}$ is the radial unit vector. The expression is a vector: an orbital average must average its direction as well as its magnitude. For a circular polar orbit, its averaged vector is $G_N\mathbf J/(2c^2r^3)$. The measured projection also depends on the reference direction used by the experiment.
+Here $\hat{\mathbf r}$ is the radial unit vector. The expression is a vector: an orbital average must average its direction as well as its magnitude. For a circular polar orbit, choose $\mathbf J=J\hat{\mathbf z}$ and $\hat{\mathbf r}=(\sin\vartheta,0,\cos\vartheta)$. Over an orbit, the averages of $\sin\vartheta\cos\vartheta$ and $\cos^2\vartheta$ are 0 and $1/2$. Thus $\langle(\mathbf J\cdot\hat{\mathbf r})\hat{\mathbf r}\rangle=\mathbf J/2$, and the averaged precession vector is $G_N\mathbf J/(2c^2r^3)$. The measured projection also depends on the reference direction used by the experiment.
 
-Gravity Probe B reported drift magnitudes of $6601.8\pm18.3$ milliarcseconds per year for the geodetic effect and $37.2\pm7.2$ for frame dragging, compared with predictions of $6606.1$ and $39.2$. The experiment's signed drift convention is defined by its sky axes; magnitudes are quoted here to focus on scale. [The collaboration's 2011 final results](https://arxiv.org/abs/1105.3456).
+Gravity Probe B reported drift magnitudes of $6601.8\pm18.3$ milliarcseconds per year for the geodetic effect and $37.2\pm7.2$ for frame dragging, compared with predictions of $6606.1$ and $39.2$. A milliarcsecond is $10^{-3}$ arcseconds. The experiment’s signed drift convention is defined by its sky axes; magnitudes are quoted here to focus on scale. [The collaboration's 2011 final results](https://arxiv.org/abs/1105.3456).
 
 | Experiment | What is measured | The theoretical relationship tested |
 |---|---|---|
@@ -5563,11 +5585,11 @@ This is a map of physical questions, not a ranking by a single “precision of G
 
 <a id="chapter-17"></a>
 
-## 17. Black holes: when the causal structure becomes the main character
+## 17. Black holes: horizons, falling clocks, and orbits
 
-A black hole is not defined by especially strong acceleration, an especially dark surface, or even a large local curvature. It is defined by which events can send signals to the exterior future. To appreciate how different that is, we will actually solve a piece of the Einstein equation.
+Imagine sending a light pulse outward as you fall toward a spherical object. At which events can that pulse escape to observers arbitrarily far away? We will answer by solving the field equation outside the object, following light through the resulting geometry, and identifying the boundary of escape. That boundary is the black-hole horizon in the spacetime we construct.
 
-### 17.1 Solving spherical vacuum: where Schwarzschild comes from
+### 17.1 Solving the spherical vacuum equation
 
 Set $\Lambda=0$. Outside a static spherical source, use the **areal radius** $r$: a symmetry sphere has area $4\pi r^2$. This is a geometrically meaningful definition, not a promise that radial proper distance equals $r$.
 
@@ -5631,13 +5653,30 @@ $$
 +\frac{dr^2}{1-2m/r}+r^2d\Omega^2.}
 $$
 
-We assumed staticity to make the derivation accessible. Birkhoff's theorem says something stronger: a spherically symmetric vacuum region with $\Lambda=0$ is locally Schwarzschild even if the spherical matter boundary moves. A perfectly spherical pulsating star does not broadcast tensor gravitational waves into its vacuum exterior. The theorem does not describe a region filled with an outgoing matter or radiation flux, which is not vacuum. A proof outline is available in [David Tong’s black-hole lecture notes](https://davidtong.org/pdfs/teaching/general-relativity/gr6.pdf).
+We assumed staticity to make the derivation accessible. Birkhoff's theorem says something stronger: a spherically symmetric vacuum region with $\Lambda=0$ is locally Schwarzschild even if the spherical matter boundary moves. A perfectly spherical pulsating star does not broadcast tensor gravitational waves into its vacuum exterior. The theorem does not describe a region filled with an outgoing matter or radiation flux, which is not vacuum. The time-independence step can be checked in the calculation below. [David Tong’s black-hole lecture notes](https://davidtong.org/pdfs/teaching/general-relativity/gr6.pdf) discuss the coordinate construction and theorem.
 
-### 17.2 Two alarming radii, two very different problems
+<details class="history-note" data-no-narration>
+<summary>Further calculation: where spherical time dependence goes</summary>
 
-At $r=2m$, the displayed $g_{rr}$ diverges and $g_{tt}$ vanishes. At $r=0$, multiple expressions fail. Are these the same sort of disaster?
+In a region where the gradient of the areal radius is spacelike, choose the same diagonal time-radius chart but initially allow $\alpha(t,r)$ and $\beta(t,r)$. The off-diagonal Ricci calculation now gives
 
-Compute a coordinate-invariant curvature quantity, the Kretschmann scalar:
+$$
+R_{tr}=\frac{2}{r}\partial_t\beta.
+$$
+
+For example, in $R_{tr}=\partial_\lambda\Gamma^\lambda{}_{rt}-\partial_r\Gamma^\lambda{}_{\lambda t}+\Gamma^\lambda{}_{\lambda\sigma}\Gamma^\sigma{}_{rt}-\Gamma^\lambda{}_{r\sigma}\Gamma^\sigma{}_{\lambda t}$, the differentiated terms cancel. The remaining terms involving $\partial_t\alpha$ and radial derivatives cancel in pairs. The angular trace $\Gamma^\theta{}_{\theta r}+\Gamma^\phi{}_{\phi r}=2/r$ multiplies $\Gamma^r{}_{rt}=\partial_t\beta$ and remains.
+
+Vacuum therefore requires $\partial_t\beta=0$. The difference of the two diagonal equations still gives $\partial_r(\alpha+\beta)=0$, so $\alpha(t,r)=-\beta(r)+q(t)$. The metric’s only apparent time dependence is the factor $e^{2q(t)}dt^2$. Define $t'=\int e^{q(t)}dt$ to remove it. The radial integration then gives the same Schwarzschild function $f$ as above.
+
+This proves the staticity step in this exterior chart. It does not use this chart through a null gradient of $r$; Section 17.3 supplies a regular extension through the horizon. A moving spherical matter boundary changes which region is vacuum, but does not add a freely varying time function to its vacuum metric.
+
+</details>
+
+### 17.2 Testing the horizon with curvature
+
+The metric’s radial component diverges at $r=2m$. Its formula also fails as $r$ approaches zero. To distinguish a coordinate failure from a divergent tidal field, calculate curvature before drawing a conclusion.
+
+In a static orthonormal frame outside $r=2m$, the six curvature entries have the pattern calculated in Chapter 9’s vacuum example: $(-2q,q,q,-q,-q,2q)$ with $q=m/r^3$. Their Ricci contractions cancel. Their full squared contraction is $4(4+1+1+1+1+4)q^2=48q^2$, giving the **Kretschmann scalar**:
 
 $$
 \mathcal K=R_{\alpha\beta\gamma\delta}R^{\alpha\beta\gamma\delta}
@@ -5646,7 +5685,7 @@ $$
 
 It is finite at $r=2m$ and diverges at $r=0$. Finite scalar invariants alone do not prove every conceivable spacetime point is regular, but here an explicit nonsingular chart will establish regularity at the horizon. At $r=0$, the divergent invariant proves the problem cannot be repaired by relabeling coordinates.
 
-Meanwhile $R_{\mu\nu}=0$ and $R=0$ everywhere in the vacuum exterior. There is abundant curvature despite the vanishing Ricci tensor: this is Weyl curvature. Calling vacuum “empty” does not make it geometrically featureless.
+Meanwhile $R_{\mu\nu}=0$ and $R=0$ everywhere in the vacuum exterior. The remaining tidal field is Weyl curvature. Vacuum removes the Ricci source in this solution; it leaves these nonzero tidal components.
 
 The horizon radius is
 
@@ -5679,7 +5718,7 @@ $$
 \boxed{ds^2=-fc^2dv^2+2c\,dv\,dr+r^2d\Omega^2.}
 $$
 
-Its time-radial block has determinant $-c^2$, including at $r=2m$. The future horizon is a perfectly regular place for these coordinates.
+Its time-radial block has determinant $-c^2$, including at $r=2m$. The time-radius block remains invertible at the future horizon. Away from the usual angular-coordinate poles, the full metric is smooth and nondegenerate there.
 
 For radial light, set $d\Omega=0$ and $ds^2=0$. One family has $dv=0$: ingoing rays. The other satisfies
 
@@ -5689,11 +5728,11 @@ $$
 
 Outside, these outgoing rays increase their radius. At the horizon they remain on it. Inside, even this outgoing family decreases its areal radius. Future-directed timelike trajectories lie between the two null directions and also move toward smaller $r$.
 
-This is the precise content behind the metaphor “all roads point inward.” It does not mean a rocket engine becomes weak or a photon slows locally. It means that the future light cones admit no escaping causal direction in this black-hole interior.
+An outward-directed engine can change the traveler’s timelike direction within the cone. It cannot produce a direction outside it. Local light still travels at $c$; the negative radial rate expresses the shape of the future cone in these coordinates.
 
 The maximal mathematical extension of eternal Schwarzschild has additional regions. A black hole produced by stellar collapse need not contain its white-hole region or second exterior. An exact metric's maximal extension and the spacetime of a particular formation process are distinct objects.
 
-### 17.4 Falling is easy; hovering is the expensive activity
+### 17.4 A falling clock and a hovering rocket
 
 For radial timelike motion, time-translation symmetry gives a dimensionless conserved energy per unit rest energy,
 
@@ -5736,7 +5775,7 @@ $$
 
 It diverges on approach to the horizon. The diverging quantity belongs to the family of observers trying to remain static. It does not imply a freely falling observer measures infinite curvature there. At the horizon, being static would require following a null worldline; no massive rocket can do that.
 
-### 17.5 The photon sphere and ISCO: three radii you should never merge
+### 17.5 Circular orbits and their stability
 
 Spherical symmetry lets a geodesic lie in an equatorial plane. Define $\ell=r^2d\phi/d\tau$. The timelike normalization becomes
 
@@ -5763,7 +5802,7 @@ $$
 
 Thus circular timelike geodesics exist for $r>3m$ and are stable for $r>6m$. The marginal boundary $r=6m$ is the **innermost stable circular orbit**, or ISCO. Unstable circular orbits can exist between $3m$ and $6m$; “unstable” does not mean “algebraically nonexistent.”
 
-For null geodesics, the effective potential is proportional to $f/r^2$. Its derivative vanishes at $r=3m$, a maximum. That is the **photon sphere**. Its circular light orbits are unstable.
+For null geodesics, the effective potential is proportional to $f/r^2$. Its derivative vanishes at $r=3m$, a maximum. That is the **photon sphere**. Its circular light orbits are unstable: a small displacement from the potential maximum grows rather than oscillating around it.
 
 | Radius in Schwarzschild | Meaning |
 |---|---|
@@ -5773,19 +5812,29 @@ For null geodesics, the effective potential is proportional to $f/r^2$. Its deri
 
 The photon sphere is not a material surface. Nor is a black-hole image a direct photograph of the horizon's coordinate radius: lensing, emission, absorption, and observer geometry intervene.
 
-For completeness, the effective potential also produces the orbit equation used in Chapter 16. Put $u=1/r$ and use $\dot r=-\ell\,du/d\phi$. Differentiate the radial energy equation with respect to $\phi$, cancel the common first-derivative factor where it is nonzero, and extend smoothly through turning points. The result is $u''+u=G_NM/\ell^2+3mu^2$. The apparently magical precession term is just the same Schwarzschild geometry expressed as an orbit shape.
+To recover the orbit equation used in Chapter 16, put $u=1/r$ and use $\dot r=-\ell u'$, where a prime now means $d/d\phi$. The radial energy equation becomes
+
+$$
+\frac{\ell^2}{c^2}u'^2+(1-2mu)\left(1+\frac{\ell^2u^2}{c^2}\right)=\mathcal E^2.
+$$
+
+Differentiate it and collect the common factor $2u'$:
+
+$$
+2u'\left[\frac{\ell^2}{c^2}(u''+u)-m-\frac{3m\ell^2}{c^2}u^2\right]=0.
+$$
+
+For a noncircular orbit with $\ell\ne0$, divide where $u'\ne0$ and extend the result continuously through isolated turning points. Since $mc^2=G_NM$, this gives $u''+u=G_NM/\ell^2+3mu^2$. Circular orbits satisfy the same equation by the separate condition $V'_{\rm eff}=0$.
 
 ### 17.6 An event horizon knows about the future
 
-In an asymptotically flat spacetime, the black-hole region is the set of events that cannot send a future-directed causal signal to future null infinity. Its boundary is the event horizon. The qualifier “future” means the entire future development matters.
+In an **asymptotically flat** spacetime, the geometry approaches flat spacetime sufficiently far from the isolated system. **Future null infinity** is the ideal destination of light that escapes indefinitely to larger distances. The black-hole region consists of events that cannot send a future-directed causal signal to that destination. Its boundary is the event horizon. The qualifier “future” means the entire future development matters.
 
-A sufficiently small freely falling laboratory generally cannot determine by purely local experiments whether it has crossed an event horizon. It can measure curvature and tidal forces, but horizon membership is a global causal statement. Locally defined trapped surfaces and foliation-dependent apparent horizons provide useful related diagnostics; they are not interchangeable definitions.
+A sufficiently small freely falling laboratory generally cannot determine by purely local experiments whether it has crossed an event horizon. It can measure curvature and tidal forces, but horizon membership is a global causal statement. Chapter 22 introduces another diagnostic by measuring whether both future-directed families of light leaving a closed surface initially decrease its area. That local area calculation answers a different question from whether a signal can escape forever.
 
-An analogy is a shipping port that eventually closes permanently. Whether a departure can still reach the open sea depends on the future geometry of the route, not just the waves measured beside the boat. The limitation is that a black hole's obstruction is causal geometry itself, not an authority changing a schedule.
+### 17.7 The geometry of a rotating black hole
 
-### 17.7 Rotation: Kerr, frame dragging, and carefully qualified no-hair claims
-
-Realistic rotating black-hole models use the Kerr solution. Deriving it fully is substantially harder than the spherical calculation; the following is a guided reading of its geometry, not a concealed claim of a complete derivation.
+The **Kerr solution** describes a stationary, isolated rotating vacuum black hole. We will take this exact solution as given and calculate its rotational effects. Obtaining it from the field equation is a separate boundary-value problem; unlike the spherical calculation, we have not derived its metric functions here.
 
 Define
 
@@ -5814,7 +5863,7 @@ ds^2={}&-\left(1-\frac{2mr}{\Sigma}\right)c^2dt^2
 \end{aligned}
 $$
 
-Setting $a_K=0$ recovers Schwarzschild. The new $dt\,d\phi$ term mixes time evolution with angular motion. Because a cross term in $ds^2$ is $2g_{t\phi}dt\,d\phi$, its displayed coefficient is twice the metric component. Missing that factor produces an impressively wrong frame-dragging calculation.
+Setting $a_K=0$ recovers Schwarzschild. The new $dt\,d\phi$ term mixes time evolution with angular motion. Because a cross term in $ds^2$ is $2g_{t\phi}dt\,d\phi$, its displayed coefficient is twice the metric component. Read the metric component by dividing that coefficient by two before using it in a momentum or velocity calculation.
 
 An observer with zero conserved axial angular momentum satisfies
 
@@ -5842,7 +5891,7 @@ Between this surface and the outer horizon lies the **ergoregion**. There, remai
 
 “No hair” is not a theorem that every possible gravitating theory has only two black-hole parameters. Kerr uniqueness results apply under substantial assumptions about vacuum Einstein gravity, stationarity, asymptotics, horizon structure, and regularity. For example, a rigorous result establishes Kerr uniqueness within a class of connected, nondegenerate, analytic regular vacuum black holes. Additional fields, different asymptotics, or dynamical settings change the question. See the primary mathematical result, [Chruściel and Costa, *On uniqueness of stationary vacuum black holes*](https://arxiv.org/abs/0806.0016).
 
-The useful physical idea is that an isolated black hole settling into the appropriate stationary vacuum state is described by very few exterior parameters. The qualification is what turns a slogan into a scientific statement.
+The useful physical idea is that an isolated black hole settling into the appropriate stationary vacuum state is described by very few exterior parameters. The assumptions determine when this description applies.
 
 <a id="chapter-18"></a>
 
