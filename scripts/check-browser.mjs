@@ -27,6 +27,13 @@ try{
    }
    assert.ok(result.scroll<=result.width+1,`${file} overflows at ${width}: ${result.scroll}`);
    assert.deepEqual(result.brokenImages,[],`${file} images`);assert.equal(result.mathErrors,0);
+   const disclosureSpacing=await page.locator('.checkpoint').evaluateAll(items=>items.map(el=>{
+    const wasOpen=el.open;el.open=true;
+    const children=[...el.children].filter(n=>!n.matches('summary,[hidden]'));
+    const last=children.at(-1),gap=last?el.getBoundingClientRect().bottom-last.getBoundingClientRect().bottom:null;
+    el.open=wasOpen;return gap;
+   }));
+   for(const gap of disclosureSpacing)if(gap!==null)assert.ok(gap>=16,`${file}: expanded answers need bottom padding at ${width}px (got ${gap})`);
    const tableSizes=await page.locator('.table-wrap').evaluateAll(tables=>tables.map(table=>({text:parseFloat(getComputedStyle(table).fontSize),math:[...table.querySelectorAll('td>.katex,td .katex')].map(el=>parseFloat(getComputedStyle(el).fontSize))})));
    for(const table of tableSizes){assert.ok(table.text>=15,`${file}: readable table prose`);assert.ok(table.math.every(size=>size>=18),`${file}: readable table mathematics`);}
    checks.push({file,width,...result});
@@ -122,6 +129,22 @@ try{
  await navToggle().click();assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'true');
  await page.keyboard.press('Escape');assert.equal(await page.locator('#menu-button').getAttribute('aria-expanded'),'false');
  await go(new URL('chapter-0.html',base).href);await page.locator('.checkpoint summary').first().click();assert.equal(await page.locator('.checkpoint').first().getAttribute('open'),'');
+ for(const width of [1440,390])for(const theme of ['light','dark']){
+  await page.setViewportSize({width,height:900});
+  await go(new URL('chapter-0.html',base).href);await page.evaluate(t=>{document.documentElement.classList.remove('large-type');document.documentElement.dataset.theme=t},theme);
+  const takeaway=page.locator('.takeaway');await takeaway.locator('summary').click();
+  const gaps=await takeaway.evaluate(el=>{const box=el.getBoundingClientRect(),title=el.querySelector('h2').getBoundingClientRect(),answer=el.querySelector('details').getBoundingClientRect();return {top:title.top-box.top,bottom:box.bottom-answer.bottom}});
+  assert.ok(gaps.top>=20&&gaps.top<=32&&gaps.bottom>=20&&gaps.bottom<=32,'The idea-to-keep panel has balanced internal spacing');
+  await takeaway.screenshot({path:`qa/takeaway-${width}-${theme}.png`});
+  await go(new URL('chapter-1.html',base).href);await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
+  const detail=page.locator('.flow-explanation');
+  const closedGap=await detail.evaluate(el=>el.closest('.spacetime-lab').getBoundingClientRect().bottom-el.querySelector('summary').getBoundingClientRect().bottom);
+  assert.ok(closedGap>=12,'The collapsed animation explanation has room below its summary');
+  await detail.locator('summary').click();
+  const creditGap=await detail.evaluate(el=>el.closest('.spacetime-lab').getBoundingClientRect().bottom-el.querySelector('.flow-credit').getBoundingClientRect().bottom);
+  assert.ok(creditGap>=24&&creditGap<=32,'The expanded animation credit has real internal bottom padding');
+  await detail.locator('.flow-credit').scrollIntoViewIfNeeded();await page.screenshot({path:`qa/animation-credit-${width}-${theme}.png`});
+ }
  assert.deepEqual(errors,[]);
  fs.writeFileSync('qa/browser-report.json',JSON.stringify({checks,interactionChecks:'passed',errors},null,2));
  console.log(`Browser checks passed: ${checks.length} page/viewport combinations, links to sections, images, compact header, search, controls, checkpoints, clock and GPS experiments.`);

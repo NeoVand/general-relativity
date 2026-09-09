@@ -311,8 +311,10 @@ For a numerical example, suppose 10 kilograms per second enter a one-cubic-metre
 To describe a small box at any position, let its side lengths be $\Delta x,\Delta y,\Delta z$. Write $J^x$ for the flux-density component pointing along $x$; the superscript is a direction label, not a power. The left and right faces each have area $\Delta y\Delta z$, so their net outward flow is
 
 $$
-[J^x(x+\Delta x)-J^x(x)]\,\Delta y\Delta z
-\simeq(\partial_xJ^x)\,\Delta x\Delta y\Delta z.
+\begin{aligned}
+&[J^x(x+\Delta x)-J^x(x)]\,\Delta y\Delta z\\
+&\simeq(\partial_xJ^x)\,\Delta x\Delta y\Delta z.
+\end{aligned}
 $$
 
 The approximation is the local derivative rule from §0.1. Repeat it for the other two pairs of faces, add the results, and divide by the box's volume. As the box shrinks, the result is

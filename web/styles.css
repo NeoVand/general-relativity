@@ -378,3 +378,30 @@ body[data-page^="chapter-"] .chapter-meta{padding-top:16px}
 
 .history-note{margin:24px 0}
 .history-note>summary{font:600 13px/1.7 Manrope,sans-serif;color:var(--geometry);cursor:pointer}
+
+/* Keep disclosure spacing inside its background, independent of paragraph
+   margin collapse and the additional semantic reading spans. */
+.takeaway{padding:30px}
+.takeaway>h2{margin:0 0 14px}
+.takeaway>p{margin:0}
+.takeaway>.checkpoint{margin:24px 0 0}
+.checkpoint{padding:0 22px;display:flow-root}
+.checkpoint>summary{padding:18px 0}
+.checkpoint[open]{padding-bottom:22px}
+.checkpoint>:not(summary){margin:0 0 18px}
+.checkpoint>:last-child{margin-bottom:0}
+.spacetime-lab:not(.hero-scene){display:flow-root}
+.spacetime-lab:has(>.flow-explanation)>.scene-note{padding-bottom:12px}
+.flow-explanation{margin:0;padding:0 28px 14px}
+.flow-explanation>summary{padding:14px 0}
+.flow-explanation[open]{padding-bottom:28px}
+.flow-explanation>div{display:flow-root;padding:4px 0 0}
+.flow-explanation>div>:first-child{margin-top:0}
+.flow-explanation>div>:last-child{margin-bottom:0}
+@media(max-width:600px){
+ .takeaway{padding:22px}
+ .checkpoint{padding-inline:18px}
+ .checkpoint[open]{padding-bottom:18px}
+ .flow-explanation{padding-inline:20px}
+ .flow-explanation[open]{padding-bottom:24px}
+}
