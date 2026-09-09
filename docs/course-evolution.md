@@ -76,3 +76,10 @@ Reader feedback revealed that the first new units bridge depended on metrics and
 - Added elementary measurement-unit practice; moved the existing metric-component exercise to Chapter 4 without changing its practice identity; preserved old links.
 - Classified all 37 lesson placements, put practice after exposition, corrected thermal/quantum ordering, and kept required preparation visible in the reading flow.
 - Added generated-order and novice-entry regression checks. Human comprehension and the full later-chapter first-use review remain outstanding.
+
+### Follow the opening into vectors, metrics, and actions
+
+- Removed premature metric language from the covector explanation and replaced an abstract perturbation warning with a differentiable numerical example.
+- Explained the two-input metric through polarization of the familiar squared-length rule; supplied a null-vector/nondegeneracy counterexample.
+- Defined the action before using it, derived its low-speed kinetic term, and recalled integration by parts at the first path variation.
+- Verified the rebuilt book, local links and mathematics, and all 37 generated lesson placements. The navigation check also passed under sixfold CPU throttling.

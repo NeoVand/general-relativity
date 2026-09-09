@@ -40,6 +40,10 @@ The full text of Chapters 0 and 1 and the first interval presentation in Chapter
 | Prerequisite display and entry links | Empty “Builds on”; a dimensional skill that mixed basic units with advanced metric components | Omit empty lists and separate measurement units from metric-component units in the curriculum. Preserve the former Chapter 0 link with a native relocation notice. |
 | Mobile first experiment | A two-column measurement table inherited a desktop minimum width | Fit both columns within the phone viewport. |
 
+## Follow-up along the next steps
+
+A second targeted pass revised §§2.3–2.6, §4.4, and §§5.4–5.5. The covector example now gives a numerical pairing without assuming a metric, and the distinction between the differential and gradient starts from the chain rule. Approximation uses an explicit small-amplitude, large-derivative example. The metric introduction explains why a squared-length rule determines a two-input rule and demonstrates a null vector pairing nontrivially with another vector. The particle-action section defines what an action assigns to a path, states the physical postulate, expands its low-speed integrand, and recalls integration by parts before varying the path. These are targeted revisions, not a claim that the whole intervening curriculum has passed a learner study.
+
 ## What now comes first
 
 Chapter 0 follows a measurement-led sequence: position and time → velocity and acceleration → units → partial derivatives → integrals → initial-value equations → force and energy → calibrated matrix measurements → flux → approximation. The worked oscillator extends the differential-equation section after the basic example. The pressure-work calculation follows the mechanics definitions.
@@ -60,7 +64,7 @@ A keyword guard is deliberately narrow. It will not catch an unexplained idea ex
 
 The next close-reading pass must follow every main-text dependency through Chapters 2 and 4–24, including all diagrams, controls, problem statements, feedback, and advanced layers. Prioritize these known risk areas:
 
-- The action introduced for particle paths in Chapter 5, before the general variational chapter: verify that every required operation is taught at first use.
+- The remaining particle-path material in Chapter 5, before the general variational chapter: the action definition and integration-by-parts reminder have been repaired; check the remaining advanced qualifications and parameter examples at first use.
 - Curvature contractions and tidal interpretation in Chapters 8–10: distinguish definitions from interpretations whose derivations arrive later.
 - Classical field energy, the field action, and Maxwell theory in Chapters 11 and 13: a stated model is legitimate input, but readers need enough mechanics and electromagnetism to use and interpret it.
 - Retarded distributions and wave modes in Chapter 18: verify the distributional operations, rather than relying on a source link as explanation.

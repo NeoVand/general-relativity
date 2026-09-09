@@ -596,7 +596,7 @@ $$
 \omega(V)=\omega_iV^i.
 $$
 
-This pairing needs no metric, no angles, and no idea of distance. It is built into the relationship between a vector space and its dual.
+This pairing needs no angles or distances. It follows from the definition of a covector as a linear measuring operation. For example, if $V=(3,4)$ and $\omega(V)=V^1+2V^2$, the answer is $11$; no length calculation entered.
 
 Return to $e'_1=2e_1$. The new extractor must be $\theta'^1=\theta^1/2$ so that $\theta'^1(e'_1)=1$. Consequently $\omega'_1=2\omega_1$. A vector's first component halves; a covector's first component doubles; their product stays the same:
 
@@ -606,7 +606,7 @@ $$
 
 This is why covectors carry lower indices. Their components change oppositely to vector components. The difference is operational, not typographical.
 
-> **Gotcha: a gradient begins life as a covector.** The differential $df$ tells you the directional change of a scalar field. Turning it into an arrow called $\operatorname{grad}f$ requires a metric. In ordinary Cartesian calculus, the Euclidean metric makes this conversion numerically invisible, which is how it gets away with hiding for years.
+> **A rate-of-change rule and an arrow have different jobs.** For a scalar function $f(x,y)$, the first-order change under a move $V$ is $df(V)=(\partial_xf)V^1+(\partial_yf)V^2$. This rule, called the **differential** $df$, is a covector. In ordinary Cartesian calculus we also collect the partial derivatives into a gradient arrow. Identifying that arrow with the covector uses the lengths and angles of the chosen axes; it is not supplied by the covector alone. Chapter 4 will construct this conversion for more general measuring rules.
 
 ### 2.4 The chain rule already knows tensor calculus
 
@@ -701,7 +701,7 @@ The index language supplies excellent error detection:
 | $V^\mu\omega_\mu$ | Scalar contraction; legal. |
 | $A^\mu{}_{\nu}V^\nu=W^\mu$ | Vector equation; the free index $\mu$ agrees. |
 | $A^\mu{}_{\nu}=B^\mu{}_{\rho}$ | Malformed unless another operation is supplied; the free indices disagree. |
-| $V^\mu W^\mu$ | Not a valid Einstein contraction under our convention; two upper indices need a metric. |
+| $V^\mu W^\mu$ | Not a valid Einstein contraction under our convention; pairing two vectors requires an additional measuring rule, developed in Chapter 4. |
 | $A^\mu{}_{\nu}B^\nu{}_{\rho}C^\rho{}_{\mu}$ | Scalar formed from a closed sequence of contractions. |
 
 Dummy indices are replaceable labels: $V^\mu\omega_\mu=V^\alpha\omega_\alpha$. Free indices are the outputs of the expression and must match across an equation. An index should not occur three times in a single product under ordinary Einstein notation.
@@ -727,9 +727,9 @@ f(x+\delta x)
 +\cdots.
 $$
 
-The first derivative measures the local slope. The second measures how that slope changes. Later, first metric derivatives will describe coordinate-dependent gravitational acceleration, while a particular combination of second derivatives and products of first derivatives will describe curvature. The qualification “a particular combination” matters: a second derivative alone is not automatically a tensor.
+The first derivative measures the local slope. The second measures how that slope changes. The approximation uses the coordinates named in the formula. A coordinate-independent statement must account for how its components transform, just as the vector–covector pairing did in §2.4.
 
-A perturbative statement such as $F=F_0+\varepsilon F_1+O(\varepsilon^2)$ says that discarded terms are at least quadratic in a specified small parameter, in the regime under discussion. Always ask what is small. A metric perturbation being small in convenient coordinates does not mean every derivative of it is small; a low-amplitude wave can oscillate rapidly.
+A perturbative statement such as $F=F_0+\varepsilon F_1+O(\varepsilon^2)$ says that discarded terms are at least quadratic in a specified small parameter, in the regime under discussion. Always ask what is small. For dimensionless $x$, let $f(x)=\varepsilon\sin(kx)$. Its magnitude is at most $|\varepsilon|$, but its derivative is $f'(x)=\varepsilon k\cos(kx)$. Choosing $\varepsilon=0.001$ and $k=10{,}000$ makes the function small while its slope can reach $10$. A bound on a function is not automatically a bound on its derivatives.
 
 One short preview of differential forms will prevent future alarm. An antisymmetric covariant tensor is called a differential form. A one-form is a covector field; a two-form has two antisymmetric slots. The wedge product satisfies
 
@@ -1190,7 +1190,15 @@ On a flat Cartesian grid, an obvious translation rule is already operating in th
 
 ### 4.4 The metric is a local measuring operation
 
-At every event, the metric takes two tangent vectors and returns a scalar:
+In Chapter 3, the Minkowski metric turned a small displacement into an interval. Now allow the measuring rule to vary from place to place. We also give it two vector inputs, because this lets us describe their relation as well as each vector separately.
+
+The ordinary dot product is a familiar example: $V\cdot V$ gives squared length, while $V\cdot W$ tells us how much of one arrow lies along the other. Its useful algebraic identity is
+
+$$
+2V\cdot W=|V+W|^2-|V|^2-|W|^2.
+$$
+
+So the rule for squared lengths already determines a rule for pairs. The same identity works for a symmetric bilinear form even when its squared values can be negative. At every event, the metric is such a form on the tangent vectors:
 
 $$
 g(V,W)=g_{\mu\nu}V^\mu W^\nu.
@@ -1202,9 +1210,9 @@ $$
 g_{\mu\nu}=g_{\nu\mu},
 $$
 
-and nondegenerate: no nonzero vector is orthogonal to every vector. In GR it has Lorentzian signature $(-,+,+,+)$. At a point, there is a basis in which its components are $\eta_{\mu\nu}$, with one negative and three positive eigenvalue directions. The number of positive and negative directions cannot be changed by a nonsingular real basis transformation.
+and **nondegenerate**: no nonzero vector pairs to zero with every vector. Here **orthogonal** means $g(V,W)=0$, extending the zero-dot-product condition. In GR it has Lorentzian signature $(-,+,+,+)$. At a point, there is a basis in which its components are $\eta_{\mu\nu}$, with one negative and three positive eigenvalue directions. The number of positive and negative directions cannot be changed by a nonsingular real basis transformation.
 
-Nondegenerate does **not** mean $g(V,V)$ is nonzero for every nonzero $V$. Null vectors have $g(V,V)=0$, but a nonzero null vector still has nonzero pairing with some other vectors. A metric with light cones is not a singular matrix.
+Nondegenerate does **not** mean $g(V,V)$ is nonzero for every nonzero $V$. Null vectors have $g(V,V)=0$, but a nonzero null vector still has nonzero pairing with some other vectors. For example, with the two-dimensional matrix $\operatorname{diag}(-1,1)$, $V=(1,1)$ pairs to zero with itself but gives $g(V,W)=-2$ for $W=(1,-1)$. The matrix is invertible despite having nonzero vectors with zero self-pairing.
 
 The line element
 
@@ -1485,19 +1493,19 @@ This example is also a warning against identifying “nonconstant metric,” “
 
 In Newtonian mechanics, a free particle moves along a straight line at constant speed. In spacetime, the invariant version is that its worldline has stationary proper time between fixed endpoint events.
 
-For a structureless massive test particle, the standard minimally coupled action is
+An **action** assigns a number to an entire candidate history by integrating a chosen expression along it. We postulate that the actual free-particle history makes its first-order change vanish when the endpoints are fixed. For a massive test particle described only by its position, the standard model uses
 
 $$
 \boxed{S_{\rm particle}=-mc^2\int d\tau.}
 $$
 
-The action has units of energy times time. The prefactor and sign ensure that its slow-motion limit gives the usual positive kinetic-energy term. The fixed overall factor does not affect the free trajectory for $m\ne0$.
+The action has units of energy times time. In flat spacetime, the integrand per unit coordinate time is $-mc^2\sqrt{1-v^2/c^2}$. Chapter 0’s square-root expansion gives $-mc^2+mv^2/2$ at low speed. The constant term has the same integral for every path between fixed endpoint times, leaving the familiar positive kinetic-energy term. The fixed overall factor does not affect the free trajectory for $m\ne0$.
 
 Why this form? Proper time is a scalar quantity attached to the path, and the integral is unchanged if we relabel points along that path. With no additional internal structure or higher-derivative couplings, it is the simplest local relativistic free-particle action. This is a physical modeling choice with extraordinary success, not a logical proof that every conceivable body in every conceivable gravitational theory must have this exact action.
 
 “Stationary” means the first-order change in the action vanishes under sufficiently small endpoint-preserving deformations of the path. It does not mean the particle tries every route, predicts the future, and selects the best review score. A stationary-action statement is a compact way to encode local differential equations.
 
-For timelike geodesics, sufficiently short segments locally maximize proper time. Over long segments, conjugate points or global geometry can spoil the maximizing property. The field equation will not turn “extremum” into “global minimum” by force of enthusiasm.
+A timelike **geodesic** is the free-fall path described by this model; the next section derives its equation. Sufficiently short segments locally maximize proper time. A long geodesic need not give the greatest elapsed time among every possible connecting path. Chapter 22 studies how families of such paths focus and why global maximizing claims need extra conditions.
 
 ### 5.5 Deriving the geodesic equation, one operation at a time
 
@@ -1536,7 +1544,7 @@ $$
 -\frac{g_{\rho\nu}\dot x^\nu}{\ell}\dot\eta^\rho.
 $$
 
-The variation contains a derivative of the arbitrary deformation $\eta$. Integration by parts transfers that derivative onto its coefficient:
+The variation contains a derivative of the arbitrary deformation $\eta$. Recall integration by parts: integrate the product rule $(F\eta)'=F'\eta+F\eta'$ and rearrange to obtain $\int F\eta'=[F\eta]-\int F'\eta$. This transfers a derivative from the deformation to its coefficient:
 
 $$
 \delta I
