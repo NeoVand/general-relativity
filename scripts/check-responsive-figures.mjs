@@ -4,6 +4,7 @@ import {chromium} from 'playwright';
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
 const page=await browser.newPage();
+page.setDefaultTimeout(20000);
 const base=process.env.BOOK_URL||'http://localhost:4173/';
 const figures=JSON.parse(fs.readFileSync('assets/figures/manifest.json')).filter(f=>fs.readFileSync(`assets/figures/${f.id}.svg`,'utf8').includes('data-mobile-viewbox'));
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
@@ -12,7 +13,7 @@ const results=[];
 try{
  for(const theme of ['light','dark'])for(const width of [1440,390,320])for(const f of figures){
   await page.setViewportSize({width,height:1000});
-  await page.goto(new URL(`chapter-${f.chapter}.html`,base).href);
+  await page.goto(new URL(`chapter-${f.chapter}.html#figure-${f.id}`,base).href);
   await page.waitForFunction(()=>document.body.dataset.readingReady==='true');
   await page.evaluate(theme=>{document.documentElement.dataset.theme=theme;return document.fonts.ready},theme);
   const figure=page.locator(`#figure-${f.id}`),svg=figure.locator('svg.gr-figure');
@@ -29,7 +30,7 @@ try{
   assert.deepEqual(geometry.clipped,[],`${f.id}/${width}/${theme}: clipped labels`);
   assert.deepEqual(geometry.overlaps,[],`${f.id}/${width}/${theme}: overlapping labels`);
   assert.ok(geometry.pageWidth<=width+1,`${f.id}: page overflow`);
-  assert.ok(geometry.mathHeight>=11,`${f.id}: mathematical labels became miniatures`);
+  assert.ok(geometry.mathHeight>=11,`${f.id}/${width}/${theme}: mathematical label height ${geometry.mathHeight} is too small`);
   await figure.screenshot({path:`qa/responsive-${f.id}-${width}-${theme}.png`});
   // Enlargement must restore the complete original composition, while the
   // chapter keeps its compact layout and the SVG stays semantically singular.

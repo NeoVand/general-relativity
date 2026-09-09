@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {parseHTML} from 'linkedom';
 import {wordsFor,alignedWords,wordAt,matchWords,captionTokens} from '../src/lib/speech.js';
 import {recordListening,historyContext} from '../src/lib/study-memory.js';
 import {instruction,scriptKey} from '../src/lib/narration.js';
@@ -19,6 +20,7 @@ const index=JSON.parse(fs.readFileSync('site/reading-index.json'));const map=JSO
 for(const p of map){const source=index.find(t=>t.id===p.id);for(const section of p.outline){assert.equal(source.segments[section.start].id,section.id);assert.equal(source.segments[section.end].id,section.endPassage);assert.ok(section.end>=section.start);}}
 const stage=index.find(p=>p.id==='chapter-2').segments.find(s=>s.id==='scene-covector-stage');
 const figure=stage.views.diagram;assert.equal(figure.text.match(/The covector dx returns/g).length,1);assert.notEqual(stage.hash,figure.hash,'Diagram and 3D narration never share a cache key');
+for(const page of index){const {document}=parseHTML(fs.readFileSync(`site/${page.id}.html`,'utf8'));for(const source of document.querySelectorAll('.scene-equation[data-passage],.scene-note[data-passage]')){const segment=page.segments.find(s=>s.id===source.id);assert.equal(segment?.noNarration,true,'Model equations and notes remain explicitly addressable without repeating in chapter listening');}}
 // Every source passage is addressable directly through the outline, not search.
 for(const p of map)for(const s of index.find(t=>t.id===p.id).segments)assert.ok(p.outline.some(o=>o.start<=s.index&&o.end>=s.index));
 console.log('Verified timestamp tokenization, math/prose matching, listening history invalidation, narration deduplication and all section targets.');

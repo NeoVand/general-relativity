@@ -47,6 +47,8 @@ jobs:
           npm run test:study
           npm run test:course
           npm run test:visual-lessons
+          npm run test:geometry-experiences
+          npm run test:curvature-experiences
       - name: Preserve inspection evidence
         if: always()
         uses: actions/upload-artifact@v4

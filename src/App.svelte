@@ -7,15 +7,18 @@
  let page=$state(untrack(()=>initial));
  let navigationError=$state('');
  let cleanup=()=>{};
- let readingModule,sceneModule,courseModule,visualModule,routeToken=0;
+ let readingModule,sceneModule,courseModule,visualModule,geometryModule,curvatureModule,routeToken=0;
  async function activate(){
   readingModule ||= await import(/* @vite-ignore */new URL(initial.assets.reading,base).href);
   sceneModule ||= await import(/* @vite-ignore */new URL(initial.assets.scenes,base).href);
   courseModule ||= await import(/* @vite-ignore */new URL(initial.assets.course,base).href);
   visualModule ||= await import(/* @vite-ignore */new URL(initial.assets.visualLessons,base).href);
+  geometryModule ||= await import(/* @vite-ignore */new URL(initial.assets.geometryExperiences,base).href);
+  curvatureModule ||= await import(/* @vite-ignore */new URL(initial.assets.curvatureExperiences,base).href);
   const offReading=readingModule.initReading(),offScenes=sceneModule.initScenes();
   const course=courseModule.initCourse(),offVisuals=visualModule.initVisualLessons();
-  cleanup=()=>{offVisuals();course.cleanup();offScenes();offReading()};
+  const offGeometry=geometryModule.initGeometryExperiences(),offCurvature=curvatureModule.initCurvatureExperiences();
+  cleanup=()=>{offCurvature();offGeometry();offVisuals();course.cleanup();offScenes();offReading()};
   await course.ready;
  }
  function restoreSnapshot(url){const id=url.searchParams.get('snapshot');if(id)visualModule?.restoreVisualLessonState(id,courseModule?.getNotebookSnapshot(id));}

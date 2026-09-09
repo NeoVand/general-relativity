@@ -49,17 +49,34 @@ export function semanticTex(tex, context='', inspect=false) {
   const scripts=tex.slice(end).match(/^(?:\s*(?:[_^]\s*(?:\{[^}]*\}|\\[a-z]+)|\{\}))+/)?.[0]||'';
   const weylIndices=(scripts.match(/\\(?:mu|nu|rho|sigma|alpha|beta|gamma|lambda)/g)||[]).length>=4;
   const curvatureForm=/^\s*\^\s*(?:\{[a-d0-3]\}|[a-d0-3])\s*(?:\{\})?\s*_\s*(?:\{[a-d0-3]\}|[a-d0-3])/.test(tex.slice(end));
+  const parts=indexPartsAt(end),count=indexCount(parts),chapter=String(context);
+  const powerOnly=parts.length===1&&parts[0].kind==='^'&&/^\d+$/.test(parts[0].value.trim());
   let role=null;
   if(token==='g'&&(indexed||metricScalar)||token==='\\eta'&&metricEta)role='geometry';
   if(token==='h'&&indexed&&String(context)==='18'||token==='a'&&String(context)==='19'||token==='\\gamma'&&tensorIndex&&String(context)==='20')role='geometry';
   if(token==='\\Gamma'&&indexed||token==='\\nabla'||token==='\\omega'&&indexed&&String(context)==='21')role='transport';
-  if(token==='R'&&(tensorIndex||scalarCurvature)||token==='C'&&weylIndices||token==='G'&&tensorIndex&&!/^\s*_\s*(?:N|\{N\})/.test(tex.slice(end))||token==='\\Omega'&&curvatureForm)role='curvature';
-  if(token==='T'&&tensorIndex||token==='\\rho'&&/^(0|11|12|15|16|18|19|22|23)$/.test(String(context)))role='matter';
-  if(token==='\\tau'||token==='u'&&indexed)role='observer';
+  const curvatureOperator=/^(8|10)$/.test(chapter)&&/^\s*(?:\\left\s*)?\([^)]*,/.test(tex.slice(end));
+  if(token==='R'&&((count===4||count===2)&&!powerOnly||curvatureOperator||scalarCurvature&&!indexed&&!/^\s*(?:\\left\s*)?\(/.test(tex.slice(end)))||token==='C'&&count===4&&!powerOnly||token==='G'&&tensorIndex&&!/^\s*_\s*(?:N|\{N\})/.test(tex.slice(end))||token==='\\Omega'&&curvatureForm)role='curvature';
+  if(token==='T'&&tensorIndex&&count===2&&/^(11|12|13|14|15|16|17|18|19|20|22|23|24)$/.test(chapter)||token==='\\rho'&&/^(0|11|12|15|16|18|19|22|23)$/.test(chapter))role='matter';
+  if(token==='\\tau'||token==='u'&&indexed&&!powerOnly)role='observer';
+  // A second level of color distinguishes related objects. It never changes
+  // index colors or guesses a physical meaning from an ambiguous letter alone.
+  let variant=null;
+  if(role==='curvature'&&!powerOnly){
+   if(token==='R')variant=count===4||curvatureOperator?'riemann':count===2?'ricci':!indexed&&scalarCurvature?'scalar-curvature':null;
+   else if(token==='C'&&count===4)variant='weyl';
+   else if(token==='G'&&count===2)variant='einstein';
+  }
+  if(token==='g'&&role==='geometry'&&!indexed&&/\\sqrt\s*\{?\s*[-|]?\s*$/.test(tex.slice(0,i)))variant='volume';
+  if(token==='\\Gamma'&&role==='transport'&&count===3)variant='connection';
+  if(token==='u'&&role==='observer'&&count===1&&!powerOnly&&/^(3|4|5|9|10|11|12|15|17|19|22|24)$/.test(chapter))variant='velocity';
+  if(token==='\\rho'&&role==='matter')variant='density';
+  if(token==='p'&&!indexed&&/^(11|19)$/.test(chapter)){role='matter';variant='pressure';}
+  if(token==='S'&&/^(13|14)$/.test(chapter)&&!indexed){variant='action';}
+  if(token==='e'&&chapter==='21'&&count>=1&&(!powerOnly||/^[0-3]$/.test(parts[0].value.trim()))){role='geometry';variant='coframe';}
+  if(token==='T'&&chapter==='21'&&(count===1||count===3)&&!powerOnly){role='transport';variant='torsion';}
   let key=null;
   if(inspect){
-   const parts=indexPartsAt(end),count=indexCount(parts),chapter=String(context);
-   const powerOnly=parts.length===1&&parts[0].kind==='^'&&/^\d+$/.test(parts[0].value.trim());
    const tail=tex.slice(end),before=tex.slice(0,i);
    if(role==='geometry'){
     if(token==='g'){
@@ -92,7 +109,7 @@ export function semanticTex(tex, context='', inspect=false) {
    }
    if(token==='\\Lambda'&&!indexed&&/^(1|12|15|19)$/.test(chapter))key='cosmological-constant';
   }
-  const classes=[role&&`math-${role}`,key&&`symbol-${key}`].filter(Boolean).join(' ');
+  const classes=[role&&`math-${role}`,variant&&`math-detail-${variant}`,key&&`symbol-${key}`].filter(Boolean).join(' ');
   result+=classes?`{\\htmlClass{${classes}}{${token}}}`:token;i=end;
  }
  return result;

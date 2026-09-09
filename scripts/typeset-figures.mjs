@@ -6,6 +6,7 @@ import {liteAdaptor} from 'mathjax-full/js/adaptors/liteAdaptor.js';
 import {RegisterHTMLHandler} from 'mathjax-full/js/handlers/html.js';
 import {AllPackages} from 'mathjax-full/js/input/tex/AllPackages.js';
 import {semanticTex} from './math-system.mjs';
+import {mathPaletteCSS} from './math-palette.mjs';
 const adaptor=liteAdaptor();RegisterHTMLHandler(adaptor);
 const doc=mathjax.document('',{InputJax:new TeX({packages:AllPackages}),OutputJax:new SVG({fontCache:'none'})});
 const mapping=JSON.parse(fs.readFileSync('content/figure-math.json'));
@@ -31,11 +32,11 @@ const figureRoles={
  'curvature-count':{'#087f8c':'curvature'},
  'horizon-area':{'#087f8c':'geometry','#b95730':'geometry'},
 };
-const styles=`.gr-figure text{font-family:Manrope,Arial,sans-serif}.gr-figure .math-geometry{color:var(--geometry,#007c78)}.gr-figure .math-curvature{color:var(--curvature,#7951bb)}.gr-figure .math-transport{color:var(--transport,#275dc5)}.gr-figure .math-matter{color:var(--matter,#a25e00)}.gr-figure .math-observer{color:var(--observer,#bb365d)}@media(prefers-color-scheme:dark){svg.gr-figure:not(.embedded){--ink:#ebedf0;--muted:#a8b0bf;--geometry:#64d9c9;--curvature:#bd9cff;--transport:#8bb5ff;--matter:#f3c16e;--observer:#ff99b4;--line:#343e4f;--paper:#141b29;--figure-bg:#192231;--figure-tint:#243549}}`;
+const styles=`.gr-figure [data-compact-only]{display:none}.gr-figure.is-compact [data-compact-only]{display:inline}.gr-figure text{font-family:Manrope,Arial,sans-serif}.gr-figure .math-geometry{color:var(--geometry,#007c78)}.gr-figure .math-curvature{color:var(--curvature,#7951bb)}.gr-figure .math-transport{color:var(--transport,#275dc5)}.gr-figure .math-matter{color:var(--matter,#a25e00)}.gr-figure .math-observer{color:var(--observer,#bb365d)}@media(prefers-color-scheme:dark){svg.gr-figure:not(.embedded){--ink:#ebedf0;--muted:#a8b0bf;--geometry:#64d9c9;--curvature:#bd9cff;--transport:#8bb5ff;--matter:#f3c16e;--observer:#ff99b4;--line:#343e4f;--paper:#141b29;--figure-bg:#192231;--figure-tint:#243549}}`;
 let count=0;
 for(const f of manifest){
  let source=fs.readFileSync(`assets/figures/${f.id}.svg`,'utf8');
- source=source.replace('<svg ','<svg class="gr-figure" ').replace('<defs>',`<style>${styles}</style><defs>`);
+ source=source.replace('<svg ','<svg class="gr-figure" ').replace('<defs>',`<style>${styles}${mathPaletteCSS({svg:true})}</style><defs>`);
  // Isolate all marker resources when several inline SVGs share a document.
  source=source.replace(/id="([^"]+)"/g,(_,id)=>`id="${f.id}-${id}"`).replace(/url\(#([^\)]+)\)/g,(_,id)=>`url(#${f.id}-${id})`).replace('aria-labelledby="title desc"',`aria-labelledby="${f.id}-title ${f.id}-desc"`);
  source=source.replace(/<text ([^>]+)>([^<]*)<\/text>/g,(full,attrs,encoded)=>{

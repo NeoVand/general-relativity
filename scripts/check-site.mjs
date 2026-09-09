@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import katex from 'katex';
-import {math} from './math-system.mjs';
+import {math,semanticTex} from './math-system.mjs';
+import {mathPalette} from './math-palette.mjs';
 const root=path.resolve('site');
 const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));
 const report=JSON.parse(fs.readFileSync('site/build-report.json'));
@@ -47,4 +48,9 @@ for(const theta of [.3,.8,1.5,2.6]){const h=1e-5;const curvature=(-Math.cos(thet
 const expressions=[...fs.readFileSync('book.md','utf8').matchAll(/\$\$([\s\S]*?)\$\$|(?<!\\)\$([^$\n]+)\$/g)].map(m=>m[1]||m[2]);
 const tokens=html=>html.match(/<math[\s\S]*?<\/math>/)?.[0].replace(/<annotation[\s\S]*?<\/annotation>/g,'').replace(/<[^>]*>/g,'');
 for(const tex of expressions)assert.equal(tokens(math(tex,false,12)),tokens(katex.renderToString(tex,{strict:'ignore',throwOnError:true})),`Color changed math: ${tex}`);
+const detailed=[['R_{abcd}',8,'riemann'],['R_{ab}',9,'ricci'],['R',9,'scalar-curvature'],['C_{\\alpha\\beta\\mu\\nu}',9,'weyl'],['G_{ab}',12,'einstein'],['\\sqrt{-g}',4,'volume'],['\\Gamma^a{}_{bc}',7,'connection'],['u^\\mu',11,'velocity'],['\\rho',11,'density'],['p',11,'pressure'],['S',13,'action'],['e^1',21,'coframe'],['T^a',21,'torsion']];
+for(const [tex,ch,role] of detailed)assert.ok(semanticTex(tex,ch).includes(`math-detail-${role}`),`${tex} carries its mathematical role`);
+for(const [tex,ch] of [['R^2',8],['R(t)',9],['u^2',4],['T_{ab}',6]])assert.ok(!/math-detail-/.test(semanticTex(tex,ch)),`Do not infer a refined identity for ${tex}`);
+const luminance=hex=>{const [r,g,b]=hex.slice(1).match(/../g).map(c=>parseInt(c,16)/255).map(c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4);return .2126*r+.7152*g+.0722*b;};
+for(const [id,,,light,dark] of mathPalette)for(const [foreground,background] of [[light,'#fffefa'],[light,'#f1f4f1'],[dark,'#111722'],[dark,'#192331']]){const a=luminance(foreground),b=luminance(background);assert.ok((Math.max(a,b)+.05)/(Math.min(a,b)+.05)>=4.5,`${id} meets body-text contrast in both themes`);}
 console.log(`Verified ${files.length} HTML pages, ${links} local links/assets, ${figs.length} figure placements, and numerical calibrations.`);

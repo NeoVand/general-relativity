@@ -265,9 +265,19 @@ html[data-sidebar=collapsed] .nav-group-toggle,html[data-sidebar=collapsed] .sid
 .scene-controls input[type=range]:focus-visible,.lab input[type=range]:focus-visible{outline:2px solid color-mix(in srgb,var(--transport) 55%,transparent);outline-offset:2px;border-radius:4px}
 .scene-controls .range-limits{font-size:9px;line-height:1.5;color:var(--muted);font-weight:400}
 .scene-equation.equation{background:color-mix(in srgb,var(--paper) 45%,transparent);padding:23px 28px;margin:0;border:0;border-radius:0;font-size:1.1rem}
-.scene-note{padding:20px 28px 26px;font-size:11px;line-height:1.8}
+.scene-note{padding:20px 28px 26px;font-size:12px;line-height:1.8}
 .scene-note>strong{font-weight:650}
 .gr-figure.is-compact [data-compact-hide]{display:none}
+.gr-figure [data-compact-only]{display:none}
+.gr-figure.is-compact [data-compact-only]{display:inline}
+.table-wrap{font-size:16px;line-height:1.7;border:0;border-radius:12px;background:color-mix(in srgb,var(--wash) 50%,var(--paper))}
+.table-wrap table{min-width:620px}
+.table-wrap th,.table-wrap td{padding:18px 22px;border-bottom-color:color-mix(in srgb,var(--line) 58%,transparent)}
+.table-wrap th{font-size:13px;font-weight:700;color:var(--muted);background:color-mix(in srgb,var(--wash) 75%,var(--paper))}
+.table-wrap td .katex,.prose .table-wrap td .katex{font-size:1.22em;line-height:1.5}
+.table-wrap td:first-child{font-weight:550;min-width:145px}
+.table-wrap:focus-visible{outline:2px solid var(--transport);outline-offset:4px}
+@media(max-width:600px){.table-wrap{font-size:15px;margin:24px 0}.table-wrap th,.table-wrap td{padding:16px 18px}.table-wrap td .katex,.prose .table-wrap td .katex{font-size:1.22em}}
 .scene-diagram[hidden]{display:none}
 [data-active-view=diagram] .scene-stage{height:auto!important;min-height:0;background:none;overflow:visible}
 [data-active-view=diagram] .scene-fallback,[data-active-view=diagram] .scene-stage>canvas,[data-active-view=diagram] .scene-labels,[data-active-view=diagram] .scene-controls,[data-active-view=diagram] .scene-camera-tools,[data-active-view=diagram] .scene-gesture-hint{display:none!important}

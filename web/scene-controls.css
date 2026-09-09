@@ -1,0 +1,40 @@
+/* Focused controls for physical experiments, using the existing theme palette. */
+.scene-controls .scene-experiment-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 15px}
+.scene-experiment-bar button{font:inherit;font-size:11px;border:0;cursor:pointer}
+.scene-play{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:7px 13px;border-radius:22px;background:var(--ink);color:var(--paper)}
+.scene-play .hugeicon{width:15px;height:15px}
+.scene-play [data-play-glyph=pause],.scene-play[aria-pressed=true] [data-play-glyph=play]{display:none}
+.scene-play[aria-pressed=true] [data-play-glyph=pause]{display:block}
+.scene-polarization{display:flex;gap:3px;padding:3px;border-radius:24px;background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.scene-polarization button{padding:6px 12px;min-height:30px;border-radius:18px;background:transparent;color:var(--muted);display:flex;gap:5px;align-items:center}
+.scene-polarization button[aria-pressed=true]{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px color-mix(in srgb,var(--ink) 7%,transparent)}
+.scene-experiment-bar button:focus-visible{outline:2px solid var(--transport);outline-offset:3px}
+.scene-wave-parameters{display:grid;grid-template-columns:1fr 1fr;gap:16px 30px;margin-top:19px}
+.scene-wave-parameters>div{min-width:0}
+.scene-controls .scene-wave-parameters .scene-parameter{display:grid;grid-template-columns:1fr;gap:3px;align-items:baseline}
+.scene-controls .scene-wave-parameters output{font-size:11px}
+.scene-control-caption{font-size:10px;line-height:1.65;color:var(--muted);margin:6px 0 0}
+.scene-measurement{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;padding:13px 16px;border-radius:12px;background:color-mix(in srgb,var(--observer) 5%,transparent)}
+.scene-measurement>div{display:flex;flex-direction:column;gap:4px}
+.scene-measurement>div>span{font-size:10px;color:var(--muted);line-height:1.5}
+.scene-measurement [data-embedding-measure]{font-size:16px;color:var(--observer)}
+.scene-measurement [data-embedding-ratio]{font-size:10px;color:var(--muted);text-align:right;max-width:115px}
+[data-scene=wave] .scene-controls{max-width:660px}
+[data-scene=wave] .scene-equation .katex-display{margin:.25em 0}
+@media(max-width:600px){
+ :is([data-scene=wave],[data-scene=embedding]) .scene-controls .scene-parameter label{font-size:12px;line-height:1.45}
+ :is([data-scene=wave],[data-scene=embedding]) .scene-controls .scene-parameter output{font-size:12px}
+ :is([data-scene=wave],[data-scene=embedding]) .scene-controls .range-limits{font-size:11px}
+ .scene-measurement>div>span{font-size:11px}
+ .scene-controls .scene-experiment-bar{gap:7px;margin-bottom:12px}
+ .scene-polarization button{padding:6px 10px;font-size:12px}
+ .scene-play{padding:7px 12px;font-size:12px}
+ .scene-wave-parameters{gap:16px;margin-top:15px}
+ .scene-controls .scene-wave-parameters .scene-parameter label{max-width:none}
+ .scene-controls .scene-wave-parameters output{font-size:12px}
+ .scene-control-caption{font-size:11px}
+ .scene-measurement{padding:12px;gap:10px}
+ .scene-measurement [data-embedding-measure]{font-size:14px}
+ .scene-measurement [data-embedding-ratio]{font-size:11px;max-width:100px}
+}
+@media(prefers-reduced-motion:reduce){.scene-experiment-bar *{transition:none}}

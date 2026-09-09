@@ -36,6 +36,8 @@
   if(element?.matches('.visual-lesson')){const text=extractPassageText(element,{live:true});const latex=[...text.matchAll(/\$([^$]+)\$/g)].map(match=>match[1]);return {...segment,text,description:text,latex,narration:undefined,sourceHash:segment.hash,hash:segment.hash+(element.dataset.visualState||'')};}
   const view=element?.closest('[data-scene]')?.dataset.activeView;
   const variant=segment.views?.[view];
+  const liveSource=element?.dataset.narrationSource||(element?.matches('.scene-stage')?element.closest('[data-scene]')?.dataset.narrationSource:null);
+  if(liveSource&&!variant){const latex=[...liveSource.matchAll(/\$([^$]+)\$/g)].map(match=>match[1]);return {...segment,text:liveSource,description:liveSource,latex,narration:undefined,sourceHash:segment.hash,hash:segment.hash+liveSource};}
   return variant?{...segment,...variant,sourceHash:segment.hash,view}:segment;
  }
  function visibleSegments(){return withNarrationContext(page.segments.filter(segment=>isReadingVisible(segment,document)).map(resolveSegment))}

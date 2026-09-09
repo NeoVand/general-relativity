@@ -2,7 +2,7 @@
 const clean=text=>text.replace(/\s+/g,' ').trim();
 export function extractPassageText(element,{live=false}={}){
  const copy=element.cloneNode(true);
- copy.querySelectorAll('script,button,.heading-link,.narration-script,.passage-tools,.step-number,.step-reason>span,.vl-controls,.vl-kicker,.vl-spatial-hint,svg,canvas').forEach(node=>node.remove());
+ copy.querySelectorAll('script,button,.heading-link,.narration-script,.passage-tools,.step-number,.step-reason>span,.vl-controls,.vl-kicker,.vl-spatial-hint,[data-experience-controls],.gx-reference,.cx-reference,svg,canvas').forEach(node=>node.remove());
  if(live)copy.querySelectorAll('[hidden],[aria-hidden="true"]').forEach(node=>node.remove());
  copy.querySelectorAll('.katex').forEach(node=>node.replaceWith(` $${node.querySelector('annotation')?.textContent||''}$ `));
  if(copy.matches('table'))return [...copy.querySelectorAll('tr')].map(row=>[...row.querySelectorAll('th,td')].map(cell=>clean(cell.textContent)).join(' | ')).join('\n');

@@ -29,7 +29,20 @@ def axes(x,y,w,h,xlabel,ylabel):
  return line(x,y,x+w,y,MUTED,2,arrow=True)+line(x,y,x,y-h,MUTED,2,arrow=True)+text(x+w,y+35,xlabel,18,MUTED,'end')+vertical
 def plot(fn,x0,x1,px,py,w,h,ymin,ymax,n=150,color=TEAL,dash=''):
  pts=[(px+w*i/n,py-h*(fn(x0+(x1-x0)*i/n)-ymin)/(ymax-ymin)) for i in range(n+1)]
- return poly(pts,color,3,dash=dash)
+ return poly(pts,color,1.8 if dash else 3.2,dash=dash)
+def elbow(x1,y1,x2,y2,color=BLUE,w=2.2,orientation='vertical',radius=12):
+ # Orthogonal endpoints with rounded bends: a flow connector, never a physical
+ # trajectory. Each endpoint is normal to the face of its source/target box.
+ if abs(x2-x1)<.01 or abs(y2-y1)<.01:return line(x1,y1,x2,y2,color,w,arrow=True)
+ sx=1 if x2>x1 else -1;sy=1 if y2>y1 else -1
+ rr=min(radius,abs(x2-x1)/2,abs(y2-y1)/2)
+ if orientation=='vertical':
+  mid=(y1+y2)/2
+  d=f'M{x1},{y1} V{mid-sy*rr} Q{x1},{mid} {x1+sx*rr},{mid} H{x2-sx*rr} Q{x2},{mid} {x2},{mid+sy*rr} V{y2}'
+ else:
+  mid=(x1+x2)/2
+  d=f'M{x1},{y1} H{mid-sx*rr} Q{mid},{y1} {mid},{y1+sy*rr} V{y2-sy*rr} Q{mid},{y2} {mid+sx*rr},{y2} H{x2}'
+ return f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{w}" marker-end="url(#{color[1:]})"/>'
 def responsive_group(body,transform='',compact_hide=False):
  return f'<g'+(f' data-mobile-transform="{transform}"' if transform else '')+(' data-compact-hide="true"' if compact_hide else '')+'>'+body+'</g>'
 def save(id,ch,title,alt,caption,body,height=480,after=None,mobile_viewbox=None):
@@ -88,10 +101,10 @@ b+=text(460,92,'FUTURE LIGHT CONE',16,TEAL,'middle',650)+text(240,255,'light: |�
 b+=text(52,443,'Signals from the starting event remain on or inside this cone. One space dimension is shown.',18,MUTED)
 save('light-cone',3,'The minus sign creates a light cone','Two light rays bound the possible future of an event. A slower-than-light path lies inside, and a spacelike displacement lies outside.','The graph uses the same scale for x and ct. A massive observer follows a timelike worldline; no rest frame exists for a light ray.',b)
 b=axes(100,380,470,260,'distance (light-years)','time (years)')
-b+=line(160,370,160,120,TEAL,4)+poly([(160,370),(310,245),(160,120)],ORANGE,4)
+b+=line(160,370,160,120,MUTED,2.2,'6 5')+poly([(160,370),(310,245),(160,120)],ORANGE,3.4)
 b+=circle(160,370,6,INK)+circle(160,120,6,INK)
 b+=text(130,375,'0',17,MUTED,'end')+text(130,250,'5',17,MUTED,'end')+text(130,125,'10',17,MUTED,'end')+text(310,411,'3',17,MUTED,'middle')
-b+=label(630,150,'Home clock','10 years along the vertical path.',TEAL)+label(630,245,'Travelling clock','8 years at speed 0.6c.',ORANGE)
+b+=label(630,150,'Home clock','10 years along the vertical path.',MUTED)+label(630,245,'Travelling clock','8 years at speed 0.6c.',ORANGE)
 b+=text(630,345,'Same departure. Same reunion.',19)+text(630,376,'Different lengths in spacetime.',19)
 save('twin-worldlines',3,'Two histories between the same events','A home clock follows a vertical worldline for ten years. A traveller reaches three light-years in five years and returns in another five.','The idealized travelling clock accumulates 10√(1 − 0.6²) = 8 years. The sharp turnaround is an approximation; the path integral, not a local feeling of slow time, gives the age difference.',b,after='3.5')
 
@@ -176,14 +189,19 @@ b+=text(45,448,'Earth, at its surface: radial separation acceleration ≈ 3.08 �
 save('tidal-eigenvalues',10,'Stretching and squeezing near Earth','Radial particles accelerate apart; tangential particles accelerate toward one another. The three tidal acceleration eigenvalues sum to zero.','The labels give eigenvalues of the Newtonian relative-acceleration matrix, not curvature components: divide by c² for the corresponding curvature scale, with the convention-dependent sign tracked in the text.',b)
 
 # 11: source matrix; units explicit.
-b=label(50,100,'Energy and momentum, in one local inertial frame','Coordinates x⁰ = ct. Every entry has energy-density units.')
+b=responsive_group(label(50,100,'Energy and momentum, in one local inertial frame','Coordinates x⁰ = ct. Every entry has energy-density units.'),compact_hide=True)
+matrix=''
 labels=[['ε','Sₓ/c','Sᵧ/c','S𝓏/c'],['cπₓ','σₓₓ','σₓᵧ','σₓ𝓏'],['cπᵧ','σᵧₓ','σᵧᵧ','σᵧ𝓏'],['cπ𝓏','σ𝓏ₓ','σ𝓏ᵧ','σ𝓏𝓏']]
 for i in range(4):
  for j in range(4):
   color='#d9eeee' if i==j==0 else '#f6e8de' if i==0 or j==0 else '#e3eaf5'
-  b+=rect(75+j*90,155+i*60,85,55,color,LINE,4)+text(117+j*90,191+i*60,labels[i][j],24,MATTER,'middle')
-b+=label(535,177,'Energy density','ε: what the observer finds locally.',MATTER)+label(535,261,'Energy flow ↔ momentum density','For symmetric T: S/c = cπ.',MATTER)+label(535,345,'Stress','Diagonal pressure; off-diagonal shear.',MATTER)
-save('stress-energy',11,'The source has more than one kind of entry','A four-by-four stress-energy matrix colors energy density, mixed energy-momentum entries, and spatial stresses differently.','S is energy flux, π is momentum density, and σ denotes the spatial stress entries using the momentum-flux convention. The tensor is symmetric in ordinary metric GR.',b)
+  matrix+=rect(75+j*90,165+i*65,85,60,color,'none',4)+text(117+j*90,206+i*65,labels[i][j],44 if i==j==0 else 36,MATTER,'middle')
+b+=responsive_group(matrix,'translate(0 -45)')
+note=text(535,190,'Energy density',24,MATTER)+text(535,230,'ε: what the observer finds locally.',24,MUTED)
+note+=text(535,300,'Energy flow ↔ momentum density',24,MATTER)+text(535,340,'For symmetric T: S/c = cπ.',24,MUTED)
+note+=text(535,410,'Stress',24,MATTER)+text(535,450,'Diagonal pressure; off-diagonal shear.',22,MUTED)
+b+=responsive_group(note,'translate(-480 240)')
+save('stress-energy',11,'The source has more than one kind of entry','A four-by-four stress-energy matrix colors energy density, mixed energy-momentum entries, and spatial stresses differently.','S is energy flux, π is momentum density, and σ denotes the spatial stress entries using the momentum-flux convention. The tensor is symmetric in ordinary metric GR.',b,height=490,mobile_viewbox='0 0 500 750')
 
 # 12: six distinct ingredients, with no anonymous constant or misleading leader.
 b=responsive_group(text(500,165,'Einstein equation display',48,INK,'middle'),'translate(0 10) scale(.5)')
@@ -216,7 +234,7 @@ for x,title,formula,color in [(65,'Curvature changes','√−g δR',TEAL),(545,'
  b+=rect(x,150,385,95,'#fff',color)+text(x+192,190,title,23,color,'middle')+text(x+192,224,formula,24,color,'middle')
  b+=line(x+192,255,x+192,295,color,2,arrow=True)
 b+=text(258,333,'Ricci + a boundary divergence',23,TEAL,'middle')+text(738,333,'−½ scalar curvature × metric',23,ORANGE,'middle')
-b+=line(258,350,460,398,TEAL,2,arrow=True)+line(738,350,540,398,ORANGE,2,arrow=True)+text(500,440,'Together: the Einstein tensor',26,INK,'middle')
+b+=elbow(258,350,460,398,TEAL)+elbow(738,350,540,398,ORANGE)+text(500,440,'Together: the Einstein tensor',26,INK,'middle')
 save('action-product-rule',14,'Two variations make one field equation','A two-branch flowchart separates the variation of scalar curvature from the variation of the invariant volume.','The boundary divergence requires its own treatment. After that treatment, the bulk coefficient of the arbitrary inverse-metric variation is the Einstein tensor.',b)
 
 # 15: symmetry and conserved energy.
@@ -377,7 +395,9 @@ save('cartan-comparison',21,'Same method, different curvature','A closed blue tr
 
 # 22: caustic and focusing inequality.
 b=axes(80,385,400,250,'position','affine time')
-for x in [140,205,270,335,400]:b+=line(x,365,270,165,TEAL,3)
+for x in [140,205,270,335,400]:
+ b+=line(x,365,270,165,TEAL,2.8)
+ b+=line(270,165,270+.3*(270-x),105,MUTED,1.5,'5 5')
 b+=circle(270,165,7,ORANGE)+text(300,150,'caustic',21,ORANGE)
 b+=label(565,140,'Convergence can have a deadline','If θ₀ < 0 and dθ/dτ ≤ −θ²/3,')
 b+=text(565,233,'τfocus ≤ 3 / |θ₀|',31,TEAL)+text(565,297,'But straight lines can cross in flat spacetime.',17)+text(565,345,'Caustic ≠ singular spacetime',24,ORANGE)+text(565,390,'Global hypotheses do the extra work.',18,MUTED)
@@ -395,13 +415,15 @@ save('effective-theory',23,'A theory has a resolution scale','A scale axis progr
 
 # 24: calculation map.
 b=''
-steps=[('1','Specify the metric','Coordinates and units'),('2','Compute the connection','First derivatives of g'),('3','Compute curvature','Derivatives + products of Γ'),('4','Choose the observer','Four-velocity or tetrad'),('5','Predict a measurement','Clock, ray, orbit, or tide'),('6','Check a familiar limit','Signs, units, and physics')]
+steps=[('1','Choose a measurement','Clock, ray, orbit, or tide'),('2','Specify the metric','Coordinates and units'),('3','Choose the observer','Four-velocity or tetrad'),('4','Use the needed geometry','Connection, curvature, or neither'),('5','Evaluate the prediction','A physical comparison'),('6','Check a familiar limit','Signs, units, and physics')]
 for i,(n,title,sub) in enumerate(steps):
- col=i%3;row=i//3;x=45+col*322;y=105+row*180
- b+=rect(x,y,285,125,'#fff',TEAL if row==0 else ORANGE)+text(x+20,y+32,n,18,TEAL if row==0 else ORANGE,weight=700)+text(x+20,y+64,title,21,INK,weight=650)+text(x+20,y+96,sub,16,MUTED)
- if col<2:b+=line(x+291,y+63,x+313,y+63,MUTED,2,arrow=True)
-b+=text(500,467,'The invariant prediction is the destination. The coordinates are the route.',20,INK,'middle')
-save('calculation-map',24,'From a metric to a measurement','Six stages organize a general relativity calculation, from specifying the metric to checking physical limits.','The observer can often be chosen earlier. This map is a practical organizing sequence; it is not a claim that every problem needs every tensor computed explicitly.',b,height=505)
+ col=i%3;row=i//3;x=45+col*322;y=105+row*205
+ b+=responsive_group(rect(x,y,285,125,'#fff',LINE)+text(x+20,y+32,n,18,TEAL if row==0 else ORANGE,weight=700)+text(x+20,y+64,title,19,INK,weight=650)+text(x+20,y+96,sub,15,MUTED),f'translate({45-x} {70+i*166-y})')
+ if col<2:b+=responsive_group(line(x+291,y+63,x+313,y+63,MUTED,2,arrow=True),compact_hide=True)
+ if i<5:b+='<g data-compact-only="true">'+line(187,202+i*166,187,229+i*166,MUTED,2,arrow=True)+'</g>'
+b+=responsive_group(elbow(831,238,187,300,MUTED,2,radius=14),compact_hide=True)
+b+=responsive_group(text(500,487,'Compute only what your measurement needs.',20,INK,'middle'),compact_hide=True)
+save('calculation-map',24,'From a question to a measurement','Six stages organize a general relativity calculation, beginning with the measurement you want to predict.','A clock comparison may need only the metric; a trajectory can need the connection; a tidal measurement needs curvature. The chosen observer and a familiar limit make the prediction physically interpretable.',b,height=525,mobile_viewbox='0 0 375 1040')
 
 # Additional figures sit at the exact argument they clarify, beyond chapter openers.
 b=label(45,90,'A route through discovery','The teaching sequence is not the historical sequence.')
@@ -428,14 +450,20 @@ for y,title,pts,col in [(200,'Affine parameter',[80+i*110 for i in range(8)],TEA
 b+=text(500,442,'A non-affine parameter can add a tangent-proportional term to the geodesic equation.',19,MUTED,'middle')
 save('affine-parameter',5,'Do not confuse a route with its parameter','Two identical straight paths have respectively equally spaced and nonuniformly spaced parameter labels.','This flat straight-line illustration isolates parameter choice. Affine parameters are related by λ ↦ aλ + b; an arbitrary nonlinear relabeling changes the standard coordinate form of the geodesic equation.',b,after='5.6')
 
-b=label(45,95,'Two antisymmetric index pairs','In four dimensions there are six possible independent pairs.')
+b=responsive_group(label(45,95,'Two antisymmetric index pairs','In four dimensions there are six possible independent pairs.'),compact_hide=True)
 pairs=['01','02','03','12','13','23']
+matrix=''
 for i,s in enumerate(pairs):
- b+=text(140+i*42,159,s,15,MUTED,'middle')+text(103,195+i*38,s,15,MUTED,'end')
- for j in range(6):b+=rect(122+j*42,171+i*38,36,32,'#c9e4e7' if j>=i else '#e8eef0',LINE,3)
-b+=label(515,175,'A symmetric 6 × 6 pair matrix','6 diagonal + 15 off-diagonal = 21')
-b+=text(515,275,'One algebraic Bianchi relation',23,ORANGE)+line(650,300,650,332,ORANGE,2,arrow=True)+text(515,385,'20 independent curvature components',25,TEAL)
-save('curvature-count',8,'From 256 slots to 20 independent entries','A six-by-six matrix of antisymmetric index pairs has one triangular half highlighted, representing twenty-one symmetric entries before Bianchi.','Riemann antisymmetry creates six pair labels; pair-exchange symmetry leaves 21 entries. The algebraic Bianchi identity removes one in four dimensions. This counts local tensor components, not propagating gravitational degrees of freedom.',b,after='8.5')
+ matrix+=text(117+i*58,159,s,26,MUTED,'middle')+text(72,222+i*58,s,26,MUTED,'end')
+ for j in range(6):
+  matrix+=rect(90+j*58,184+i*58,54,54,'#c9e4e7' if j>=i else '#e8eef0','none',5)
+  matrix+=text(117+j*58,220+i*58,f'pair entry {min(i,j)+1}{max(i,j)+1}',30,TEAL if j>=i else MUTED,'middle')
+b+=responsive_group(matrix,'translate(-22 -60)')
+note=text(515,205,'Pair-exchange symmetry',24,TEAL)+text(515,265,'6 + 15 = 21',38,TEAL)
+note+=text(515,308,'Diagonal + mirrored pairs',20,MUTED)
+note+=text(515,365,'Then one cyclic relation',24,ORANGE)+text(515,425,'21 − 1 = 20',40,TEAL)+text(515,473,'independent components',22,MUTED)
+b+=responsive_group(note,'translate(-475 350)')
+save('curvature-count',8,'From 256 slots to 20 independent entries','A six-by-six matrix of antisymmetric pairs repeats each off-diagonal symbol in its reflected tile. The upper triangle and diagonal contain twenty-one symbols.','Riemann antisymmetry creates six pair labels; pair-exchange symmetry leaves 21 entries. The algebraic Bianchi identity removes one in four dimensions. This counts local tensor components, not propagating gravitational degrees of freedom.',b,height=585,after='8.5',mobile_viewbox='0 0 460 870')
 
 b=label(45,95,'The Newtonian calibration','Use the trace-reversed equation for slowly moving dust.')
 rows=[('Geometry','R₀₀ ≈ ∇²Φ / c²',TEAL),('Matter','T₀₀ − ½Tg₀₀ ≈ ½ρc²',ORANGE),('Newton','∇²Φ = 4πGρ',BLUE)]
@@ -448,7 +476,7 @@ save('newtonian-calibration',12,'Where the factor of eight comes from','Geometry
 b=axes(80,370,420,240,'coordinate normal to boundary','allowed variation')
 b+=plot(lambda x:x*(1-x),0,1,105,370,355,220,0,.3)
 b+=circle(105,370,6,INK)+circle(460,370,6,INK)
-b+=line(105,370,168,253,ORANGE,3)+line(397,253,460,370,ORANGE,3)
+b+=line(105,370,168,253,ORANGE,1.8,'6 5')+line(397,253,460,370,ORANGE,1.8,'6 5')
 b+=label(565,140,'Zero value at the boundary','Does not imply zero normal derivative.')
 b+=text(565,228,'δg = 0',30,TEAL)+text(565,285,'∂ₙ(δg) can be nonzero',27,ORANGE)+text(565,354,'A boundary term may therefore survive.',19)+text(565,397,'The variational problem needs a boundary policy.',16,MUTED)
 save('boundary-variation',14,'Fixing the value does not fix the slope','A variation vanishes at both endpoints while having nonzero slopes there.','The scalar graph is an analogy for each metric variation component along a normal direction. It explains why the Einstein–Hilbert action needs appropriate boundary treatment even when the boundary metric is fixed.',b,after='14.6')
@@ -498,7 +526,7 @@ b+=text(500,452,'Radiated fraction ≤ 1 − 1/√2 ≈ 29.3%, under these ideal
 save('horizon-area',22,'Two areas constrain one remnant','Two equal initial Schwarzschild horizons are compared with a limiting final circle whose area equals their sum.','The equality illustration is the bound’s limiting case, not an achievable merger prediction. Initial binding energy is neglected, and all holes are assumed nonspinning; Kerr horizons require a different area formula.',b,after='22.9')
 
 b=axes(80,380,465,240,'fraction of evaporation elapsed','radiation entropy (schematic)')
-b+=poly([(105,375),(315,160),(520,375)],TEAL,4)+poly([(105,375),(520,140)],ORANGE,3,dash='7 5')
+b+=poly([(105,375),(315,225),(520,140)],ORANGE,2.2,dash='7 5')+poly([(105,375),(315,225),(520,375)],TEAL,3.4)
 b+=label(610,155,'Unitary expectation','Rise, then fall as information is recovered.',TEAL)+label(610,260,'Uncorrected semiclassical trend','Keeps growing in the leading approximation.',ORANGE)
 b+=text(610,363,'A thermal-looking spectrum can still',19)+text(610,394,'contain correlations between quanta.',19)
 save('page-curve',22,'The information question has a shape','A schematic entropy curve rises and returns to zero, while a dashed comparison curve continues to rise.','Axes are qualitative and the curves are not a quantitative evaporation solution. A final pure radiation state has zero fine-grained entropy for the whole radiation system; individual portions can remain mixed.',b,after='22.10')

@@ -67,6 +67,17 @@ try{
  const other=JSON.parse(fs.readFileSync('site/reading-index.json','utf8')).find(p=>p.id==='chapter-16'),offpage=other.segments.find(s=>s.depth==='formal');
  result=await askTool('read_passage',{page:other.id,passage:offpage.id});assert(result.passages.every(s=>s.lesson===offpage.lesson&&s.depth==='formal'&&s.visibility==='reference'));
  result=await askTool('play_section',{page:data.id,passage:practice.id,end:title.id});assert(result.error?.includes('end'));
+ // Each integrated experiment is one listening unit. Its current parameters,
+ // not its hidden reference diagram or every control label, inform the narrator.
+ for(const [chapter,id,control] of [[4,'manifold-chart-experience','[data-gx-chart="b"]'],[8,'curvature-pair-explorer','[data-cx-phase="2"]'],[9,'curvature-cloud-explorer','[data-cx-mode="isotropic"]'],[16,'orbital-precession-experience','[data-gx-scale="1"]']]){
+  await close();await page.goto(new URL(`chapter-${chapter}.html`,base).href);await page.waitForFunction(id=>!!document.getElementById(id)?.dataset.narrationSource,id);
+  const model=page.locator('#'+id);await model.scrollIntoViewIfNeeded();
+  const before=await model.getAttribute('data-narration-source');await model.locator(control).click();
+  const after=await model.getAttribute('data-narration-source');assert.notEqual(after,before,'Changing the experiment updates the spoken source');
+  const items=await page.evaluate(id=>{const model=document.getElementById(id);return JSON.parse(document.querySelector('#reading-data').textContent).segments.filter(s=>model.contains(document.getElementById(s.id)))},id);
+  assert.equal(items.length,1,'An experiment does not repeat its equations, controls, and reference as separate narration');
+  await model.locator('[data-study-action="listen"]').click();await ready();assert.equal(narratorRequests().at(-1).source,after,'The narrator receives the current mathematical model');await stop();
+ }
  assert.deepEqual(errors,[]);
  console.log('Verified live source neighborhoods, hidden/off-page depth retrieval, narration context cache changes, bounded bridge playback, explicit exercise ranges, hidden-panel reveal, and chapter practice exclusion with mocked providers.');
 }finally{await browser.close()}

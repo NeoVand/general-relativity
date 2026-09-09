@@ -15,7 +15,9 @@
     "check": "svelte-check --fail-on-warnings",
     "test:study": "node scripts/check-study-core.mjs && node scripts/check-course-narration.mjs && node scripts/check-course-narration-browser.mjs && node scripts/check-study.mjs && node scripts/check-selection.mjs",
     "test:course": "node scripts/check-course.mjs",
-    "test:visual-lessons": "node scripts/check-visual-lessons.mjs"
+    "test:visual-lessons": "node scripts/check-visual-lessons.mjs",
+    "test:geometry-experiences": "node scripts/check-geometry-experiences.mjs",
+    "test:curvature-experiences": "node scripts/check-curvature-experiences.mjs --integrated"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

@@ -4,10 +4,49 @@ import {chromium} from 'playwright';
 import {scenes} from './scenes.mjs';
 import {rainRadius, FALL_TIME, ENTRY_HALF_SIZE, VIEW_RADIUS, INJECTION_INTERVAL, COHORTS, INITIAL_PHASE, cohortRadius, EARTH_GM, EARTH_RADIUS} from '../web/earth-flow.js';
 import {math,semanticTex} from './math-system.mjs';
+import {covectorCrossings,coneNearSide,embeddingHeight,radialProperLength,waveStrain,waveDisplacement} from '../web/scene-models.js';
+// Independent physical checks: induced geometry, quadrature, polarization symmetry,
+// and wave propagation constrain the model beyond its own displayed endpoints.
+for(const c of [.05,.25,.65]){
+ const n=1000,a=.75,b=1,step=(b-a)/n,f=r=>1/Math.sqrt(1-c/r);
+ let sum=f(a)+f(b);for(let i=1;i<n;i++)sum+=(i%2?4:2)*f(a+i*step);
+ assert.ok(Math.abs(radialProperLength(a,b,c)-sum*step/3)<1e-10,'The ruler must equal the Schwarzschild radial metric integral');
+ for(const r of [.72,.85,1]){const eps=1e-5,dz=(embeddingHeight(r+eps,c)-embeddingHeight(r-eps,c))/(2*eps);assert.ok(Math.abs(1+dz*dz-1/(1-c/r))<1e-6,'The Euclidean embedding must induce the spatial metric');}
+}
+assert.equal(radialProperLength(.75,1,0),.25);
+assert.ok(radialProperLength(.75,1,.65)>radialProperLength(.75,1,.25));
+assert.throws(()=>radialProperLength(.5,1,.65),RangeError);
+assert.deepEqual(covectorCrossings(.2),[]);assert.deepEqual(covectorCrossings(.5),[[1,2/3,1/3]]);
+for(const [x,y,z] of covectorCrossings(1)){assert.equal(y/x,2/3);assert.equal(z/x,1/3);assert.ok(Number.isInteger(x));}
+for(const a of [.2,1,2,3])assert.notEqual(coneNearSide(Math.cos(a),Math.sin(a),2,3),coneNearSide(Math.cos(a),Math.sin(a),-2,-3));
+for(const h of [-.35,0,.25]){
+ const ex=waveDisplacement(1,0,h,'cross'),ey=waveDisplacement(0,1,h,'cross');
+ assert.ok(Math.abs(ex[0]+ey[1]-2)<1e-12,'The linear displacement perturbation is traceless');
+ assert.ok(Math.abs(ex[0]*ey[1]-ex[1]*ey[0]-(1-h*h/4))<1e-12,'Area changes vanish to first order');
+ const [x,y]=[.6,.8],q=Math.SQRT1_2,rotated=waveDisplacement(q*(x+y),q*(-x+y),h,'plus'),back=[q*(rotated[0]-rotated[1]),q*(rotated[0]+rotated[1])],cross=waveDisplacement(x,y,h,'cross');
+ assert.ok(back.every((v,i)=>Math.abs(v-cross[i])<1e-12),'Cross polarization is the plus tensor rotated forty-five degrees');
+}
+for(const frequency of [.75,1.5,2.5]){
+ const z=.7,phase=.8,dt=.31;
+ assert.ok(Math.abs(waveStrain(z+dt,phase+frequency*dt,.25,frequency)-waveStrain(z,phase,.25,frequency))<1e-12,'A fixed phase must travel at c for every frequency');
+}
 const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,args:['--enable-unsafe-swiftshader'],...(fs.existsSync(chrome)?{executablePath:chrome}:{})});
 const page=await browser.newPage();const base=process.env.BOOK_URL||'http://localhost:4173/';
 const errors=[],checks=[],labelIssues=[];page.on('pageerror',e=>errors.push(e.message));fs.mkdirSync('qa',{recursive:true});
+async function assertRulerLabelClear(element){
+ const overlap=await element.evaluate(e=>{const stage=e.querySelector('.scene-stage').getBoundingClientRect(),label=e.querySelector('.scene-label.math-observer').getBoundingClientRect();return JSON.parse(e.dataset.rulerScreen).some(([x,y])=>{x=stage.x+x*stage.width;y=stage.y+y*stage.height;return x>label.left-2&&x<label.right+2&&y>label.top-2&&y<label.bottom+2});});
+ assert.equal(overlap,false,'The length label must not cover its measured ruler');
+}
+// Chrome's beyond-viewport element capture can temporarily reflow the page and
+// clip a tall section's left edge. Give the capture its full height explicitly;
+// all layout/label assertions still run at the original requested viewport.
+async function captureScene(element,path){
+ const viewport=page.viewportSize(),height=Math.ceil((await element.boundingBox()).height)+160;
+ if(height>viewport.height)await page.setViewportSize({...viewport,height});
+ try{await element.scrollIntoViewIfNeeded();await element.screenshot({path});}
+ finally{if(height>viewport.height)await page.setViewportSize(viewport);}
+}
 try{
  for(const width of [1440,390])for(const theme of ['light','dark']){
   await page.setViewportSize({width,height:width===390?844:1100});
@@ -16,7 +55,8 @@ try{
    await page.goto(new URL(`${s.id==='sphere'?'figure-atlas.html':`chapter-${s.chapter}.html`}#scene-${s.id}`,base).href);
    const el=page.locator(`#scene-${s.id}`);await el.scrollIntoViewIfNeeded();await page.waitForFunction(id=>document.getElementById(id).dataset.ready==='true',`scene-${s.id}`);
    await page.evaluate(()=>document.fonts.ready);
-   const range=el.locator('input');
+   const range=el.locator(`#scene-${s.id}-parameter`);
+   if(s.id==='wave'&&await el.getAttribute('data-playing')==='true')await el.locator('[data-wave-play]').click();
    if(s.id==='earth')await el.locator('.scene-stage').press('Space');
    else {await range.fill(String(s.max));await range.dispatchEvent('input');}
    const data=await el.evaluate(e=>({...e.dataset}));
@@ -28,9 +68,9 @@ try{
    }else if(s.id==='sphere'){
     const v=JSON.parse(data.vector),p=JSON.parse(data.position);assert.ok(Math.abs(v[2]-1)<1e-12);assert.ok(Math.abs(p[1]-1)<1e-12);assert.ok(Math.abs(v.reduce((sum,x,i)=>sum+x*p[i],0))<1e-12);
    }else if(s.id==='tides')assert.deepEqual(JSON.parse(data.scales),[1.3,.85,.85]);
-   else if(s.id==='embedding')assert.equal(+data.measurement,4);
-   else if(s.id==='covector')assert.equal(+data.measurement,3);
-   else if(s.id==='cone')assert.equal(+data.measurement,.95);
+   else if(s.id==='embedding'){assert.ok(Math.abs(+data.measurement-radialProperLength(.75,1,.65))<1e-12);assert.equal(+data.compactness,.65);}
+   else if(s.id==='covector'){assert.equal(+data.measurement,3);assert.deepEqual(JSON.parse(data.crossings),[[1,2/3,1/3],[2,4/3,2/3],[3,2,1]]);}
+   else if(s.id==='cone'){assert.equal(+data.measurement,.95);const depth=JSON.parse(data.coneDepth);assert.ok(depth.near>100&&depth.far>100);}
    else if(s.id==='expansion')assert.equal(+data.measurement,1.5);
    else if(s.id==='wave')assert.ok(Math.abs(+data.phase-2*Math.PI)<1e-12);
    else if(s.id==='slices')assert.equal(+data.measurement,1.2);
@@ -38,8 +78,10 @@ try{
     const cropped=await el.evaluate(e=>{const b=e.querySelector('.scene-stage').getBoundingClientRect();return [...e.querySelectorAll('.scene-label')].filter(n=>{const r=n.getBoundingClientRect();return r.left<b.left||r.top<b.top||r.right>b.right||r.bottom>b.bottom}).map(n=>n.textContent);});
     assert.deepEqual(cropped,[],`${s.id}: labels must fit at the control maximum`);
    }
+   if(s.id==='embedding')await assertRulerLabelClear(el);
    // Inspect a representative intermediate state as well as the endpoint.
    if(s.id!=='earth'){await range.fill(String(s.id==='sphere'?180:s.value));await range.dispatchEvent('input');}
+   if(s.id==='embedding')await assertRulerLabelClear(el);
    if(s.id!=='earth'){await el.locator('.scene-stage').press('ArrowLeft');await el.locator('.scene-stage').press('Home');}
    const result=await el.evaluate(e=>{
     const stage=e.querySelector('.scene-stage'),rect=stage.getBoundingClientRect();
@@ -65,15 +107,71 @@ try{
     assert.equal(await el.locator('.scene-stage').getAttribute('tabindex'),null,'A static diagram does not add a keyboard stop');
     assert.ok((await el.locator('.scene-stage').getAttribute('aria-label')).includes('Static diagram'),'The accessible description follows the selected view');
     assert.equal(await el.locator('.scene-diagram [data-passage]').count(),0,'The alternate diagram must not repeat the narration');
-    await el.screenshot({path:`qa/lab-${s.id}-diagram-${width}-${theme}.png`});
+    await captureScene(el,`qa/lab-${s.id}-diagram-${width}-${theme}.png`);
     await el.locator('[data-scene-mode="3d"]').click();
     assert.equal(await el.locator('canvas').isVisible(),true);
     assert.ok(await range.evaluate(input=>input.getAttribute('aria-valuetext')),'Slider should expose its formatted value');
    }
    checks.push({scene:s.id,width,theme});
-   await el.screenshot({path:`qa/lab-${s.id}-${width}-${theme}.png`});
+   await captureScene(el,`qa/lab-${s.id}-${width}-${theme}.png`);
   }
  }
+ // Wave controls represent distinct physics; phase scrubbing pauses playback.
+ await page.goto(new URL('chapter-18.html#scene-wave',base).href);
+ const wave=page.locator('#scene-wave');await wave.scrollIntoViewIfNeeded();
+ await page.waitForFunction(()=>document.querySelector('#scene-wave').dataset.ready==='true');
+ if(await wave.getAttribute('data-playing')==='true')await wave.locator('[data-wave-play]').click();
+ await wave.locator('#scene-wave-parameter').fill('50');await wave.locator('#scene-wave-parameter').dispatchEvent('input');
+ await wave.locator('[data-wave-amplitude]').fill('25');await wave.locator('[data-wave-amplitude]').dispatchEvent('input');
+ await wave.locator('[data-wave-polarization=cross]').click();
+ assert.equal(await wave.getAttribute('data-polarization'),'cross');
+ const crossMatrix=JSON.parse(await wave.getAttribute('data-detector-matrix'));
+ assert.ok(crossMatrix.every((v,i)=>Math.abs(v-[1,-.125,-.125,1][i])<1e-12));
+ assert.ok((await wave.locator('[data-wave-equation] annotation').textContent()).includes('h}_\\times'));
+ assert.ok((await wave.getAttribute('data-narration-source')).includes('Cross polarization'));
+ await wave.locator('[data-wave-amplitude]').fill('0');await wave.locator('[data-wave-amplitude]').dispatchEvent('input');
+ assert.deepEqual(JSON.parse(await wave.getAttribute('data-detector-matrix')),[1,0,0,1]);
+ await wave.locator('[data-wave-amplitude]').fill('35');await wave.locator('[data-wave-amplitude]').dispatchEvent('input');
+ await wave.locator('[data-wave-frequency]').fill('250');await wave.locator('[data-wave-frequency]').dispatchEvent('input');
+ assert.equal(+(await wave.getAttribute('data-frequency')),2.5);
+ await captureScene(wave,'qa/lab-wave-controls-cross-mobile.png');
+ await wave.locator('[data-wave-play]').click();
+ const initialWaveFrames=+(await wave.getAttribute('data-frames')||0);
+ await page.waitForFunction(n=>+document.querySelector('#scene-wave').dataset.frames>n+4,initialWaveFrames);
+ await wave.locator('[data-wave-play]').click();
+ const pausedWave=await wave.getAttribute('data-phase');await page.waitForTimeout(180);
+ assert.equal(await wave.getAttribute('data-phase'),pausedWave,'Paused wave must hold its phase');
+ await wave.locator('[data-wave-play]').click();
+ await wave.locator('[data-scene-mode=diagram]').click();await page.waitForTimeout(100);
+ const diagramFrames=await wave.getAttribute('data-frames');await page.waitForTimeout(160);
+ assert.equal(await wave.getAttribute('data-frames'),diagramFrames,'The alternate diagram must suspend wave animation');
+ await wave.locator('[data-scene-mode="3d"]').click();
+ await page.waitForFunction(n=>+document.querySelector('#scene-wave').dataset.frames>n+2,+diagramFrames);
+ await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));await page.waitForTimeout(180);
+ const invisibleWaveFrames=await wave.getAttribute('data-frames');await page.waitForTimeout(180);
+ assert.equal(await wave.getAttribute('data-frames'),invisibleWaveFrames,'Offscreen wave must stop updating');
+ await page.emulateMedia({reducedMotion:'reduce'});
+ await wave.scrollIntoViewIfNeeded();
+ assert.equal(await wave.getAttribute('data-playing'),'false','Enabling reduced motion pauses an existing animation');
+ await page.reload();await wave.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#scene-wave').dataset.ready==='true');
+ assert.equal(await wave.getAttribute('data-playing'),'false','Reduced motion disables autoplay');
+ await page.emulateMedia({reducedMotion:'no-preference'});
+ // The two fixed ruler endpoints remain outside the horizon across all masses.
+ await page.goto(new URL('chapter-17.html#scene-embedding',base).href);
+ const embedding=page.locator('#scene-embedding');await embedding.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#scene-embedding').dataset.ready==='true');
+ let previousLength=0;
+ for(const value of ['5','25','65']){
+  await embedding.locator('input').fill(value);await embedding.locator('input').dispatchEvent('input');
+  await assertRulerLabelClear(embedding);
+  const ruler=JSON.parse(await embedding.getAttribute('data-ruler'));assert.equal(ruler.from,.75);assert.equal(ruler.to,1);assert.equal(ruler.coordinate,.25);assert.ok(ruler.proper>previousLength);previousLength=ruler.proper;
+ }
+ await captureScene(embedding,'qa/lab-embedding-high-mass-mobile.png');
+ // Near/far cues must follow the camera, not a fixed convention in the model.
+ await page.goto(new URL('chapter-3.html#scene-cone',base).href);
+ const cone=page.locator('#scene-cone');await cone.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#scene-cone').dataset.ready==='true');
+ const firstDepth=JSON.parse(await cone.getAttribute('data-cone-depth'));
+ await cone.locator('.scene-stage').press('ArrowLeft');
+ assert.notEqual(JSON.parse(await cone.getAttribute('data-cone-depth')).angle,firstDepth.angle);
  // Check the actual falling-grid controls, reduced motion, and invisible-scene suspension.
  await page.goto(new URL('index.html',base).href);
  const earth=page.locator('[data-scene=earth]');

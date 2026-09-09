@@ -147,10 +147,10 @@
     "number": 14,
     "chapter": 8,
     "title": "From 256 slots to 20 independent entries",
-    "alt": "A six-by-six matrix of antisymmetric index pairs has one triangular half highlighted, representing twenty-one symmetric entries before Bianchi.",
+    "alt": "A six-by-six matrix of antisymmetric pairs repeats each off-diagonal symbol in its reflected tile. The upper triangle and diagonal contain twenty-one symbols.",
     "caption": "Riemann antisymmetry creates six pair labels; pair-exchange symmetry leaves 21 entries. The algebraic Bianchi identity removes one in four dimensions. This counts local tensor components, not propagating gravitational degrees of freedom.",
     "width": 1000,
-    "height": 480,
+    "height": 585,
     "after": "8.5"
   },
   {
@@ -183,7 +183,7 @@
     "alt": "A four-by-four stress-energy matrix colors energy density, mixed energy-momentum entries, and spatial stresses differently.",
     "caption": "S is energy flux, π is momentum density, and σ denotes the spatial stress entries using the momentum-flux convention. The tensor is symmetric in ordinary metric GR.",
     "width": 1000,
-    "height": 480,
+    "height": 490,
     "after": null
   },
   {
@@ -432,11 +432,11 @@
     "id": "calculation-map",
     "number": 40,
     "chapter": 24,
-    "title": "From a metric to a measurement",
-    "alt": "Six stages organize a general relativity calculation, from specifying the metric to checking physical limits.",
-    "caption": "The observer can often be chosen earlier. This map is a practical organizing sequence; it is not a claim that every problem needs every tensor computed explicitly.",
+    "title": "From a question to a measurement",
+    "alt": "Six stages organize a general relativity calculation, beginning with the measurement you want to predict.",
+    "caption": "A clock comparison may need only the metric; a trajectory can need the connection; a tidal measurement needs curvature. The chosen observer and a familiar limit make the prediction physically interpretable.",
     "width": 1000,
-    "height": 505,
+    "height": 525,
     "after": null
   }
 ]

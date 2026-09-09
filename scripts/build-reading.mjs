@@ -17,9 +17,10 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  const {document}=parseHTML(fs.readFileSync(`site/${file}`,'utf8'));
  const id=file.replace('.html','');
  const main=document.querySelector('main');
- const candidates=[...main.querySelectorAll('h1,h2,h3,h4,p,li,summary,.equation,.equation-piece,figure,.scene-stage,.visual-lesson,table')].filter(el=>{
-  if(el.closest('nav,.contents-group,.chapter-preparation,.chapter-meta,.scene-fallback,.scene-controls,.lab-directory,.hero-equation-key,.color-key'))return false;
-  if(el.closest('.visual-lesson')&&!el.matches('.visual-lesson'))return false;
+ const experienceSelector='.visual-lesson,.geometry-experience,.curvature-experience';
+ const candidates=[...main.querySelectorAll('h1,h2,h3,h4,p,li,summary,.equation,.equation-piece,figure,.scene-stage,.visual-lesson,.geometry-experience,.curvature-experience,table')].filter(el=>{
+  if(el.closest('nav,.contents-group,.chapter-preparation,.chapter-meta,.scene-heading,.scene-fallback,.scene-controls,.lab-directory,.hero-equation-key,.color-key'))return false;
+  if(el.closest(experienceSelector)&&!el.matches(experienceSelector))return false;
   if(el.closest('.lesson-prerequisites,.lesson-sources,.course-compass,.chapter-bridges,.course-route-picker,.course-node-requires,.lesson-topline,.return-to-lesson'))return false;
   if(el.closest('figure')!==null&&!el.matches('figure'))return false;
   if(el.closest('.scene-stage')!==null&&!el.matches('.scene-stage'))return false;
@@ -29,7 +30,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  let heading=document.querySelector('h1')?.textContent||id,sectionHeading=heading;
  const segments=[];
  for(const el of candidates){
-  const kind=el.matches('figure')?'figure':el.matches('.scene-stage,.visual-lesson')?'visualization':el.matches('.equation,.equation-piece')?'equation':el.matches('table')?'table':/^H[1-4]$/.test(el.tagName)?'heading':'text';
+  const kind=el.matches('figure')?'figure':el.matches('.scene-stage,'+experienceSelector)?'visualization':el.matches('.equation,.equation-piece')?'equation':el.matches('table')?'table':/^H[1-4]$/.test(el.tagName)?'heading':'text';
   const lesson=el.closest('[data-lesson]');
   if(kind==='heading'){heading=source(el);if(!lesson)sectionHeading=heading;}
   else if(!lesson)heading=sectionHeading;
@@ -44,6 +45,7 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   }
   if(kind==='visualization'&&spec){text=`${spec.title}. ${spec.deck} ${spec.note}`;description=text;latex.length=0;latex.push(spec.equation);}
   if(el.matches('.visual-lesson')){const lesson=lessons.find(l=>l.id===el.dataset.lessonId);text=lesson.title+'. '+lesson.question+' '+lesson.takeaway;description=text;el.id='visual-'+lesson.id;}
+  if(el.matches('.geometry-experience,.curvature-experience')){text=el.dataset.narrationSource||el.querySelector('.narration-script')?.textContent||text;description=text;latex.length=0;latex.push(...[...text.matchAll(/\$([^$]+)\$/g)].map(m=>m[1]));}
   if(!text&&!latex.length)continue;
   const anchor=el.id||`passage-${segments.length+1}`;el.id=anchor;el.dataset.passage=String(segments.length);
   const hash=createHash('sha256').update(text+latex.join(' ')).digest('hex').slice(0,16);
@@ -52,6 +54,10 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
   const panel=el.closest('.lesson-panel');if(panel)entry.depth=panel.dataset.depth;
   if(lesson)entry.lesson=lesson.dataset.lesson;
   if(el.closest('[data-no-narration]'))entry.noNarration=true;
+  // The visual narrator already explains its equation and model limitations.
+  // Keep these exact sources available for explicit requests, but do not repeat
+  // them immediately after the same scene during continuous chapter playback.
+  if(el.closest('.scene-equation,.scene-note,.scene-explanation')){entry.noNarration=true;el.setAttribute('data-no-narration','');}
   if(el.matches('.visual-lesson'))entry.narration=text;
   const diagram=kind==='visualization'&&el.querySelector('.scene-diagram figure');
   if(diagram){
@@ -83,7 +89,8 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  bookMap.push({id,title:entry.title,summary:document.querySelector('.chapter-deck')?.textContent||segments.find(s=>s.kind==='text')?.text.slice(0,220)||'',outline});
  catalog.push({id,title:entry.title,segments:segments.map(({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration})=>({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration}))});
  document.querySelectorAll('script[src]').forEach(s=>{if(!s.src.includes('katex'))s.remove()});
- const assets={reading:fs.readdirSync('site').find(f=>/^app-[\da-f]+\.js$/.test(f)),scenes:fs.readdirSync('site').find(f=>/^scenes-[\da-f]+\.js$/.test(f)),course:fs.readdirSync('site').find(f=>/^course-[\da-f]+\.js$/.test(f)),visualLessons:fs.readdirSync('site').find(f=>/^visual-lessons-[\da-f]+\.js$/.test(f))};
+ const entryNames={reading:'app',scenes:'scenes',course:'course',visualLessons:'visual-lessons',geometryExperiences:'geometry-experiences',curvatureExperiences:'curvature-experiences'};
+ const assets=Object.fromEntries(Object.entries(entryNames).map(([key,name])=>[key,fs.readdirSync('site').find(f=>new RegExp(`^${name}-[\\da-f]+\\.js$`).test(f))]));
  const wrapper=document.createElement('div');wrapper.id='book-shell';
  while(document.body.firstChild)wrapper.append(document.body.firstChild);
  document.body.append(wrapper);

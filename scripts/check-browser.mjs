@@ -27,6 +27,8 @@ try{
    }
    assert.ok(result.scroll<=result.width+1,`${file} overflows at ${width}: ${result.scroll}`);
    assert.deepEqual(result.brokenImages,[],`${file} images`);assert.equal(result.mathErrors,0);
+   const tableSizes=await page.locator('.table-wrap').evaluateAll(tables=>tables.map(table=>({text:parseFloat(getComputedStyle(table).fontSize),math:[...table.querySelectorAll('td>.katex,td .katex')].map(el=>parseFloat(getComputedStyle(el).fontSize))})));
+   for(const table of tableSizes){assert.ok(table.text>=15,`${file}: readable table prose`);assert.ok(table.math.every(size=>size>=18),`${file}: readable table mathematics`);}
    checks.push({file,width,...result});
    if(['index.html','chapter-0.html','chapter-8.html','chapter-11.html','chapter-14.html','chapter-16.html','chapter-22.html'].includes(file))await page.screenshot({path:`qa/${file.replace('.html','')}-${width}.png`});
   }

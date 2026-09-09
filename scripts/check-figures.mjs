@@ -15,7 +15,7 @@ try{
   await page.evaluate(async base=>{const style=document.createElementNS('http://www.w3.org/2000/svg','style');style.textContent=`@font-face{font-family:Manrope;src:url('${base}assets/fonts/manrope-latin-wght-normal.woff2');font-weight:200 800}`;document.documentElement.append(style);await document.fonts.load('20px Manrope');await document.fonts.ready},process.env.BOOK_URL||'http://localhost:4173/');
   const result=await page.evaluate(()=>{
    const W=innerWidth,H=innerHeight;
-   const textElements=[...document.querySelectorAll('text,svg.figure-math')].filter(e=>e.textContent||e.hasAttribute('data-tex'));
+   const textElements=[...document.querySelectorAll('text,svg.figure-math')].filter(e=>e.getClientRects().length&&(e.textContent||e.hasAttribute('data-tex')));
    const text=textElements.map(e=>{const r=e.getBoundingClientRect();return {text:e.getAttribute('data-tex')||e.textContent,x:r.x,y:r.y,w:r.width,h:r.height}});
    const clipped=text.filter(t=>t.x<-.5||t.x+t.w>W+.5||t.y<-.5||t.y+t.h>H+.5);
    const overlaps=[];
@@ -27,7 +27,7 @@ try{
    // Sample rendered stroke centerlines in screen coordinates, excluding TeX
    // glyph outlines and marker definitions. Filled regions may contain labels;
    // their boundary strokes still need to stay clear of the lettering.
-   const shapes=[...document.querySelectorAll('path,line,polyline,polygon,circle,ellipse,rect')].filter(e=>!e.closest('defs,svg.figure-math'));
+   const shapes=[...document.querySelectorAll('path,line,polyline,polygon,circle,ellipse,rect')].filter(e=>e.getClientRects().length&&!e.closest('defs,svg.figure-math'));
    const strokes=shapes.filter(e=>getComputedStyle(e).stroke!=='none'&&+getComputedStyle(e).strokeOpacity>0);
    const lineOverlaps=[];
    for(const e of strokes){
