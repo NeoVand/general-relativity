@@ -49,6 +49,7 @@ const guides=JSON.parse(fs.readFileSync('content/guides.json','utf8'));
 // Titles can improve without breaking saved section links or lesson references.
 const sectionIds=JSON.parse(fs.readFileSync('content/section-ids.json','utf8'));
 let manuscript=fs.readFileSync('book.md','utf8');
+if(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]|\r(?!\n)/.test(manuscript))throw new Error('The manuscript contains an unexpected control character; check escaped mathematical commands.');
 manuscript=manuscript.replace(/<a id="[^"]+"><\/a>/g,'');
 const sections=manuscript.split(/^## /m);
 const pages=sections.slice(1).filter(s=>/^\d+\.|^Appendix /.test(s)).map(s=>{
@@ -79,7 +80,7 @@ function render(source,page){
  const headings=[];
  html=html.replace(/<h([234])>([\s\S]*?)<\/h\1>/g,(_,level,inner)=>{
   const plain=inner.replace(/<[^>]*>/g,'').replace(/&[^;]+;/g,' ').trim();
-  let id=(level==='3'&&sectionIds[plain.match(/^(\d+\.\d+)\s/)?.[1]])||slug(plain);const count=used.get(id)||0;used.set(id,count+1);if(count)id+=`-${count}`;
+  let id=(level==='3'&&sectionIds[plain.match(/^((?:\d+|[A-Z])\.\d+)\s/)?.[1]])||slug(plain);const count=used.get(id)||0;used.set(id,count+1);if(count)id+=`-${count}`;
   if(level==='3'||page.id==='reading-guide')headings.push({id,label:plain});
   return `<h${level} id="${id}">${inner}<a class="heading-link" href="#${id}" aria-label="Link to this section">#</a></h${level}>`;
  });

@@ -44,7 +44,7 @@ export const corePractice=[
 },
 {
  id:'contract-curvature-by-hand',chapter:9,after:'9.1 What a curvature trace leaves out',title:'A trace loses information you can name',question:'Can you exhibit nonzero curvature whose entire Ricci tensor vanishes?',
- intuition:s`A trace is a particular sum, and positive and negative contributions can cancel. To see what it forgets, work with a small supplied curvature table rather than a verbal slogan. Use an orthonormal frame with signature $(-+++)$.`,
+ intuition:s`A trace is a particular sum, and positive and negative contributions can cancel. To see what it forgets, work with a small supplied curvature table and calculate its contractions. Use an orthonormal frame with signature $(-+++)$.`,
  steps:[
  step('Supply six independent sectional entries',s`Let the only independent nonzero entries be $R_{0101}=A$, $R_{0202}=B$, $R_{0303}=C$, $R_{1212}=D$, $R_{1313}=E$, and $R_{2323}=F$. Generate their partners using pair antisymmetry and pair exchange. Each listed index pair couples only to itself; the four-distinct-index entries in the algebraic Bianchi identity are all zero.`,s`R_{ab}=\eta^{cd}R_{cadb}.`, 'The inverse metric contributes a minus sign when the contracted index is temporal.'),
  step('Perform the contraction',s`For example $R_{11}=-R_{0101}+R_{2121}+R_{3131}=-A+D+E$. Applying the same rule to the other diagonal entries gives the whole Ricci tensor for this table. Off-diagonal entries vanish.`,s`R_{00}=A+B+C,\quad R_{11}=-A+D+E,\quad R_{22}=-B+D+F,\quad R_{33}=-C+E+F.`, 'Pair antisymmetry is used twice for entries such as R₂₁₂₁, leaving the original sign.'),
@@ -80,7 +80,7 @@ export const corePractice=[
 },
 {
  id:'symmetry-earns-a-charge',chapter:15,after:"15.2 Symmetry and local conservation",title:'Earn a conserved quantity from a symmetry',question:'What must stay unchanged before you are allowed to claim a conservation law?',
- intuition:s`A symmetry changes a description or configuration in a way that leaves the relevant physical action unchanged, with suitable boundary conditions. Start with one particle and one continuous translation. The cancellation is short enough to follow without treating Noether’s theorem as a slogan.`,
+ intuition:s`A symmetry changes a description or configuration in a way that leaves the relevant physical action unchanged, with suitable boundary conditions. Start with one particle and one continuous translation. The cancellation will show which quantity stays constant.`,
  steps:[
  step('Translate a free direction',s`For $L=m(\dot x^2+\dot y^2)/2-U(y)$, a constant shift $x\to x+\epsilon$ changes neither the velocities nor the potential. The x Euler–Lagrange equation is therefore $d(\partial L/\partial\dot x)/dt=0$.`,s`p_x=m\dot x=\text{constant}.`, 'The missing coordinate dependence expresses a translation symmetry.'),
  step('Check time translation separately',s`For a general particle Lagrangian, define $E=\dot q^i(\partial L/\partial\dot q^i)-L$. Differentiate with the product rule and substitute the Euler–Lagrange equations. The remaining term is $-\partial L/\partial t$.`,s`\frac{dE}{dt}=-\frac{\partial L}{\partial t}.`, 'An explicitly time-dependent external apparatus can exchange energy with the chosen particle system.'),

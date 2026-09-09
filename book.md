@@ -26,7 +26,7 @@ For the applications route, the opening action argument in §15.2 may be read as
 
 Do some exercises while the corresponding ideas are fresh rather than saving all of Appendix A for the end. After Chapter 2, try A.1; after Chapter 4, A.2; after Chapter 7, A.4 and A.6; after Chapter 10, A.9. Each problem asks you to use an operation, which is a stronger check than recognizing its finished formula.
 
-**Analogies are scaffolding.** A good analogy reveals a relationship. It does not provide a license to import every feature of the familiar object. When we use a rubber sheet, an accountant, a map, a neighboring laboratory, or a rotating compass, we will say where the comparison breaks.
+**Analogies are scaffolding.** A good analogy reveals a relationship. It does not provide a license to import every feature of the familiar object. A map can help distinguish a coordinate choice from the place being described; a rotating compass can help explain changing components. Each comparison has limits that the calculation must make clear.
 
 **“Derive” has several meanings.** We can derive a consequence from assumptions, derive an equation from a chosen action, or motivate why that action is a good low-energy model. These are different accomplishments. General relativity is not forced on us by pure logic or by the equivalence principle alone. Its assumptions must meet experiment.
 
@@ -37,7 +37,7 @@ Do some exercises while the corresponding ideas are fresh rather than saving all
 
 ### Conventions used in later chapters
 
-Different excellent books use different signs. A disagreement in notation need not be a disagreement about nature. This book keeps the following treaty throughout.
+Books differ in their sign and unit conventions. Compare those choices before comparing component formulas. This book uses the following conventions.
 
 | Symbol or convention | Meaning |
 |---|---|
@@ -94,7 +94,7 @@ $$
 
 The action is called **Einstein–Hilbert**, after Einstein and David Hilbert. The determinant, inverse-metric variation, boundary terms, and factors of $c$ will all get their own explanations.
 
-A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\theta^2$, $g_{\theta\theta}=r^2$ has dimensions of length squared. It is the whole line element that must have the correct units, not every coordinate component separately.
+Coordinate units: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\theta^2$, $g_{\theta\theta}=r^2$ has dimensions of length squared. It is the whole line element that must have the correct units, not every coordinate component separately.
 
 
 </details>
@@ -107,25 +107,25 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 - [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
 - [4. Spacetime as a manifold: maps, rulers, and the geometry beneath them](#chapter-4)
 - [5. Free fall, the equivalence principle, and the worldline action](#chapter-5)
-- [6. Differentiation when your measuring axes will not sit still](#chapter-6)
+- [6. Differentiation in a changing basis](#chapter-6)
 - [7. The connection: how neighboring laboratories compare directions](#chapter-7)
-- [8. Curvature: what remains after the coordinate excuses run out](#chapter-8)
+- [8. Curvature and transport around a loop](#chapter-8)
 - [9. Ricci, Weyl, and Einstein: different questions asked of curvature](#chapter-9)
 - [10. Tides: how to measure curvature without seeing spacetime from outside](#chapter-10)
-- [11. Energy, momentum, and stress: what gravity listens to](#chapter-11)
-- [12. Einstein's equation: every symbol earns its place](#chapter-12)
-- [13. Variational calculus: learning to ask a whole history a question](#chapter-13)
-- [14. The Einstein–Hilbert action, taken apart completely](#chapter-14)
-- [15. Symmetry, conservation, vacuum energy, and the limits of slogans](#chapter-15)
+- [11. Energy, momentum, and stress](#chapter-11)
+- [12. Einstein's field equation](#chapter-12)
+- [13. Variational calculus for paths and fields](#chapter-13)
+- [14. Deriving Einstein’s equation from an action](#chapter-14)
+- [15. Symmetry, conservation, and vacuum energy](#chapter-15)
 - [16. Turning geometry into experiments: clocks, light, and Mercury](#chapter-16)
-- [17. Black holes: when the causal structure becomes the main character](#chapter-17)
-- [18. Gravitational waves: curvature can carry a message](#chapter-18)
+- [17. Black holes: horizons, falling clocks, and orbits](#chapter-17)
+- [18. Gravitational waves: from moving masses to a detector](#chapter-18)
 - [19. Cosmology: Einstein's equation for the large-scale universe](#chapter-19)
-- [20. Making spacetime run: initial data, constraints, and numerical relativity](#chapter-20)
-- [21. A local laboratory at every point: tetrads, forms, and the gauge viewpoint](#chapter-21)
-- [22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics](#chapter-22)
-- [23. Einstein's equation as a low-energy masterpiece: effective theory and the frontier](#chapter-23)
-- [24. Bringing the whole machine together](#chapter-24)
+- [20. Initial data, constraints, and numerical relativity](#chapter-20)
+- [21. Local laboratory frames and differential forms](#chapter-21)
+- [22. Focusing, singularities, and black-hole thermodynamics](#chapter-22)
+- [23. Gravity as an effective theory and its open questions](#chapter-23)
+- [24. Calculating and interpreting a spacetime](#chapter-24)
 - [Appendix A. Thirty exercises that turn recognition into understanding](#appendix-a)
 - [Appendix B. A working reference sheet](#appendix-b)
 - [Appendix C. A plain-language glossary](#appendix-c)
@@ -1457,7 +1457,7 @@ V^\mu=(V^0,V^1,V^2,V^3)
 V_\mu=(-V^0,V^1,V^2,V^3).
 $$
 
-For example, $u_0=-\gamma c$ while $u^0=\gamma c$. This minus sign is responsible for many apparently mysterious signs in energy formulas.
+For example, $u_0=-\gamma c$ while $u^0=\gamma c$. Lowering the time index accounts for the minus sign in the energy contraction below.
 
 The gradient distinction from Chapter 2 now resolves:
 
@@ -3663,7 +3663,7 @@ T^{\mu\nu}=(\epsilon+p)\frac{u^\mu u^\nu}{c^2}
 }
 $$
 
-This derivation explains the apparently mysterious $\epsilon+p$. Pressure initially entered as a purely spatial stress. Expressing “spatial” covariantly requires a projector containing $u^\mu u^\nu$, so pressure also joins the coefficient of the velocity term.
+The combination $\epsilon+p$ follows from the observer’s spatial projector. Pressure initially entered as a purely spatial stress. Expressing “spatial” covariantly requires a projector containing $u^\mu u^\nu$, so pressure also joins the coefficient of the velocity term.
 
 For an observer moving at relative speed $v$ with respect to the fluid,
 
@@ -6281,7 +6281,7 @@ $$
 
 Multiplying by the sphere's solid angle $4\pi$ produces $8\pi S/5$. That cancels the flux prefactor's $8\pi$ and leaves precisely $G_N/(5c^5)$. The time average and the angular average serve different purposes; their labels keep those operations distinct.
 
-The $c^{-5}$ makes ordinary laboratory gravitational radiation staggeringly weak. Large masses, rapid asymmetric motion, and compact configurations help overcome that suppression.
+The $c^{-5}$ suppression makes ordinary laboratory gravitational radiation extremely weak. Large masses, rapid asymmetric motion, and compact configurations help overcome that suppression.
 
 For compact bodies, the leading quadrupole law can describe their slow orbital dynamics even when gravity inside each body is strong; its derivation must then be embedded in a consistent approximation for the effective orbital source. It is not a demand that each black hole itself be a weak-field object.
 
@@ -7420,7 +7420,7 @@ The plane has $K=0$ despite a nonzero connection in this polar coframe. The sphe
 
 <a id="chapter-22"></a>
 
-## 22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics
+## 22. Focusing, singularities, and black-hole thermodynamics
 
 ### 22.1 From one falling observer to a cloud of them
 
@@ -7476,7 +7476,7 @@ $$
 
 In a transported rest frame, this is “separation velocity equals $B$ times separation.” Differentiating again and using the geodesic-deviation equation gives a matrix evolution law with a term $-B^2$ and a curvature term. Raychaudhuri's equation is its trace.
 
-### 22.2 Deriving the Raychaudhuri equation, one logical move at a time
+### 22.2 Deriving the Raychaudhuri equation
 
 Start with the expansion and differentiate along the flow:
 
@@ -7524,7 +7524,7 @@ $$
 
 For a normalized accelerated congruence, add $+\nabla_\mu a^\mu$ to this expression, with the same projected definitions. Rockets can alter the cloud's behavior; geodesic focusing theorems do not silently include thrust.
 
-Every term has a story:
+The terms describe distinct contributions:
 
 - $-\theta^2/3$: convergence can reinforce itself even without curvature.
 - $-\sigma^2$: stretching along some directions can accelerate volume focusing.
@@ -7535,7 +7535,9 @@ The Weyl tensor is absent from the explicit last term, but it can generate shear
 
 ### 22.3 How an inequality becomes a finite-time prediction
 
-Suppose the congruence is geodesic and hypersurface-orthogonal, so $\omega_{\mu\nu}=0$. The equivalence between vanishing twist and local orthogonality to hypersurfaces is an application of the Frobenius integrability theorem. It is a condition on the flow, not a claim that every family of geodesics has zero vorticity.
+Suppose the geodesics are orthogonal to a family of spacelike slices. Locally their covector is then $u_\mu=-N\partial_\mu t$, where $t$ labels the slices and $N$ normalizes $u$. Antisymmetrizing its derivative cancels the second derivatives of $t$. The terms left contain a factor $\partial_\mu t$; projecting both indices into a slice removes them. Thus $\omega_{\mu\nu}=0$ for this flow.
+
+The converse local statement, that zero twist allows such orthogonal slices, is the codimension-one Frobenius integrability theorem. The focusing calculation below needs only the forward implication just checked.
 
 Also suppose the **timelike convergence condition** holds:
 
@@ -7559,9 +7561,15 @@ If the geodesics extend through the required interval, this inequality forces th
 
 **This is not yet a spacetime singularity.** Aim a family of straight worldlines at the same event in Minkowski spacetime. Their congruence focuses; each worldline continues perfectly well. What breaks is the single-valued smooth velocity field used to describe that overlapping family.
 
-The jump from a local focusing theorem to a global singularity theorem requires additional causal and topological arguments. Skipping that jump is like proving that two highways intersect and declaring that the Earth ends there.
+The volume also makes the focusing bound explicit. Put $v=(\mathcal V/\mathcal V_0)^{1/3}$, with $v(0)=1$. While the congruence is regular,
 
-### 22.4 Energy conditions are assumptions with jobs to do
+$$
+\frac{v''}{v}=\frac{\dot\theta}{3}+\frac{\theta^2}{9}\le0.
+$$
+
+Its initial slope is $v'(0)=\theta_0/3<0$. Since that slope cannot increase, $v(\tau)\le1+\theta_0\tau/3$. A positive smooth volume therefore cannot persist beyond $3/|\theta_0|$. This establishes focusing if the geodesics extend that far; inferring spacetime incompleteness still requires the additional global argument in a singularity theorem.
+
+### 22.4 Energy conditions and focusing
 
 Einstein's equation converts curvature conditions into matter conditions, but it does not itself require ordinary matter to satisfy those conditions. They are additional hypotheses.
 
@@ -7573,6 +7581,16 @@ For a perfect fluid, useful pointwise conditions are:
 | Weak energy condition, WEC | Every timelike observer measures nonnegative local energy density | $\epsilon\ge0$, $\epsilon+p\ge0$ |
 | Dominant energy condition, DEC | Energy density is nonnegative and its flux is causal | $\epsilon\ge\lvert p\rvert$ |
 | Strong energy condition, SEC | $(T_{\mu\nu}-\tfrac12Tg_{\mu\nu})v^\mu v^\nu\ge0$ for all timelike $v$ | $\epsilon+p\ge0$, $\epsilon+3p\ge0$ |
+
+To verify the fluid inequalities, use its orthonormal rest frame and a unit timelike observer $v^{\hat\mu}=\gamma(1,\boldsymbol\beta)$, with $|\boldsymbol\beta|<1$. The measured density is
+
+$$
+T_{\mu\nu}v^\mu v^\nu=(\epsilon+p)\gamma^2-p.
+$$
+
+At rest this is $\epsilon$; as $\gamma$ becomes large its sign is controlled by $\epsilon+p$. Nonnegativity for every observer therefore requires both WEC inequalities. A null vector has the form $k^{\hat\mu}=q(1,\mathbf n)$ with $|\mathbf n|=1$, giving $T_{\mu\nu}k^\mu k^\nu=q^2(\epsilon+p)$ and the NEC.
+
+For the SEC, add $T/2=(-\epsilon+3p)/2$ to the timelike contraction. Its value at rest is $(\epsilon+3p)/2$ and its large-$\gamma$ coefficient is again $\epsilon+p$. For the DEC, the energy-flux vector seen by $v$ is $J^{\hat\mu}=-T^{\hat\mu}{}_{\hat\nu}v^{\hat\nu}=(\gamma\epsilon,-\gamma p\boldsymbol\beta)$. Requiring it to be future causal for every $|\boldsymbol\beta|<1$ gives $\epsilon\ge0$ and $\epsilon^2\ge p^2$, or $\epsilon\ge|p|$.
 
 For $\Lambda=0$, the SEC implies timelike convergence. If $\Lambda$ remains on the geometric side, however,
 
@@ -7589,7 +7607,15 @@ Classical scalar potentials can violate the SEC, and quantum fields can violate 
 
 ### 22.5 Trapped surfaces and what Penrose actually proved
 
-For an affinely parametrized null geodesic congruence, the transverse screen has two dimensions. Its Raychaudhuri equation has the corresponding coefficient:
+A null ray has no unit rest frame: its tangent $k$ is perpendicular to itself. To isolate the two transverse directions, choose another null vector $l$ with $k\cdot l=-1$ and define
+
+$$
+q_{\mu\nu}=g_{\mu\nu}+k_\mu l_\nu+l_\mu k_\nu.
+$$
+
+This tensor removes both $k$ and $l$ components and supplies a positive metric on the remaining two-dimensional **screen**. Project the separation-velocity map onto that screen and split it into trace, shear, and twist as before. The trace is now an area-growth rate, so the trace part of the two-dimensional map is $\theta q_{\mu\nu}/2$.
+
+For affinely parametrized geodesic rays, taking the trace of the same evolution calculation gives
 
 $$
 \frac{d\theta}{d\lambda}
@@ -7600,7 +7626,7 @@ $$
 
 The shear and twist here live on the positive-definite two-dimensional screen transverse to the rays. An affine parameter is essential; a nonaffine parameter introduces an additional term proportional to $\theta$.
 
-Take a closed spacelike two-surface and send future light rays orthogonally away from it in both null-normal directions. For an ordinary sphere in flat space, the outward bundle grows in area and the inward bundle shrinks. A **future trapped surface** has negative expansion in both directions. Even the outward-directed light bundle initially loses cross-sectional area.
+Take a compact spacelike two-surface without a boundary, such as a sphere, and send future light rays orthogonally away from it in both null-normal directions. For an ordinary sphere in flat space, the outward bundle grows in area and the inward bundle shrinks. A **future trapped surface** has negative expansion in both directions. Even the outward-directed light bundle initially loses cross-sectional area.
 
 This is a local geometric condition on the surface and its null normals. It does not say that a photon locally travels more slowly than light, nor does it require a coordinate speed to become negative.
 
@@ -7610,7 +7636,7 @@ One standard form of Penrose's theorem says that a sufficiently regular spacetim
 
 Even incompleteness must be interpreted carefully: deleting one point from otherwise regular Minkowski spacetime creates incomplete geodesics artificially. One must consider extendibility and which spacetime has actually been specified. Conversely, a coordinate singularity that disappears in a larger smooth chart is not evidence that physics has ended.
 
-The genuinely unsettling message is that broad geometric conditions can force classical evolution to confront an endpoint without our being able to remove it by assuming that realistic matter is a little less symmetric.
+The theorem applies without assuming a spherical source. Its conclusion is incompleteness under the stated global and convergence conditions, even when the matter distribution is less symmetric than the examples solved earlier.
 
 ### 22.6 Horizons are about causal access; predictability needs another definition
 
@@ -7695,9 +7721,9 @@ S_{\mathrm{BH}}=\frac{4\pi k_BG_NM^2}{\hbar c}
 \ell_P=\sqrt{\frac{\hbar G_N}{c^3}}.
 $$
 
-Entropy proportional to area is startling because ordinary extensive systems usually organize entropy by volume. This result says the gravitational problem has a different information accounting. It does not, by itself, prove that spacetime is made from literal square pixels.
+For ordinary extensive matter at fixed local conditions, doubling volume doubles entropy. Here the entropy scales with horizon area: doubling the Schwarzschild mass multiplies both area and entropy by four. The formula determines that scaling without specifying microscopic constituents of the horizon.
 
-Since $T_H\propto M^{-1}$, a Schwarzschild black hole becomes hotter as it loses mass. Its heat capacity is negative. Ordinary canonical-ensemble intuition—put it in a bath and expect a stable equilibrium—therefore needs caution.
+Since $T_H\propto M^{-1}$, a Schwarzschild black hole becomes hotter as it loses mass. Its **heat capacity**, $C=d(Mc^2)/dT_H=-Mc^2/T_H$, is negative. A slightly hotter hole loses energy to a bath and becomes hotter still, rather than relaxing back by the usual positive-heat-capacity mechanism. Equilibrium therefore requires an analysis of the whole system and its boundary conditions.
 
 The classical horizon-area theorem requires the relevant convergence and global regularity assumptions. Hawking evaporation does not contradict it: the quantum stress tensor need not satisfy the classical energy hypothesis, and the horizon area can decrease. The thermodynamic quantity then involves generalized entropy,
 
@@ -7705,9 +7731,7 @@ $$
 S_{\mathrm{gen}}=\frac{k_BA}{4\ell_P^2}+S_{\mathrm{outside}},
 $$
 
-with the quantum-field entropy and gravitational parameters treated consistently under renormalization. The generalized second law has substantial support and proofs in specified settings; it should not be promoted without qualifications to a theorem covering every unknown quantum-gravitational process.
-
-Curvature, causality, quantum theory, and entropy now meet in one calculation. That intersection is a clue about the depth of gravity, even though it is not yet a finished microscopic explanation.
+with the quantum-field entropy and gravitational parameters treated consistently under **renormalization**. This means that when short-distance field contributions are regulated, the theory’s parameters must be adjusted consistently so the physical prediction does not depend on the arbitrary regulator. Chapter 23 develops that distinction between a regulated intermediate expression and a prediction. The generalized second law has substantial support and proofs in specified settings; it should not be promoted without qualifications to a theorem covering every unknown quantum-gravitational process.
 
 ### 22.9 Classical area increase, with the assumptions visible
 
@@ -7735,9 +7759,28 @@ $$
 d(Mc^2)=\frac{\kappa_{\rm sg}c^2}{8\pi G_N}\,dA+\Omega_H\,dJ.
 $$
 
-Here $\kappa_{\rm sg}$ is surface gravity with acceleration units, $\Omega_H$ is horizon angular velocity, and $J$ is angular momentum. With $T_H=\hbar\kappa_{\rm sg}/(2\pi c k_B)$ and $S_{\rm BH}=k_BAc^3/(4\hbar G_N)$, the area term equals $T_HdS_{\rm BH}$. Surface gravity is constant on an equilibrium horizon under the zeroth law's assumptions. The classical second law is area increase; quantum evaporation calls for generalized entropy instead. The various third-law formulations need additional qualifications and are not needed for this derivation. [Wald's account of the laws and their assumptions](https://arxiv.org/abs/gr-qc/9912119).
+Here $\kappa_{\rm sg}$ is **surface gravity** with acceleration units, $\Omega_H$ is horizon angular velocity, and $J$ is angular momentum. For Schwarzschild, surface gravity is the limiting hovering acceleration after correcting by its redshift factor:
 
-### 22.10 The information question, without assuming quantum mechanics
+$$
+\kappa_{\rm sg}=\lim_{r\to r_s^+}N(r)a_{\rm proper}(r)
+=\frac{G_NM}{r_s^2}=\frac{c^2}{2r_s}.
+$$
+
+The local hovering acceleration diverges; this redshifted limit remains finite and uses the clock normalization at infinity.
+
+For the nonextremal Kerr family, $|a_K|<m$, the corresponding quantities are
+
+$$
+\begin{aligned}
+A&=4\pi(r_+^2+a_K^2),\\
+\Omega_H&=\frac{ca_K}{r_+^2+a_K^2},\\
+\kappa_{\rm sg}&=\frac{c^2(r_+-r_-)}{2(r_+^2+a_K^2)}.
+\end{aligned}
+$$
+
+These formulas use the horizon radii defined in Section 17.7. The area follows by integrating the horizon cross-section: $\sqrt{g_{\theta\theta}g_{\phi\phi}}=(r_+^2+a_K^2)\sin\theta$. The angular velocity is the horizon limit of $-g_{t\phi}/g_{\phi\phi}$. To check the first law within this family, differentiate $r_+^2-2mr_++a_K^2=0$, obtaining $(r_+-m)dr_+=r_+dm-a_Kda_K$. Substitute that relation into $dA$, with $M=c^2m/G_N$ and $J=c^3ma_K/G_N$. The two terms on the right reduce to $c^4dm/G_N=d(Mc^2)$. This family calculation verifies the coefficients; the general horizon mechanics law has broader hypotheses. With $T_H=\hbar\kappa_{\rm sg}/(2\pi c k_B)$ and $S_{\rm BH}=k_BAc^3/(4\hbar G_N)$, the area term equals $T_HdS_{\rm BH}$. Surface gravity is constant on an equilibrium horizon under the zeroth law's assumptions. The classical second law is area increase; quantum evaporation calls for generalized entropy instead. The various third-law formulations need additional qualifications and are not needed for this derivation. [Wald's account of the laws and their assumptions](https://arxiv.org/abs/gr-qc/9912119).
+
+### 22.10 The black-hole information question
 
 Classical uncertainty means we do not know which state a system has. Quantum theory also has **entanglement**: two subsystems can have a definite joint state even when neither has a definite pure state on its own. A **pure state** describes the complete quantum state; a **mixed state** describes uncertainty or the reduced description of a subsystem. **Unitary evolution** is the reversible state evolution of an isolated quantum system in ordinary quantum mechanics. These definitions are enough to state the puzzle, though not to reproduce a quantum-field calculation.
 
@@ -7745,17 +7788,17 @@ In the leading semiclassical account of a collapsing black hole, outgoing radiat
 
 The tension appears when we combine several claims: a pure initial state, complete evaporation with no remaining hidden system, a final radiation state with irretrievably lost correlations, and unitary evolution of the entire isolated process. Those claims cannot all hold. The classical no-hair description of a stationary exterior is not, by itself, a proof that a quantum state has no microscopic information.
 
-The entropy of radiation expected in a unitary evaporation rises while the radiation is entangled with the remaining hole, then eventually falls to zero if all that remains is the final pure radiation state. This qualitative rise-and-fall behavior is called the **Page curve**. Modern gravitational entropy calculations reproduce such curves in specified models using additional saddle points and so-called islands. They are significant theoretical results, not direct observations of astrophysical evaporation or a fully settled microscopic description of every black hole. [Almheiri and collaborators' review](https://arxiv.org/abs/2006.06872).
+The entropy of radiation expected in a unitary evaporation rises while the radiation is entangled with the remaining hole, then eventually falls to zero if all that remains is the final pure radiation state. This qualitative rise-and-fall behavior is called the **Page curve**. In specified semiclassical models, calculations of radiation entropy include an **island**: an interior region whose field correlations contribute to the entropy assigned to the radiation. The calculation varies candidate island boundaries to make the generalized entropy stationary and selects the smallest admissible value. The no-island candidate can dominate early and an island candidate later, producing a Page-shaped curve. The underlying gravitational integral sums over candidate field and geometry histories weighted by their action. Its stationary contributions are called **saddle points**; additional contributions of this kind produce the island prescription in these models. These results concern specified quantum-gravitational calculations; they do not constitute direct measurements of astrophysical evaporation or a microscopic account valid for every black hole. [Almheiri and collaborators' review](https://arxiv.org/abs/2006.06872).
 
 The boundary of the book is visible here. The classical Einstein equation alone cannot decide how quantum information is recovered. It supplies the geometry in which the question becomes sharp.
 
 <a id="chapter-23"></a>
 
-## 23. Einstein's equation as a low-energy masterpiece: effective theory and the frontier
+## 23. Gravity as an effective theory and its open questions
 
 ### 23.1 A theory can be incomplete without being unreliable
 
-The phrase “we need quantum gravity” can create the impression that quantum mechanics and GR cannot be used together at all. That impression is false. There is a systematic, predictive framework for quantum gravitational effects at sufficiently low energies: **effective field theory**, or EFT.
+A laboratory measurement has a finite resolution. At wavelengths much longer than an unknown microscopic scale, we can organize possible gravitational corrections by how small they are at that resolution. This is the **effective field theory (EFT)** approach to quantum gravity.
 
 An effective theory describes the degrees of freedom accessible at a chosen resolution. It represents unresolved shorter-distance physics through coefficients multiplying allowed local interactions. It does not require us to know every microscopic detail before predicting a long-wavelength experiment.
 
@@ -7781,7 +7824,9 @@ $$
 
 This is the geometric series $1/(1-z)=1+z+z^2+\cdots$, now applied to a differential operator. It is useful when the source varies on scales for which the relevant derivatives are small compared with $M_*^2$. At higher frequencies the expansion fails, and the heavy field's independent dynamics must be restored.
 
-This toy response suppresses boundary-condition and propagator details to isolate the derivative expansion. Actual quantum matching also involves loops, symmetries, and the available light fields.
+The inverse operator also needs initial or boundary conditions, just as the Green function did in Chapter 18. The displayed series describes the slowly varying sourced response; it does not include an independently excited fast solution of the homogeneous heavy-field equation.
+
+In a quantum calculation, **matching** means choosing the effective coefficients so that it reproduces the low-energy predictions of a more detailed theory. Perturbative quantum corrections involve integrals over intermediate modes. Some are called **loop corrections**, after the closed loops in diagrams that organize those integrals; they are not literal particle trajectories. Contributions from arbitrarily large momenta may require a regulator. **Renormalization** adjusts the coefficients consistently with that regulator, fixing measured quantities so that predictions to the retained order do not depend on this intermediate choice.
 
 For a generally covariant metric theory, local gravitational interactions must be scalar combinations of curvature and covariant derivatives, integrated with the invariant volume. In these units, define the **reduced Planck mass** by
 
@@ -7802,7 +7847,7 @@ $$
 
 The symbols $\mathcal O_i^{(6)}$ denote local scalar operators of mass dimension six, such as suitable cubic-curvature contractions. $S_{\mathrm{light}}$ contains the light matter fields retained explicitly.
 
-Check every dimension. For this dimensional count, choose length-valued local coordinates and a dimensionless metric. A coordinate then has mass dimension $-1$, a derivative has dimension $+1$, and curvature has dimension $+2$. The measure $d^4x$ has dimension $-4$. Thus $M_{\mathrm{Pl}}^2R$, $R^2$, and $\mathcal O^{(6)}/M_*^2$ all have dimension $+4$, as required for a dimensionless action. The $a_i$ and $b_i$ are dimensionless in this notation. $M_*$ is a heavy-physics or cutoff scale; it need not equal $M_{\mathrm{Pl}}$.
+Here **mass dimension** means the power of mass carried by a quantity’s units when $c=\hbar=1$. Length and time then have inverse-mass units. For the dimensional count, choose length-valued local coordinates and a dimensionless metric. A coordinate then has mass dimension $-1$, a derivative has dimension $+1$, and curvature has dimension $+2$. The measure $d^4x$ has dimension $-4$. Thus $M_{\mathrm{Pl}}^2R$, $R^2$, and $\mathcal O^{(6)}/M_*^2$ all have dimension $+4$, as required for a dimensionless action. The $a_i$ and $b_i$ are dimensionless in this notation. $M_*$ is a heavy-physics or cutoff scale; it need not equal $M_{\mathrm{Pl}}$.
 
 Generic derivative power counting compares curvature-squared terms with the Einstein term at relative order $a_i\mathcal R_*/M_{\mathrm{Pl}}^2$, where $\mathcal R_*$ denotes a characteristic magnitude of curvature components in a physically specified orthonormal frame, with mass dimension two. This estimate organizes possible corrections; specific operators can vanish on particular backgrounds. In four dimensions, constant-coefficient local curvature-squared terms produce no bulk correction when evaluated on a Ricci-flat vacuum solution: variations of $R^2$ and $R_{\mu\nu}R^{\mu\nu}$ vanish there, and the remaining quadratic contraction is related to them by the Gauss–Bonnet combination below. Nonzero Weyl curvature still matters for higher operators and for EFT validity. The actual coefficients determine the suppression scale. “Low energy” is a quantitative hierarchy, not a promise that every coefficient is conveniently small.
 
@@ -7813,9 +7858,11 @@ R_{\mu\nu\rho\sigma}R^{\mu\nu\rho\sigma}
 -4R_{\mu\nu}R^{\mu\nu}+R^2
 $$
 
-does not change local bulk equations under the appropriate variational boundary conditions. Field redefinitions can remove additional redundant operators in specified calculations, sometimes moving their effects into matter interactions. Counting written terms is not the same as counting measurable new parameters.
+does not change local bulk equations under the appropriate variational boundary conditions. A **field redefinition** changes the variables used to describe the same low-energy configurations. For a small local change $g\mapsto g+\delta g$, the action changes at first order by its field equation contracted with $\delta g$, plus boundary terms. Operators proportional to the leading equations can therefore be exchanged for other terms at the corresponding perturbative order. In a coupled theory, this can move contributions into matter interactions; all fields and observables must be transformed consistently. Counting written terms is not the same as counting measurable new parameters.
 
-Massless quantum fields also produce nonlocal contributions, schematically involving expressions such as $R\log(-\Box/\mu^2)R$. They cannot all be hidden in a finite list of local constants: massless particles propagate over long distances. Here $\mu$ is a renormalization scale, with corresponding coefficient dependence arranged so physical predictions do not depend on this arbitrary bookkeeping choice.
+Massless quantum fields also produce nonlocal contributions, schematically involving expressions such as $R\log(-\Box/\mu^2)R$. They cannot all be hidden in a finite list of local constants: massless particles propagate over long distances. Here $\mu$ is an arbitrary reference energy, the **renormalization scale**; its dependence cancels with the corresponding scale dependence of the coefficients in a physical prediction.
+
+The logarithm of an operator can be understood through its modes. In Euclidean coordinates, a mode $e^{i\mathbf k\cdot\mathbf x}$ is an eigenfunction of $-\nabla^2$ with eigenvalue $|\mathbf k|^2$. Acting with $\log(-\nabla^2/\mu^2)$ multiplies that mode by $\log(|\mathbf k|^2/\mu^2)$. This multiplier cannot be represented by a finite polynomial in derivatives. Reassembling the modes produces a response depending on field values across a region, which is the meaning of **nonlocal** here. The Lorentzian expression needs an additional state and boundary prescription.
 
 ### 23.3 Nonrenormalizable does not mean nonpredictive
 
@@ -7823,7 +7870,7 @@ A perturbatively renormalizable theory can absorb ultraviolet divergences into a
 
 EFT asks a different question: **how many parameters contribute at the accuracy of this experiment?** At a fixed order in the low-energy expansion, only finitely many operators contribute. Determine their coefficients by measurement or matching to a more microscopic theory, and the remaining predictions at that order follow.
 
-It resembles approximating a smooth function by a Taylor series. An arbitrary function contains infinitely many coefficients, but a controlled second-order approximation does not require knowing the coefficient of $x^{47}$. The crucial requirement is a valid small expansion parameter and an honest estimate of neglected terms.
+It resembles approximating a smooth function by a Taylor series. An arbitrary function contains infinitely many coefficients, but a controlled second-order approximation does not require knowing the coefficient of $x^{47}$. The crucial requirement is a valid small expansion parameter and an estimate of neglected terms.
 
 Quantum gravitational loop corrections often carry powers of energy divided by the Planck scale, along with loop factors. In a long-distance problem, a characteristic quantum ratio is
 
@@ -7840,9 +7887,9 @@ $$
 
 These are different. Near the horizon of a large black hole, the second can be order unity while the first is tiny. Strong classical gravity is not automatically Planckian quantum gravity. Nor must one expand about flat space to use low-energy reasoning; curved backgrounds can be treated when their physical scales and the quantum state allow a controlled approximation. See [Donoghue's review of quantum GR and its effective-theory limits](https://arxiv.org/abs/2211.09902).
 
-**Higher-derivative trap:** if we truncate an EFT and then solve its higher-derivative equations exactly at arbitrarily high frequency, we may find extra runaway or ghostlike solutions. That extrapolates the truncated expression beyond the expansion that justified it. Consistent EFT calculations treat higher-order corrections perturbatively, using methods such as order reduction or field redefinition where appropriate. An extra physical pole genuinely below the proposed cutoff would require reexamining the field content, not dismissing it by slogan. These distinctions are developed in [Solomon and Trodden's research on higher derivatives in EFT](https://arxiv.org/abs/1709.09695).
+**Using a truncated equation.** if we truncate an EFT and then solve its higher-derivative equations exactly at arbitrarily high frequency, we may find extra exponentially growing solutions, called runaways, or extra modes with the wrong kinetic-energy sign, called ghosts. That extrapolates the truncated expression beyond the expansion that justified it. Consistent EFT calculations treat higher-order corrections perturbatively. For example, **order reduction** substitutes the leading equation into higher-derivative correction terms and retains only the desired perturbative order, rather than treating every new high-frequency solution as an independent physical mode. Suitable field redefinitions can serve a related purpose. An extra physical pole genuinely below the proposed cutoff would require reexamining the field content, not dismissing it by slogan. These distinctions are developed in [Solomon and Trodden's research on higher derivatives in EFT](https://arxiv.org/abs/1709.09695).
 
-### 23.4 The spin-2 route: gravity is forced to notice its own bookkeeping
+### 23.4 Consistent interactions of a spin-2 field
 
 There is another way to approach Einstein's equation. Begin with a free massless spin-2 field $h_{\mu\nu}$ in Minkowski spacetime. Its linear gauge freedom has the form
 
@@ -7865,11 +7912,11 @@ The logic is powerful: a universally interacting massless spin-2 field cannot co
 
 This is not a theorem that any imaginable spin-2 system must equal pure GR at all energies. The argument relies on assumptions including locality, Lorentz-compatible dynamics, appropriate gauge consistency, field content, and the leading derivative structure. Field redefinitions and stress-tensor improvements affect intermediate expressions. Additional fields, higher-derivative terms, nonlocality, or different backgrounds require separate analysis. A Minkowski-background construction also presupposes an appropriate flat-background limit; it does not determine an arbitrary cosmological constant from nothing.
 
-### 23.5 What the uniqueness of Einstein's equation actually says
+### 23.5 The assumptions behind uniqueness
 
-In four dimensions, the Lovelock classification implies that a natural, symmetric, divergence-free rank-two tensor built locally from the metric and at most its second derivatives has the Einstein tensor and metric as the available gravitational ingredients, under the theorem's hypotheses. Consequently, a metric-only second-order field equation of this type takes the Einstein-plus-cosmological form, up to constants. A precise mathematical statement appears in [“Lovelock's theorem revisited”](https://arxiv.org/html/1005.2386v4).
+In four dimensions, the Lovelock classification implies that a natural, symmetric, covariantly divergence-free rank-two tensor built locally from the metric and at most its second derivatives has the Einstein tensor and metric as the available gravitational ingredients, under the theorem's hypotheses. Consequently, a metric-only second-order field equation of this type takes the Einstein-plus-cosmological form, up to constants. A precise mathematical statement appears in [“Lovelock's theorem revisited”](https://arxiv.org/html/1005.2386v4).
 
-The assumptions are the engine of the conclusion. Add another field, permit higher derivatives, change dimension, or change locality, and the conclusion changes. Thus GR's distinguished simplicity and EFT's higher-order corrections are compatible claims. One concerns a restricted class of exact equations; the other organizes small departures when that class is not assumed exact at every scale.
+Here “natural” means that the construction itself respects smooth coordinate changes, rather than depending on extra coordinate choices. The listed assumptions restrict the available tensors. Add another field, permit higher derivatives, change dimension, or change locality, and the conclusion changes. Thus GR's distinguished simplicity and EFT's higher-order corrections are compatible claims. One concerns a restricted class of exact equations; the other organizes small departures when that class is not assumed exact at every scale.
 
 Einstein's equation is remarkably constrained at its leading level. That makes its success intelligible without making the unfinished parts of physics disappear.
 
@@ -7893,7 +7940,9 @@ $$
 
 with the separate terms understood within a consistent renormalization prescription. Only their physical combination is measurable.
 
-Why does quantum theory make the small observed combination surprising? In natural units, a free bosonic field suggests a zero-point contribution
+To understand the zero-point estimate, start with a quantum harmonic oscillator of frequency $\omega$. Its lowest energy is $\hbar\omega/2$, rather than zero. One can see the lower bound from the uncertainty relation $\Delta x\Delta p\ge\hbar/2$: the sum $(\Delta p)^2/(2m)+m\omega^2(\Delta x)^2/2$ is at least $\omega\Delta x\Delta p\ge\hbar\omega/2$. A Gaussian state with $\Delta x=\sqrt{\hbar/(2m\omega)}$ and $\Delta p=\sqrt{\hbar m\omega/2}$ attains the bound. This is additional quantum input, not a classical consequence of Einstein’s equation.
+
+A free bosonic field decomposes into harmonic modes, one oscillator per wave vector. In a large periodic box of volume $V=L^3$, allowed wave-vector components are spaced by $2\pi/L$. Dividing the number of modes by volume gives the measure $d^3k/(2\pi)^3$. In natural units the mode frequency is $\omega_{\mathbf k}=\sqrt{|\mathbf k|^2+m^2}$, from the Klein–Gordon dispersion relation in Chapter 13. Adding their lowest energies suggests
 
 $$
 \epsilon_{\mathrm{zero\ point}}
@@ -7904,7 +7953,7 @@ A large-momentum cutoff $M_*$ makes this grow roughly as $M_*^4$. You can see th
 
 That cutoff estimate is not a unique, covariant prediction of the measured cosmological constant. Renormalization, the regulator, masses, interactions, phase transitions, and the gravitational vacuum parameter all matter. The notorious “roughly 120 orders of magnitude” comparison uses a Planck-scale heuristic; it should not be presented as an exact regulator-independent prediction that an experiment simply refuted. [Jérôme Martin's review of the cosmological constant problem](https://arxiv.org/abs/1205.3365).
 
-Nevertheless, the problem survives the correction to the slogan. In the standard cosmological interpretation, the effective dark-energy density corresponds to an energy scale of only a few millielectronvolts raised to the fourth power. Contributions associated with much higher known particle-physics scales naturally dwarf that. Why does the renormalized combination stay so small when such contributions change? That is a radiative-stability and naturalness question, not merely an unremoved divergent integral.
+Nevertheless, the problem survives the correction to the slogan. In the standard cosmological interpretation, the effective dark-energy density corresponds to an energy scale of only a few millielectronvolts raised to the fourth power. An electronvolt is the energy gained by one elementary charge across one volt, $1\,\mathrm{eV}=1.602176634\times10^{-19}\,\mathrm J$; a millielectronvolt is $10^{-3}$ of that. In natural units energy density has energy-to-the-fourth units. Contributions associated with much higher known particle-physics scales naturally dwarf that. Why does the renormalized combination stay so small when such contributions change? This is the **radiative-stability** question: why does a small measured combination remain small after quantum corrections change its separate contributions? **Naturalness** asks whether that smallness is protected by a mechanism or requires a fine cancellation among much larger terms.
 
 GR permits a small cosmological constant. It does not explain its observed value, and ordinary EFT bookkeeping does not supply the missing explanation by itself.
 
@@ -7923,7 +7972,7 @@ The higher-curvature terms are included because renormalizing quantum matter on 
 
 This approximation is most credible when the relevant curvature and momenta are below its cutoff, the quantum state is suitable, and neglected metric fluctuations or stress fluctuations do not undermine the mean-field description. Small curvature alone is not a universal certificate of validity. Long evolution, delicate quantum correlations, unusual states, or large fluctuations can raise additional issues.
 
-Hawking radiation inhabits this framework. The endpoint of evaporation and the complete accounting of information generally do not follow just by extending the leading approximation until a black hole becomes arbitrarily small. A calculation can advertise the boundary of its own reliability; that is useful scientific information.
+Hawking radiation inhabits this framework. The endpoint of evaporation and the complete accounting of information generally do not follow just by extending the leading approximation until a black hole becomes arbitrarily small. The approximation must be checked as the mass and curvature evolve.
 
 ### 23.8 What experiments test—and what dark matter and dark energy mean
 
@@ -7937,13 +7986,13 @@ An observation does not compare “all of GR” with “all alternatives” in a
 | Gravitational-wave signals | Wave generation, propagation, polarization, and remnant dynamics within a chosen analysis |
 | Cosmological expansion and structure | The joint behavior of gravity, matter content, initial conditions, and large-scale evolution |
 
-For example, the LIGO-Virgo-KAGRA GWTC-5.0 analysis compares waveform residuals, polarizations, generation, and remnant properties and reports no overall evidence for physics beyond GR in those tests. That is a strong set of constrained comparisons, with stated statistical and modeling limits. It is not a proof that every possible modification at every scale has vanished. [LVK's primary GWTC-5.0 tests paper](https://arxiv.org/abs/2607.19293).
+For example, the July 2026 LIGO-Virgo-KAGRA GWTC-5.0 analysis compares waveform residuals, polarizations, generation, and remnant properties and reports no overall evidence for physics beyond GR in those tests. That is a strong set of constrained comparisons, with stated statistical and modeling limits. It is not a proof that every possible modification at every scale has vanished. [LVK's primary GWTC-5.0 tests paper](https://arxiv.org/abs/2607.19293).
 
 **Dark matter** and **dark energy** also name different explanatory roles. In the usual cosmological model, dark matter behaves approximately as clustering, nearly pressureless matter on large scales. Dark energy denotes a component producing the observed accelerated expansion; a cosmological constant is its simplest standard representation. They are not two names for vacuum energy, nor does either term alone establish that Einstein's geometric equation is wrong.
 
 The observational inference always depends on a combined model: gravitational laws, visible and invisible sources, their interactions, and initial conditions. A successful alternative must fit the web of measurements together. Matching one galaxy curve or one expansion history is a starting point, not the entire examination.
 
-### 23.9 The open questions are sharper than “space is mysterious”
+### 23.9 Open questions beyond the effective theory
 
 The unresolved frontier contains concrete questions:
 
@@ -7951,19 +8000,19 @@ The unresolved frontier contains concrete questions:
 - How do smooth causal geometry and approximately local fields emerge, if they are not fundamental at every scale?
 - What counts the black-hole entropy in sufficiently general situations, and how is information represented through formation and evaporation?
 - What mechanism, if any, explains the small effective cosmological constant and its stability under quantum corrections?
-- Which genuinely quantum properties of gravity can be isolated experimentally, rather than inferred solely from a classical gravitational fit?
+- Which quantum properties of gravity can be isolated experimentally, rather than inferred solely from a classical gravitational fit?
 
-Different research programs offer different partial answers and controlled special cases. No derivation in this book establishes that spacetime is a lattice, that consciousness creates geometry, or that a particular microscopic proposal is experimentally selected.
+Different research programs offer different partial answers and controlled special cases. The effective description does not select a unique microscopic theory. That requires additional theoretical consistency and empirical evidence.
 
 The modern achievement is already substantial: the same geometry can be understood as a dynamical constrained system, a local-frame gauge structure, a theory of causal focusing, a thermodynamic participant, and a predictive low-energy quantum field theory. Those are independent pressures on the same equation. A future theory must explain why this structure works so well, as well as where its limits lie.
 
 <a id="chapter-24"></a>
 
-## 24. Bringing the whole machine together
+## 24. Calculating and interpreting a spacetime
 
-### 24.1 A calculation is a chain of questions
+### 24.1 From a spacetime model to a measurement
 
-After a long journey through geometry, it is possible to forget which object answers which question. Here is the operating manual.
+A calculation starts with physical assumptions and ends with an observer’s predicted reading. The intermediate steps have different jobs:
 
 | Stage | Question | Mathematical object |
 |---|---|---|
@@ -7976,11 +8025,11 @@ After a long journey through geometry, it is possible to forget which object ans
 | Specify a particular solution | Which physical history is being described? | Constraint-satisfying initial data and appropriate boundary/asymptotic information |
 | Predict an experiment | What does a specified observer or detector record? | Proper times, frequency ratios, tidal response, scattering data |
 
-A component formula is usually a middle step, not the final observable. An impressively complicated $g_{00}$ is no substitute for specifying who carries the clock.
+A component formula is usually a middle step, not the final observable. A clock calculation needs both the metric and the clock’s worldline.
 
-### 24.2 One last complete example: clocks can disagree in flat spacetime
+### 24.2 A complete check with accelerating observers
 
-This example deliberately combines several ideas that are easy to confuse.
+We will calculate the connection, curvature, accelerometer readings, and photon frequencies for the same family of accelerating observers.
 
 Start in Minkowski spacetime, with inertial coordinates $(T,X,Y,Z)$:
 
@@ -8020,7 +8069,7 @@ $$
 d\tau=q(z)\,dt.
 $$
 
-Does that contradict anything we learned? No. “Stationary in Rindler coordinates” describes an accelerated family of observers. The question includes the observers, not only the spacetime.
+These stationary coordinate positions belong to accelerating observers. Their relative clock rates depend on that choice of worldlines, even though the underlying spacetime is flat.
 
 #### Calculate the connection
 
@@ -8091,9 +8140,9 @@ If the receiver is at larger $z$, the received frequency is lower. There is a fr
 
 The inertial description interprets the same experiment in terms of the observers' motion during the light exchange. The accelerated description interprets it using a position-dependent lapse. Both predict the same detector readings.
 
-> **Capstone trap door:** Nonconstant metric components, nonzero Christoffel symbols, acceleration readings, and frequency shifts between a specified family of observers do not individually prove nonzero spacetime curvature. Tidal curvature requires the appropriate invariant geometric test.
+> **What this calculation distinguishes.** Nonconstant metric components, nonzero Christoffel symbols, acceleration readings, and frequency shifts between a specified family of observers do not individually prove nonzero spacetime curvature. Tidal curvature requires the appropriate invariant geometric test.
 
-The chart covers the wedge $Z+c^2/a_0>|cT|$. Its boundaries $Z+c^2/a_0=\pm cT$ are null acceleration horizons for the stationary Rindler observers. They are neither curvature singularities nor black-hole horizons in Minkowski spacetime. A coordinate system can have a limited view without the universe having a wound.
+The chart covers the wedge $Z+c^2/a_0>|cT|$. Its boundaries $Z+c^2/a_0=\pm cT$ are null acceleration horizons for the stationary Rindler observers. They are neither curvature singularities nor black-hole horizons in Minkowski spacetime. Inertial coordinates extend across these boundaries in the same smooth Minkowski spacetime.
 
 ### 24.3 How to calculate a spacetime without getting lost
 
@@ -8104,17 +8153,17 @@ Suppose someone hands you a metric and asks you to interpret it. Use this sequen
 3. **Compute the determinant.** This controls the volume element and often reveals where a coordinate chart fails.
 4. **Identify symmetries before differentiating.** Independence of a coordinate can provide a Killing vector and conserved quantities. Symmetry can save pages of algebra.
 5. **Compute $\Gamma$ from $g$ and $\partial g$.** Exploit its lower-index symmetry only for the Levi-Civita connection in a coordinate basis.
-6. **Compute Riemann before trusting a curvature slogan.** Form the derivative terms and both quadratic terms with the chosen convention.
+6. **Compute Riemann with all its terms.** Form the derivative terms and both quadratic terms with the chosen convention.
 7. **Contract carefully.** Obtain Ricci, scalar curvature, and Einstein tensor; free indices must remain in the right places.
 8. **Compare with a physically admissible stress tensor.** Conservation, matter equations, and an equation of state may rule out an apparently convenient interpretation.
 9. **Choose observers.** Build four-velocities or a local orthonormal frame and project coordinate tensors into quantities those observers measure.
 10. **Check a known limit.** Flat space, weak fields, small velocities, spherical symmetry, or an independently known invariant can reveal an error that elegant notation concealed.
 
-A computer can perform steps 2–7 beautifully while understanding none of steps 1, 8, or 9. That is why a hundred lines of symbolic output can be less trustworthy than one well-chosen physical limit.
+Symbolic software can carry out the matrix operations and derivatives. Its output still needs the chart domain, matter assumptions, and observer definitions to become a physical prediction. Independent limits and invariants provide checks on the calculation.
 
 ### 24.4 Four calibration geometries
 
-These examples are excellent tests for a hand calculation or a computer implementation. Here $A$ is the radius of a sphere; in the Schwarzschild row, $m=G_NM/c^2$; in the FLRW row, use $c=1$ and a spatially flat cosmology with $H=\dot a/a$.
+These four known geometries test different parts of a hand calculation or computer implementation. Here $A$ is the radius of a sphere; in the Schwarzschild row, $m=G_NM/c^2$; in the FLRW row, use $c=1$ and a spatially flat cosmology with $H=\dot a/a$.
 
 | Geometry | A result that must emerge | Error it often catches |
 |---|---|---|
@@ -8137,7 +8186,7 @@ If you impose the equations before varying, you discard the directions that the 
 
 Boundary contributions add another reason not to identify a vanishing bulk integrand with a physically empty action. In gravitational problems, boundary conditions and boundary terms can carry decisive information.
 
-### 24.6 A compact mental reconstruction of the Einstein equation
+### 24.6 Reconstructing the field equation
 
 Close the book for a moment and try to rebuild the logic.
 
@@ -8183,7 +8232,7 @@ You have not merely acquired a new answer about gravity. You have acquired a bet
 
 These are not speed tests. Several are designed so that the tempting answer is wrong. Try the problem before reading the solution. If you obtain a different sign, first compare conventions; if you obtain a different physical prediction after doing so, investigate.
 
-### A.1 A vector and a covector change their clothes
+### A.1 Transforming a vector and a covector
 
 **Problem.** In two dimensions, let $x'=2x+y$ and $y'=y$. A vector has components $(V^x,V^y)=(3,4)$ and a covector has components $(\omega_x,\omega_y)=(5,-2)$. Transform both and check their contraction.
 
@@ -8288,7 +8337,7 @@ $$
 
 can remain nonzero. A function vanishing at a point need not have vanishing derivatives there. In normal coordinates the metric's first derivatives vanish at $P$, but its second derivatives contain curvature information.
 
-### A.8 A sphere's circumference confesses its curvature
+### A.8 Measuring curvature with a circumference
 
 **Problem.** On a sphere of radius $A$, a geodesic circle at geodesic distance $s$ from the north pole has circumference $C(s)=2\pi A\sin(s/A)$. Expand it for small $s$ and compare it with a flat circle.
 
@@ -8330,13 +8379,13 @@ $$
 
 For slow dust, $T_{00}\simeq\rho c^2$, $T\simeq-\rho c^2$, and $g_{00}\simeq-1$. The parenthesis in the $00$ component becomes $\rho c^2/2$. Thus $R_{00}\simeq4\pi G_N\rho/c^2$, consistent with $R_{00}\simeq\nabla^2\Phi/c^2$ and Newton's Poisson equation.
 
-### A.11 A zero scalar curvature proves much less than you think
+### A.11 What zero scalar curvature implies
 
 **Problem.** Does $R=0$ imply vacuum? Does vacuum with $\Lambda=0$ imply no gravitational waves?
 
 **Solution.** Both answers are no. A classical electromagnetic field in four dimensions has a trace-free stress tensor. Einstein's trace equation gives $R=0$ when $\Lambda=0$, even though $T_{\mu\nu}$ and $R_{\mu\nu}$ may be nonzero. Vacuum implies $R_{\mu\nu}=0$, but the Weyl tensor can still describe gravitational waves or an exterior tidal field.
 
-Three distinct statements are being separated: scalar-flat, Ricci-flat, and Riemann-flat. Do not let a shorter word count persuade you that they are interchangeable.
+The three conditions are called scalar-flat, Ricci-flat, and Riemann-flat, respectively. Each sets a different tensor or contraction to zero.
 
 ### A.12 Pressure enters the local curvature source
 
@@ -8403,7 +8452,7 @@ Every timelike observer measures energy density $V_0$ and isotropic pressure $-V
 
 **Solution.** No. The elementary function $f(x)=x$ satisfies $f(0)=0$ but $f'(0)=1$. The same distinction applies componentwise to a field variation. The Einstein–Hilbert bulk action produces boundary terms containing derivatives of the metric variation. For a suitable fixed-induced-metric problem on a non-null smooth boundary, the Gibbons–Hawking–York term supplies the required cancellation. Setting more boundary data to zero than the problem calls for can conceal rather than solve this issue.
 
-### A.16 A Killing vector manufactures a conserved current
+### A.16 Constructing a conserved current
 
 **Problem.** Let $T^{\mu\nu}$ be symmetric and covariantly conserved. If $\xi^\mu$ obeys $\nabla_{(\mu}\xi_{\nu)}=0$, prove that $J^\mu=T^{\mu\nu}\xi_\nu$ is conserved.
 
@@ -8585,7 +8634,7 @@ $$
 
 Multiply by $T_H=\hbar c^3/(8\pi G_NMk_B)$ to obtain $T_HdS=c^2dM$. This is a consistency check within the semiclassical result for an uncharged, nonrotating hole, not a derivation of its microscopic degrees of freedom.
 
-### A.30 The effective-theory expansion has a speed limit
+### A.30 Estimating an effective-theory correction
 
 **Problem.** In units $c=\hbar=1$, consider a schematic gravitational Lagrangian
 
@@ -8595,7 +8644,7 @@ $$
 
 with dimensionless coefficient $a$ of order unity. On a slowly varying geometry with typical curvature scale $R\sim L^{-2}$, estimate the relative size of the correction. State why $R=0$ alone is not a sufficient validity check.
 
-**Solution.** Relative to the $R$ term, the displayed correction scales as $a/(M_*L)^2$. It is small when $M_*L\gg1$. But an actual effective action contains other independent curvature contractions and derivative operators. The scalar $R$ may vanish while Riemann or Weyl curvature is nonzero, as in a Schwarzschild exterior. Validity requires control of the physically relevant curvature components, invariant scales, frequencies, and state-dependent effects, not a single convenient scalar. The effective theory can be predictive below its cutoff without claiming validity at arbitrarily short distances.
+**Solution.** Relative to the $R$ term, the displayed correction scales as $a/(M_*L)^2$. It is small when $M_*L\gg1$. This is generic power counting, not a prediction that this particular $R^2$ term changes a Ricci-flat vacuum solution: its variation vanishes on that solution, as discussed in Section 23.2. An effective action can also contain higher curvature contractions and derivative operators. The scalar $R$ may vanish while Riemann or Weyl curvature is nonzero, as in a Schwarzschild exterior. Validity requires control of the physically relevant curvature components, invariant scales, frequencies, and state-dependent effects, not a single convenient scalar. The effective theory can be predictive below its cutoff without claiming validity at arbitrarily short distances.
 
 ---
 
@@ -8603,7 +8652,7 @@ with dimensionless coefficient $a$ of order unity. On a slowly varying geometry 
 
 ## Appendix B. A working reference sheet
 
-A reference sheet is useful once an equation has a meaning. Before that, it is a decorative wall of Greek letters. Use this appendix as a retrieval aid, and return to the associated chapter whenever a formula feels suspiciously effortless.
+Use this appendix to retrieve equations after their derivations. The formulas follow the book’s metric signature and curvature convention; their stated domains and approximation assumptions remain part of each result.
 
 ### B.1 The geometry ladder
 
@@ -8811,7 +8860,7 @@ for slow test motion, weak approximately static fields, negligible pressure, and
 | Covariant derivative | A derivative that accounts for the connection so its output transforms as the intended tensor |
 | Diffeomorphism | A smooth invertible map with smooth inverse; it underlies coordinate changes and GR's field-relabeling gauge symmetry |
 | Effective field theory | An expansion valid below a specified scale, organized so that finitely many parameters control predictions to a chosen accuracy |
-| Einstein tensor | The divergence-free contraction of curvature that appears in Einstein's field equation |
+| Einstein tensor | The covariantly divergence-free combination of Ricci curvature and its scalar trace that appears in the field equation |
 | Equivalence principle | A family of experimentally meaningful statements about universal free fall and the local behavior of nongravitational physics; its precise version matters |
 | Event horizon | A global causal boundary separating events that can send signals to the relevant future infinity from those that cannot |
 | Extrinsic curvature | How a hypersurface sits within a higher-dimensional geometry; in a spacetime slicing it encodes important information about the slices' evolution |
@@ -8929,14 +8978,14 @@ Before calculating, read the expression aloud. In $A^\mu B_\mu$, one index appea
 | A dummy appears twice in a term | $A^\mu B_\mu$ | An ambiguous threefold repetition. |
 | Rename an entire dummy pair | $A^\mu B_\mu=A^\alpha B_\alpha$ | Changing only half a contraction. |
 | An inverse is a matrix inverse | $g^{\mu\alpha}g_{\alpha\nu}=\delta^\mu{}_\nu$ | Taking elementwise reciprocals. |
-| Raising uses the metric | $v^\mu=g^{\mu\nu}v_\nu$ | Treating height as decoration. |
+| Raising uses the metric | $v^\mu=g^{\mu\nu}v_\nu$ | Changing an index position without applying the metric. |
 | A trace knows the dimension | $\delta^\mu{}_\mu=4$ | Forgetting that the repeated pair is summed. |
 
 For an antisymmetric $A^{\mu\nu}$ and symmetric $S_{\mu\nu}$, the contraction vanishes. Rename $\mu\leftrightarrow\nu$ throughout: $S_{\mu\nu}A^{\mu\nu}=S_{\nu\mu}A^{\nu\mu}=-S_{\mu\nu}A^{\mu\nu}$. A number equal to its own negative is zero. This small argument removes many apparently complicated terms.
 
 ### E.2 A scalar field: when is it dust, and when is it not?
 
-**Problem.** In natural units, a homogeneous canonical scalar field has $\epsilon=\dot\phi^2/2+V(\phi)$ and $p=\dot\phi^2/2-V(\phi)$. Find its equation of state when $V=0$. Then explain how an oscillating massive scalar can instead act like dust.
+**Problem.** In units $c=\hbar=1$, a homogeneous canonical scalar field has $\epsilon=\dot\phi^2/2+V(\phi)$ and $p=\dot\phi^2/2-V(\phi)$. Find its equation of state when $V=0$. Then explain how an oscillating massive scalar can instead act like dust.
 
 <details class="checkpoint"><summary>Work it out, then reveal the solution</summary>
 

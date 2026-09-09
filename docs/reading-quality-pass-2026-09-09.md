@@ -98,8 +98,18 @@ The frame chapter starts with cylindrical ruler components, gives the coefficien
 
 All 37 lessons passed 680 browser interactions after this batch; static pages and authored prerequisite order also passed.
 
+## Chapters 22 through 24 and appendices
+
+Focusing now includes a shrinking-volume proof of the finite-time bound, a projected-derivative check of zero twist, and the observer calculations behind the perfect-fluid energy conditions. The null screen is constructed before it is used. The thermodynamics discussion derives the negative heat capacity and the finite Schwarzschild surface gravity. A calculation verifies the rotating-hole first law by differentiating the horizon area; independent finite differences check both mass and spin variations.
+
+The effective-theory chapter introduces resolution, regulated quantities, renormalization, and the meaning of a nonlocal operator before using them. It explains the additional quantum assumptions behind the zero-point estimate. The information discussion defines islands and identifies the model-dependent status of the calculation. The gravitational-wave catalog reference is dated rather than described as indefinitely current. The final calculation chapter and exercise titles use direct descriptions instead of personification and editorial slogans.
+
+Appendix units and definitions were checked, the front contents were synchronized with the revised titles, and saved appendix links now receive the same preservation and automated checks as chapter links. The build rejects unexpected control characters that can silently corrupt mathematical commands during editing.
+
+This completes a first sentence-level pass through the manuscript, including the appendices. It does not complete every possible derivation: the full Kerr construction, global singularity proof, canonical constraint algebra, and quantum-field calculations still need dedicated treatments to meet the project's full self-contained ambition. Supplied results and additional assumptions are identified where they enter. Reader observation and exercises with actual beginners remain necessary to assess whether the pacing works.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 22.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every chapter or certify the entire book as error-free.

@@ -145,6 +145,15 @@ for(const k of [-1,0,1]){
  }
 }
 // Full-index contraction checks the signs and multiplicities of the six-entry table.
+// Differentiate the horizon area rather than using the first-law identity to
+// construct it. Both independent directions in the nonextremal family must work.
+for(const [m,a] of [[1,.2],[2,.8],[3,-1.5]]){
+ const area=(m,a)=>4*Math.PI*((m+Math.sqrt(m*m-a*a))**2+a*a);
+ const root=Math.sqrt(m*m-a*a),rp=m+root,omega=a/(rp*rp+a*a),kappa=root/(rp*rp+a*a),step=1e-5;
+ const areaM=(area(m+step,a)-area(m-step,a))/(2*step),areaA=(area(m,a+step)-area(m,a-step))/(2*step);
+ near(kappa*areaM/(8*Math.PI)+omega*a,1,1e-8);
+ near(kappa*areaA/(8*Math.PI)+omega*m,0,1e-8);
+}
 // A spatially varying, anisotropically evolving slice checks the ADM signs.
 // Freeze its time dependence to obtain intrinsic curvature independently of
 // the spacetime calculation; derive K directly from the metric's time change.

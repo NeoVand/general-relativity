@@ -10,6 +10,11 @@ const report=JSON.parse(fs.readFileSync('site/build-report.json'));
 assert.equal(report.chapters,25);assert.equal(report.mathErrors.length,0);
 assert.ok(report.displayEquations>=690);
 const cache=new Map(files.map(f=>[f,fs.readFileSync(path.join(root,f),'utf8')]));
+// Saved links must survive editorial improvements to chapter and exercise titles.
+for(const [section,id] of Object.entries(JSON.parse(fs.readFileSync('content/section-ids.json','utf8')))){
+ const chapter=section.split('.')[0],file=/^\d+$/.test(chapter)?`chapter-${chapter}.html`:`appendix-${chapter.toLowerCase()}.html`;
+ assert.ok(cache.get(file)?.includes(`id="${id}"`),`Preserved section link ${file}#${id}`);
+}
 let links=0;
 for(const [file,html]of cache){
  assert.ok(html.includes('<html lang="en">'),file);
