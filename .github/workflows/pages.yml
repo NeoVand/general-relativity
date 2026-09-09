@@ -34,21 +34,31 @@ jobs:
       - run: npm run check
       - name: Install browser for the reading checks
         run: npx playwright install --with-deps chromium
-      - name: Check desktop, mobile, and interactive examples
+      - name: Start the book preview
         run: |
           npm run serve > /tmp/book-server.log 2>&1 &
           for attempt in $(seq 1 30); do
-            curl --fail --silent http://localhost:4173/ > /dev/null && break
+            curl --fail --silent http://localhost:4173/ > /dev/null && exit 0
             sleep 1
           done
-          npm run test:browser
-          npm run test:figures
-          npm run test:experience
-          npm run test:study
-          npm run test:course
-          npm run test:visual-lessons
-          npm run test:geometry-experiences
-          npm run test:curvature-experiences
+          cat /tmp/book-server.log
+          exit 1
+      - name: Check navigation, typography, and symbol inspection
+        run: npm run test:browser
+      - name: Inspect SVGs in both themes and responsive layouts
+        run: npm run test:figures
+      - name: Check spatial scenes and animation controls
+        run: npm run test:experience
+      - name: Check listening and assistant integration
+        run: npm run test:study
+      - name: Check worked lessons and learning routes
+        run: npm run test:course
+      - name: Check guided visual lessons
+        run: npm run test:visual-lessons
+      - name: Check manifold charts and orbital precession
+        run: npm run test:geometry-experiences
+      - name: Check curvature components and tidal clouds
+        run: npm run test:curvature-experiences
       - name: Preserve inspection evidence
         if: always()
         uses: actions/upload-artifact@v4

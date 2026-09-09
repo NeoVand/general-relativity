@@ -38,6 +38,20 @@ async function assertRulerLabelClear(element){
  const overlap=await element.evaluate(e=>{const stage=e.querySelector('.scene-stage').getBoundingClientRect(),label=e.querySelector('.scene-label.math-observer').getBoundingClientRect();return JSON.parse(e.dataset.rulerScreen).some(([x,y])=>{x=stage.x+x*stage.width;y=stage.y+y*stage.height;return x>label.left-2&&x<label.right+2&&y>label.top-2&&y<label.bottom+2});});
  assert.equal(overlap,false,'The length label must not cover its measured ruler');
 }
+// A scroll request is not proof that an animated stage left the viewport.
+// Observe the same stage as the runtime and let both observers settle first.
+async function scrollSceneVisibility(element,visible){return element.evaluate((e,wanted)=>new Promise((resolve,reject)=>{
+ const stage=e.querySelector('.scene-stage');let frame=0;
+ const snapshot=()=>{const r=stage.getBoundingClientRect();return {frames:e.dataset.frames,phase:e.dataset.phase,time:e.dataset.time,detectorMatrix:e.dataset.detectorMatrix,playing:e.dataset.playing,animating:e.dataset.animating,top:r.top,bottom:r.bottom,viewport:innerHeight};};
+ const timeout=setTimeout(()=>{observer.disconnect();cancelAnimationFrame(frame);reject(Error(`${e.dataset.scene} did not become ${wanted?'visible':'offscreen'}`));},5000);
+ const observer=new IntersectionObserver(entries=>{
+  if(entries.at(-1).isIntersecting!==wanted)return;
+  observer.disconnect();
+  frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{clearTimeout(timeout);resolve(snapshot());});});
+ });observer.observe(stage);
+ if(wanted)stage.scrollIntoView({block:'center',behavior:'instant'});
+ else scrollTo({top:document.documentElement.scrollHeight,left:0,behavior:'instant'});
+}),visible);}
 // Chrome's beyond-viewport element capture can temporarily reflow the page and
 // clip a tall section's left edge. Give the capture its full height explicitly;
 // all layout/label assertions still run at the original requested viewport.
@@ -147,11 +161,19 @@ try{
  assert.equal(await wave.getAttribute('data-frames'),diagramFrames,'The alternate diagram must suspend wave animation');
  await wave.locator('[data-scene-mode="3d"]').click();
  await page.waitForFunction(n=>+document.querySelector('#scene-wave').dataset.frames>n+2,+diagramFrames);
- await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));await page.waitForTimeout(180);
- const invisibleWaveFrames=await wave.getAttribute('data-frames');await page.waitForTimeout(180);
- assert.equal(await wave.getAttribute('data-frames'),invisibleWaveFrames,'Offscreen wave must stop updating');
+ const hiddenWave=await scrollSceneVisibility(wave,false);
+ assert.ok(hiddenWave.bottom<=0||hiddenWave.top>=hiddenWave.viewport,'The wave stage must actually be outside the viewport');
+ assert.equal(hiddenWave.playing,'true','Offscreen suspension preserves play intent');
+ assert.equal(hiddenWave.animating,'false','The offscreen wave has canceled its animation loop');
+ await page.waitForTimeout(350);
+ assert.equal(await wave.getAttribute('data-frames'),hiddenWave.frames,'Offscreen wave must stop rendering frames');
+ assert.equal(await wave.getAttribute('data-phase'),hiddenWave.phase,'Offscreen wave must hold its internal phase');
+ assert.equal(await wave.getAttribute('data-detector-matrix'),hiddenWave.detectorMatrix,'Offscreen detector geometry must remain unchanged');
+ const resumedWave=await scrollSceneVisibility(wave,true);
+ assert.equal(resumedWave.playing,'true');assert.equal(resumedWave.animating,'true');
+ await page.waitForFunction(n=>+document.querySelector('#scene-wave').dataset.frames>n+2,+hiddenWave.frames,{timeout:5000});
  await page.emulateMedia({reducedMotion:'reduce'});
- await wave.scrollIntoViewIfNeeded();
+ await page.waitForFunction(()=>document.querySelector('#scene-wave').dataset.playing==='false',null,{timeout:5000});
  assert.equal(await wave.getAttribute('data-playing'),'false','Enabling reduced motion pauses an existing animation');
  await page.reload();await wave.scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#scene-wave').dataset.ready==='true');
  assert.equal(await wave.getAttribute('data-playing'),'false','Reduced motion disables autoplay');
@@ -194,11 +216,16 @@ try{
  await page.waitForTimeout(150);
  assert.equal(await earth.getAttribute('data-frames'),stopped,'Paused scene must stop updating');
  await earth.locator('.scene-stage').press('Space');
- await page.locator('.appendix-links').scrollIntoViewIfNeeded();
- await page.waitForTimeout(200);
- const hiddenFrames=await earth.getAttribute('data-frames');
- await page.waitForTimeout(200);
- assert.equal(await earth.getAttribute('data-frames'),hiddenFrames,'Offscreen scene must stop updating');
+ const hiddenEarth=await scrollSceneVisibility(earth,false);
+ assert.ok(hiddenEarth.bottom<=0||hiddenEarth.top>=hiddenEarth.viewport,'Earth must actually be outside the viewport');
+ assert.equal(hiddenEarth.playing,'true','Offscreen suspension preserves Earth play intent');
+ await page.waitForTimeout(350);
+ assert.equal(await earth.getAttribute('data-frames'),hiddenEarth.frames,'Offscreen Earth must stop rendering frames');
+ assert.equal(await earth.getAttribute('data-time'),hiddenEarth.time,'Offscreen Earth must hold its internal time');
+ assert.equal(await earth.getAttribute('data-phase'),hiddenEarth.phase,'Offscreen Earth must hold its grid phase');
+ const resumedEarth=await scrollSceneVisibility(earth,true);assert.equal(resumedEarth.playing,'true');
+ await page.waitForFunction(n=>+document.querySelector('[data-scene=earth]').dataset.frames>n+2,+hiddenEarth.frames,{timeout:5000});
+ await page.waitForFunction(t=>+document.querySelector('[data-scene=earth]').dataset.time>t,+hiddenEarth.time,{timeout:5000});
  await page.emulateMedia({reducedMotion:'reduce'});
  await page.goto(new URL('figure-atlas.html',base).href);
  await page.locator('[data-scene=earth]').scrollIntoViewIfNeeded();
