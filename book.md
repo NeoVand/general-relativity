@@ -3913,13 +3913,34 @@ $$
 
 Kinetic energy gives positive pressure; potential energy gives negative pressure. This prepares the intuition for scalar-field cosmology without requiring a field to be imagined as a literal fluid of tiny balls.
 
-**Return to SI units and $x^0=ct$.** For electromagnetism choose
+**Return to SI units and $x^0=ct$.** Before packaging electromagnetism into a tensor, give its two fields a measuring procedure. A small test body's **electric charge** $q$ determines its electromagnetic response; charge is measured in coulombs (C), and its sign can be positive or negative. The **electric field** $\mathbf E$ is the force per unit positive charge on a test body momentarily at rest. It is measured in newtons per coulomb. The **magnetic field** $\mathbf B$ describes an additional force on a moving charge. Together they enter the experimentally established Lorentz-force law:
+
+$$
+\frac{d\mathbf p}{dt}=q(\mathbf E+\mathbf v\times\mathbf B).
+$$
+
+Here $\mathbf p$ is the particle's ordinary three-momentum and $\mathbf v$ its velocity in the chosen local inertial frame. The magnetic field has units $\mathrm{N\,s/(C\,m)}$, called teslas. The **cross product** $\mathbf a\times\mathbf b$ is perpendicular to both arrows, with magnitude $|\mathbf a||\mathbf b|\sin\theta$ when the angle between them is $\theta$. Its direction follows the right-hand rule: curl the fingers from $\mathbf a$ toward $\mathbf b$; the thumb points along the product. In right-handed Cartesian axes its components are
+
+$$
+\mathbf a\times\mathbf b
+=(a_yb_z-a_zb_y,\ a_zb_x-a_xb_z,\ a_xb_y-a_yb_x).
+$$
+
+For example, velocity along +x and magnetic field along +y give a magnetic force on a positive charge along +z. The magnetic force is perpendicular to the velocity, so it changes the momentum's direction without doing work on that particle. The electric contribution supplies power $q\mathbf E\cdot\mathbf v$.
+
+Electric and magnetic fields depend on the observer. The **electromagnetic field-strength tensor** $F_{\mu\nu}$ packages their six components so another observer can transform them together. It is antisymmetric: $F_{\nu\mu}=-F_{\mu\nu}$. With our metric signature, choose
 
 $$
 F_{0i}=-\frac{E_i}{c},\qquad F_{ij}=\varepsilon_{ijk}B_k,
 $$
 
-in a local orthonormal frame. Here $\varepsilon_{ijk}$ is the three-dimensional antisymmetric symbol: $\varepsilon_{123}=+1$, exchanging two indices reverses the sign, and repeating an index gives zero. It is unrelated to energy density $\epsilon$. The electromagnetic Lagrangian energy density and stress tensor are
+in a local orthonormal frame. Here $\varepsilon_{ijk}$ is the three-dimensional antisymmetric symbol: $\varepsilon_{123}=+1$, exchanging two indices reverses the sign, and repeating an index gives zero. It is unrelated to energy density $\epsilon$.
+
+The factor $1/c$ gives the temporal and spatial entries of $F$ the same units. It also makes the covariant force law $dp^\mu/d\tau=qF^\mu{}_{\nu}u^\nu$ reproduce the three-force above: insert $u^\nu=\gamma(c,\mathbf v)$ and divide by $dt/d\tau=\gamma$. The temporal contribution becomes $q\mathbf E$ and the spatial contribution becomes $q\mathbf v\times\mathbf B$.
+
+Two vacuum constants set the SI normalization: the **permittivity** $\epsilon_0$ and **permeability** $\mu_0$. They relate the strengths of the electric and magnetic fields to charge, electric current (charge flowing past a point per unit time), and stored field energy. Their units are $\mathrm{C^2/(N\,m^2)}$ and $\mathrm{N\,s^2/C^2}$ respectively, and $\epsilon_0\mu_0c^2=1$. Thus $\epsilon_0E^2$ and $B^2/\mu_0$ both have units of energy per volume.
+
+The electromagnetic Lagrangian energy density and stress tensor are
 
 $$
 \mathcal L_{\rm EM}=-\frac1{4\mu_0}F_{\alpha\beta}F^{\alpha\beta},
@@ -3946,7 +3967,19 @@ $$
 \epsilon_0\mu_0c^2=1.
 $$
 
-The preceding field-energy example defines the energy density and the Poynting vector: the latter measures electromagnetic energy transported per unit area per unit time. The field-action formulas here preview the variational construction developed in Chapter 13. The same tensor includes electric and magnetic stresses, so a magnetic field can affect geometry even in a region containing no material particles.
+The energy-flux vector $\mathbf S$ is called the **Poynting vector**. Its direction is the direction of energy transport; its magnitude gives energy crossing a perpendicular unit area per unit time. The corresponding momentum density is $\mathbf S/c^2$, as in §11.1. The field-action formulas here preview the variational construction developed in Chapter 13. The same tensor includes electric and magnetic stresses, so a magnetic field can affect geometry even in a region containing no material particles.
+
+**A light wave as a check.** A plane wave has the same field across each plane perpendicular to its direction of travel. At one event in such a wave traveling along +z, suppose $\mathbf E=(E,0,0)$ and $\mathbf B=(0,E/c,0)$. The two contributions to the energy density are equal because $1/(\mu_0c^2)=\epsilon_0$. Therefore
+
+$$
+\epsilon_{\rm EM}=\epsilon_0E^2,
+\qquad
+\mathbf S=(0,0,c\epsilon_{\rm EM}),
+\qquad
+\boldsymbol\pi=(0,0,\epsilon_{\rm EM}/c).
+$$
+
+The field energy moves at $c$ and carries forward momentum. Here $E$ is the instantaneous field value, which can vary along the wave. With other local field configurations, stored energy need not imply a nonzero net flux: if $\mathbf E$ and $\mathbf B$ are parallel, their cross product vanishes even when the energy density is positive.
 
 Its classical trace in four spacetime dimensions vanishes:
 

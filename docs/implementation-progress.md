@@ -19,7 +19,7 @@ The full course overhaul is **not finished**. A completed commit means the named
 | Penrose diagrams and black-hole causal geometry | Open | Teach compactification; distinguish collapse from eternal extensions; light cones and singularities. |
 | Gravitational lensing and black-hole optics | Open | Linked source, lens, observer and image; validate null rays before rendering the sky. |
 | Remaining chapter visual coverage | Open | Chapters 2, 5, 9–10, 12, 14–15, 18–20, 22–24 against the coverage map. |
-| Complete prose/prerequisite review | Open | Read every main-text and optional explanation; repair undefined quantities and unjustified jumps. |
+| Complete prose/prerequisite review | Open | Selected openings and mechanics/geometry passages repaired; electromagnetic fields, cross product and energy-flux preparation added in §11.6. Full main-text and optional-explanation review remains. |
 | Tutor integration and teaching evaluation | Partial | Deterministic state available; validated actions/Undo, real misconception sessions and learner walkthroughs remain. |
 | Final release review | Open | Integrated physics, annotation, responsive, keyboard, performance and learning review. |
 
