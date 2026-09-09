@@ -1,5 +1,6 @@
 import {polarDefaults,polarState,polarMeasurements,polarFromPoint} from './geometry-foundations-model.js';
 import {initVectorFields} from './vector-field-experience.js';
+import {initParallelTransport} from './parallel-transport-experience.js';
 
 const fmt=(n,d=2)=>(Math.abs(n)<.5*10**-d?0:n).toFixed(d);
 const path=points=>points.map((p,i)=>`${i?'L':'M'}${p.map(x=>fmt(x,3)).join(',')}`).join(' ');
@@ -55,7 +56,7 @@ export function polarSource(value=polarDefaults) {
 }
 
 export function initGeometryFoundations() {
-  const cleanups=[initVectorFields()];
+  const cleanups=[initVectorFields(),initParallelTransport()];
   for(const root of document.querySelectorAll('[data-polar-experience]')){
     let state={...polarDefaults},dragging=false;
     try{state=polarState(JSON.parse(localStorage.getItem('gr-course-v1'))?.visuals?.[root.id]?.state);}catch{}

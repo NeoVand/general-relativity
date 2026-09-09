@@ -2226,7 +2226,17 @@ The volume factor accounts for the contracted index $\mu$; the final connection 
 
 ### 7.1 Parallel transport along a path
 
-Take a curve $x^\mu(\lambda)$ and a vector $V^\mu(\lambda)$ attached to its points. The covariant derivative along the curve is
+Put a small arrow on a flat sheet. Slide its base around a triangle without turning the arrow. At a corner, your route changes direction, but the arrow keeps pointing the same way. Back at the starting point, its direction is unchanged.
+
+Now roll the sheet into a cylinder. The arrow must tip in the surrounding room to stay flat against the sheet. That tipping is unavoidable; an extra twist within the sheet is not. **Parallel transport** carries a direction while allowing only the change required by the local geometry. On these surfaces, we can see it as keeping the arrow tangent without turning it within its tangent plane.
+
+Try the plane and rolled sheet first. Then try the sphere. Its path follows **great circles**: intersections of the sphere with planes through its center. The equator is one example. Three arcs make the triangle. The blue arrow records the starting direction at A; the pink arrow travels. The question is what happens when both arrows can be compared at A again.
+
+<div data-foundation-insert="transport"></div>
+
+On the plane and cylinder the arrow returns unchanged. On the sphere, it can return rotated even though we added no local twist along the way. We have separated two questions: how to carry a vector through each small step, and whether carrying it around a whole loop returns it unchanged. The connection answers the first. Curvature, developed in Chapter 8, answers the local version of the second.
+
+To express the carrying rule in coordinates, take a curve $x^\mu(\lambda)$ and a vector $V^\mu(\lambda)$ attached to its points. The covariant derivative along the curve is
 
 $$
 \frac{DV^\mu}{d\lambda}
@@ -2519,7 +2529,9 @@ We have nonzero Christoffel symbols, changing basis components, and coordinate a
 
 ## 8. Curvature and transport around a loop
 
-On the flat plane, carrying a vector around a circle returned it unchanged. We will now repeat that comparison on a sphere. Follow the local rule for keeping an arrow parallel, bring it back to its starting point, and compare the two directions there. A mismatch measures something that changing coordinate labels cannot remove.
+In the [transport experiment](chapter-7.html#parallel-transport-lab), the plane and rolled sheet returned the arrow unchanged, while the sphere could return it rotated. Both directions are compared at the same starting point, so changing coordinate labels cannot remove their mismatch. This return transformation is called **holonomy**. For the sphere’s tangent plane, it is a rotation.
+
+Shrink the sphere’s triangle. The return angle becomes smaller, approaching zero with the enclosed area. What remains after dividing by that small area is a local measure of curvature. On a sphere of radius $R$, its magnitude is $1/R^2$. Increasing $R$ while keeping the same angular triangle does not change the rotation: the physical area grows as $R^2$ while the curvature falls as $1/R^2$.
 
 To calculate this effect for a small loop, we need to compare derivatives taken in two different orders.
 

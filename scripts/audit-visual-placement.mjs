@@ -7,7 +7,7 @@ import crypto from 'node:crypto';
 import {parseHTML} from 'linkedom';
 
 const skip = 'script,style,header,nav,button,.katex,annotation,.passage-tools,.heading-link,.narration-script,.lesson-tabs,.lesson-prereqs,[data-no-narration],[hidden]';
-const visual = '[data-scene],[data-visual-lesson],[data-geometry-experience],[data-curvature-experience],[data-relativity-lab],[data-mechanics-experience],[data-polar-experience],[data-vector-field-experience],figure.diagram';
+const visual = '[data-scene],[data-visual-lesson],[data-geometry-experience],[data-curvature-experience],[data-relativity-lab],[data-mechanics-experience],[data-polar-experience],[data-vector-field-experience],[data-parallel-transport],figure.diagram';
 const clean = element => {
   const copy = element.cloneNode(true);
   copy.querySelectorAll(skip).forEach(node => node.remove());

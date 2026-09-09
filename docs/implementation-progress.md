@@ -10,8 +10,8 @@ The full course overhaul is **not finished**. A completed commit means the named
 | Mechanics and Hamiltonian preparation | Shipped | `a27a2f4`; energy/phase-space experiments, independent calculations, manuscript derivation. |
 | Polar coordinates and physical distances | Shipped | Labeled grid before the transformation; drag, radius/angle controls, arc/chord comparison, origin failure; mathematical and browser checks. |
 | Differentiating actual vector fields | Shipped | Four fields, neighboring polar frames, common-origin comparison and an exact finite product-rule diagram; visual before component algebra. |
-| Connection and continuous parallel transport | In progress | Plane, cylinder and sphere; tangent-plane comparison; verified transport. |
-| Curvature through two routes and closed loops | Open | Reversible path controls, signed holonomy and area scaling. |
+| Connection and continuous parallel transport | Implemented and pushed | Continuous plane/cylinder/sphere transport before the equation; exact model, independent ODE, face-on view, orbit/fallback/reload checks. |
+| Curvature through two routes and closed loops | Partial | Closed-loop transport, reversal, shrinking, and area/radius scaling implemented. Dedicated two-route endpoint comparison remains. |
 | Stress–energy through particles and fluid flow | Open | Crossings, pressure without bulk flow, shear; consistent tensor indexing. |
 | Variations and stationary action | Open | Reconcile symbols; label endpoints/displacement; linked histories and action; saddle example. |
 | Forms, exterior derivative and Stokes | Open | Level sets, oriented area/flux, cancellation along interior boundaries. |
