@@ -82,8 +82,16 @@ The black-hole chapter adds the spherical time-independence calculation, connect
 
 The assembled book passed 74 page/viewport checks, including section links, readable tables, clock and GPS controls, and the compact reader header.
 
+## Chapters 18 and 19
+
+The wave chapter now demonstrates the residual gauge choices behind the two-polarization count, derives the double-angle transformation, and follows light on both interferometer arms. The binary calculation supplies the center-of-mass substitution and the energy-versus-frequency derivative behind chirp mass. Multipole names are attached to their defining integrals. The calculation's approximation and source assumptions remain explicit.
+
+Cosmology introduces comoving labels, explains the domain of the closed radial chart, works through the time-dependent Ricci terms and fluid divergence, and checks the full Weyl cancellation. The observing section now teaches angular-diameter and luminosity distances in the manuscript before the practice lesson uses them. It defines luminosity and flux and accounts separately for photon-energy and arrival-rate redshift. Numerical metric differentiation checks Weyl cancellation for positive, zero, and negative spatial curvature.
+
+Static and prerequisite checks, 74 browser page/viewport checks, and narration-context checks passed after this batch.
+
 ## Verification
 
 Local checks during this pass: static pages and links; all 37 lesson placements; eight lab placements and the two opening figures; Svelte checks; 74 browser page/viewport combinations; desktop/mobile navigation; all 40 figures in both themes; 42 responsive figure/theme/width compositions; all 36 3D scene/theme/viewport combinations; reading position; reading-source and narration unit checks. All 37 lessons also passed 680 browser interactions, including deep links and saved exercise state, after the Chapter 4–5 rewrite. Screenshot evidence accompanies this note.
 
-These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 18.
+These checks establish specific software behavior and catch the named sequencing regressions. They do not establish that a novice can understand every remaining chapter. The ongoing sentence-level pass continues from Chapter 20.

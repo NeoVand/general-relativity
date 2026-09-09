@@ -51,7 +51,7 @@ export const bridgeLessons = [
  },
  {
   id:'waves-and-retarded-time',chapter:18,
-  after:'18.1 Linearization is a controlled approximation, not a different theory',
+  after:'18.1 Keeping the first-order gravitational field',
   title:'Read a wave before reading its complex notation',
   question:'How does an equation say that information travels at a definite speed?',
   intuition:s`Imagine a pulse with a shape $F$ moving toward increasing $z$ without changing shape. At time $t$, its profile is $F(z-ct)$. Keeping the pulse’s argument fixed gives $z=ct+\text{constant}$: the pulse moves at speed $c$. No complex numbers are needed.`,

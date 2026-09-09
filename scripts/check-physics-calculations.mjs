@@ -130,6 +130,20 @@ for(const t of [1,2,3]){
  const dust=curvature(flrw(2/3),[t,0,0,0]);near(dust.scalar,4/(3*t*t));near(dust.kretschmann,80/(27*t**4));near(dust.G00,4/(3*t*t));near(dust.G11,0);
  const radiation=curvature(flrw(.5),[t,0,0,0]);near(radiation.scalar,0);near(radiation.G11/radiation.G00,1/3);near(radiation.kretschmann,3/(2*t**4));
 }
+// Nonzero spatial curvature is included here, rather than inferring conformal
+// flatness from the k=0 examples. Test the complete Weyl subtraction in the
+// coordinate basis, using Ricci obtained from numerical metric derivatives.
+for(const k of [-1,0,1]){
+ const power=.7,point=[2,.4,.9,.2];
+ const metric=([t,chi,theta])=>{const a=t**power,g=matrix();g[0][0]=-1;g[1][1]=a*a/(1-k*chi*chi);g[2][2]=a*a*chi*chi;g[3][3]=g[2][2]*Math.sin(theta)**2;return g};
+ const g=metric(point),r=curvature(metric,point),A=power*(power-1)/point[0]**2,B=power**2/point[0]**2+k/point[0]**(2*power);
+ near(r.scalar,6*(A+B),3e-5);near(r.kretschmann,12*(A*A+B*B),3e-5);
+ for(const [i,[a,b,c,d]] of indices.entries()){
+  const ricciPart=.5*(g[a][c]*r.ricci[b][d]-g[a][d]*r.ricci[b][c]-g[b][c]*r.ricci[a][d]+g[b][d]*r.ricci[a][c]);
+  const scalarPart=r.scalar/6*(g[a][c]*g[b][d]-g[a][d]*g[b][c]);
+  near(r.lowered[i]-ricciPart+scalarPart,0,3e-6);
+ }
+}
 // Full-index contraction checks the signs and multiplicities of the six-entry table.
 function contract(values){const tensor=Array.from({length:4},()=>tensor3()),pairs=[[0,1],[0,2],[0,3],[1,2],[1,3],[2,3]],sign=[-1,1,1,1];
  pairs.forEach(([a,b],i)=>{tensor[a][b][a][b]=tensor[b][a][b][a]=values[i];tensor[a][b][b][a]=tensor[b][a][a][b]=-values[i]});
@@ -138,4 +152,4 @@ function contract(values){const tensor=Array.from({length:4},()=>tensor3()),pair
 }
 const vacuum=contract([-2,1,1,-1,-1,2]);assert.deepEqual(vacuum.ricci,matrix());assert.equal(vacuum.K,48);
 assert.equal(contract([-2,-2,-2,2,2,2]).scalar,24);assert.equal(contract([1,2,3,4,5,6]).ricci[2][2],8);
-console.log('All chapters have distinct transfer practice. Independent metric derivatives verify FLRW sources, conformal curvature, wave invariants, and the separate weak-field potentials; full-index sums verify the curvature-table exercises.');
+console.log('All chapters have distinct transfer practice. Independent metric derivatives verify FLRW sources and Weyl cancellation for all three spatial curvatures, spherical time dependence, Kerr vacuum, regular horizon curvature, conformal and wave invariants, and the separate weak-field potentials.');

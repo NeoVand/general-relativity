@@ -5895,13 +5895,13 @@ The useful physical idea is that an isolated black hole settling into the approp
 
 <a id="chapter-18"></a>
 
-## 18. Gravitational waves: curvature can carry a message
+## 18. Gravitational waves: from moving masses to a detector
 
 The metric responds to matter, but it is not required to follow matter instantaneously. Einstein's equation is a dynamical field equation. Once disturbed, geometry has propagating degrees of freedom of its own.
 
 The key conceptual distinction is between a field's **source** and the **field already present**. Maxwell's equations permit light in a charge-free region. Einstein's equation permits gravitational waves in a matter-free region. “The source is zero here” does not imply “the solution is zero here.”
 
-### 18.1 Linearization is a controlled approximation, not a different theory
+### 18.1 Keeping the first-order gravitational field
 
 Use Cartesian coordinates $x^0=ct$ on a Minkowski background, take $\Lambda=0$, and write
 
@@ -5927,7 +5927,7 @@ $$
 -\partial_\sigma h_{\mu\nu}).
 $$
 
-Why not use the full inverse metric in this expression? Its correction is already first order, so multiplying it by $\partial h$ would give a second-order term. Why omit $\Gamma\Gamma$ from linearized curvature? For the same reason: each connection is first order around this constant background.
+The correction to the inverse metric is first order. Multiplying it by $\partial h$ would give a second-order term, which we discard here. For the same reason, the $\Gamma\Gamma$ terms do not enter first-order curvature: each connection is first order around this constant background.
 
 Contracting the derivative terms in Riemann gives
 
@@ -5953,9 +5953,9 @@ $$
 R^{(1)}=\partial_\mu\partial_\nu h^{\mu\nu}-\Box h.
 $$
 
-Read the Ricci formula slowly. Two terms involve divergences of $h$, one is a wave operator acting on each component, and one differentiates the trace. That structure suggests choosing variables and coordinates that isolate the wave operator.
+Two terms in Ricci involve divergences of $h$, one applies the wave operator to each component, and one differentiates the trace. Combining the trace with $h_{\mu\nu}$ will collect these terms into a simpler equation.
 
-### 18.2 Trace reversal and Lorenz gauge: cleaning the algebra without deleting physics
+### 18.2 Trace reversal and Lorenz gauge
 
 Define the trace-reversed perturbation
 
@@ -5980,7 +5980,7 @@ G^{(1)}_{\mu\nu}
 -\frac12\eta_{\mu\nu}\partial^\alpha\partial^\beta\bar h_{\alpha\beta}.
 $$
 
-Symmetrization includes its factor of $1/2$. The unhelpful terms are now explicitly divergences of $\bar h$.
+Symmetrization includes its factor of $1/2$. The terms beyond the wave operator all contain the divergence of $\bar h$. A coordinate choice that makes this divergence zero will remove them together.
 
 Under an infinitesimal coordinate change $x'^\mu=x^\mu+\xi^\mu$, the first-order perturbation changes by
 
@@ -6010,7 +6010,7 @@ $$
 \boxed{\Box\bar h_{\mu\nu}=-\frac{16\pi G_N}{c^4}T_{\mu\nu}.}
 $$
 
-The coefficient follows directly from $G^{(1)}_{\mu\nu}=-\Box\bar h_{\mu\nu}/2$ and Einstein's $8\pi G_N/c^4$. If you lose a factor of two here, every predicted wave amplitude will faithfully preserve your mistake.
+The coefficient follows directly from $G^{(1)}_{\mu\nu}=-\Box\bar h_{\mu\nu}/2$ and Einstein's $8\pi G_N/c^4$. The extra factor of two comes from dividing by the coefficient $-1/2$ on the geometric side.
 
 Taking a divergence requires $\partial^\mu T_{\mu\nu}=0$ at this order. The source cannot be chosen arbitrarily; its leading dynamics must be consistent with energy-momentum conservation. For a self-gravitating compact system, systematically including the gravitational contribution requires the appropriate perturbative expansion rather than inserting an inconsistent prescribed matter motion.
 
@@ -6033,7 +6033,32 @@ Its wave covector is null; for a wave propagating along $z$, the phase depends o
 
 The gauge condition gives $k^\mu A_{\mu\nu}=0$, four restrictions on a symmetric tensor's ten components. But this gauge is not fully fixed: transformations satisfying $\Box\xi^\mu=0$ preserve it. For a nonzero vacuum plane wave, four residual gauge choices remove four further amplitude combinations. What remains are two independent radiative polarizations.
 
-This $10-4-4=2$ count is an on-shell plane-wave count. It should not be applied blindly to arbitrary metric perturbations with matter, boundaries, or constrained nonradiative components.
+This count applies to a nonzero vacuum plane wave satisfying both its field equation and gauge condition. The explicit reduction below shows which components disappear; counting alone would not establish their independence.
+
+<details class="history-note" data-no-narration>
+<summary>Further calculation: remove the four residual components</summary>
+
+Write the unbarred amplitude as $H_{\mu\nu}$, so $h_{\mu\nu}=\operatorname{Re}[H_{\mu\nu}e^{ik_\alpha x^\alpha}]$. For propagation in the positive $z$ direction, take $k_\mu=(-q,0,0,q)$ with $q=\omega/c\ne0$. A residual coordinate change $\xi_\mu=\operatorname{Re}[B_\mu e^{ik_\alpha x^\alpha}]$ satisfies $\Box\xi_\mu=0$ because $k$ is null. It changes the amplitude by
+
+$$
+H'_{\mu\nu}=H_{\mu\nu}-i(k_\mu B_\nu+k_\nu B_\mu).
+$$
+
+The time-containing entries consequently obey
+
+$$
+\begin{aligned}
+H'_{00}&=H_{00}+2iqB_0,\\
+H'_{01}&=H_{01}+iqB_1,\qquad H'_{02}=H_{02}+iqB_2,\\
+H'_{03}&=H_{03}+iq(B_3-B_0).
+\end{aligned}
+$$
+
+Choose $B_0$ to set the first line to zero, $B_1,B_2$ to set the second line to zero, and then $B_3$ to set the third line to zero. Thus all $H'_{0\mu}$ vanish, while Lorenz gauge remains satisfied.
+
+Since $k^\mu=(q,0,0,q)$, that gauge condition reads $\bar H'_{0\nu}+\bar H'_{3\nu}=0$. At $\nu=0$, the already zero time entries leave $H'/2=0$, where $H'$ is the trace. The remaining conditions then give $H'_{3\nu}=0$. Only $H'_{11}=-H'_{22}$ and $H'_{12}=H'_{21}$ are free. These are the two amplitudes displayed below.
+
+</details>
 
 A convenient representative is **transverse-traceless**, or TT, gauge. For propagation along $z$,
 
@@ -6048,17 +6073,24 @@ h_\times&-h_+&0\\
 \qquad h_+=h_+(t-z/c),\quad h_\times=h_\times(t-z/c).
 $$
 
-“Transverse” means the perturbation has no component along the propagation direction. “Traceless” means its first-order expansion along one transverse axis is accompanied by contraction along the other.
+“Transverse” means the spatial perturbation has no component along the propagation direction. “Traceless” means its diagonal spatial entries sum to zero. Along the instantaneous principal axes, the two transverse eigenvalues are equal and opposite.
 
 The plus polarization stretches an initially circular ring of free test particles along one axis and compresses it along the perpendicular axis. Half a cycle later the roles reverse. The cross polarization does the same with axes rotated by $45^\circ$. Superpositions produce elliptical or circular polarization.
 
-An ordinary vector's components mix by an angle $\theta$ when transverse axes rotate by $\theta$. These two polarization amplitudes mix by $2\theta$. That doubled angular response is a classical signature of the spin-2 character of the field. It does not require a quantum detector to see the relevant transformation rule.
+Rotate the transverse basis by $\theta$, taking $e'_x=\cos\theta\,e_x+\sin\theta\,e_y$ and $e'_y=-\sin\theta\,e_x+\cos\theta\,e_y$. Applying the tensor transformation to its two inputs gives
 
-### 18.4 “But the particles do not move in TT coordinates!” Exactly
+$$
+\begin{aligned}
+h'_+&=h_+\cos2\theta+h_\times\sin2\theta,\\
+h'_\times&=-h_+\sin2\theta+h_\times\cos2\theta.
+\end{aligned}
+$$
 
-For initially stationary free test particles in TT coordinates, $\Gamma^i{}_{00}=0$ at first order. Their spatial coordinates can remain constant. Does that mean the wave is an illusion?
+The double angle follows from $\cos^2\theta-\sin^2\theta=\cos2\theta$ and $2\sin\theta\cos\theta=\sin2\theta$. In particular, a $45$-degree rotation exchanges the two patterns up to sign. This transformation is the classical meaning of the wave’s **spin-2** angular response.
 
-No. Coordinates are labels; the metric tells us the distance between labels. Along a short arm directed along $x$,
+### 18.4 What a detector measures in TT coordinates
+
+For initially stationary free test particles in TT coordinates, $\Gamma^i{}_{00}=0$ at first order. Their spatial coordinates can remain constant while the metric changes the distance between them. Along a short arm directed along $x$,
 
 $$
 L_x(t)=\int_0^{L_0}\sqrt{1+h_+}\,dx
@@ -6097,9 +6129,16 @@ $$
 
 For $L_0=4\,\mathrm{km}$ and $h_+=10^{-21}$, the differential equivalent length is $4\times10^{-18}\,\mathrm m$. Each individual arm's change in this idealized example is half that magnitude with opposite sign. Actual responses include source direction, polarization, optical configuration, and frequency-dependent light travel effects.
 
-Why does the light not “stretch exactly with the apparatus” and erase the measurement? Because an interferometer measures the relation between null propagation, mirror worldlines, and a clock at the beamsplitter. The wave creates a time-dependent anisotropic tidal geometry. There is no universal rescaling of every relevant relation that turns this into an unchanged experiment. The full light-travel calculation agrees with the simple strain description in its regime of validity.
+We can check the light signal explicitly in the same short-arm limit. During one round trip, treat $h_+$ as approximately constant. The null condition along the $x$ arm gives $c\,dt\simeq(1+h_+/2)|dx|$; the $y$ arm has the opposite sign. Their round-trip times are therefore
 
-### 18.5 Retarded solutions: the field receives yesterday's news
+$$
+T_x\simeq\frac{2L_0}{c}(1+h_+/2),\qquad
+T_y\simeq\frac{2L_0}{c}(1-h_+/2).
+$$
+
+The clock at the beamsplitter measures this $t$ as proper time because $g_{00}=-1$ there. The arrival-time difference is $T_x-T_y=2L_0h_+/c$. A laser of local frequency $f_{\rm laser}$ converts it into a phase difference $2\pi f_{\rm laser}(T_x-T_y)$. Thus following the light gives a measurable change, consistent with the strain calculation. For longer arms relative to the wavelength, integrate the changing field along each outgoing and returning light path instead.
+
+### 18.5 Waves from a changing source
 
 With no incoming radiation and an appropriate localized weak source, the retarded solution is
 
@@ -6110,7 +6149,7 @@ $$
 {|\mathbf x-\mathbf x'|}\,d^3x'.
 $$
 
-Every source element contributes at its own retarded time. The denominator spreads the disturbance over distance; the time argument enforces finite propagation. This is the gravitational cousin of a retarded electromagnetic potential, with a tensor source and tensor response.
+Every source element contributes at its own retarded time. The denominator gives the falloff with distance; the time argument samples the source when its signal had to leave to reach the observer now.
 
 For a source much smaller than its characteristic gravitational wavelength, observed far away at distance $D$, approximate the denominator by $D$ and the leading source time by $t-D/c$. Then
 
@@ -6165,9 +6204,11 @@ $$
 
 acting here on symmetric tensors. The first operation projects both indices into the observer's transverse plane. The second removes the trace within that two-dimensional plane, hence $1/2$ rather than the $1/3$ used to remove a three-dimensional trace. That difference is a useful check that the geometry remains attached to the algebra.
 
-### 18.6 Why a violently breathing sphere still does not radiate tensor waves
+### 18.6 Which source motions radiate
 
-An isolated source's leading mass monopole is its conserved total mass-energy. Its leading mass dipole describes its center of mass, whose velocity is fixed by conserved total momentum. A changing monopole or accelerating isolated center of mass is unavailable as a radiative degree of freedom. The leading current dipole is tied to conserved angular momentum. The first available leading tensor radiation comes from a changing quadrupole.
+The **mass monopole** is the total mass at the accuracy of this slow-motion calculation, $M=\int\rho\,d^3x$. The **mass dipole** is the vector $D_i=\int\rho x_i\,d^3x=M x_{{\rm CM},i}$, locating the center of mass. The quadrupole uses two position factors, as in $I_{ij}$ above.
+
+Conservation gives $\dot M=0$, $\dot D_i=P_i$, and $\dot P_i=0$ for an isolated leading-order source, where $P_i$ is total momentum. Its dipole therefore has no second time derivative. The analogous first moment of the mass current describes total angular momentum, also conserved at this order. These lower moments cannot supply the varying radiative field. The quadrupole is the first available mass moment.
 
 Two masses orbiting each other continually change their quadrupole even if their total mass and center of mass remain constant. A perfectly spherical body expanding and contracting has no trace-free mass quadrupole. Exact spherical symmetry also forbids tensor gravitational radiation beyond this approximation, consistent with Birkhoff's theorem in the vacuum exterior.
 
@@ -6204,7 +6245,7 @@ P_{\rm GW}=\frac{G_N}{5c^5}
 \left\langle\dddot Q_{ij}\dddot Q^{ij}\right\rangle.
 $$
 
-The extra time derivative relative to the strain reflects that energy depends on the rate of change of the wave. We can even uncover the mysterious $1/5$ rather than asking you to trust a coefficient that apparently wandered in from another textbook.
+The flux contains the square of a first time derivative of strain, whereas strain contains a second derivative of $Q$. That explains the third derivative in the power. The factor $1/5$ follows by integrating the transverse projection over all viewing directions, as we now calculate.
 
 Write $A_{ij}=\dddot Q_{ij}$ at a fixed retarded time. Substituting the quadrupole strain into the flux and integrating over a large sphere gives
 
@@ -6250,7 +6291,7 @@ $$
 P_{\rm GW}=\frac{32}{5}\frac{G_N^4\mu^2M^3}{c^5r^5}.
 $$
 
-To see the binary coefficient, put the relative position at $\mathbf r=r(\cos\Omega t,\sin\Omega t,0)$ in its center-of-mass frame. Then $I_{ij}=\mu r_i r_j$. The changing quadrupole components are
+To see the binary coefficient, put the relative position at $\mathbf r=r(\cos\Omega t,\sin\Omega t,0)$ in its center-of-mass frame. The center-of-mass condition places the two bodies at $\mathbf r_1=(m_2/M)\mathbf r$ and $\mathbf r_2=-(m_1/M)\mathbf r$. Substituting these in $I_{ij}=m_1r_{1i}r_{1j}+m_2r_{2i}r_{2j}$ gives $I_{ij}=\mu r_i r_j$. The changing quadrupole components are
 
 $$
 \begin{aligned}
@@ -6269,9 +6310,18 @@ $$
 
 Use $\Omega^2=G_NM/r^3$ in the quadrupole power law to obtain the displayed binary luminosity. This leading calculation treats the orbit as approximately circular and nearly unchanged over one cycle; the slow inspiral is then included through energy balance.
 
-Its Newtonian binding energy is $E=-G_N\mu M/(2r)$. Because $dE/dt=-P_{\rm GW}<0$, the energy becomes more negative and $r$ decreases. Kepler's relation $\Omega^2=G_NM/r^3$ then makes the orbital frequency increase. The system loses energy and speeds up: a bound gravitational system has just ambushed everyday friction intuition.
+Its Newtonian binding energy is $E=-G_N\mu M/(2r)$. Because $dE/dt=-P_{\rm GW}<0$, the energy becomes more negative and $r$ decreases. Kepler's relation $\Omega^2=G_NM/r^3$ then makes the orbital frequency increase. Its speed increases while its total energy decreases: the drop in gravitational potential energy is greater than the gain in kinetic energy.
 
-The dominant wave frequency is twice the orbital frequency, $f=\Omega/\pi$. Rewriting $E$ and $P$ in terms of $f$, differentiating $E(f)$, and applying energy balance yields
+The quadrupole components repeat at twice the orbital frequency, so the dominant wave frequency is $f=\Omega/\pi$. Kepler’s relation gives $r=(G_NM)^{1/3}(\pi f)^{-2/3}$. Define $\mathcal M=\mu^{3/5}M^{2/5}$, so $\mathcal M^{5/3}=\mu M^{2/3}$. Substitution into the energy and power gives
+
+$$
+\begin{aligned}
+E(f)&=-\frac12G_N^{2/3}\mathcal M^{5/3}(\pi f)^{2/3},\\
+P(f)&=\frac{32}{5c^5}G_N^{7/3}\mathcal M^{10/3}(\pi f)^{10/3}.
+\end{aligned}
+$$
+
+Differentiate $E$: $dE/df=-G_N^{2/3}\mathcal M^{5/3}\pi^{2/3}f^{-1/3}/3$. Energy balance, $(dE/df)\dot f=-P$, then yields
 
 $$
 \dot f=\frac{96}{5}\pi^{8/3}
@@ -6282,30 +6332,32 @@ $$
 
 The combination $\mathcal M$ is the **chirp mass**. Its name is operational: the measured rate at which the signal's pitch rises strongly constrains it. This is a leading inspiral formula, requiring slow enough orbital motion for the approximation. Near merger, higher-order analytic methods and numerical solutions of Einstein's equation become necessary.
 
-### 18.8 A real event that turned these symbols into data
+### 18.8 Comparing the prediction with GW150914
 
 On September 14, 2015, LIGO detected GW150914. The discovery report described a signal rising from approximately $35$ to $250$ Hz with peak strain about $10^{-21}$. Its inferred source was a merging binary black hole; the initial analysis estimated that roughly three solar masses of energy were radiated. These are findings of the original analysis, with model-dependent parameter estimates and uncertainties, rather than exact source properties. [LIGO Scientific Collaboration and Virgo Collaboration, *Observation of Gravitational Waves from a Binary Black Hole Merger*](https://arxiv.org/abs/1602.03837).
 
-The conceptual achievement is broader than hearing a cosmic chirp. A theory derived from a variational principle and local geometric identities predicted a timed sequence of tidal distortions caused by distant dynamical curvature. Instruments measured that sequence. Agreement constrains alternatives; it does not logically prove that no other theory can agree in the tested regime.
+The measured signal includes the increase in frequency described by the inspiral calculation. The final merger and settling require stronger-field predictions than the leading quadrupole formula. Comparing the complete predicted waveform with detector data tests this progression through different regimes.
 
 <a id="chapter-19"></a>
 
 ## 19. Cosmology: Einstein's equation for the large-scale universe
 
-Black holes exploit isolation. Cosmology exploits symmetry of a different kind: on sufficiently large scales, approximate homogeneity and isotropy. This does not mean the universe has no galaxies. It means we construct a smooth background description whose departures can then be studied as perturbations.
+Follow three widely separated galaxies carried by an expanding background. If every separation grows by the same fraction during the same time, one function can describe that common change: the scale factor. We first study this smooth background, then use it to calculate the light received from a distant source. Individual galaxies and other departures from uniformity require additional structure.
 
 Homogeneity says no spatial location is special in the background model. Isotropy says no spatial direction is special for its fundamental observers. Neither assumption requires time independence. The universe is allowed to evolve while treating every background location equivalently.
 
-### 19.1 FLRW geometry, with the units declared before the equations multiply
+### 19.1 A metric for uniform expansion
 
-Use the chart $(t,\chi,\theta,\phi)$, with $t$ in seconds and the comoving spatial coordinates dimensionless. Choose
+Attach spatial labels to the background observers so their labels stay fixed during expansion. Such coordinates are called **comoving**. Use the chart $(t,\chi,\theta,\phi)$, with $t$ in seconds and the spatial labels dimensionless. The common scaling and spatial symmetries lead to
 
 $$
 \boxed{ds^2=-c^2dt^2+a^2(t)
 \left[\frac{d\chi^2}{1-k\chi^2}+\chi^2d\Omega^2\right],}
 $$
 
-where $a(t)$ has units of length and $k\in\{-1,0,+1\}$ is dimensionless. This is the Friedmann–Lemaître–Robertson–Walker metric. The spatial slices have scalar curvature
+where $a(t)$ has units of length and $k\in\{-1,0,+1\}$ is dimensionless. This is the **Friedmann–Lemaître–Robertson–Walker (FLRW) metric**. For $k=+1$, the displayed radial chart has $0\le\chi<1$ and does not cover the whole closed spatial geometry; Section 19.7 gives a radial coordinate that continues past this patch. The angular coordinates have their usual pole limitations.
+
+At fixed time, isotropy makes the sectional curvature the same for every spatial two-plane, and homogeneity makes it the same at each point. Call that value $K_s=k/a^2$. In an orthonormal spatial frame the curvature therefore has the form ${}^{(3)}R_{ijkl}=K_s(\delta_{ik}\delta_{jl}-\delta_{il}\delta_{jk})$. Contracting gives ${}^{(3)}R_{ij}=2K_s\delta_{ij}$, and a second contraction gives
 
 $$
 {}^{(3)}R=\frac{6k}{a^2}.
@@ -6323,9 +6375,9 @@ $$
 H=\frac{\dot a}{a},
 $$
 
-with units of inverse time. It measures the fractional expansion rate. An expansion factor is a ratio of scale factors, while $H$ is a rate of change. Confusing those is like confusing the current size of your bank balance with its interest rate.
+with units of inverse time. It measures the fractional expansion rate. An expansion factor is a ratio of scale factors, while $H$ is a rate of change. For example, doubling all distances is an expansion factor of two; taking a billion years to do so and taking two billion years imply different expansion rates.
 
-### 19.2 Deriving the curvature without hiding the time dependence
+### 19.2 Calculating the spacetime curvature
 
 Write the spatial bracket as $\gamma_{ij}dx^i dx^j$, so $g_{ij}=a^2\gamma_{ij}$ and $\gamma$ has unit constant curvature $k$. The useful connection coefficients are
 
@@ -6348,7 +6400,7 @@ $$
 
 The cancellation uses $\dot H=\ddot a/a-H^2$. There are three equal spatial contributions because there are three equivalent spatial directions.
 
-For the spatial Ricci components, the intrinsic curvature contributes $2k\gamma_{ij}$. The time-dependent terms contribute $(a\ddot a+2\dot a^2)\gamma_{ij}/c^2$. Thus
+For the spatial Ricci components, the intrinsic curvature contributes $2k\gamma_{ij}$. The time-dependent pieces are $\partial_t\Gamma^t{}_{ij}=(\dot a^2+a\ddot a)\gamma_{ij}/c^2$, the trace product $3H\Gamma^t{}_{ij}=3\dot a^2\gamma_{ij}/c^2$, and the two remaining mixed products totaling $-2\dot a^2\gamma_{ij}/c^2$. Adding them gives
 
 $$
 R_{ij}=\left(\frac{a\ddot a+2\dot a^2}{c^2}+2k\right)\gamma_{ij}.
@@ -6375,7 +6427,7 @@ G^i{}_j=-\frac1{c^2}
 \left(2\frac{\ddot a}{a}+H^2+\frac{kc^2}{a^2}\right)\delta^i{}_j.
 $$
 
-The $tt$ component has inverse-time-squared units because this chart uses $t$, not $ct$. The mixed spatial components have inverse-length-squared units. This is consistent tensor dimensional bookkeeping, not an inconsistency to be repaired by arbitrarily inserting $c$.
+The $tt$ component has inverse-time-squared units because this chart uses $t$, not $ct$. The mixed spatial components have inverse-length-squared units. The coordinate units explain the difference, just as the metric’s $tt$ component carries $c^2$ when $t$ is measured in seconds.
 
 ### 19.3 The Friedmann equations: what controls expansion and acceleration
 
@@ -6418,15 +6470,27 @@ $$
 +\frac{\Lambda c^2}{3}.}
 $$
 
-This is the acceleration equation. Energy density and isotropic pressure both gravitate. The three pressures arise from the three spatial directions, not from an arbitrary correction inserted to surprise Newton.
+This is the acceleration equation. Energy density and isotropic pressure both gravitate. The factor three counts the three equal spatial pressures in the rest frame.
 
 A positive expansion rate $H>0$ does not imply accelerating expansion $\ddot a>0$. A ball thrown upward moves upward while slowing. Likewise, a matter-filled model can grow in size while its growth rate decreases.
 
 Conversely, a positive cosmological constant contributes positively to $\ddot a/a$. If it dominates, expansion accelerates. The equations make the condition quantitative instead of relying on the ambiguous phrase “repulsive gravity.”
 
-### 19.4 Conservation becomes the universe's first law of thermodynamics
+### 19.4 Energy conservation during expansion
 
-The time component of $\nabla_\mu T^{\mu\nu}=0$ gives
+Use the mixed components $T^t{}_t=-\epsilon$ and $T^i{}_j=p\delta^i{}_j$. The time component of their covariant divergence is
+
+$$
+\begin{aligned}
+\nabla_\mu T^\mu{}_t
+&=\partial_t(-\epsilon)
++\Gamma^\mu{}_{\mu t}(-\epsilon)
+-\Gamma^j{}_{it}p\delta^i{}_j\\
+&=-\dot\epsilon-3H\epsilon-3Hp.
+\end{aligned}
+$$
+
+Setting it to zero gives
 
 $$
 \boxed{\dot\epsilon+3H(\epsilon+p)=0.}
@@ -6440,7 +6504,7 @@ $$
 
 This has the familiar form $dE=-p\,dV$. As the volume expands, positive pressure reduces the energy within that comoving volume. The fluid does expansion work in this local continuum sense.
 
-These equations are not three independent pieces of information. Differentiate the first Friedmann equation and use the continuity equation; away from a turning point, dividing by $H$ recovers the acceleration equation. At $H=0$, use the original Einstein and conservation equations rather than dividing by zero. Bianchi consistency is doing its job even when an algebraic shortcut is unavailable.
+These equations are not three independent pieces of information. Differentiate the first Friedmann equation and use the continuity equation; away from a turning point, dividing by $H$ recovers the acceleration equation. At $H=0$, use the original Einstein and conservation equations rather than dividing by zero. The undivided equations remain valid at a turning point.
 
 For a separately conserved component with constant equation-of-state parameter
 
@@ -6481,7 +6545,7 @@ Either keep $\Lambda$ explicit in the Friedmann equations or include this compon
 
 A comoving volume filled with this effective component gains total energy as it grows, since its energy density remains constant. This does not violate the continuity equation; its negative pressure makes the right-hand side $-p\,dV$ positive. In a general expanding spacetime there is no global timelike translation symmetry supplying a universally conserved total energy of the elementary mechanics kind.
 
-### 19.5 Solving for the scale factor: three recognizable cosmic personalities
+### 19.5 Solving for the scale factor
 
 Consider a spatially flat universe dominated by a single separately conserved constant-$w$ component, with no additional explicit $\Lambda$. For $w>-1$, choose the expanding branch. Combining the first Friedmann equation with the density scaling gives
 
@@ -6508,7 +6572,7 @@ H=\sqrt{\frac{\Lambda c^2}{3}}=\text{constant},
 \qquad a(t)\propto e^{Ht}.
 $$
 
-The power-law derivation excluded $w=-1$, so the exponential must be obtained separately. Plugging $w=-1$ into the power-law exponent and celebrating infinity would be mathematics performing a distress signal.
+For $w=-1$, the density is constant, so the first Friedmann equation makes $H$ constant. Integrating $\dot a/a=H$ gives the exponential directly. This case was excluded when we divided by $1+w$ in the power-law integration.
 
 More generally, a positive-density single component with $w<-1/3$ produces acceleration in the flat model. That criterion depends on the total effective $\epsilon+3p$ when multiple components are present.
 
@@ -6544,11 +6608,11 @@ $$
 
 A photon observed at redshift $z=2$ was emitted when the scale factor was one third its value at observation. Its observed wavelength is three times its emitted wavelength, assuming no additional peculiar-motion or local gravitational shifts.
 
-Photon energy is proportional to frequency, so it scales as $a^{-1}$. Combined with number-density dilution $a^{-3}$, this independently explains radiation's $a^{-4}$ energy-density law. The geodesic calculation and the fluid conservation calculation agree: two conceptual roads reach the same equation.
+Photon energy is proportional to frequency, so it scales as $a^{-1}$. Combined with number-density dilution $a^{-3}$, this independently explains radiation's $a^{-4}$ energy-density law. The light-propagation and fluid-conservation calculations give the same density scaling.
 
 This redshift differs from comparing stationary observers in a static potential. Generic FLRW spacetime has no corresponding global timelike Killing symmetry. A useful alternative interpretation builds the redshift from many small local Doppler shifts between neighboring comoving observers. What one should not do is pretend all widely separated cosmological observers share one global special-relativistic inertial frame.
 
-### 19.7 Conformal time: changing the graph paper to straighten light rays
+### 19.7 Conformal time and radial light rays
 
 Define dimensionless conformal time by
 
@@ -6563,13 +6627,15 @@ ds^2=a^2(\eta)\left[-d\eta^2+d\psi^2+
 S_k^2(\psi)d\Omega^2\right],
 $$
 
-where $S_{+1}(\psi)=\sin\psi$, $S_0(\psi)=\psi$, and $S_{-1}(\psi)=\sinh\psi$ in their appropriate coordinate domains. Radial light rays now satisfy $d\psi=\pm d\eta$.
+The radial functions follow by integrating $d\chi/d\psi=\sqrt{1-k\chi^2}$ near the origin: $\chi=\sin\psi$ for $k=+1$, $\chi=\psi$ for $k=0$, and $\chi=\sinh\psi$ for $k=-1$. Thus $S_{+1}(\psi)=\sin\psi$, $S_0(\psi)=\psi$, and $S_{-1}(\psi)=\sinh\psi$.
 
-The transformation has made causal bookkeeping much easier. Multiplying a metric by a positive conformal factor preserves its null cones. It does not preserve proper times, physical lengths, or affine parameters of null geodesics. The graph paper can straighten the light rays without stopping the universe's clocks and rulers from evolving.
+In the closed case, $0<\psi<\pi$ continues smoothly through $\psi=\pi/2$, where $\chi$ ceased to be a usable radial coordinate. The endpoints are the two poles of this spherical spatial chart. Radial light rays now satisfy $d\psi=\pm d\eta$.
+
+A plot of $\psi$ against $\eta$ now draws radial light at slopes $+1$ and $-1$. Multiplying a metric by a positive conformal factor preserves its null cones. It does not preserve proper times, physical lengths, or affine parameters of null geodesics. The prefactor $a^2$ still determines the physical lengths and times represented by that plot.
 
 This distinction becomes especially useful for horizons: what matters is how much conformal time has elapsed or remains, not merely whether today's expansion rate sounds large.
 
-### 19.8 Three distances called a horizon far too casually
+### 19.8 The Hubble radius and the two cosmological horizons
 
 At fixed cosmic time, radial proper distance from the origin along a spatial slice is $D=a(t)\psi$. A comoving object has fixed $\psi$, so
 
@@ -6613,15 +6679,29 @@ Cosmological effects can appear as tiny tidal terms in suitable local approximat
 
 Dark matter and dark energy also play different dynamical roles. In the usual cosmological modeling, cold dark matter behaves approximately as pressureless matter, contributes to gravitational clustering, and has background density scaling approximately as $a^{-3}$. Dark energy labels the component or effective physics invoked for accelerated expansion; a cosmological constant is the simplest constant-$w=-1$ realization. The equations alone do not identify dark matter's particle properties or prove that dark energy is exactly a cosmological constant.
 
-Historically, distant Type Ia supernova measurements supplied evidence for accelerated expansion through the relation between observed redshift and inferred luminosity distance. A primary account is [Riess and collaborators, *Observational Evidence from Supernovae for an Accelerating Universe and a Cosmological Constant*](https://arxiv.org/abs/astro-ph/9805201). Such an inference connects calibrated observations to a model for light propagation and cosmic evolution; it is not a direct photograph of negative pressure.
+Type Ia supernovae are stellar explosions whose brightness can be calibrated using their observed light curves and spectra. Comparing that calibrated luminosity with the received flux defines a **luminosity distance**, worked out in Section 19.11. Historically, the relation between these distances and redshifts supplied evidence for accelerated expansion. A primary account is [Riess and collaborators, *Observational Evidence from Supernovae for an Accelerating Universe and a Cosmological Constant*](https://arxiv.org/abs/astro-ph/9805201). Such an inference connects calibrated observations to a model for light propagation and cosmic evolution; it is not a direct photograph of negative pressure.
 
 The modern task is to confront expansion, lensing, clustering, and other observables together while checking systematics and assumptions. A successful fit within GR supports that description. It does not establish that every alternative gravitational theory is mathematically incapable of producing the same particular observations.
 
-### 19.10 A curvature comparison that should permanently cure one misconception
+### 19.10 Comparing cosmological and black-hole curvature
 
-FLRW is conformally flat: its Weyl tensor vanishes. Its curvature is entirely in the Ricci part. The Schwarzschild vacuum exterior has the opposite pattern: its Ricci tensor vanishes while its Weyl tensor carries the tidal field.
+FLRW has zero Weyl curvature. To check this rather than infer it from spatial flatness, define
 
-There is an additional surprise. A radiation-filled FLRW solution with $\Lambda=0$ has $T=-\epsilon+3p=0$, so the traced Einstein equation gives $R=0$. Yet $R_{\mu\nu}$ is nonzero. Even vanishing scalar curvature is a remarkably weak statement about the full geometry.
+$$
+\mathcal A=\frac{\ddot a}{ac^2},\qquad
+\mathcal B=\frac{H^2}{c^2}+\frac{k}{a^2}.
+$$
+
+The orthonormal curvature components from the connection calculation are $R_{i0j0}=-\mathcal A\delta_{ij}$ and $R_{ijkl}=\mathcal B(\delta_{ik}\delta_{jl}-\delta_{il}\delta_{jk})$, with the time-space mixed triples zero. They give $R_{00}=-3\mathcal A$, $R_{ij}=(\mathcal A+2\mathcal B)\delta_{ij}$, and $R=6(\mathcal A+\mathcal B)$. Substituting these in Chapter 9’s Weyl decomposition gives, for example,
+
+$$
+C_{0i0j}=\left[-\mathcal A+\frac12(4\mathcal A+2\mathcal B)
+-(\mathcal A+\mathcal B)\right]\delta_{ij}=0.
+$$
+
+The spatial components cancel as $\mathcal B-(\mathcal A+2\mathcal B)+(\mathcal A+\mathcal B)=0$. The mixed components are already zero. All curvature is therefore in the Ricci part; the metric is **conformally flat**, as defined in Chapter 9. The Schwarzschild vacuum exterior has the opposite pattern: its Ricci tensor vanishes while its Weyl tensor carries the tidal field.
+
+There is a useful further check. A radiation-filled FLRW solution with $\Lambda=0$ has $T=-\epsilon+3p=0$, so the traced Einstein equation gives $R=0$. Yet $R_{\mu\nu}$ is nonzero. The zero scalar is a cancellation in the contraction, not the absence of the individual Ricci components.
 
 | Geometry or region | Ricci tensor | Weyl tensor | What this teaches |
 |---|---|---|---|
@@ -6634,11 +6714,32 @@ The Einstein equation controls a particular contraction of curvature. Matter-fil
 
 Vanishing Weyl curvature does not mean vanishing geodesic deviation. De Sitter spacetime, for example, has isotropic relative acceleration of neighboring comoving geodesics. The Ricci–Weyl split distinguishes parts of the tidal geometry; it does not assign all measurable gravitational effects to Weyl alone.
 
-<a id="chapter-20"></a>
-
 ### 19.11 Observe an expansion history
 
-Redshift, brightness, and angular size give complementary questions to ask of the same expansion model. The worked lesson separates their distance definitions and builds the prediction from the Friedmann equation.
+Consider a comoving source seen at redshift $z$, at radial coordinate $\psi$ from us. Let $a_0$ be the scale factor when we observe it. Its present radial distance along the cosmic-time slice is $D_C=a_0\psi$. A sphere at that coordinate has present area $4\pi[a_0S_k(\psi)]^2$, which defines the transverse comoving distance $D_M=a_0S_k(\psi)$. For flat spatial geometry these distances agree.
+
+Suppose a small transverse feature had proper size $\ell$ when its light was emitted. The angular part of the metric gives $\ell\simeq a_{\rm em}S_k(\psi)\theta$ for its small observed angle $\theta$. The **angular-diameter distance** is the distance a Euclidean observer would infer from that size and angle:
+
+$$
+D_A\equiv\frac{\ell}{\theta}
+=a_{\rm em}S_k(\psi)=\frac{D_M}{1+z}.
+$$
+
+Brightness supplies another measurement. Let the source radiate isotropically with luminosity $L$, its emitted energy per unit proper time summed over all wavelengths. The received flux $F$ is energy per unit detector area per unit observer time, also summed over wavelengths. The photons spread over area $4\pi D_M^2$. Each loses an energy factor $1/(1+z)$, and their arrival intervals grow by $1+z$. Thus
+
+$$
+F=\frac{L}{4\pi D_M^2(1+z)^2}.
+$$
+
+Define the **luminosity distance** by $F=L/(4\pi D_L^2)$. Comparing the two expressions gives
+
+$$
+D_L=(1+z)D_M=(1+z)^2D_A.
+$$
+
+At $z=1$, the same source has $D_L=4D_A$. The definitions differ because the brightness measurement includes two redshift effects that the angle measurement does not. This calculation assumes the smooth FLRW model, light wavelengths short compared with the curvature scale, and no absorption or conversion of photons along the beam. The worked example now obtains these distances from an expansion history.
+
+<a id="chapter-20"></a>
 
 ## 20. Making spacetime run: initial data, constraints, and numerical relativity
 

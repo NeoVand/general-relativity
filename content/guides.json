@@ -164,7 +164,7 @@
   "18": {
     "title": "Gravitational waves",
     "deck": "A gravitational wave changes distances in a characteristic pattern. Learn what a detector actually measures.",
-    "question": "Why are there only two gravitational-wave polarizations?",
+    "question": "How can a passing gravitational wave change a detector’s reading?",
     "payoff": "Connect the linearized field equation to detector strain and quadrupole radiation.",
     "takeaway": "Coordinates can hold the test masses fixed while the proper distances between them vary. The measurable effect is relative geometry.",
     "check": "Does a perfectly spherical breathing source emit tensor gravitational waves?",
@@ -172,7 +172,7 @@
   },
   "19": {
     "title": "Cosmology: an expanding universe",
-    "deck": "Give symmetry the hardest part of the algebra, then ask what matter does to expansion.",
+    "deck": "Follow expanding distances, derive their evolution, and calculate the light we receive.",
     "question": "What controls the expansion and acceleration of the universe?",
     "payoff": "Derive Friedmann evolution and distinguish redshift, distance, and horizons.",
     "takeaway": "Expansion rate and acceleration are different questions. A universe can expand while slowing down.",
