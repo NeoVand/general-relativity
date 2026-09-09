@@ -83,3 +83,10 @@ Reader feedback revealed that the first new units bridge depended on metrics and
 - Explained the two-input metric through polarization of the familiar squared-length rule; supplied a null-vector/nondegeneracy counterexample.
 - Defined the action before using it, derived its low-speed kinetic term, and recalled integration by parts at the first path variation.
 - Verified the rebuilt book, local links and mathematics, and all 37 generated lesson placements. The navigation check also passed under sixfold CPU throttling.
+
+### Preserve the expert reference without making it an entry requirement
+
+- Kept the opening invitation and the collapsed convention reference in sections that the publisher retains; the handwritten contents section is deliberately omitted from generated pages.
+- Excluded the convention reference from default narration while retaining its mathematics for explicit reference use. Added checks against silently dropping either the invitation or the reference.
+- Restated the scope of Newton’s model alongside the first gravitational potential.
+- Verified the build, local links, mathematics, generated lesson order, desktop/mobile entry behavior, and narration boundaries.

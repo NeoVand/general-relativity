@@ -1,8 +1,10 @@
 # General Relativity, From the Inside Out
 
-### A guided expedition from clocks and vectors to the Einstein–Hilbert action, black holes, and the modern theory of spacetime
+### How clocks, light, and falling objects reveal gravity
 
-**For a reader with basic calculus and linear algebra.** Chapter 0 builds the needed mechanics, partial derivatives, differential equations, and flux accounting. You do not need a prior course in physics or relativity. Everything specifically geometric—manifolds, covectors, connections, covariant derivatives, curvature, and metric variations—is developed here. Some later sections introduce graduate-level ideas, but the conceptual staircase remains visible.
+## Begin with measurements
+
+**For a reader with basic calculus and linear algebra.** Chapter 0 builds the needed mechanics, partial derivatives, differential equations, and flux accounting. You do not need a prior course in physics or relativity. The geometric language is developed as it becomes useful. Later chapters extend the same measurement questions into graduate material; each new mathematical tool needs its own explanation.
 
 Begin with a ruler, a clock, and a moving object. By the end, we want to calculate what clocks record near stars, how falling bodies move relative to one another, and what light can tell us about the universe. Einstein's equation will become useful after we have built the ideas it connects.
 
@@ -30,40 +32,7 @@ Do some exercises while the corresponding ideas are fresh rather than saving all
 
 **About the sources.** The explanations, analogies, and worked calculations are written as an independent tutorial. Links identify historical evidence, research results, and places to pursue particular ideas; the book is not a paraphrase of a single textbook. The final reading guide distinguishes foundational notes from original research. Exact contemporary parameter estimates and speculative claims are deliberately unnecessary to the main argument.
 
-## Contents
-
-- [0. Before spacetime: the tools you already almost know](#chapter-0)
-- [1. The scandal: gravity changes the measuring equipment](#chapter-1)
-- [2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe](#chapter-2)
-- [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
-- [4. Spacetime as a manifold: maps, rulers, and the geometry beneath them](#chapter-4)
-- [5. Free fall, the equivalence principle, and the worldline action](#chapter-5)
-- [6. Differentiation when your measuring axes will not sit still](#chapter-6)
-- [7. The connection: how neighboring laboratories compare directions](#chapter-7)
-- [8. Curvature: what remains after the coordinate excuses run out](#chapter-8)
-- [9. Ricci, Weyl, and Einstein: different questions asked of curvature](#chapter-9)
-- [10. Tides: how to measure curvature without seeing spacetime from outside](#chapter-10)
-- [11. Energy, momentum, and stress: what gravity listens to](#chapter-11)
-- [12. Einstein's equation: every symbol earns its place](#chapter-12)
-- [13. Variational calculus: learning to ask a whole history a question](#chapter-13)
-- [14. The Einstein–Hilbert action, taken apart completely](#chapter-14)
-- [15. Symmetry, conservation, vacuum energy, and the limits of slogans](#chapter-15)
-- [16. Turning geometry into experiments: clocks, light, and Mercury](#chapter-16)
-- [17. Black holes: when the causal structure becomes the main character](#chapter-17)
-- [18. Gravitational waves: curvature can carry a message](#chapter-18)
-- [19. Cosmology: Einstein's equation for the large-scale universe](#chapter-19)
-- [20. Making spacetime run: initial data, constraints, and numerical relativity](#chapter-20)
-- [21. A local laboratory at every point: tetrads, forms, and the gauge viewpoint](#chapter-21)
-- [22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics](#chapter-22)
-- [23. Einstein's equation as a low-energy masterpiece: effective theory and the frontier](#chapter-23)
-- [24. Bringing the whole machine together](#chapter-24)
-- [Appendix A. Thirty exercises that turn recognition into understanding](#appendix-a)
-- [Appendix B. A working reference sheet](#appendix-b)
-- [Appendix C. A plain-language glossary](#appendix-c)
-- [Appendix D. Where to go next](#appendix-d)
-- [Appendix E. Index practice and three extra calculations](#appendix-e)
-
-<details class="course-conventions">
+<details class="course-conventions" data-no-narration>
 <summary>Notation reference for returning readers</summary>
 
 ### Conventions used in later chapters
@@ -129,6 +98,41 @@ A final units trap: angular coordinates are dimensionless. In $ds^2=dr^2+r^2d\th
 
 
 </details>
+
+## Contents
+
+- [0. Before spacetime: the tools you already almost know](#chapter-0)
+- [1. The scandal: gravity changes the measuring equipment](#chapter-1)
+- [2. The mathematical survival kit: objects, components, and the art of changing your mind without changing the universe](#chapter-2)
+- [3. Special relativity: learning what a clock is actually measuring](#chapter-3)
+- [4. Spacetime as a manifold: maps, rulers, and the geometry beneath them](#chapter-4)
+- [5. Free fall, the equivalence principle, and the worldline action](#chapter-5)
+- [6. Differentiation when your measuring axes will not sit still](#chapter-6)
+- [7. The connection: how neighboring laboratories compare directions](#chapter-7)
+- [8. Curvature: what remains after the coordinate excuses run out](#chapter-8)
+- [9. Ricci, Weyl, and Einstein: different questions asked of curvature](#chapter-9)
+- [10. Tides: how to measure curvature without seeing spacetime from outside](#chapter-10)
+- [11. Energy, momentum, and stress: what gravity listens to](#chapter-11)
+- [12. Einstein's equation: every symbol earns its place](#chapter-12)
+- [13. Variational calculus: learning to ask a whole history a question](#chapter-13)
+- [14. The Einstein–Hilbert action, taken apart completely](#chapter-14)
+- [15. Symmetry, conservation, vacuum energy, and the limits of slogans](#chapter-15)
+- [16. Turning geometry into experiments: clocks, light, and Mercury](#chapter-16)
+- [17. Black holes: when the causal structure becomes the main character](#chapter-17)
+- [18. Gravitational waves: curvature can carry a message](#chapter-18)
+- [19. Cosmology: Einstein's equation for the large-scale universe](#chapter-19)
+- [20. Making spacetime run: initial data, constraints, and numerical relativity](#chapter-20)
+- [21. A local laboratory at every point: tetrads, forms, and the gauge viewpoint](#chapter-21)
+- [22. When geodesics crowd together: focusing, singularities, and black-hole thermodynamics](#chapter-22)
+- [23. Einstein's equation as a low-energy masterpiece: effective theory and the frontier](#chapter-23)
+- [24. Bringing the whole machine together](#chapter-24)
+- [Appendix A. Thirty exercises that turn recognition into understanding](#appendix-a)
+- [Appendix B. A working reference sheet](#appendix-b)
+- [Appendix C. A plain-language glossary](#appendix-c)
+- [Appendix D. Where to go next](#appendix-d)
+- [Appendix E. Index practice and three extra calculations](#appendix-e)
+
+
 
 ---
 
@@ -246,7 +250,7 @@ $$
 \mathbf a=-\boldsymbol\nabla\Phi.
 $$
 
-Here $r$ is distance from the center and $G_N$ is Newton's gravitational constant. This choice makes $\Phi$ approach zero far away. The **gradient** $\boldsymbol\nabla\Phi$ is the arrow whose Cartesian components are the partial derivatives of $\Phi$. It points toward fastest increase. For this spherical example, differentiating with respect to $r$ gives $d\Phi/dr=G_NM/r^2$. The minus sign in the acceleration law therefore gives inward acceleration of magnitude $G_NM/r^2$.
+Here $r$ is distance from the center and $G_N$ is Newton's gravitational constant. This choice makes $\Phi$ approach zero far away. This is Newton's model; the near-Earth experiments here lie in its useful range. Later chapters quantify its limits at high speeds and near very compact massive objects. The **gradient** $\boldsymbol\nabla\Phi$ is the arrow whose Cartesian components are the partial derivatives of $\Phi$. It points toward fastest increase. For this spherical example, differentiating with respect to $r$ gives $d\Phi/dr=G_NM/r^2$. The minus sign in the acceleration law therefore gives inward acceleration of magnitude $G_NM/r^2$.
 
 **Pressure** is force per area. A gas exerts pressure on a wall because collisions transfer momentum to it. The pressure unit is the pascal, $1\,\mathrm{Pa}=1\,\mathrm{N/m^2}$. Pressure will matter when we ask how fluids move and how they affect gravity. The worked example below first shows how pressure can transfer energy.
 

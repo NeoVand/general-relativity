@@ -36,6 +36,11 @@ assert.doesNotMatch(first.textContent,/\bmetric\b|spacetime interval|connection 
 assert.match(first.textContent,/Watch a small cart/);
 assert.equal(first.querySelector('[data-lesson]').id,'measurements-and-units');
 assert.equal(doc(4).querySelector('[data-lesson="dimensions-before-symbols"]')?.id,'dimensions-before-symbols');
+const guide=parseHTML(fs.readFileSync('site/reading-guide.html','utf8')).document;
+assert.match(guide.querySelector('.prose').textContent,/Begin with a ruler, a clock/,'the entry invitation survives manuscript-to-page splitting');
+const conventions=guide.querySelector('details.course-conventions');
+assert.ok(conventions&&!conventions.hasAttribute('open')&&conventions.hasAttribute('data-no-narration'),'the returning-reader reference is closed and excluded from default narration');
+assert.ok(conventions.querySelectorAll('.katex').length>10,'the reference still contains its equations');
 const gravity=doc(1).querySelector('.prose').textContent;
 assert.doesNotMatch(gravity,/connection coefficients|Ricci|Weyl|g_\{\\mu/,'motivation does not require later tensor machinery');
 const interval=doc(3).getElementById('3-3-the-interval-the-quantity-that-refuses-to-change');
