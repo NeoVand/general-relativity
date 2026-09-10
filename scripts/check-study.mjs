@@ -10,6 +10,15 @@ const chrome='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const browser=await chromium.launch({headless:true,...(fs.existsSync(chrome)?{executablePath:chrome}:{}),args:['--autoplay-policy=no-user-gesture-required','--enable-unsafe-swiftshader']});
 const page=await browser.newPage({viewport:{width:1440,height:1000}});
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
+async function checkNavbar(){
+ const bar=await page.locator('.topbar').boundingBox(),brand=await page.locator('.app-brand').boundingBox(),dock=await page.locator('.companion-dock').boundingBox(),launch=await page.locator('.study-launcher').boundingBox(),search=await page.locator('.book-search').boundingBox();
+ assert.equal(bar.height,56,'Audio uses the existing navbar height');
+ assert.ok(brand.x+brand.width<=dock.x&&dock.x+dock.width<=launch.x&&launch.x+launch.width<=search.x,'Audio, Ask/Listen, and Search fit without overlapping');
+ for(const button of await page.locator('.study-toolbar button:visible').all()){
+  const b=await button.boundingBox();assert.ok(b.y>=bar.y&&b.y+b.height<=bar.y+bar.height&&b.x>=dock.x&&b.x+b.width<=search.x,'Every study control fits in the header');
+ }
+}
+
 const requests=[];
 const index=JSON.parse(fs.readFileSync('site/reading-index.json'));
 const destination=index.find(p=>p.id==='chapter-3');
@@ -172,14 +181,38 @@ try{
  for(const width of [1440,1100,901,800,390,320])for(const theme of ['light','dark']){
   await page.setViewportSize({width,height:900});await page.evaluate(theme=>document.documentElement.dataset.theme=theme,theme);
   const dock=await page.locator('.companion-dock').boundingBox();assert.ok(dock.x>=0&&dock.x+dock.width<=width+1,`${width}: compact player fits`);assert.ok(dock.height<110,'Minimized playback remains compact');
-  if(width>900){assert.equal(dock.y,56,'Desktop controls live below the first navbar row');assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.page')).paddingTop),'108px','Reading reserves both navbar rows');const launch=await page.locator('.study-launcher').boundingBox();assert.ok(launch.y<56,'Ask and Listen are in the navbar');}
+  if(width>900){
+   assert.equal(await page.evaluate(()=>getComputedStyle(document.querySelector('.page')).paddingTop),'56px','Audio does not increase the header height');
+   assert.equal(await page.locator('.topbar .study-toolbar').count(),1,'Study controls belong to the current chapter navbar');
+   const launch=await page.locator('.study-launcher').boundingBox(),search=await page.locator('.book-search').boundingBox(),brand=await page.locator('.app-brand').boundingBox();
+   assert.ok(dock.y>=0&&dock.y+dock.height<=56,'Playback stays inside the original navbar row');
+   assert.ok(brand.x+brand.width<=dock.x,'Playback does not overlap the book identity');
+   assert.ok(dock.x+dock.width<=launch.x&&launch.x+launch.width<=search.x,'Playback, Ask/Listen, then Search appear in order');
+  }
   for(const button of await page.locator('.companion-dock button').all()){const b=await button.boundingBox();assert.ok(b.x>=dock.x&&b.x+b.width<=dock.x+dock.width+1,`${width}: player control is inside the dock`);}
   await page.screenshot({path:`qa/companion-compact-${theme}-${width}.png`});
+  if(width>900){
+   await page.locator('#search-button').click();await page.waitForTimeout(350);
+   const search=await page.locator('.book-search').boundingBox(),launch=await page.locator('.study-launcher').boundingBox(),brand=await page.locator('.app-brand').boundingBox(),player=await page.locator('.companion-dock').boundingBox();
+   assert.ok(player.x>=brand.x+brand.width&&launch.x+launch.width<=search.x,`${width}: expanded search does not overlap the audio controls`);
+   for(const button of await page.locator('.companion-dock button:visible').all()){const b=await button.boundingBox();assert.ok(b.x>=player.x&&b.x+b.width<=player.x+player.width+1,`${width}: expanded search leaves controls clickable`);}
+   await checkNavbar();
+   await page.keyboard.press('Escape');
+   await page.getByRole('button',{name:'Show captions',exact:true}).click();
+   const captions=await page.locator('.listening-caption').boundingBox();assert.ok(captions.x>=0&&captions.x+captions.width<=width,'Captions remain within the viewport');
+   await page.getByRole('button',{name:'Show captions',exact:true}).click();
+   await page.locator('#search-button').click();await page.waitForTimeout(350);
+   await page.screenshot({path:`qa/companion-search-${theme}-${width}.png`});
+   await page.keyboard.press('Escape');await page.waitForTimeout(350);
+  }
  }
  await page.setViewportSize({width:1440,height:1000});
 
  await page.getByRole('button',{name:'Ask about this reading',exact:true}).click();
  assert.equal(await page.evaluate(()=>window.__audio[0].paused),true);assert.equal(await page.evaluate(()=>window.__lifecycle.trackEnabled),true);
+ // The live microphone adds a control while the paused narration stays visible.
+ await page.setViewportSize({width:901,height:900});await page.locator('#search-button').click();await page.waitForTimeout(350);await checkNavbar();
+ await page.screenshot({path:'qa/companion-live-mic-search.png'});await page.keyboard.press('Escape');await page.setViewportSize({width:1440,height:1000});
  const pausedTime=await page.evaluate(()=>window.__audio[0].currentTime);
  await say('What does the part I just heard mean?');
  await page.waitForFunction(()=>window.__lifecycle.sent.some(e=>e.type==='session.update'&&e.session.instructions?.includes('LISTENING HISTORY')));
@@ -222,6 +255,7 @@ try{
  assert.ok(await page.evaluate(()=>window.__audio[0].currentTime)>=heldAt);assert.equal(await page.evaluate(()=>window.__audio[0].paused),false,'Voice can resume from the held position');
  await page.getByRole('button',{name:'Stop narration',exact:true}).click();
  assert.equal(await page.evaluate(()=>window.__lifecycle.trackEnabled),false,'Push-to-talk remains muted after stopping narration');
+ await checkNavbar();await page.screenshot({path:'qa/companion-voice-navbar.png'});
  await page.getByRole('button',{name:'Open voice conversation',exact:true}).click();
  await page.getByRole('button',{name:'Unmute',exact:true}).click();
  await say('Open chapter 12.');

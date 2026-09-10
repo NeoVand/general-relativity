@@ -3,6 +3,7 @@
  import {onMount,tick} from 'svelte';
  import SafeHTML from './SafeHTML.svelte';
  import Icon from './Icon.svelte';
+ import {navbarToolbar} from './lib/navbar-toolbar.js';
  import {loadSettings,saveSettings,forgetSettings,defaults,clearCache,cached,saveCache} from './lib/cache.js';
  import {voices,complete} from './lib/providers.js';
  import {narrationText,narrationAudio,splitSpeech,needsExplanation,scriptKey} from './lib/narration.js';
@@ -371,16 +372,7 @@
  });
 </script>
 
-<div class="study-launcher" aria-label="Study tools">
- <button aria-label="Listen" title="Listen to the book" onclick={()=>reveal('listen')} aria-expanded={open&&tab==='listen'} aria-controls="study-panel"><Icon name="headphones"/><span class="study-launcher-label">Listen</span></button>
- <button aria-label="Ask" title={shortcut?`Ask the tutor · Hold ${shortcutText} to talk`:'Ask the tutor'} onclick={()=>{if(active)pause();reveal('ask')}} aria-expanded={open&&tab==='ask'} aria-controls="study-panel"><Icon name="chat"/><span class="study-launcher-label">Ask</span>{#if calling}<span class="live-dot"></span>{/if}</button>
-</div>
-{#if selection?.anchor&&!open}
- <div class="selection-study" role="group" aria-label="Selected text actions" data-placement={selection.anchor.placement} style:left={`${selection.anchor.left}px`} style:top={`${selection.anchor.top}px`}>
-  <button aria-label="Listen to selected text" title="Listen to selection" onclick={()=>listen('selection')}><Icon name="headphones" size={18}/></button>
-  <button aria-label="Explain selected text" title="Explain selection" onclick={explainSelection}><Icon name="chat" size={18}/></button>
- </div>
-{/if}
+<div class="study-toolbar" use:navbarToolbar={page.id}>
 {#if active||calling||(!open&&error)}
  <div class="companion-dock listening-dock" data-playback={playback}>
   {#if error&&!open}<div class="dock-notice" role="alert"><span>{error}</span><button onclick={()=>{open=true;tab=active?'listen':'ask'}}>Details</button><button aria-label="Dismiss error" onclick={()=>error=''}><Icon name="close" size={16}/></button></div>{/if}
@@ -399,7 +391,7 @@
     <button aria-label="Stop narration" title="Stop narration" onclick={finishNarration}><Icon name="stop"/></button>
     <div class="audio-progress" style={`--audio-progress:${progress*100}%`}></div>
    </div>
-   {#if calling}<div class="dock-call-status"><span><span class="live-dot" class:mic-paused={muted||narratorOwnsAudio}></span>{voiceStatus}</span><div>{#if !narratorOwnsAudio&&callState!=='connecting'}<button onclick={mute}>{muted?'Unmute microphone':'Mute microphone'}</button>{/if}<button onclick={endCall}>End voice call</button></div></div>{/if}
+   {#if calling}<div class="dock-call-status"><span><span class="live-dot" class:mic-paused={muted||narratorOwnsAudio}></span>{voiceStatus}</span><div>{#if !narratorOwnsAudio&&callState!=='connecting'}<button aria-label={muted?'Unmute microphone':'Mute microphone'} title={muted?'Unmute microphone':'Mute microphone'} onclick={mute}><Icon name={muted?'micOff':'mic'} size={18}/><span class="dock-call-label">{muted?'Unmute microphone':'Mute microphone'}</span></button>{/if}<button aria-label="End voice call" title="End voice call" onclick={endCall}><Icon name="hangup" size={18}/><span class="dock-call-label">End voice call</span></button></div></div>{/if}
   {:else if calling}
    <div class="listening-bar voice-bar" aria-label="Voice conversation">
     <button class="player-primary" disabled={callState==='connecting'} aria-label={muted||narratorOwnsAudio?'Unmute microphone':'Mute microphone'} title={muted||narratorOwnsAudio?'Unmute microphone':'Mute microphone'} onclick={mute}><Icon name={muted||narratorOwnsAudio?'micOff':'mic'}/></button>
@@ -408,6 +400,17 @@
     <button class="end-call" aria-label="End voice call" title="End voice call" onclick={endCall}><Icon name="hangup"/></button>
    </div>
   {/if}
+ </div>
+{/if}
+<div class="study-launcher" aria-label="Study tools">
+ <button aria-label="Listen" title="Listen to the book" onclick={()=>reveal('listen')} aria-expanded={open&&tab==='listen'} aria-controls="study-panel"><Icon name="headphones"/><span class="study-launcher-label">Listen</span></button>
+ <button aria-label="Ask" title={shortcut?`Ask the tutor · Hold ${shortcutText} to talk`:'Ask the tutor'} onclick={()=>{if(active)pause();reveal('ask')}} aria-expanded={open&&tab==='ask'} aria-controls="study-panel"><Icon name="chat"/><span class="study-launcher-label">Ask</span>{#if calling}<span class="live-dot"></span>{/if}</button>
+</div>
+</div>
+{#if selection?.anchor&&!open}
+ <div class="selection-study" role="group" aria-label="Selected text actions" data-placement={selection.anchor.placement} style:left={`${selection.anchor.left}px`} style:top={`${selection.anchor.top}px`}>
+  <button aria-label="Listen to selected text" title="Listen to selection" onclick={()=>listen('selection')}><Icon name="headphones" size={18}/></button>
+  <button aria-label="Explain selected text" title="Explain selection" onclick={explainSelection}><Icon name="chat" size={18}/></button>
  </div>
 {/if}
 {#if open}

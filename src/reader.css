@@ -91,23 +91,45 @@ body:has(#listen-content) .listening-caption{display:none}
 }
 @media print{.companion-dock{display:none!important}}
 
-/* Desktop audio lives in the header. The second row reserves document space,
-   so playback controls never float over a paragraph or a laboratory. */
+/* Playback extends to the left of Ask / Listen in the existing header row. */
+.study-toolbar{display:contents}
+.dock-call-status button{display:inline-flex;align-items:center;gap:5px}
+.dock-call-status button svg{display:none}
 @media(min-width:901px){
- .topbar{height:56px}
- .topbar .reading-tools{margin-right:188px}
- .study-launcher{top:6px;right:22px;bottom:auto;padding:2px;gap:2px;background:none;box-shadow:none;border:0;border-radius:0;backdrop-filter:none}
- .study-launcher button{height:40px;padding:8px 13px;border-radius:10px}
- :root:has(.companion-dock .listening-bar){--header-height:108px}
- .companion-dock,body:has(.study-panel) .companion-dock{top:56px;bottom:auto;left:0;right:0;transform:none;width:100%;height:52px;display:flex;align-items:center;justify-content:center;gap:16px;padding:0 24px;background:var(--paper);border-bottom:1px solid var(--line);z-index:39}
- .companion-dock .listening-bar{height:50px;min-height:0;max-width:620px;width:auto;flex:1;border:0;border-radius:0;box-shadow:none;background:transparent;backdrop-filter:none;padding:4px 0}
- .companion-dock .voice-bar{max-width:440px}
- .companion-dock .dock-call-status{margin:0;padding:0 0 0 16px;height:32px;gap:16px;border:0;border-left:1px solid var(--line);border-radius:0;flex-shrink:0;background:transparent}
- .companion-dock .listening-caption,.companion-dock .dock-notice{position:absolute;top:calc(100% + 8px);right:24px;width:min(480px,calc(100vw - 48px));box-sizing:border-box}
+ .topbar .reading-tools{flex:1;min-width:0;justify-content:flex-end;margin-right:0}
+ .topbar .app-brand{flex-shrink:0}
+ .study-toolbar{display:flex;align-items:center;gap:8px;min-width:0;margin-right:8px}
+ .study-launcher{position:static;order:2;flex-shrink:0;padding:0;gap:0;background:none;box-shadow:none;border:0;border-radius:0;backdrop-filter:none}
+ .study-launcher button{height:36px;padding:8px 10px;border-radius:9px;font-size:12px;gap:6px}
+ .companion-dock,body:has(.study-panel) .companion-dock{position:relative;inset:auto;transform:none;width:440px;min-width:0;height:40px;display:flex;align-items:center;gap:4px;padding:0;background:none;border:0;z-index:55}
+ .companion-dock:has(.voice-bar),body:has(.study-panel) .companion-dock:has(.voice-bar){width:260px}
+ .companion-dock .listening-bar{position:relative;height:36px;min-height:0;min-width:0;width:auto;flex:1;gap:0;padding:0;border:0;border-radius:0;box-shadow:none;background:none;backdrop-filter:none}
+ .companion-dock .listening-bar button{width:32px;height:32px;flex-shrink:0;border-radius:8px}
+ .companion-dock .listening-bar .player-primary{width:32px;height:32px;border-radius:50%}
+ .companion-dock .listening-bar .player-title{width:auto;min-width:40px;flex:1;margin:0 5px;font-size:11px}
+ .companion-dock .player-title small{display:none}
+ .companion-dock .audio-progress{bottom:0;height:1px}
+ .companion-dock .dock-call-status{margin:0;padding:0 0 0 4px;height:28px;border:0;border-left:1px solid var(--line);border-radius:0;flex-shrink:0;background:none}
+ .companion-dock .dock-call-status>span,.companion-dock .dock-call-label{display:none}
+ .companion-dock .dock-call-status>div{gap:0}
+ .companion-dock .dock-call-status button{justify-content:center;width:32px;height:32px;padding:0;border-radius:8px}
+ .companion-dock .dock-call-status button svg{display:block}
+ .companion-dock .dock-call-status button:last-child{color:var(--observer)}
+ .companion-dock .listening-caption,.companion-dock .dock-notice{position:fixed;top:calc(var(--header-height) + 12px);right:24px;width:min(480px,calc(100vw - 48px));box-sizing:border-box}
  .study-panel,body:has(.listening-bar) .study-panel,body:has(.dock-call-status) .study-panel{top:calc(var(--header-height) + 12px);bottom:auto;max-height:calc(100dvh - var(--header-height) - 24px)}
- .companion-dock:not(:has(.listening-bar)){height:0;padding:0;border:0}
+ .companion-dock:not(:has(.listening-bar)){width:0;height:0;padding:0;border:0}
 }
-@media(min-width:901px) and (max-width:1100px){.topbar .top-title{display:none}.companion-dock .dock-call-status{gap:10px;font-size:10px}}
+@media(min-width:901px) and (max-width:1250px){
+ .topbar:has(.companion-dock) .top-title{display:none}
+ .study-launcher button{padding:8px}
+ .study-launcher-label{display:none}
+}
+@media(min-width:901px) and (max-width:1100px){
+ .topbar .book-search.open{width:300px}
+ .topbar.search-open .player-title{display:none}
+ .topbar.search-open .study-toolbar{gap:4px;margin-right:4px}
+ .topbar.search-open .companion-dock{width:auto}
+}
 .shortcut-setting{margin:0 0 24px;padding:16px;background:var(--wash);border-radius:12px}
 .shortcut-setting .study-secondary{background:var(--paper);width:100%}.shortcut-setting .field-note:last-child{margin-bottom:0}
 

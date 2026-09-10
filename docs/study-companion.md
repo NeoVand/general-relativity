@@ -4,7 +4,7 @@ The book now has a persistent Svelte 5 reader, built with Vite and deployed as s
 
 ## Using it
 
-Open **Listen** or **Ask** in the desktop navbar or the bottom-right controls on a phone. Active desktop audio adds a reserved navbar row, leaving the book unobstructed. Under **Connections**, enter your OpenAI and ElevenLabs keys, choose a narrator, and save. **Find voices** retrieves the voices available to your ElevenLabs account. Select GPT-5.6 Terra or Sol for the text tutor and spoken explanations. Live conversation uses GPT Realtime 2.1, with its own selectable OpenAI voice.
+Open **Listen** or **Ask** in the desktop navbar or the bottom-right controls on a phone. Desktop playback controls appear in the same navbar row, to the left of Ask, Listen, and Search, without changing the header height. Under **Connections**, enter your OpenAI and ElevenLabs keys, choose a narrator, and save. **Find voices** retrieves the voices available to your ElevenLabs account. Select GPT-5.6 Terra or Sol for the text tutor and spoken explanations. Live conversation uses GPT Realtime 2.1, with its own selectable OpenAI voice.
 
 - Listen to a whole chapter, start at the visible passage, or select text and read its containing passages.
 - Equations and figures have small Listen and Explain actions. The landing-page Earth animation stays free of controls.
