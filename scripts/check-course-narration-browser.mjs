@@ -20,8 +20,8 @@ await page.route('https://api.elevenlabs.io/**',route=>{
  const body=route.request().postDataJSON();requests.push({provider:'eleven',body});const characters=Array.from(body.text);
  return route.fulfill({json:{audio_base64:wav.toString('base64'),alignment:{characters,character_start_times_seconds:characters.map((_,i)=>i*8/characters.length),character_end_times_seconds:characters.map((_,i)=>(i+1)*8/characters.length)}}});
 });
-const ready=()=>page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
-async function close(){const button=page.getByRole('button',{name:'Close study panel',exact:true});if(await button.count())await button.click();}
+const ready=()=>page.waitForFunction(()=>document.querySelector('.companion-dock')?.dataset.playback==='playing');
+async function close(){const button=page.getByRole('button',{name:/^(Close study panel|Minimize study companion)$/});if(await button.count())await button.click();}
 async function stop(){const button=page.getByRole('button',{name:'Stop narration',exact:true});if(await button.count())await button.click();await close();}
 async function askTool(name,args,{play=false}={}){
  await page.getByRole('button',{name:'Ask',exact:true}).click();command={name,args};
@@ -107,6 +107,12 @@ try{
   const after=await model.getAttribute('data-narration-source');assert.notEqual(after,before,'Changing the experiment updates the spoken source');
   const items=await page.evaluate(id=>{const model=document.getElementById(id);return JSON.parse(document.querySelector('#reading-data').textContent).segments.filter(s=>model.contains(document.getElementById(s.id)))},id);
   assert.equal(items.length,1,'An experiment does not repeat its equations, controls, and reference as separate narration');
+  const focus=await askTool('get_reader_focus',{});
+  const experiment=focus.course.experiments.find(e=>e.id===id);
+  assert(experiment,`${id}: the tutor sees the visible experiment`);
+  assert.equal(experiment.description,after,'Tutor and narrator share the live model description');
+  assert(experiment.controls.length>0&&experiment.teaching.length>0,'Tutor receives available controls and what to notice');
+  await close();
   await model.locator('[data-study-action="listen"]').click();await ready();assert.equal(narratorRequests().at(-1).source,after,'The narrator receives the current mathematical model');await stop();
  }
  assert.deepEqual(errors,[]);

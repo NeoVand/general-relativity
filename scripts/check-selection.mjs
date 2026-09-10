@@ -80,7 +80,7 @@ try{
  assert.equal(requests.filter(r=>r.provider==='eleven').at(-1).body.text,listened.text,'ElevenLabs reads only the selected words');
  const highlighted=await page.evaluate(()=>{const r=[...CSS.highlights.get('spoken-word')][0];return {text:r.toString(),start:r.startOffset,node:r.startContainer===window.__selectionTarget.node}});
  assert.equal(highlighted.text,listened.text);assert.equal(highlighted.start,listened.start);assert.ok(highlighted.node,'highlight follows selected occurrence, not an earlier repeated word');
- await page.getByRole('button',{name:'Stop narration',exact:true}).click();await page.getByRole('button',{name:'Close study panel',exact:true}).click();await page.waitForTimeout(100);assert.equal(await page.locator('.listening-bar').count(),0,'stopping pending playback cannot reopen a paused player');
+ await page.getByRole('button',{name:'Stop narration',exact:true}).click();assert.equal(await page.locator('.study-panel').count(),0,'passage narration stays compact');await page.waitForTimeout(100);assert.equal(await page.locator('.listening-bar').count(),0,'stopping pending playback cannot reopen a paused player');
 
  for(const width of [390,768,1440])for(const theme of ['light','dark']){
   await page.setViewportSize({width,height:900});await page.evaluate(t=>document.documentElement.dataset.theme=t,theme);
@@ -104,21 +104,21 @@ try{
  assert.equal(diagramFocus.selection,diagram.text);assert.equal(diagramFocus.passage.kind,'figure');assert.deepEqual(diagramFocus.passage.latex,diagram.latex);
  await page.getByRole('button',{name:'Close study panel',exact:true}).click();
  const beforeDiagram=requests.filter(r=>r.provider==='openai').length;
- await scene.locator('.scene-actions [data-study-action="listen"]').click();await page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
+ await scene.locator('.scene-actions [data-study-action="listen"]').click();await page.waitForFunction(()=>document.querySelector('.companion-dock')?.dataset.playback==='playing');
  assert.ok(requests.filter(r=>r.provider==='openai').length>beforeDiagram);
  let narrationRequest=requests.filter(r=>r.provider==='openai').at(-1).body;
  assert.equal(JSON.parse(narrationRequest.messages.at(-1).content).source,diagram.text,'diagram narration uses diagram content');
- await page.getByRole('button',{name:'Stop narration',exact:true}).click();await page.getByRole('button',{name:'Close study panel',exact:true}).click();
+ await page.getByRole('button',{name:'Stop narration',exact:true}).click();assert.equal(await page.locator('.study-panel').count(),0,'passage narration stays compact');
  await scene.locator('[data-scene-mode="3d"]').click();
  const before3D=requests.filter(r=>r.provider==='openai').length;
- await scene.locator('.scene-actions [data-study-action="listen"]').click();await page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
+ await scene.locator('.scene-actions [data-study-action="listen"]').click();await page.waitForFunction(()=>document.querySelector('.companion-dock')?.dataset.playback==='playing');
  assert.ok(requests.filter(r=>r.provider==='openai').length>before3D,'3D and diagram use separate narration caches');
  narrationRequest=requests.filter(r=>r.provider==='openai').at(-1).body;
  assert.notEqual(JSON.parse(narrationRequest.messages.at(-1).content).source,diagram.text);
- await page.getByRole('button',{name:'Stop narration',exact:true}).click();await page.getByRole('button',{name:'Close study panel',exact:true}).click();
+ await page.getByRole('button',{name:'Stop narration',exact:true}).click();assert.equal(await page.locator('.study-panel').count(),0,'passage narration stays compact');
  await scene.locator('[data-scene-mode="diagram"]').click();
  const chapterCount=await page.evaluate(()=>JSON.parse(document.querySelector('#reading-data').textContent).segments.filter(s=>{const el=document.getElementById(s.id);if(!el||s.noNarration||el.closest('[hidden],[data-no-narration]'))return false;return !(el?.closest('.scene-equation,.scene-note,.scene-explanation')&&el.closest('[data-scene]')?.dataset.activeView==='diagram')}).length);
- await page.locator('[data-study-action="chapter"]').click();await page.waitForFunction(()=>document.querySelector('.reading-now .study-eyebrow')?.textContent==='NOW READING');
+ await page.locator('[data-study-action="chapter"]').click();await page.waitForFunction(()=>document.querySelector('.companion-dock')?.dataset.playback==='playing');
  assert.ok((await page.locator('.player-title small').textContent()).includes(`of ${chapterCount} ·`),'chapter queue omits hidden 3D equations and notes');
  assert.deepEqual(errors,[]);
  console.log('Verified selection placement, native collapse/outside/scroll/Escape dismissal, exact tutor and narration excerpts, repeated-word highlight, six responsive theme states, and separate diagram/3D narration sources.');
