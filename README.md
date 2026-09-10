@@ -58,6 +58,11 @@ actual settings.
    ElevenLabs key and choose a narrator for TTS.
 3. Start listening, type a question, or start a voice conversation.
 
+On desktop, playback stays in the navbar. Hold **⌘ + Shift + Space** (macOS) or
+**Ctrl + Shift + Space** to pause and ask about the exact moment you were hearing.
+Release to send; ask to continue to resume that reading. You can change or disable
+the shortcut in **Connections**.
+
 Provider requests use your own accounts and their usage limits. Keys stay in
 tab-scoped browser storage by default; remembering them on the device is
 optional. Requests go directly to the providers, with no shared application
@@ -106,8 +111,7 @@ npm run serve
 
 Open **[localhost:4173](http://localhost:4173/)**. Generated files go into `site/`,
 which is excluded from Git. After changing the manuscript or reader code,
-`npm run build:reader` rebuilds against the existing figure assets. Use the full
-build when changing the generated figures, then refresh the browser.
+`npm run build:app` rebuilds only the Svelte reader after changes in `src/` (typically under a second). `npm run build:reader` rebuilds the book and reading index using existing figures. Use the full build when changing generated figures, then refresh the browser.
 
 ### How it is built
 
@@ -147,12 +151,7 @@ Individual lab suites include `npm run test:mechanics`,
 Voice tests mock the provider boundary; evaluating live speech quality requires
 connected provider accounts.
 
-The [GitHub Actions workflow](.github/workflows/pages.yml) runs the full build
-and configured checks for pull requests and pushes to `main`. Successful
-`main` builds deploy to GitHub Pages. Checks include mathematical calibration,
-rendered equations, links, figure labels, responsive layouts, keyboard controls,
-saved-state recovery, and narration. Human scientific and teaching review
-remains essential.
+Run `npm run check` and `npm run test:all` locally before pushing. These checks cover mathematical calibration, rendered equations, links, figure labels, responsive layouts, keyboard controls, saved-state recovery, and narration. The [GitHub Actions workflow](.github/workflows/pages.yml) builds and publishes successful `main` builds to GitHub Pages without repeating the browser test suite. Human scientific and teaching review remains essential.
 
 ## Help make the book better
 

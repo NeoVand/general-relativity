@@ -13,7 +13,7 @@
     "test:experience": "node scripts/check-experience.mjs",
     "build:reader": "node scripts/build-site.mjs && node scripts/build-reading.mjs && vite build && node scripts/attach-reader.mjs",
     "check": "svelte-check --fail-on-warnings",
-    "test:study": "node scripts/check-study-core.mjs && node scripts/check-course-narration.mjs && node scripts/check-course-narration-browser.mjs && node scripts/check-study.mjs && node scripts/check-selection.mjs",
+    "test:study": "node scripts/check-voice-tools.mjs && node scripts/check-study-core.mjs && node scripts/check-course-narration.mjs && node scripts/check-course-narration-browser.mjs && node scripts/check-study.mjs && node scripts/check-selection.mjs",
     "test:course": "node scripts/check-course.mjs",
     "test:visual-lessons": "node scripts/check-visual-lessons.mjs",
     "test:geometry-experiences": "node scripts/check-geometry-experiences.mjs",
@@ -30,7 +30,9 @@
     "test:parallel-transport": "node scripts/check-parallel-transport.mjs",
     "test:flow-order": "node scripts/check-flow-order.mjs",
     "test:particle-flow": "node scripts/check-particle-flow.mjs",
-    "test:fluid-shear": "node scripts/check-fluid-shear.mjs"
+    "test:fluid-shear": "node scripts/check-fluid-shear.mjs",
+    "build:app": "vite build && node scripts/attach-reader.mjs",
+    "test:all": "npm run test && npm run test:browser && npm run test:figures && npm run test:experience && npm run test:study && npm run test:course && npm run test:visual-lessons && npm run test:geometry-experiences && npm run test:curvature-experiences && npm run test:resilience && npm run test:learning-state && npm run test:diagnostics && npm run test:physics && npm run test:sequence && npm run test:relativity-models && npm run test:relativity-labs && npm run test:mechanics && npm run test:geometry-foundations && npm run test:parallel-transport && npm run test:flow-order && npm run test:particle-flow && npm run test:fluid-shear"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",

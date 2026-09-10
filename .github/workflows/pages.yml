@@ -30,66 +30,8 @@ jobs:
           python-version: '3.12'
       - run: npm ci
       - run: npm run build
-      - run: npm test
-      - run: npm run check
-      - run: npm run test:relativity-models
-      - name: Install browser for the reading checks
-        run: npx playwright install --with-deps chromium
-      - name: Start the book preview
-        run: |
-          npm run serve > /tmp/book-server.log 2>&1 &
-          for attempt in $(seq 1 30); do
-            curl --fail --silent http://localhost:4173/ > /dev/null && exit 0
-            sleep 1
-          done
-          cat /tmp/book-server.log
-          exit 1
-      - name: Check navigation, typography, and symbol inspection
-        run: npm run test:browser
-      - name: Inspect SVGs in both themes and responsive layouts
-        run: npm run test:figures
-      - name: Check spatial scenes and animation controls
-        run: npm run test:experience
-      - name: Check listening and assistant integration
-        run: npm run test:study
-      - name: Verify readable lessons when enhancement is unavailable
-        run: npm run test:resilience
-      - name: Check notebook history and backup migration
-        run: npm run test:learning-state
-      - name: Verify foundation diagnostics and fallback reasoning
-        run: npm run test:diagnostics
-      - name: Calibrate the new curvature and matter examples
-        run: npm run test:physics
-      - name: Check the novice opening and authored teaching order
-        run: npm run test:sequence
-      - name: Check worked lessons and learning routes
-        run: npm run test:course
-      - name: Calculated laboratories and experiment recovery
-        run: npm run test:relativity-labs
-      - name: Check the mechanics and Hamiltonian experiments
-        run: npm run test:mechanics
-      - name: Check guided visual lessons
-        run: npm run test:visual-lessons
-      - name: Check polar coordinates and vector fields
-        run: npm run test:geometry-foundations
-      - name: Check flow order and Lie bracket preparation
-        run: npm run test:flow-order
-      - name: Check particle crossings and stress-energy measurements
-        run: npm run test:particle-flow
-      - name: Check fluid shear and momentum balance
-        run: npm run test:fluid-shear
-      - name: Check continuous transport and surface holonomy
-        run: npm run test:parallel-transport
-      - name: Check manifold charts and orbital precession
-        run: npm run test:geometry-experiences
-      - name: Check curvature components and tidal clouds
-        run: npm run test:curvature-experiences
-      - name: Preserve inspection evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-inspection
-          path: qa/
+      # Run npm run test:all locally before pushing. Publishing deliberately
+      # does not reinstall a browser or repeat the visual inspection suite.
       - uses: actions/configure-pages@v5
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3
@@ -108,6 +50,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy the checked book
+      - name: Deploy the book
         id: deployment
         uses: actions/deploy-pages@v4

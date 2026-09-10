@@ -19,6 +19,7 @@ for(const [section,id] of Object.entries(JSON.parse(fs.readFileSync('content/sec
 let links=0;
 for(const [file,html]of cache){
  assert.ok(html.includes('<html lang="en">'),file);
+ assert.equal([...html.matchAll(/<script type="module" src="reader\/[^"]+"/g)].length,1,`${file}: one reader bundle after repeated app builds`);
  assert.ok(!html.includes('GRMATHTOKEN'),`Unresolved math in ${file}`);
  assert.ok(!html.includes('class="math-error"'),`Invalid math in ${file}`);
  // A skipped equation never creates a KaTeX error node. Inspect the actual
