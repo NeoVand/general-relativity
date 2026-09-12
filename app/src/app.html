@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111722" />
+    <style>
+      @layer reset, book;
+    </style>
+    <script>
+      try {
+        if (localStorage.getItem('gr-sidebar') === 'collapsed')
+          document.documentElement.dataset.sidebar = 'collapsed';
+        const theme = localStorage.getItem('gr-theme');
+        document.documentElement.dataset.theme =
+          theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (localStorage.getItem('gr-type') === 'large')
+          document.documentElement.classList.add('large-type');
+      } catch {}
+    </script>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>

@@ -120,7 +120,7 @@ export function earthFlow({el, stage, root, camera, controls, renderer, render})
   const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), earthMaterial);
   earth.rotation.y = -1.6;
   root.add(earth);
-  new THREE.TextureLoader().load('./assets/earth/blue-marble-december.webp', texture => {
+  new THREE.TextureLoader().load(new URL('./assets/earth/blue-marble-december.webp', import.meta.url).href, texture => {
     if(disposed){texture.dispose();return;}
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());

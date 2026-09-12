@@ -5,16 +5,17 @@ import {narrationNote} from './narration-notes.mjs';
 import {scenes,icon} from './scenes.mjs';
 import {lessons,courseFor} from '../content/course.mjs';
 import {extractPassageText} from '../src/lib/reading-context.js';
-fs.mkdirSync('site/assets/licenses',{recursive:true});
-fs.copyFileSync('vendor/voicebook/LICENSE','site/assets/licenses/voicebook.txt');
+const out=process.env.BOOK_OUTPUT||'site';
+fs.mkdirSync(`${out}/assets/licenses`,{recursive:true});
+fs.copyFileSync('vendor/voicebook/LICENSE',`${out}/assets/licenses/voicebook.txt`);
 const catalog=[],bookMap=[];
 const clean=s=>s.replace(/\s+/g,' ').trim();
 function uniqueSentences(text){
  const seen=new Set();return text.split(/(?<=[.!?])\s+/).filter(s=>{const key=s.toLowerCase().replace(/[^\p{L}\p{N}]/gu,'');if(seen.has(key))return false;seen.add(key);return true}).join(' ');
 }
 const source=extractPassageText;
-for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
- const {document}=parseHTML(fs.readFileSync(`site/${file}`,'utf8'));
+for(const file of fs.readdirSync(out).filter(f=>f.endsWith('.html'))){
+ const {document}=parseHTML(fs.readFileSync(`${out}/${file}`,'utf8'));
  const id=file.replace('.html','');
  const main=document.querySelector('main');
  // Optional explanations need their own source neighborhood. Exercises stay
@@ -96,14 +97,14 @@ for(const file of fs.readdirSync('site').filter(f=>f.endsWith('.html'))){
  catalog.push({id,title:entry.title,segments:segments.map(({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration,supplement})=>({id,index,kind,heading,text,latex,hash,views,depth,lesson,noNarration,supplement}))});
  document.querySelectorAll('script[src]').forEach(s=>{if(!s.src.includes('katex'))s.remove()});
  const entryNames={reading:'app',scenes:'scenes',course:'course',visualLessons:'visual-lessons',geometryExperiences:'geometry-experiences',curvatureExperiences:'curvature-experiences'};
- const assets=Object.fromEntries(Object.entries(entryNames).map(([key,name])=>[key,fs.readdirSync('site').find(f=>new RegExp(`^${name}-[\\da-f]+\\.js$`).test(f))]));
+ const assets=Object.fromEntries(Object.entries(entryNames).map(([key,name])=>[key,fs.readdirSync(out).find(f=>new RegExp(`^${name}-[\\da-f]+\\.js$`).test(f))]));
  const wrapper=document.createElement('div');wrapper.id='book-shell';
  while(document.body.firstChild)wrapper.append(document.body.firstChild);
  document.body.append(wrapper);
  const data=document.createElement('script');data.type='application/json';data.id='reading-data';data.textContent=JSON.stringify({...entry,assets,course:courseFor(id.startsWith('chapter-')?Number(id.slice(8)):undefined)}).replace(/</g,'\\u003c');document.body.append(data);
- fs.writeFileSync(`site/${file}`,document.toString());
+ fs.writeFileSync(`${out}/${file}`,document.toString());
 }
-fs.writeFileSync('site/book-map.json',JSON.stringify(bookMap));
-fs.writeFileSync('site/reading-index.json',JSON.stringify(catalog));
-fs.writeFileSync('site/reading-report.json',JSON.stringify({pages:catalog.length,segments:catalog.reduce((n,p)=>n+p.segments.length,0)}));
+fs.writeFileSync(`${out}/book-map.json`,JSON.stringify(bookMap));
+fs.writeFileSync(`${out}/reading-index.json`,JSON.stringify(catalog));
+fs.writeFileSync(`${out}/reading-report.json`,JSON.stringify({pages:catalog.length,segments:catalog.reduce((n,p)=>n+p.segments.length,0)}));
 console.log('Prepared semantic reading passages for',catalog.length,'pages.');

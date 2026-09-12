@@ -1,0 +1,9 @@
+node_modules/
+.svelte-kit/
+build/
+static/book/
+src/lib/server/generated/
+test-results/
+playwright-report/
+.sites-runtime/
+.book-build/

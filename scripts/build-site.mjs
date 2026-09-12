@@ -21,7 +21,9 @@ import {curvatureExperienceHTML} from './curvature-experiences.mjs';
 import {mathPaletteCSS} from './math-palette.mjs';
 validateCourse();
 
-const out='site';
+const out=process.env.BOOK_OUTPUT||'site';
+const resolvedOut=path.resolve(out),relativeOut=path.relative(process.cwd(),resolvedOut);
+if(!relativeOut||relativeOut.startsWith('..')||path.isAbsolute(relativeOut))throw Error('Book output must be a subdirectory of this repository.');
 fs.mkdirSync(out,{recursive:true});
 for(const name of fs.readdirSync(out)) fs.rmSync(path.join(out,name),{recursive:true,force:true});
 fs.cpSync('web',out,{recursive:true});

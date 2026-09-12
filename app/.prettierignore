@@ -1,0 +1,9 @@
+node_modules
+.svelte-kit
+.book-build
+build
+static/book
+src/lib/server/generated
+package-lock.json
+test-results
+playwright-report

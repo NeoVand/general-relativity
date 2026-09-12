@@ -1,0 +1,44 @@
+{
+  "name": "relativity-reader",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "content": "node --experimental-strip-types scripts/prepare.ts",
+    "dev": "npm run content && vite dev --host 127.0.0.1 --port 5173 --strictPort",
+    "build": "npm run content && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 5173 --strictPort",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
+    "test": "vitest run",
+    "test:browser": "npm run content && playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@hugeicons/core-free-icons": "^4.3.2",
+    "@sveltejs/kit": "2.70.3",
+    "dompurify": "^3.4.15",
+    "katex": "0.16.22",
+    "markdown-it": "14.3.1",
+    "svelte": "^5.57.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1",
+    "@sveltejs/adapter-static": "3.0.10",
+    "@sveltejs/vite-plugin-svelte": "^7.3.0",
+    "@types/katex": "^0.16.7",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.28.0",
+    "linkedom": "^0.18.13",
+    "prettier": "^3.9.6",
+    "prettier-plugin-svelte": "^4.1.1",
+    "svelte-check": "^4.7.6",
+    "typescript": "~6.0.3",
+    "vite": "^8.2.2",
+    "vitest": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

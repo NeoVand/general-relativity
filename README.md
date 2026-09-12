@@ -12,6 +12,22 @@ derivation, or ask a question about the passage in front of you.
 [Choose a learning path](https://neovand.github.io/general-relativity/course-map.html) ·
 [Browse the visual atlas](https://neovand.github.io/general-relativity/figure-atlas.html)
 
+## SvelteKit rebuild
+
+The new reader lives in [`app/`](app/README.md), alongside the original app.
+It includes a floating study companion, a compact continuous-audio player,
+TypeScript state and provider layers, and the existing book and laboratories.
+
+```sh
+npm ci
+npm --prefix app ci
+npm run dev:v2
+```
+
+Open http://127.0.0.1:5173/chapter-0.html. See the [rebuild guide](app/README.md)
+for architecture, tests, and the remaining laboratory migration boundary.
+The published site still uses the original build until a separate cutover.
+
 ## Learn by changing something
 
 The laboratories connect mathematical quantities to things you can manipulate
